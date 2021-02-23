@@ -28,3 +28,7 @@ Route::resource('admin/activitylogs', 'App\Http\Controllers\Admin\ActivityLogsCo
 Route::resource('admin/settings', 'App\Http\Controllers\Admin\SettingsController');
 Route::get('admin/generator', ['uses' => '\Appzcoder\LaravelAdmin\Controllers\ProcessController@getGenerator']);
 Route::post('admin/generator', ['uses' => '\Appzcoder\LaravelAdmin\Controllers\ProcessController@postGenerator']);
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
