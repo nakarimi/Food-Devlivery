@@ -35,7 +35,7 @@
    <div class="col">
       <div class="form-group{{ $errors->has('percentage') ? 'has-error' : ''}}">
          <label for="percentage" class="control-label">{{ 'Percentage' }}</label>
-         <input class="form-control" name="percentage" type="number" id="percentage" value="{{ $commission->percentage ?? ''}}" >
+         <input class="form-control" name="percentage" type="number" step=".01" id="percentage" value="{{ $commission->percentage ?? ''}}" >
          {!! $errors->first('percentage', '
          <p class="help-block">:message</p>
          ') !!}
