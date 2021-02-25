@@ -15,7 +15,7 @@
             <option value="">Commission Type</option>
             <option value="general" @if( (isset($commission->type)) && ($commission->type) == 'general') selected="selected" @endif >General</option>
             <option value="devliver" @if( (isset($commission->type)) && ($commission->type) == 'devliver') selected="selected" @endif>Delivery</option>
-        </select>
+         </select>
          {!! $errors->first('type', '
          <p class="help-block">:message</p>
          ') !!}
@@ -46,11 +46,10 @@
    <div class="col">
       <div class="form-group{{ $errors->has('status') ? 'has-error' : ''}}">
          <label for="status" class="control-label">{{ 'Status' }}</label>
-         <!-- <input class="form-control" name="status" type="text" id="status" value="{{ $commission->status ?? ''}}" required> -->
          <select class="custom-select mr-sm-2" name="status" id="status" required>
             <option value="1"  @if( (isset($commission->status)) && ($commission->status) == '1') selected="selected" @endif>Enable</option>
             <option value="0"  @if( (isset($commission->status)) && ($commission->status) == '0') selected="selected" @endif>Disable</option>
-        </select>
+         </select>
 
          {!! $errors->first('status', '
          <p class="help-block">:message</p>
