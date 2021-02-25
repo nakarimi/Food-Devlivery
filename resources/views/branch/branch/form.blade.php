@@ -28,7 +28,7 @@
             <option value="">Main Commission Type</option>
             @foreach($commissions as $commission)
                @if($commission->type == 'general')
-                <option value="{{ $commission->id }}" @if( $commission->id == $branch->main_commission_id) selected="selected" @endif >{{ $commission->title }}</option>
+                <option value="{{ $commission->id }}" @if( isset($branch->main_commission_id) && $commission->id == $branch->main_commission_id) selected="selected" @endif >{{ $commission->title }}</option>
                @endif
             @endforeach
          </select>
@@ -46,7 +46,7 @@
             <option value="">Delivery Commission Type</option>
             @foreach($commissions as $commission)
                @if($commission->type == 'delivery')
-                <option value="{{ $commission->id }}"   @if( $commission->id == $branch->deliver_commission_id) selected="selected" @endif >{{ $commission->title }}</option>
+                <option value="{{ $commission->id }}"   @if( isset($branch->deliver_commission_id) && $commission->id == $branch->deliver_commission_id) selected="selected" @endif >{{ $commission->title }}</option>
                @endif
             @endforeach
          </select>
@@ -109,7 +109,7 @@
 
    <select class="custom-select mr-sm-2" name="user_id" id="user_id" required>
       @foreach($users as $user)
-         <option value="{{ $user->id }}" @if( $user->id == $branch->user_id) selected="selected" @endif >{{ $user->name }}</option>
+         <option value="{{ $user->id }}" @if( isset($branch->user_id) && $user->id == $branch->user_id) selected="selected" @endif >{{ $user->name }}</option>
       @endforeach
    </select>
 
