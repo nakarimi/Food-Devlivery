@@ -32,3 +32,5 @@ Route::post('admin/generator', ['uses' => '\Appzcoder\LaravelAdmin\Controllers\P
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::resource('branch', 'App\Http\Controllers\BranchController');
