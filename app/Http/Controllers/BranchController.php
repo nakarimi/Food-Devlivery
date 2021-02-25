@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 
 use App\Models\Branch;
+use App\Models\Commission;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class BranchController extends Controller
 {
@@ -46,7 +48,9 @@ class BranchController extends Controller
      */
     public function create()
     {
-        return view('branch.branch.create');
+       
+        $data = $this->dropdown_data();
+        return view('branch.branch.create', $data);
     }
 
     /**
@@ -95,9 +99,8 @@ class BranchController extends Controller
      */
     public function edit($id)
     {
-        $branch = Branch::findOrFail($id);
-
-        return view('branch.branch.edit', compact('branch'));
+        $data = $this->dropdown_data($id);
+        return view('branch.branch.edit', $data);
     }
 
     /**
@@ -137,5 +140,19 @@ class BranchController extends Controller
         Branch::destroy($id);
 
         return redirect('branch')->with('flash_message', 'Branch deleted!');
+    }
+
+    public function dropdown_data($id = false) {
+        // Pass commissons for dropdown list form.
+       $data['commissions'] = Commission::all();
+
+        // Pass Users for dropdown list form.
+        $data['users'] = User::all();
+
+        // Pass branches to view. (For Edit form)
+        $data['branch'] = ($id) ? Branch::findOrFail($id) : null;
+        
+
+        return $data;
     }
 }
