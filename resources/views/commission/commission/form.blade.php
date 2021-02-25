@@ -14,7 +14,7 @@
          <select class="custom-select mr-sm-2" name="type" id="type" required>
             <option value="">Commission Type</option>
             <option value="general" @if( (isset($commission->type)) && ($commission->type) == 'general') selected="selected" @endif >General</option>
-            <option value="devliver" @if( (isset($commission->type)) && ($commission->type) == 'devliver') selected="selected" @endif>Delivery</option>
+            <option value="delivery" @if( (isset($commission->type)) && ($commission->type) == 'delivery') selected="selected" @endif>Delivery</option>
          </select>
          {!! $errors->first('type', '
          <p class="help-block">:message</p>
