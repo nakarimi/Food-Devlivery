@@ -9,6 +9,7 @@ use App\Models\Payment;
 use Illuminate\Http\Request;
 use App\Models\Branch;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
@@ -19,6 +20,7 @@ class PaymentController extends Controller
      */
     public function index(Request $request)
     {
+
         $keyword = $request->get('search');
         $perPage = 25;
 
@@ -43,7 +45,11 @@ class PaymentController extends Controller
      */
     public function create()
     {
-        $data = dropdown_data();
+        $data = $this->dropdown_data();
+        // foreach($data['branches'] as $branch) {
+        //     print_r($branch);
+        // }
+        // print_r();die;
         return view('payment.payment.create', $data);
     }
 
@@ -138,7 +144,7 @@ class PaymentController extends Controller
     public function dropdown_data($id = false) {
         
         // Pass Branches for dropdown list form.
-        $data['branches'] = Branch::all();
+        $data['branches'] = DB::table("branches")->select('branche_main_info.title', 'branches.id')->where('branche_main_info.status', 'like', 'approved')->join('branche_main_info', 'branche_main_info.business_id', '=', 'branches.id')->latest('branche_main_info.created_at')->get();
 
         // Pass Users for dropdown list form.
         $data['users'] = User::all();

@@ -29,7 +29,7 @@ class Branch extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'business_type', 'main_commission_id', 'deliver_commission_id', 'status', 'title', 'description', 'logo', 'contact', 'location'];
+    protected $fillable = ['user_id', 'business_type', 'main_commission_id', 'deliver_commission_id', 'status'];
 
     
 
@@ -43,5 +43,12 @@ class Branch extends Model
     public function getDescriptionForEvent($eventName)
     {
         return __CLASS__ . " model has been {$eventName}";
+    }
+
+    // Relation ship with latest contract
+    public function branchDetails(){
+        // return $this->hasOne('App\Branch','business_id');
+        return $this->hasOne(BranchDetails::class, 'business_id')->where('status', 'approved')->latest();
+
     }
 }
