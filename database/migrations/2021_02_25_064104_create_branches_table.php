@@ -20,11 +20,6 @@ class CreateBranchesTable extends Migration
             $table->integer('main_commission_id')->nullable();
             $table->integer('deliver_commission_id')->nullable();
             $table->string('status')->nullable();
-            $table->string('title')->nullable();
-            $table->string('description')->nullable();
-            $table->string('logo')->nullable();
-            $table->string('contact')->nullable();
-            $table->string('location')->nullable();
             });
     }
 
