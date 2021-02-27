@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/dashboard', function () {
+    return view('dashboard.dashboard');
+});
+
 
 Auth::routes();
 
@@ -34,10 +38,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('admin/settings', 'App\Http\Controllers\Admin\SettingsController');
     Route::get('admin/generator', ['uses' => '\Appzcoder\LaravelAdmin\Controllers\ProcessController@getGenerator']);
     Route::post('admin/generator', ['uses' => '\Appzcoder\LaravelAdmin\Controllers\ProcessController@postGenerator']);
-    
-    
+
+
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    
+
     Route::resource('branch', 'App\Http\Controllers\BranchController');
     Route::resource('commission', 'App\Http\Controllers\CommissionController');
     Route::resource('driver', 'App\Http\Controllers\DriverController');
