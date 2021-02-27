@@ -36,3 +36,4 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::resource('branch', 'App\Http\Controllers\BranchController');
 Route::resource('commission', 'App\Http\Controllers\CommissionController');
 Route::resource('driver', 'App\Http\Controllers\DriverController');
+Route::resource('payment', 'App\Http\Controllers\PaymentController');
