@@ -9,6 +9,7 @@ use App\Models\Branch;
 use App\Models\Commission;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class BranchController extends Controller
 {
@@ -70,9 +71,34 @@ class BranchController extends Controller
 			'title' => 'required'
 		]);
         $requestData = $request->all();
-        
-        Branch::create($requestData);
 
+        $id = DB::table('branches')->insertGetId(
+            ['user_id' => $requestData['user_id'],
+            'business_type' => $requestData['business_type'],
+            'main_commission_id' => $requestData['main_commission_id'],
+            'deliver_commission_id' => $requestData['deliver_commission_id'],
+            'status' => $requestData['status']]
+        );
+        
+        // Todo: make upload logo possible and add url to table.
+        if ($id) {
+            $details_id = DB::table('branche_main_info')->insertGetId(
+                ['business_id' => $id,
+                'title' => $requestData['title'],
+                'description' => $requestData['description'],
+                'logo' => $this->save_file($request),
+                'contact' => $requestData['contact'],
+                'location' => $requestData['location'], 
+                'status' => 'approved']
+            );
+
+            if (!$details_id) {
+                Branch::destroy($id);
+            }
+        }
+        else {
+            return redirect('branch')->with('flash_message', 'Sorry there is problem, storing branch data');
+        }    
         return redirect('branch')->with('flash_message', 'Branch added!');
     }
 
@@ -99,7 +125,7 @@ class BranchController extends Controller
      */
     public function edit($id)
     {
-        $data = $this->dropdown_data($id);
+        $data = $this->dropdown_data($id); 
         return view('branch.branch.edit', $data);
     }
 
@@ -125,6 +151,30 @@ class BranchController extends Controller
         $branch = Branch::findOrFail($id);
         $branch->update($requestData);
 
+        // Also update the details table.
+        // Todo, if edit is done by admin the status shoudl be approved otherwise it should be pending.
+        $status = 'pending';
+        $update = ['business_id' => $id,
+        'title' => $requestData['title'],
+        'description' => $requestData['description'],
+        'contact' => $requestData['contact'],
+        'location' => $requestData['location'], 
+        'status' => 'pending'];
+        
+        // If there was a new image, use it otherwise get old image name.
+        if ($request->file('logo')) {
+            $update['logo'] = $this->save_file($request);
+        } else {
+            $update['logo'] =  $branch->branchDetails->logo;
+        }
+        
+        // Update details.
+        $details_id = DB::table('branche_main_info')->insertGetId($update);
+
+        if (!$details_id) {
+            return redirect('branch')->with('flash_message', 'Sorry there is problem, storing branch data');
+        }
+   
         return redirect('branch')->with('flash_message', 'Branch updated!');
     }
 
@@ -142,6 +192,13 @@ class BranchController extends Controller
         return redirect('branch')->with('flash_message', 'Branch deleted!');
     }
 
+    /**
+     * Load necessary data for dropdowns.
+     *
+     * @param  int  $id
+     *
+     * @return array $data
+     */
     public function dropdown_data($id = false) {
         // Pass commissons for dropdown list form.
        $data['commissions'] = Commission::all();
@@ -154,5 +211,41 @@ class BranchController extends Controller
         
 
         return $data;
+    }
+
+      /**
+     * Store the image and return it's address.
+     *
+     * @param \Illuminate\Http\Response $request
+     * request contains the file object.
+     *
+     * @return a string which is name of the file with extension and address.
+     *
+     * */
+    public function save_file(Request $request) {
+        // Handle File Upload
+        if($request->file('logo')) {
+
+            // Get filename with extension
+            $filenameWithExt = $request->file('logo')->getClientOriginalName();
+
+            // Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+
+            // Get just ext
+            $extension = $request->file('logo')->getClientOriginalExtension();
+
+            //Filename to store
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+
+            // Upload Image
+            $path = $request->file('logo')->storeAs('profile_images', $fileNameToStore);
+
+        }
+        else {
+            $fileNameToStore = 'noimage.jpg';
+        }
+
+        return $fileNameToStore;
     }
 }
