@@ -2,8 +2,9 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreatePagesTable extends Migration
+class CreateRolesPermissionsTables extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +13,10 @@ class CreatePagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('pages', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('title')->nullable();
-            $table->text('content')->nullable();
-            $table->softDeletes();
+        Schema::create('roles', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('label')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreatePagesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('pages');
+        Schema::drop('roles');
     }
 }

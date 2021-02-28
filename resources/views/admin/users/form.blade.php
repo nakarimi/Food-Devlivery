@@ -19,10 +19,26 @@
     {!! Form::password('password', $passwordOptions) !!}
     {!! $errors->first('password', '<p class="help-block">:message</p>') !!}
 </div>
-<div class="form-group{{ $errors->has('roles') ? ' has-error' : ''}}">
-    {!! Form::label('role', 'Role: ', ['class' => 'control-label']) !!}
-    {!! Form::select('roles[]', $roles, isset($user_roles) ? $user_roles : [], ['class' => 'form-control', 'multiple' => true]) !!}
+
+<div class="form-group{{ $errors->has('location') ? ' has-error' : ''}}">
+    {!! Form::label('location', 'Location: ', ['class' => 'control-label']) !!}
+    {!! Form::text('location', null, ['class' => 'form-control']) !!}
 </div>
+
+<div class="form-group{{ $errors->has('contacts') ? ' has-error' : ''}}">
+    {!! Form::label('contacts', 'Contact Number: ', ['class' => 'control-label']) !!}
+    {!! Form::text('contacts', null, ['class' => 'form-control']) !!}
+</div>
+<div class="form-group{{ $errors->has('role_id') ? ' has-error' : ''}}">
+    {!! Form::label('role_id', 'Role: ', ['class' => 'control-label']) !!}
+    {!! Form::select('role_id', $roles, isset($user->role_id) ? $user->role_id : [], ['class' => 'form-control']) !!}
+</div>
+
+<div class="form-group{{ $errors->has('logo') ? ' has-error' : ''}}">
+    <label for="logo" class="control-label">Photo(Logo):</label>
+    <input type="file" class="form-control" name="logo" id="logo">
+</div>
+
 <div class="form-group">
     {!! Form::submit($formMode === 'edit' ? 'Update' : 'Create', ['class' => 'btn btn-primary']) !!}
 </div>
