@@ -25,15 +25,15 @@ class BranchController extends Controller
 
         if (!empty($keyword)) {
             $branch = Branch::where('user_id', 'LIKE', "%$keyword%")
-                ->orWhere('business_type', 'LIKE', "%$keyword%")
-                ->orWhere('main_commission_id', 'LIKE', "%$keyword%")
-                ->orWhere('deliver_commission_id', 'LIKE', "%$keyword%")
-                ->orWhere('status', 'LIKE', "%$keyword%")
-                ->orWhere('title', 'LIKE', "%$keyword%")
-                ->orWhere('description', 'LIKE', "%$keyword%")
-                ->orWhere('logo', 'LIKE', "%$keyword%")
-                ->orWhere('contact', 'LIKE', "%$keyword%")
-                ->orWhere('location', 'LIKE', "%$keyword%")
+                // ->orWhere('business_type', 'LIKE', "%$keyword%")
+                // ->orWhere('main_commission_id', 'LIKE', "%$keyword%")
+                // ->orWhere('deliver_commission_id', 'LIKE', "%$keyword%")
+                // ->orWhere('status', 'LIKE', "%$keyword%")
+                // ->orWhere('title', 'LIKE', "%$keyword%")
+                // ->orWhere('description', 'LIKE', "%$keyword%")
+                // ->orWhere('logo', 'LIKE', "%$keyword%")
+                // ->orWhere('contact', 'LIKE', "%$keyword%")
+                // ->orWhere('location', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
             $branch = Branch::latest()->paginate($perPage);
@@ -80,13 +80,13 @@ class BranchController extends Controller
             'status' => $requestData['status']]
         );
         
-        // Todo: make upload logo possible and add url to table.
+
         if ($id) {
             $details_id = DB::table('branche_main_info')->insertGetId(
                 ['business_id' => $id,
                 'title' => $requestData['title'],
                 'description' => $requestData['description'],
-                'logo' => $this->save_file($request),
+                'logo' => save_file($request),
                 'contact' => $requestData['contact'],
                 'location' => $requestData['location'], 
                 'status' => 'approved']
@@ -163,7 +163,7 @@ class BranchController extends Controller
         
         // If there was a new image, use it otherwise get old image name.
         if ($request->file('logo')) {
-            $update['logo'] = $this->save_file($request);
+            $update['logo'] = save_file($request);
         } else {
             $update['logo'] =  $branch->branchDetails->logo;
         }
@@ -213,39 +213,5 @@ class BranchController extends Controller
         return $data;
     }
 
-      /**
-     * Store the image and return it's address.
-     *
-     * @param \Illuminate\Http\Response $request
-     * request contains the file object.
-     *
-     * @return a string which is name of the file with extension and address.
-     *
-     * */
-    public function save_file(Request $request) {
-        // Handle File Upload
-        if($request->file('logo')) {
-
-            // Get filename with extension
-            $filenameWithExt = $request->file('logo')->getClientOriginalName();
-
-            // Get just filename
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-
-            // Get just ext
-            $extension = $request->file('logo')->getClientOriginalExtension();
-
-            //Filename to store
-            $fileNameToStore = $filename.'_'.time().'.'.$extension;
-
-            // Upload Image
-            $path = $request->file('logo')->storeAs('profile_images', $fileNameToStore);
-
-        }
-        else {
-            $fileNameToStore = 'noimage.jpg';
-        }
-
-        return $fileNameToStore;
-    }
+     
 }
