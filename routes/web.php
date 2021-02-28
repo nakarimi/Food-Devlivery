@@ -25,10 +25,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', function () { return redirect('/admin');});
 
     Route::get('admin', 'App\Http\Controllers\Admin\AdminController@index');
-    Route::resource('admin/roles', 'App\Http\Controllers\Admin\RolesController');
-    Route::resource('admin/permissions', 'App\Http\Controllers\Admin\PermissionsController');
     Route::resource('admin/users', 'App\Http\Controllers\Admin\UsersController');
-    Route::resource('admin/pages', 'App\Http\Controllers\Admin\PagesController');
     Route::resource('admin/activitylogs', 'App\Http\Controllers\Admin\ActivityLogsController')->only([
         'index', 'show', 'destroy'
     ]);
