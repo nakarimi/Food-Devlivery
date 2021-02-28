@@ -21,7 +21,7 @@
                             </ul>
                         @endif
 
-                        {!! Form::open(['url' => '/admin/users', 'class' => 'form-horizontal']) !!}
+                        {!! Form::open(['url' => '/admin/users', 'class' => 'form-horizontal', 'enctype' => 'multipart/form-data']) !!}
 
                         @include ('admin.users.form', ['formMode' => 'create'])
 

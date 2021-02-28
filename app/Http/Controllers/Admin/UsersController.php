@@ -37,8 +37,7 @@ class UsersController extends Controller
     public function create()
     {
         $roles = Role::select('id', 'name', 'label')->get();
-        $roles = $roles->pluck('label', 'name');
-
+        $roles = $roles->pluck('label','id');
         return view('admin.users.create', compact('roles'));
     }
 
@@ -57,18 +56,14 @@ class UsersController extends Controller
                 'name' => 'required',
                 'email' => 'required|string|max:255|email|unique:users',
                 'password' => 'required',
-                'roles' => 'required'
+                'role_id' => 'required'
             ]
         );
 
         $data = $request->except('password');
         $data['password'] = bcrypt($request->password);
+        $data['logo'] = $this->save_image($request);
         $user = User::create($data);
-
-        foreach ($request->roles as $role) {
-            $user->assignRole($role);
-        }
-
         return redirect('admin/users')->with('flash_message', 'User added!');
     }
 
@@ -96,15 +91,10 @@ class UsersController extends Controller
     public function edit($id)
     {
         $roles = Role::select('id', 'name', 'label')->get();
-        $roles = $roles->pluck('label', 'name');
+        $roles = $roles->pluck('label','id');
+        $user = User::with('role')->select('id', 'name', 'email', 'location', 'role_id', 'contacts')->findOrFail($id);
 
-        $user = User::with('roles')->select('id', 'name', 'email')->findOrFail($id);
-        $user_roles = [];
-        foreach ($user->roles as $role) {
-            $user_roles[] = $role->name;
-        }
-
-        return view('admin.users.edit', compact('user', 'roles', 'user_roles'));
+        return view('admin.users.edit', compact('user', 'roles'));
     }
 
     /**
@@ -122,7 +112,7 @@ class UsersController extends Controller
             [
                 'name' => 'required',
                 'email' => 'required|string|max:255|email|unique:users,email,' . $id,
-                'roles' => 'required'
+                'role_id' => 'required'
             ]
         );
 
@@ -130,15 +120,11 @@ class UsersController extends Controller
         if ($request->has('password')) {
             $data['password'] = bcrypt($request->password);
         }
-
+        if ($request->file('logo')){
+         $data['logo'] = $this->save_image($request);
+        }
         $user = User::findOrFail($id);
         $user->update($data);
-
-        $user->roles()->detach();
-        foreach ($request->roles as $role) {
-            $user->assignRole($role);
-        }
-
         return redirect('admin/users')->with('flash_message', 'User updated!');
     }
 
@@ -154,5 +140,14 @@ class UsersController extends Controller
         User::destroy($id);
 
         return redirect('admin/users')->with('flash_message', 'User deleted!');
+    }
+
+    public function save_image($request){
+        $filename = null;
+        if ($request->file('logo')){
+            $filename = time().'.'.request()->logo->getClientOriginalExtension();
+            request()->logo->move(public_path('images'), $filename);
+        }
+        return $filename;
     }
 }

@@ -20,6 +20,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'logo',
+        'location',
+        'role_id',
+        'contacts',
+        'status'
     ];
 
     /**
@@ -40,4 +45,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // user with role relationship
+    public function role(){
+        return $this -> hasOne('App\Models\Role','id','role_id');
+    }
 }
