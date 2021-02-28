@@ -43,3 +43,5 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('payment', 'App\Http\Controllers\PaymentController');
 
 });
+
+Route::resource('item', 'App\Http\Controllers\ItemController');
