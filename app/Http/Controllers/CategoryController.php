@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\Item;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
-class ItemController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,14 +23,17 @@ class ItemController extends Controller
         $perPage = 25;
 
         if (!empty($keyword)) {
-            $item = Item::where('branch_id', 'LIKE', "%$keyword%")
+            $category = Category::where('branch_id', 'LIKE', "%$keyword%")
                 ->orWhere('status', 'LIKE', "%$keyword%")
+                ->orWhere('category_id', 'LIKE', "%$keyword%")
+                ->orWhere('title', 'LIKE', "%$keyword%")
+                ->orWhere('thumbnail', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
-            $item = Item::latest()->paginate($perPage);
+            $category = Category::latest()->paginate($perPage);
         }
 
-        return view('item.item.index', compact('item'));
+        return view('category.category.index', compact('category'));
     }
 
     /**
@@ -41,7 +44,7 @@ class ItemController extends Controller
     public function create()
     {
         $data = $this->dropdown_data();
-        return view('item.item.create', $data);
+        return view('category.category.create', $data);
     }
 
     /**
@@ -56,42 +59,37 @@ class ItemController extends Controller
         $this->validate($request, [
 			'branch_id' => 'required',
 			'status' => 'required',
-			'title' => 'required',
-			'price' => 'required'
+			'title' => 'required'
 		]);
         $requestData = $request->all();
-
         // Also update the details table.
         // Todo, if edit is done by admin the status shoudl be approved otherwise it should be pending.
         $status = 'pending';
-        
-        $id = DB::table('items')->insertGetId(
+
+        $id = DB::table('categories')->insertGetId(
             ['branch_id' => $requestData['branch_id'],
             'status' => $requestData['status']
             ]);
         
         if ($id) {
-            $details_id = DB::table('item_details')->insertGetId(
-                ['item_id' => $id,
+            $details_id = DB::table('category_details')->insertGetId(
+                ['category_id' => $id,
                 'title' => $requestData['title'],
                 'description' => $requestData['description'],
-                'code' => $requestData['code'],
-                'thumbnail' => save_file($request),
-                'price' => $requestData['price'], 
-                'package_price' => $requestData['package_price'],
-                'unit' => $requestData['unit'],
+                'thumbnail' => save_file($request, 'thumbnail'),
+                // 'contents' => $requestData['contents'],
                 'details_status' => $status,
                 ]);
 
             if (!$details_id) {
-                Item::destroy($id);
+                Category::destroy($id);
             }
         }
         else {
-            return redirect('branch')->with('flash_message', 'Sorry there is problem, storing Item data');
+            return redirect('branch')->with('flash_message', 'Sorry there is problem, storing category data');
         } 
 
-        return redirect('item')->with('flash_message', 'Item added!');
+        return redirect('category')->with('flash_message', 'Category added!');
     }
 
     /**
@@ -103,9 +101,9 @@ class ItemController extends Controller
      */
     public function show($id)
     {
-        $item = Item::findOrFail($id);
+        $category = Category::findOrFail($id);
 
-        return view('item.item.show', compact('item'));
+        return view('category.category.show', compact('category'));
     }
 
     /**
@@ -117,10 +115,10 @@ class ItemController extends Controller
      */
     public function edit($id)
     {
-
+        
         $data = $this->dropdown_data($id);
 
-        return view('item.item.edit', $data);
+        return view('category.category.edit', $data);
     }
 
     /**
@@ -136,43 +134,39 @@ class ItemController extends Controller
         $this->validate($request, [
 			'branch_id' => 'required',
 			'status' => 'required',
-			'title' => 'required',
-			'price' => 'required'
+			'title' => 'required'
 		]);
         $requestData = $request->all();
         
-        $item = Item::findOrFail($id);
-        $item->update($requestData);
+        $category = Category::findOrFail($id);
+        $category->update($requestData);
 
         // Also update the details table.
         // Todo, if edit is done by admin the status shoudl be approved otherwise it should be pending.
         $status = 'pending';
         
-        $update = ['item_id' => $id,
-            'title' => $requestData['title'],
-            'description' => $requestData['description'],
-            'code' => $requestData['code'],
-            'price' => $requestData['price'], 
-            'package_price' => $requestData['package_price'],
-            'unit' => $requestData['unit'],
-            'details_status' => $status,
+        $update = ['category_id' => $id,
+        'title' => $requestData['title'],
+        'description' => $requestData['description'],
+        // 'contents' => $requestData['contents'],
+        'details_status' => $status,
         ];
 
         // If there was a new image, use it otherwise get old image name.
         if ($request->file('logo')) {
             $update['thumbnail'] = save_file($request);
         } else {
-            $update['thumbnail'] =  $item->itemDetails->thumbnail;
+            $update['thumbnail'] =  $category->categoryDetails->thumbnail;
         }
-        
+
         // Update details.
-        $details_id = DB::table('item_details')->insertGetId($update);
+        $details_id = DB::table('category_details')->insertGetId($update);
 
         if (!$details_id) {
-            return redirect('branch')->with('flash_message', 'Sorry there is problem, updating item data');
+            return redirect('branch')->with('flash_message', 'Sorry there is problem, updating category data');
         }
 
-        return redirect('item')->with('flash_message', 'Item updated!');
+        return redirect('category')->with('flash_message', 'Category updated!');
     }
 
     /**
@@ -184,12 +178,12 @@ class ItemController extends Controller
      */
     public function destroy($id)
     {
-        Item::destroy($id);
+        Category::destroy($id);
 
-        return redirect('item')->with('flash_message', 'Item deleted!');
+        return redirect('category')->with('flash_message', 'Category deleted!');
     }
 
-     /**
+    /**
      * Load necessary data for dropdowns.
      *
      * @param  int  $id
@@ -205,7 +199,7 @@ class ItemController extends Controller
 
         // Pass Item to view. (For Edit form)
         // $item = Item::findOrFail($id);
-        $data['item'] = ($id) ? Item::findOrFail($id) : null;
+        $data['category'] = ($id) ? $category = Category::findOrFail($id) : null;
 
         return $data;
     }
