@@ -13,9 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 
 
@@ -23,6 +20,7 @@ Auth::routes();
 
 // For Logged in users.
 Route::middleware(['auth'])->group(function () {
+    Route::get('/', function () { return redirect('/admin');});
 
     Route::get('admin', 'App\Http\Controllers\Admin\AdminController@index');
     Route::resource('admin/roles', 'App\Http\Controllers\Admin\RolesController');
