@@ -16,7 +16,9 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Auth::routes();
+Auth::routes([
+    'register' => false
+]);
 
 // For Logged in users.
 Route::middleware(['auth'])->group(function () {
