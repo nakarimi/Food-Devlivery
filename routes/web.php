@@ -44,3 +44,4 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::resource('item', 'App\Http\Controllers\ItemController');
+Route::resource('category', 'App\Http\Controllers\CategoryController');
