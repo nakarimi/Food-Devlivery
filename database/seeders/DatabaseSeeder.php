@@ -133,15 +133,10 @@ class DatabaseSeeder extends Seeder
             array('id' => '4','created_at' => NULL,'updated_at' => NULL,'item_id' => '4','title' => 'کچالو','description' => 'کچالوی غزنی','code' => '100','thumbnail' => 'noimage.jpg','price' => '25','package_price' => '0','unit' => 'کیلو','details_status' => 'approved')
           ));
 
-        DB::table('categories')->insert(array(
-            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'branch_id' => '4','status' => '1'),
-            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'branch_id' => '5','status' => '1')
-          ));
-
-        DB::table('category_details')->insert(array(
-            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'category_id' => '1','title' => 'غذای چاشت','description' => NULL,'thumbnail' => 'noimage.jpg','contents' => NULL,'details_status' => 'approved'),
-            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'category_id' => '2','title' => 'عمومی','description' => NULL,'thumbnail' => 'noimage.jpg','contents' => NULL,'details_status' => 'approved')
-          ));
+        // DB::table('categories')->insert(array(
+        //     array('id' => '1','created_at' => NULL,'updated_at' => NULL,'branch_id' => '4','status' => '1'),
+        //     array('id' => '2','created_at' => NULL,'updated_at' => NULL,'branch_id' => '5','status' => '1')
+        //   ));
 
         // \App\Models\User::factory(10)->create();
     }

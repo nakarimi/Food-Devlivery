@@ -23,11 +23,8 @@ class CategoryController extends Controller
         $perPage = 25;
 
         if (!empty($keyword)) {
-            $category = Category::where('branch_id', 'LIKE', "%$keyword%")
-                ->orWhere('status', 'LIKE', "%$keyword%")
-                ->orWhere('category_id', 'LIKE', "%$keyword%")
+            $category = Category::where('status', 'LIKE', "%$keyword%")
                 ->orWhere('title', 'LIKE', "%$keyword%")
-                ->orWhere('thumbnail', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
             $category = Category::latest()->paginate($perPage);
@@ -43,8 +40,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $data = $this->dropdown_data();
-        return view('category.category.create', $data);
+        return view('category.category.create');
     }
 
     /**
@@ -57,37 +53,11 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-			'branch_id' => 'required',
-			'status' => 'required',
-			'title' => 'required'
+            'title' => 'required',
+            'status' => 'required'
 		]);
         $requestData = $request->all();
-        // Also update the details table.
-        // Todo, if edit is done by admin the status shoudl be approved otherwise it should be pending.
-        $status = 'pending';
-
-        $id = DB::table('categories')->insertGetId(
-            ['branch_id' => $requestData['branch_id'],
-            'status' => $requestData['status']
-            ]);
-        
-        if ($id) {
-            $details_id = DB::table('category_details')->insertGetId(
-                ['category_id' => $id,
-                'title' => $requestData['title'],
-                'description' => $requestData['description'],
-                'thumbnail' => save_file($request, 'thumbnail'),
-                // 'contents' => $requestData['contents'],
-                'details_status' => $status,
-                ]);
-
-            if (!$details_id) {
-                Category::destroy($id);
-            }
-        }
-        else {
-            return redirect('branch')->with('flash_message', 'Sorry there is problem, storing category data');
-        } 
+        Category::create($requestData);
 
         return redirect('category')->with('flash_message', 'Category added!');
     }
@@ -116,9 +86,9 @@ class CategoryController extends Controller
     public function edit($id)
     {
         
-        $data = $this->dropdown_data($id);
+        $category = Category::findOrFail($id);
 
-        return view('category.category.edit', $data);
+        return view('category.category.edit', compact('category'));
     }
 
     /**
@@ -132,39 +102,26 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-			'branch_id' => 'required',
 			'status' => 'required',
 			'title' => 'required'
-		]);
-        $requestData = $request->all();
+        ]);
         
         $category = Category::findOrFail($id);
-        $category->update($requestData);
-
-        // Also update the details table.
-        // Todo, if edit is done by admin the status shoudl be approved otherwise it should be pending.
-        $status = 'pending';
         
-        $update = ['category_id' => $id,
-        'title' => $requestData['title'],
-        'description' => $requestData['description'],
-        // 'contents' => $requestData['contents'],
-        'details_status' => $status,
+        $update = [
+            'title' => $request['title'],
+            'description' => $request['description'],
+            'status' => $request['status'],
         ];
 
-        // If there was a new image, use it otherwise get old image name.
         if ($request->file('logo')) {
             $update['thumbnail'] = save_file($request);
         } else {
-            $update['thumbnail'] =  $category->categoryDetails->thumbnail;
+            $update['thumbnail'] =  $category->thumbnail;
         }
-
-        // Update details.
-        $details_id = DB::table('category_details')->insertGetId($update);
-
-        if (!$details_id) {
-            return redirect('branch')->with('flash_message', 'Sorry there is problem, updating category data');
-        }
+        
+        
+        $category->update($update);
 
         return redirect('category')->with('flash_message', 'Category updated!');
     }
@@ -181,26 +138,5 @@ class CategoryController extends Controller
         Category::destroy($id);
 
         return redirect('category')->with('flash_message', 'Category deleted!');
-    }
-
-    /**
-     * Load necessary data for dropdowns.
-     *
-     * @param  int  $id
-     *
-     * @return array $data
-     */
-    public function dropdown_data($id = false) {
-        // Pass commissons for dropdown list form.
-        // $data['commissions'] = Commission::all();
-
-        // Pass Users for dropdown list form.
-        $data['users'] = User::all();
-
-        // Pass Item to view. (For Edit form)
-        // $item = Item::findOrFail($id);
-        $data['category'] = ($id) ? $category = Category::findOrFail($id) : null;
-
-        return $data;
     }
 }
