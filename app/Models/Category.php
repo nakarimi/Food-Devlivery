@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\categoryDetails;
 
-class Branch extends Model
+class Category extends Model
 {
     use LogsActivity;
     
@@ -15,7 +16,7 @@ class Branch extends Model
      *
      * @var string
      */
-    protected $table = 'branches';
+    protected $table = 'categories';
 
     /**
     * The database primary key value.
@@ -29,9 +30,7 @@ class Branch extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'business_type', 'main_commission_id', 'deliver_commission_id', 'status'];
-
-    
+    protected $fillable = ['title', 'description', 'thumbnail', 'status'];
 
     /**
      * Change activity log event description
@@ -43,11 +42,5 @@ class Branch extends Model
     public function getDescriptionForEvent($eventName)
     {
         return __CLASS__ . " model has been {$eventName}";
-    }
-
-    // Relationship with details table.
-    public function branchDetails(){
-        return $this->hasOne(BranchDetails::class, 'business_id')->where('status', 'approved')->latest();
-
     }
 }

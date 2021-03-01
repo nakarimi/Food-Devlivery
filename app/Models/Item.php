@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\ItemDetails;
 
-class Branch extends Model
+class Item extends Model
 {
     use LogsActivity;
     
@@ -15,7 +16,7 @@ class Branch extends Model
      *
      * @var string
      */
-    protected $table = 'branches';
+    protected $table = 'items';
 
     /**
     * The database primary key value.
@@ -29,7 +30,7 @@ class Branch extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'business_type', 'main_commission_id', 'deliver_commission_id', 'status'];
+    protected $fillable = ['branch_id', 'status'];
 
     
 
@@ -46,8 +47,8 @@ class Branch extends Model
     }
 
     // Relationship with details table.
-    public function branchDetails(){
-        return $this->hasOne(BranchDetails::class, 'business_id')->where('status', 'approved')->latest();
+    public function itemDetails(){
+        return $this->hasOne(ItemDetails::class, 'item_id')->where('details_status', 'approved')->latest();
 
     }
 }
