@@ -38,4 +38,36 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    // This function used to return every role to their dashboard.
+    public function authenticate(Request $request)
+    {
+        $role = Auth::user()->role->name;
+        $role=strtolower($role);
+        switch ($role) {
+            case 'admin':
+                return redirect(route('admin.dashboard'));
+                break;
+            case 'restaurant':
+                return redirect(route('restaurant.dashboard'));
+                break;
+
+            case 'support':
+                return redirect(route('support.dashboard'));
+                break;
+
+            case 'driver':
+                return redirect(route('driver.dashboard'));
+                break;
+
+            case 'customer':
+                return redirect(route('customer.dashboard'));
+                break;
+            default:
+                return '/notfound';
+                break;
+        }
+
+    }
+
 }
