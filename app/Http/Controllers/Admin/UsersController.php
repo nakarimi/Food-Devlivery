@@ -38,8 +38,7 @@ class UsersController extends Controller
     {
         $roles = Role::select('id', 'name', 'label')->get();
         $roles = $roles->pluck('label','id');
-        $status = [1 => 'Active', 2 => 'Deactive'];
-        return view('admin.users.create', compact('roles', 'status'));
+        return view('admin.users.create', compact('roles'));
     }
 
     /**
@@ -51,6 +50,7 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
+//        dd($request);
         $this->validate(
             $request,
             [
@@ -63,8 +63,15 @@ class UsersController extends Controller
 
         $data = $request->except('password');
         $data['password'] = bcrypt($request->password);
-        $data['logo'] = $this->save_image($request);
         $user = User::create($data);
+
+        // Return Restaurant and Driver to next page.
+        if ($request->role_id == 4){
+            return redirect()->route('branch.create',['userId'=> $user->id, 'title' => $request->name]);
+        }
+        elseif ($request->role_id == 3){
+            return redirect()->route('driver.create',['userId'=> $user->id, 'title' => $request->name]);
+        }
         return redirect('admin/users')->with('flash_message', 'User added!');
     }
 
@@ -93,10 +100,9 @@ class UsersController extends Controller
     {
         $roles = Role::select('id', 'name', 'label')->get();
         $roles = $roles->pluck('label','id');
-        $status = [1 => 'Active', 2 => 'Deactive'];
-        $user = User::with('role')->select('id', 'name', 'email', 'location', 'role_id', 'contacts', 'status')->findOrFail($id);
+        $user = User::with('role')->select('id', 'name', 'email', 'role_id')->findOrFail($id);
 
-        return view('admin.users.edit', compact('user', 'roles', 'status'));
+        return view('admin.users.edit', compact('user', 'roles'));
     }
 
     /**
@@ -122,9 +128,6 @@ class UsersController extends Controller
         if ($request->has('password')) {
             $data['password'] = bcrypt($request->password);
         }
-        if ($request->file('logo')){
-         $data['logo'] = $this->save_image($request);
-        }
         $user = User::findOrFail($id);
         $user->update($data);
         return redirect('admin/users')->with('flash_message', 'User updated!');
@@ -144,12 +147,4 @@ class UsersController extends Controller
         return redirect('admin/users')->with('flash_message', 'User deleted!');
     }
 
-    public function save_image($request){
-        $filename = null;
-        if ($request->file('logo')){
-            $filename = time().'.'.request()->logo->getClientOriginalExtension();
-            request()->logo->move(public_path('images'), $filename);
-        }
-        return $filename;
-    }
 }

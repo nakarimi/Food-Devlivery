@@ -31,7 +31,7 @@
                                 <thead>
                                     <tr>
                                         <th>#</th><th>Name</th><th>Email</th>
-                                        <th>Location</th><th>Contacts</th><th>Role</th><th>Status</th><th>Actions</th>
+                                       <th>Role</th><th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -39,10 +39,7 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td><a href="{{ url('/admin/users', $item->id) }}">{{ ucfirst($item->name) }}</a></td><td>{{ $item->email }}</td>
-                                        <td>{{ucfirst($item->location)  }}</td>
-                                        <td>{{ $item->contacts }}</td>
                                         <td>{{ $item->role->label }}</td>
-                                        <td>@php echo ($item->status == 1 ) ? '<span class="badge bg-inverse-success">Active</span>' :  '<span class="badge bg-inverse-danger">Deactive</span>'; @endphp </td>
                                         <td>
                                             <a href="{{ url('/admin/users/' . $item->id) }}" title="View User"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
                                             <a href="{{ url('/admin/users/' . $item->id . '/edit') }}" title="Edit User"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>

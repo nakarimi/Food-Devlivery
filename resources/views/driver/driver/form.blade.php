@@ -2,7 +2,7 @@
    <div class="col">
       <div class="form-group{{ $errors->has('title') ? 'has-error' : ''}}">
     <label for="title" class="control-label">{{ 'Full Name' }}</label>
-    <input class="form-control" name="title" type="text" id="title" value="{{ $driver->title ?? ''}}" required>
+    <input class="form-control" name="title" type="text" id="title" value="{{ $driver->title ?? $_GET['title'] ?? ''}}" required>
     {!! $errors->first('title', '<p class="help-block">:message</p>') !!}
 </div>
    </div>
@@ -13,7 +13,7 @@
 
      <select class="custom-select mr-sm-2" name="user_id" id="user_id" required>
       @foreach($users as $user)
-         <option value="{{ $user->id }}" @if( isset($driver->user_id) && $user->id == $driver->user_id) selected="selected" @endif >{{ $user->name }}</option>
+         <option value="{{ $user->id }}" @if( (isset($driver->user_id) && $user->id == $driver->user_id) || $user->id == ($_GET['userId'] ?? '')) selected="selected" @endif >{{ $user->name }}</option>
       @endforeach
    </select>
 
