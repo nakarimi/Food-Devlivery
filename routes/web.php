@@ -45,6 +45,8 @@ Route::middleware(['admin'])->group(function () {
     Route::resource('payment', 'App\Http\Controllers\PaymentController');
     Route::resource('item', 'App\Http\Controllers\ItemController');
     Route::resource('category', 'App\Http\Controllers\CategoryController');
+    Route::resource('menu', 'App\Http\Controllers\MenuController');
+
 
 });
 
@@ -92,6 +94,5 @@ Route::middleware(['customer'])->group(function () {
         return view('dashboards.customer.dashboard');
     })->name('customer.dashboard');
 });
-
 
 
