@@ -50,7 +50,7 @@
             <!-- Page Content -->
             <div class="content container-fluid">
             <!-- Page Header -->
-                @include('layouts.page-header')
+{{--                @include('layouts.page-header')--}}
             <!-- /Page Header -->
 
 

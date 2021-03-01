@@ -1,4 +1,7 @@
 @extends('layouts.master')
+@section('title')
+Single User
+@stop
 
 @section('content')
     <div class="container">
@@ -26,33 +29,64 @@
                         {!! Form::close() !!}
                         <br/>
                         <br/>
-
-                        <div class="table-responsive">
-                            <table class="table table-striped custom-table mb-0 table-nowrap">
-                                <thead>
-                                    <tr>
-                                        <th>ID.</th> <th>Name</th><th>Email</th><th>Role</th><th>Contact</th><th>Photo</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{{ $user->id }}</td> <td> {{ $user->name }} </td><td> {{ $user->email }} </td>
-                                        <td>{{ $user->role->label }}</td> <td> {{ $user->contacts }} </td>
-                                        <td>
-                                            <img alt="" class="rounded mx-auto d-block"
-
-                                                 @if ($user->logo != null && file_exists(public_path('images/'.$user->logo)))
-                                                 src="{{asset('images/'.$user->logo.'')}}"
-                                                 @else
-                                                 src="{{asset('img/user.jpg')}}"
-                                                @endif
-
-                                                height="70px"
-                                            >
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="card mb-0">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="profile-view">
+                                            <div class="profile-img-wrap">
+                                                <div class="profile-img">
+                                                    <a href="#"><img alt=""
+                                                                     @if ($user->logo != null && file_exists(public_path('images/'.$user->logo)))
+                                                                     src="{{asset('images/'.$user->logo.'')}}"
+                                                                     @else
+                                                                     src="{{asset('img/user.jpg')}}"
+                                                            @endif
+                                                        ></a>
+                                                </div>
+                                            </div>
+                                            <div class="profile-basic">
+                                                <div class="row">
+                                                    <div class="col-md-5 mt-3">
+                                                        <div class="profile-info-left">
+                                                            <h3 class="user-name mb-0">{{ucfirst($user->name)}}</h3> <br>
+                                                            <small class="text-muted">{{$user->role->label}}</small>
+                                                            <div class="staff-id">Location : {{$user->location}}</div>
+                                                            <div class="small doj text-muted">Registered on: {{ date_format(date_create($user->created_at), "jS F Y") }}</div>
+                                                            @if ($user->status == 1)
+                                                                <div class="staff-msg"><a class="btn btn-danger" href="#">Deactive User</a></div>
+                                                            @else
+                                                                <div class="staff-msg"><a class="btn btn-custom" href="#">Activate User</a></div>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-7 mt-3">
+                                                        <ul class="personal-info">
+                                                            <li>
+                                                                <div class="title">Contacts:</div>
+                                                                <div class="text"><a href="">{{$user->contacts}}</a></div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="title">Email:</div>
+                                                                <div class="text"><a href="">{{$user->email}}</a></div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="title">Location:</div>
+                                                                <div class="text">{{$user->location}}<br></div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="title">Gender:</div>
+                                                                <div class="text">Male</div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="pro-edit"><a class="edit-icon" href="{{ url('/admin/users/' . $user->id . '/edit') }}"><i class="fa fa-pencil"></i></a></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                     </div>

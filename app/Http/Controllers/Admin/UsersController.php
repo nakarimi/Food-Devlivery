@@ -17,7 +17,7 @@ class UsersController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->get('search');
-        $perPage = 15;
+        $perPage = 10;
 
         if (!empty($keyword)) {
             $users = User::where('name', 'LIKE', "%$keyword%")->orWhere('email', 'LIKE', "%$keyword%")
@@ -38,7 +38,8 @@ class UsersController extends Controller
     {
         $roles = Role::select('id', 'name', 'label')->get();
         $roles = $roles->pluck('label','id');
-        return view('admin.users.create', compact('roles'));
+        $status = [1 => 'Active', 2 => 'Deactive'];
+        return view('admin.users.create', compact('roles', 'status'));
     }
 
     /**
@@ -92,9 +93,10 @@ class UsersController extends Controller
     {
         $roles = Role::select('id', 'name', 'label')->get();
         $roles = $roles->pluck('label','id');
-        $user = User::with('role')->select('id', 'name', 'email', 'location', 'role_id', 'contacts')->findOrFail($id);
+        $status = [1 => 'Active', 2 => 'Deactive'];
+        $user = User::with('role')->select('id', 'name', 'email', 'location', 'role_id', 'contacts', 'status')->findOrFail($id);
 
-        return view('admin.users.edit', compact('user', 'roles'));
+        return view('admin.users.edit', compact('user', 'roles', 'status'));
     }
 
     /**
