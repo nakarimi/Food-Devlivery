@@ -9,6 +9,7 @@ use App\Models\Item;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use App\Models\Category;
 
 class ItemController extends Controller
 {
@@ -54,7 +55,8 @@ class ItemController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-			'branch_id' => 'required',
+            'branch_id' => 'required',
+            'category_id' => 'required',
 			'status' => 'required',
 			'title' => 'required',
 			'price' => 'required'
@@ -67,6 +69,7 @@ class ItemController extends Controller
         
         $id = DB::table('items')->insertGetId(
             ['branch_id' => $requestData['branch_id'],
+            'category_id' => $requestData['category_id'],
             'status' => $requestData['status']
             ]);
         
@@ -75,7 +78,6 @@ class ItemController extends Controller
                 ['item_id' => $id,
                 'title' => $requestData['title'],
                 'description' => $requestData['description'],
-                'code' => $requestData['code'],
                 'thumbnail' => save_file($request),
                 'price' => $requestData['price'], 
                 'package_price' => $requestData['package_price'],
@@ -134,7 +136,8 @@ class ItemController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-			'branch_id' => 'required',
+            'branch_id' => 'required',
+            'category_id' => 'required',
 			'status' => 'required',
 			'title' => 'required',
 			'price' => 'required'
@@ -151,7 +154,6 @@ class ItemController extends Controller
         $update = ['item_id' => $id,
             'title' => $requestData['title'],
             'description' => $requestData['description'],
-            'code' => $requestData['code'],
             'price' => $requestData['price'], 
             'package_price' => $requestData['package_price'],
             'unit' => $requestData['unit'],
@@ -197,8 +199,8 @@ class ItemController extends Controller
      * @return array $data
      */
     public function dropdown_data($id = false) {
-        // Pass commissons for dropdown list form.
-        // $data['commissions'] = Commission::all();
+        // Pass categories for dropdown list form.
+        $data['categories'] = Category::all();
 
         // Pass Users for dropdown list form.
         $data['users'] = User::all();

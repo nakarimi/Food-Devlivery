@@ -45,3 +45,5 @@ Route::middleware(['auth'])->group(function () {
 
 });
 
+
+Route::resource('menu', 'App\Http\Controllers\MenuController');

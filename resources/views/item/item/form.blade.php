@@ -39,8 +39,13 @@
    </div>
    <div class="col">
       <div class="form-group{{ $errors->has('code') ? 'has-error' : ''}}">
-         <label for="code" class="control-label">{{ 'Code' }}</label>
-         <input class="form-control" name="code" type="text" id="code" value="{{ $item->itemDetails->code ?? ''}}" >
+         <label for="category_id" class="control-label">{{ 'Category' }}</label>
+         {{-- <input class="form-control" name="code" type="text" id="code" value="{{ $item->itemDetails->code ?? ''}}" > --}}
+         <select class="custom-select mr-sm-2" name="category_id" id="category_id" required>
+            @foreach($categories as $category)
+                <option value="{{ $category->id }}" @if( isset($item->category_id) && $category->id == $item->category_id) selected="selected" @endif >{{ $category->title }}</option>
+            @endforeach
+         </select>
          {!! $errors->first('code', '
          <p class="help-block">:message</p>
          ') !!}
