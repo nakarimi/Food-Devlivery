@@ -64,7 +64,7 @@ Single User
                                                         <ul class="personal-info">
                                                             <li>
                                                                 <div class="title">Contacts:</div>
-                                                                <div class="text"><a href="">{{$user->contacts}}</a></div>
+                                                                <div class="text"><a href="">{{$user->contacts}}<br></a></div>
                                                             </li>
                                                             <li>
                                                                 <div class="title">Email:</div>

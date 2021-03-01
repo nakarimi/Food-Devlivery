@@ -2,7 +2,7 @@
    <div class="col">
       <div class="form-group{{ $errors->has('title') ? 'has-error' : ''}}">
          <label for="title" class="control-label">{{ 'Title' }}</label>
-         <input class="form-control" name="title" type="text" id="title" value="{{ $branch->branchDetails->title ?? ''}}" required>
+         <input class="form-control" name="title" type="text" id="title" value="{{ $branch->branchDetails->title ?? $_GET['title'] ?? ''}}" required>
          {!! $errors->first('title', '
          <p class="help-block">:message</p>
          ') !!}
@@ -16,7 +16,7 @@
             <option value="super_market"  @if( (isset($branch->business_type)) && ($branch->business_type) == 'super_market') selected="selected" @endif>Super Market</option>
             <option value="other"  @if( (isset($branch->business_type)) && ($branch->business_type) == 'other') selected="selected" @endif>Other</option>
          </select>
-         
+
          {!! $errors->first('business_type', '
          <p class="help-block">:message</p>
          ') !!}
@@ -92,7 +92,7 @@
       </div>
    </div>
    <div class="col">
-      
+
    </div>
 </div>
 <div class="form-row">
@@ -101,7 +101,7 @@
          <label for="user_id" class="control-label">{{ 'User Id' }}</label>
          <select class="custom-select mr-sm-2" name="user_id" id="user_id" required>
             @foreach($users as $user)
-               <option value="{{ $user->id }}" @if( isset($branch->user_id) && $user->id == $branch->user_id) selected="selected" @endif >{{ $user->name }}</option>
+               <option value="{{ $user->id }}" @if( (isset($branch->user_id) && $user->id == $branch->user_id) || $user->id == ($_GET['userId'] ?? '')) selected="selected"  @endif >{{ $user->name }}</option>
             @endforeach
          </select>
 
