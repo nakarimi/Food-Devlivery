@@ -30,14 +30,14 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>#</th><th>Branch Id</th><th>Status</th><th>Category Id</th><th>Actions</th>
+                                        <th>#</th><th>Title</th><th>Status</th><th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($category as $item)
                                     <tr>
-                                        <td>{{ $loop->iteration or $item->id }}</td>
-                                        <td>{{ $item->branch_id }}</td><td>{{ $item->status }}</td><td>{{ $item->category_id }}</td>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $item->title }}</td><td>{{ $item->status }}</td>
                                         <td>
                                             <a href="{{ url('/category/' . $item->id) }}" title="View Category"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
                                             <a href="{{ url('/category/' . $item->id . '/edit') }}" title="Edit Category"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>

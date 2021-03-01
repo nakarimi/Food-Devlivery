@@ -30,9 +30,7 @@ class Category extends Model
      *
      * @var array
      */
-    protected $fillable = ['branch_id', 'status'];
-
-    
+    protected $fillable = ['title', 'description', 'thumbnail', 'status'];
 
     /**
      * Change activity log event description
@@ -44,11 +42,5 @@ class Category extends Model
     public function getDescriptionForEvent($eventName)
     {
         return __CLASS__ . " model has been {$eventName}";
-    }
-
-    // Relationship with details table.
-    public function categoryDetails(){
-        return $this->hasOne(categoryDetails::class, 'category_id')->where('details_status', 'approved')->latest();
-
     }
 }
