@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         DB::table('roles')->insert(array(
             array(
                 'id'    => '1',
-                'name' => 'Admin',
+                'name' => 'admin',
                 'label' => 'Admin',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
@@ -61,7 +61,7 @@ class DatabaseSeeder extends Seeder
                 'role_id' => 1,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
-            ), 
+            ),
             array (
                 'name'     => 'Support',
                 'email'    => 'support@pomtech.com',
