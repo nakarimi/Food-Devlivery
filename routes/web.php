@@ -40,8 +40,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('commission', 'App\Http\Controllers\CommissionController');
     Route::resource('driver', 'App\Http\Controllers\DriverController');
     Route::resource('payment', 'App\Http\Controllers\PaymentController');
+    Route::resource('item', 'App\Http\Controllers\ItemController');
+    Route::resource('category', 'App\Http\Controllers\CategoryController');
 
 });
 
-Route::resource('item', 'App\Http\Controllers\ItemController');
-Route::resource('category', 'App\Http\Controllers\CategoryController');
