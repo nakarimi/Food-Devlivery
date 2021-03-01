@@ -120,23 +120,27 @@ class DatabaseSeeder extends Seeder
         ));
 
         DB::table('items')->insert(array(
-            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'branch_id' => '4','status' => '1'),
-            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'branch_id' => '4','status' => '1'),
-            array('id' => '3','created_at' => NULL,'updated_at' => NULL,'branch_id' => '5','status' => '1'),
-            array('id' => '4','created_at' => NULL,'updated_at' => NULL,'branch_id' => '5','status' => '1')
+            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'branch_id' => '4','category_id' => '1', 'status' => '1'),
+            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'branch_id' => '4','category_id' => '1', 'status' => '1'),
+            array('id' => '3','created_at' => NULL,'updated_at' => NULL,'branch_id' => '5','category_id' => '2','status' => '1'),
+            array('id' => '4','created_at' => NULL,'updated_at' => NULL,'branch_id' => '5','category_id' => '2','status' => '1')
           ));
 
         DB::table('item_details')->insert(array(
-            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'item_id' => '1','title' => 'Pizza','description' => 'پیتزا مخصوص با سوس','code' => '101','thumbnail' => 'noimage.jpg','price' => '50','package_price' => '0','unit' => 'piece','details_status' => 'approved'),
-            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'item_id' => '2','title' => 'همبرگر','description' => 'همبرگر با نون اضافی','code' => '102','thumbnail' => 'noimage.jpg','price' => '70','package_price' => '10','unit' => 'piece','details_status' => 'approved'),
-            array('id' => '3','created_at' => NULL,'updated_at' => NULL,'item_id' => '3','title' => 'روغن','description' => '1 کیلو','code' => NULL,'thumbnail' => 'noimage.jpg','price' => '120','package_price' => '0','unit' => 'bottle','details_status' => 'approved'),
-            array('id' => '4','created_at' => NULL,'updated_at' => NULL,'item_id' => '4','title' => 'کچالو','description' => 'کچالوی غزنی','code' => '100','thumbnail' => 'noimage.jpg','price' => '25','package_price' => '0','unit' => 'کیلو','details_status' => 'approved')
+            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'item_id' => '1','title' => 'Pizza','description' => 'پیتزا مخصوص با سوس','thumbnail' => 'noimage.jpg','price' => '50','package_price' => '0','unit' => 'piece','details_status' => 'approved'),
+            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'item_id' => '2','title' => 'همبرگر','description' => 'همبرگر با نون اضافی','thumbnail' => 'noimage.jpg','price' => '70','package_price' => '10','unit' => 'piece','details_status' => 'approved'),
+            array('id' => '3','created_at' => NULL,'updated_at' => NULL,'item_id' => '3','title' => 'روغن','description' => '1 کیلو','thumbnail' => 'noimage.jpg','price' => '120','package_price' => '0','unit' => 'bottle','details_status' => 'approved'),
+            array('id' => '4','created_at' => NULL,'updated_at' => NULL,'item_id' => '4','title' => 'کچالو','description' => 'کچالوی غزنی','thumbnail' => 'noimage.jpg','price' => '25','package_price' => '0','unit' => 'کیلو','details_status' => 'approved')
           ));
 
-        // DB::table('categories')->insert(array(
-        //     array('id' => '1','created_at' => NULL,'updated_at' => NULL,'branch_id' => '4','status' => '1'),
-        //     array('id' => '2','created_at' => NULL,'updated_at' => NULL,'branch_id' => '5','status' => '1')
-        //   ));
+        DB::table('categories')->insert(array(
+            array('id' => '1','created_at' => '2021-03-01 10:40:55','updated_at' => '2021-03-01 10:40:55','title' => 'پیتزا','description' => NULL,'thumbnail' => NULL,'status' => '1'),
+            array('id' => '2','created_at' => '2021-03-01 10:41:06','updated_at' => '2021-03-01 10:41:06','title' => 'عمومی','description' => NULL,'thumbnail' => NULL,'status' => '1')
+          ));
+
+        DB::table('menus')->insert(array(
+            array('id' => '1','created_at' => '2021-03-01 10:44:29','updated_at' => '2021-03-01 10:44:29','title' => 'Menu 1','branch_id' => '4','status' => '1','items' => '["1", "2"]')
+        ));
 
         // \App\Models\User::factory(10)->create();
     }

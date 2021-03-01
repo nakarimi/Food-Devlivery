@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\ItemDetails;
 
-class Item extends Model
+class Menu extends Model
 {
     use LogsActivity;
     
@@ -16,7 +15,7 @@ class Item extends Model
      *
      * @var string
      */
-    protected $table = 'items';
+    protected $table = 'menus';
 
     /**
     * The database primary key value.
@@ -30,7 +29,7 @@ class Item extends Model
      *
      * @var array
      */
-    protected $fillable = ['branch_id','category_id', 'status'];
+    protected $fillable = ['title', 'branch_id','status', 'items'];
 
     
 
@@ -44,11 +43,5 @@ class Item extends Model
     public function getDescriptionForEvent($eventName)
     {
         return __CLASS__ . " model has been {$eventName}";
-    }
-
-    // Relationship with details table.
-    public function itemDetails(){
-        return $this->hasOne(ItemDetails::class, 'item_id')->where('details_status', 'approved')->latest();
-
     }
 }
