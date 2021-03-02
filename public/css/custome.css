@@ -1,3 +1,7 @@
-.itemCategories .table td, .table th {
+.itemCategories .table td, 
+.itemCategories .table th, 
+.itemList .table td, 
+.itemList .table th
+{
     vertical-align: inherit;
 }

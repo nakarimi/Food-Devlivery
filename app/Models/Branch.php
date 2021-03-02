@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use App\Models\Commission;
+use App\Models\Item;
 
 class Branch extends Model
 {
@@ -63,9 +64,7 @@ class Branch extends Model
 
     // Relation ship with Branch
     public function payment(){
-        
         return $this->hasMany(Payment::class);
-
     }
 
 }

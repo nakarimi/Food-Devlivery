@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\ItemDetails;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Branch;
 
 class Item extends Model
 {

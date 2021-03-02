@@ -48,8 +48,6 @@ class Commission extends Model
 
     // Relation ship with Branch
     public function branch(){
-        
         return $this->hasMany(Branch::class);
-
     }
 }
