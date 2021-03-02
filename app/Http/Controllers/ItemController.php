@@ -230,13 +230,13 @@ class ItemController extends Controller
     public function pendingItems()
     {
         $item = $this->getItemsBasedOnStatus('pending');
-        return view('item.item.pendingItems', compact('item'));
+        return view('item.item.index', compact('item'));
     }
 
     public function approvedItems()
     {
         $item = $this->getItemsBasedOnStatus('approved');
-        return view('item.item.approvedItems', compact('item'));
+        return view('item.item.index', compact('item'));
     }
 
     public function approveItem(Request $request)
