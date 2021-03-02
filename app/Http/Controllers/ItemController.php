@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use App\Models\Category;
+use App\Models\Branch;
 
 class ItemController extends Controller
 {
@@ -216,8 +217,8 @@ class ItemController extends Controller
         // Pass categories for dropdown list form.
         $data['categories'] = Category::all();
 
-        // Pass Users for dropdown list form.
-        $data['users'] = User::all();
+        // Pass branches for dropdown list form.
+        $data['branches'] = Branch::all();
 
         // Pass Item to view. (For Edit form)
         // $item = Item::findOrFail($id);

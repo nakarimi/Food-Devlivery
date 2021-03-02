@@ -44,4 +44,9 @@ class Menu extends Model
     {
         return __CLASS__ . " model has been {$eventName}";
     }
+
+    public function branch(){
+        return $this->belongsTo(Branch::class);
+    }
 }
+ 

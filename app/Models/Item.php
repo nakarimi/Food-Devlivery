@@ -2,10 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\ItemDetails;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\Branch;
 
 class Item extends Model
 {
@@ -55,5 +53,9 @@ class Item extends Model
     // Relationship with details table with full data.
     public function itemFullDetails(){
         return $this->hasMany(ItemDetails::class, 'item_id');
+    }
+    
+    public function branch(){
+        return $this->belongsTo(Branch::class);
     }
 }
