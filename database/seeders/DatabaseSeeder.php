@@ -134,8 +134,8 @@ class DatabaseSeeder extends Seeder
           ));
 
         DB::table('categories')->insert(array(
-            array('id' => '1','created_at' => '2021-03-01 10:40:55','updated_at' => '2021-03-01 10:40:55','title' => 'پیتزا','description' => NULL,'thumbnail' => NULL,'status' => '1'),
-            array('id' => '2','created_at' => '2021-03-01 10:41:06','updated_at' => '2021-03-01 10:41:06','title' => 'عمومی','description' => NULL,'thumbnail' => NULL,'status' => '1')
+            array('id' => '1','created_at' => '2021-03-01 10:40:55','updated_at' => '2021-03-01 10:40:55','title' => 'پیتزا','description' => NULL,'thumbnail' => 'noimage.jpg','status' => '1'),
+            array('id' => '2','created_at' => '2021-03-01 10:41:06','updated_at' => '2021-03-01 10:41:06','title' => 'عمومی','description' => NULL,'thumbnail' => 'noimage.jpg','status' => '1')
           ));
 
         DB::table('menus')->insert(array(

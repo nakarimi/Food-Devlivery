@@ -25,6 +25,11 @@
     <!-- Main CSS -->
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
 
+    <!-- Custome CSS -->
+    <link rel="stylesheet" href="{{asset('css/custome.css')}}">
+
+
+
 
     {{--   Adding specific style of each page--}}
 

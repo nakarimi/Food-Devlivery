@@ -7,7 +7,7 @@
 
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">Commission {{ $commission->id }}</div>
+                    <div class="card-header">{{ $commission->title }}</div>
                     <div class="card-body">
 
                         <a href="{{ url('/commission') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
