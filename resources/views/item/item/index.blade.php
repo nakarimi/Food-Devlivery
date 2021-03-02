@@ -45,9 +45,15 @@
                                 </h2>
                             </td>
                            <td>{{ $item->itemDetails->title }}</td>
-                           <td>{{ $item->branch->id ?? "####" }}</td>
+                           <td>{{ $item->branchDetails->title ?? "####" }}</td>
                            <td>{{ $item->itemDetails->price }}</td>
-                           <td>{{ $item->status }}</td>
+                           <td>
+                              @if($item->status == 1)
+                                 <span class="badge bg-inverse-success">Active</span>
+                              @else
+                                 <span class="badge bg-inverse-danger">Inactive</span>
+                              @endif
+                           </td>
                            <td>
                               <a href="{{ url('/item/' . $item->id) }}" title="View Item"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
                               <a href="{{ url('/item/' . $item->id . '/edit') }}" title="Edit Item"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>

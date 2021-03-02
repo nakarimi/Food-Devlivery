@@ -44,4 +44,8 @@ class Menu extends Model
     {
         return __CLASS__ . " model has been {$eventName}";
     }
+
+    public function branchDetails(){
+        return $this->hasOne(BranchDetails::class, 'business_id')->where('status', 'approved')->latest();
+    }
 }
