@@ -46,4 +46,9 @@ class User extends Authenticatable
     public function role(){
         return $this -> hasOne('App\Models\Role','id','role_id');
     }
+
+    // Relation ship with Branch
+    public function payment(){
+        return $this->hasMany(Payment::class);
+    }
 }

@@ -31,7 +31,7 @@ if (!function_exists('save_file')) {
             $fileNameToStore = $filename.'_'.time().'.'.$extension;
 
             // Upload Image
-            $path = $request->file('logo')->storeAs('profile_images', $fileNameToStore);
+            $path = $request->file('logo')->storeAs('/public/profile_images', $fileNameToStore);
 
         }
         else {

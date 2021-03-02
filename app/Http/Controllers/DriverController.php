@@ -138,7 +138,7 @@ class DriverController extends Controller
         $data['users'] = User::all();
 
         // Pass drivers to view. (For Edit form)
-        $data['driver'] = Driver::findOrFail($id);
+        $data['driver'] = ($id) ? Driver::findOrFail($id) : [];
 
         return $data;
     }
