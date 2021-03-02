@@ -111,8 +111,7 @@ class ItemController extends Controller
     public function show($id)
     {
         $item = Item::with('itemFullDetails')->findOrFail($id);
-//        dd($item->itemFullDetails);
-
+        
         return view('item.item.show', compact('item'));
     }
 
@@ -171,11 +170,11 @@ class ItemController extends Controller
         ];
 
         // If there was a new image, use it otherwise get old image name.
-//        if ($request->file('logo')) {
-//            $update['thumbnail'] = save_file($request);
-//        } else {
-//            $update['thumbnail'] =  $item->itemDetails->thumbnail;
-//        }
+       if ($request->file('logo')) {
+           $update['thumbnail'] = save_file($request);
+       } else {
+           $update['thumbnail'] =  $item->itemDetails->thumbnail;
+       }
 
         // Update details.
         $details_id = DB::table('item_details')->insertGetId($update);
@@ -230,13 +229,13 @@ class ItemController extends Controller
     public function pendingItems()
     {
         $item = $this->getItemsBasedOnStatus('pending');
-        return view('item.item.pendingItems', compact('item'));
+        return view('item.item.index', compact('item'));
     }
 
     public function approvedItems()
     {
         $item = $this->getItemsBasedOnStatus('approved');
-        return view('item.item.approvedItems', compact('item'));
+        return view('item.item.index', compact('item'));
     }
 
     public function approveItem(Request $request)
