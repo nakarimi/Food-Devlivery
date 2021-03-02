@@ -6,6 +6,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Models\Item;
+use App\Models\ItemDetails;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -62,24 +63,28 @@ class ItemController extends Controller
 			'price' => 'required'
 		]);
         $requestData = $request->all();
+        $role = get_role();
 
         // Also update the details table.
         // Todo, if edit is done by admin the status shoudl be approved otherwise it should be pending.
-        $status = 'pending';
-        
+        $status = 'approved';
+        if ($role == 'restaurant'){
+            $status = 'pending';
+        }
+
         $id = DB::table('items')->insertGetId(
             ['branch_id' => $requestData['branch_id'],
             'category_id' => $requestData['category_id'],
             'status' => $requestData['status']
             ]);
-        
+
         if ($id) {
             $details_id = DB::table('item_details')->insertGetId(
                 ['item_id' => $id,
                 'title' => $requestData['title'],
                 'description' => $requestData['description'],
                 'thumbnail' => save_file($request),
-                'price' => $requestData['price'], 
+                'price' => $requestData['price'],
                 'package_price' => $requestData['package_price'],
                 'unit' => $requestData['unit'],
                 'details_status' => $status,
@@ -91,7 +96,7 @@ class ItemController extends Controller
         }
         else {
             return redirect('branch')->with('flash_message', 'Sorry there is problem, storing Item data');
-        } 
+        }
 
         return redirect('item')->with('flash_message', 'Item added!');
     }
@@ -105,7 +110,8 @@ class ItemController extends Controller
      */
     public function show($id)
     {
-        $item = Item::findOrFail($id);
+        $item = Item::with('itemFullDetails')->findOrFail($id);
+//        dd($item->itemFullDetails);
 
         return view('item.item.show', compact('item'));
     }
@@ -143,30 +149,34 @@ class ItemController extends Controller
 			'price' => 'required'
 		]);
         $requestData = $request->all();
-        
+        $role = get_role();
+
         $item = Item::findOrFail($id);
         $item->update($requestData);
 
         // Also update the details table.
         // Todo, if edit is done by admin the status shoudl be approved otherwise it should be pending.
-        $status = 'pending';
-        
+        $status = 'approved';
+        if ($role == 'restaurant'){
+            $status = 'pending';
+        }
+
         $update = ['item_id' => $id,
             'title' => $requestData['title'],
             'description' => $requestData['description'],
-            'price' => $requestData['price'], 
+            'price' => $requestData['price'],
             'package_price' => $requestData['package_price'],
             'unit' => $requestData['unit'],
             'details_status' => $status,
         ];
 
         // If there was a new image, use it otherwise get old image name.
-        if ($request->file('logo')) {
-            $update['thumbnail'] = save_file($request);
-        } else {
-            $update['thumbnail'] =  $item->itemDetails->thumbnail;
-        }
-        
+//        if ($request->file('logo')) {
+//            $update['thumbnail'] = save_file($request);
+//        } else {
+//            $update['thumbnail'] =  $item->itemDetails->thumbnail;
+//        }
+
         // Update details.
         $details_id = DB::table('item_details')->insertGetId($update);
 
@@ -174,6 +184,11 @@ class ItemController extends Controller
             return redirect('branch')->with('flash_message', 'Sorry there is problem, updating item data');
         }
 
+        else{
+            DB::table('item_details')->where('item_id', '=', $id)
+                ->where('id', '!=', $details_id)
+                ->update(array('details_status' => "old"));
+        }
         return redirect('item')->with('flash_message', 'Item updated!');
     }
 
@@ -211,4 +226,44 @@ class ItemController extends Controller
 
         return $data;
     }
+
+    public function pendingItems()
+    {
+        $item = $this->getItemsBasedOnStatus('pending');
+        return view('item.item.pendingItems', compact('item'));
+    }
+
+    public function approvedItems()
+    {
+        $item = $this->getItemsBasedOnStatus('approved');
+        return view('item.item.approvedItems', compact('item'));
+    }
+
+    public function approveItem(Request $request)
+    {
+        $detialId = $request->item_detail_id;
+        $item = ItemDetails::findOrFail($detialId);
+        $item->details_status = "approved";
+        $item->save();
+         return redirect()->back()->with('flash_message', 'Item Approved!');
+    }
+
+    public function rejectItem(Request $request)
+    {
+        $detialId = $request->item_detail_id;
+        $item = ItemDetails::findOrFail($detialId);
+        $item->details_status = "rejected";
+        $item->save();
+         return redirect()->back()->with('flash_message', 'Item Rejected!');
+    }
+
+    public function getItemsBasedOnStatus($status)
+    {
+        $item = Item::whereHas(
+            'itemFullDetails', function ($query) use ($status) {
+            $query->where('details_status', '=', $status);
+        })->latest()->paginate(10);
+        return $item;
+    }
+
 }

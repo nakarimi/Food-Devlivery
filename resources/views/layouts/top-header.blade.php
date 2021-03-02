@@ -224,7 +224,7 @@
             <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
 							<span class="user-img"><img src="" alt="">
 							<span class="status online"></span></span>
-                <span>Admin</span>
+                <span>{{auth()->user()->name}}</span>
             </a>
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="profile.html">My Profile</a>
