@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Commission;
 
 class Branch extends Model
 {
@@ -48,6 +49,16 @@ class Branch extends Model
     // Relationship with details table.
     public function branchDetails(){
         return $this->hasOne(BranchDetails::class, 'business_id')->where('status', 'approved')->latest();
-
     }
+    
+    // Relation ship with commission
+    public function mainCommission(){
+        return $this->hasOne(Commission::class, 'id', 'main_commission_id');
+    }
+
+    // Relation ship with commission
+    public function deliveryCommission(){
+        return $this->hasOne(Commission::class, 'id', 'deliver_commission_id');
+    }
+
 }
