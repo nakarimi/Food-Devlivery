@@ -61,4 +61,11 @@ class Branch extends Model
         return $this->hasOne(Commission::class, 'id', 'deliver_commission_id');
     }
 
+    // Relation ship with Branch
+    public function payment(){
+        
+        return $this->hasMany(Payment::class);
+
+    }
+
 }

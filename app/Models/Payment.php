@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Branch;
+use App\Models\User;
 
 class Payment extends Model
 {
@@ -44,4 +46,14 @@ class Payment extends Model
     {
         return __CLASS__ . " model has been {$eventName}";
     }
+
+    public function branchDetails(){
+        return $this->hasOne(BranchDetails::class, 'business_id')->where('status', 'approved')->latest();
+    }
+
+    // Relation ship with commission
+    public function user(){
+        return $this->hasOne(User::class, 'id', 'reciever_id');
+    }
+
 }
