@@ -115,8 +115,8 @@ class DatabaseSeeder extends Seeder
         ));
 
         DB::table('branche_main_info')->insert(array(
-            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'business_id' => '1','title' => 'Fifty-Fifty','description' => 'Eat anything with 50 Afs.','logo' => 'noimage.jpg','contact' => '+937909090','location' => 'Herat-Chawk Golha','status' => 'approved'),
-            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'business_id' => '2','title' => 'Herat Super Market','description' => 'Any you need, we have.','logo' => 'noimage.jpg','contact' => '+937303030','location' => 'Herat-Chawk Shahre Now','status' => 'approved')
+            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'business_id' => '1','title' => 'Fifty-Fifty','description' => 'Eat anything with 50 Afs.','logo' => 'test_1614666474.png','contact' => '+937909090','location' => 'Herat-Chawk Golha','status' => 'approved'),
+            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'business_id' => '2','title' => 'Herat Super Market','description' => 'Any you need, we have.','logo' => 'logo_1614666570.png','contact' => '+937303030','location' => 'Herat-Chawk Shahre Now','status' => 'approved')
         ));
 
         DB::table('items')->insert(array(
