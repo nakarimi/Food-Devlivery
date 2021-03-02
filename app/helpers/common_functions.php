@@ -42,3 +42,14 @@ if (!function_exists('save_file')) {
     }
 }
 
+if (!function_exists('get_role')) {
+     /**
+     * Return user role name.
+     * */
+    function get_role() {
+        // Handle File Upload
+       $role =  auth()->user()->role->name;
+        return $role;
+    }
+}
+

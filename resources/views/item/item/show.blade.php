@@ -32,6 +32,45 @@
                             </table>
                         </div>
 
+                        <br>
+                        <div class="table-responsive">
+                            <h1>Item History</h1>
+                            <table class="table table-striped">
+                                <thead>
+                                <th>ID</th><th>title</th><th>Price</th><th>Unit</th><th>Status</th>
+                                </thead>
+                                <tbody>
+                                @foreach($item->itemFullDetails as $detail)
+                                <tr>
+                                    <td>{{$detail->id}}</td>
+                                    <td>{{$detail->title}}</td>
+                                    <td>{{$detail->price}}</td>
+                                    <td>{{$detail->unit}}</td>
+                                    <td>
+                                    @if ($detail->details_status == "pending" )
+
+                                            <form method="POST" action="{{ url('/approveItem') }}" accept-charset="UTF-8" style="display:inline">
+                                                {{ csrf_field() }}
+                                                <input type="hidden" value="{{$detail->id}}" name="item_detail_id">
+                                                <button class="btn btn-sm btn-info" onclick="return confirm(&quot;Confirm approve?&quot;)">Approve</button>
+                                            </form>
+
+                                            <form method="POST" action="{{ url('/rejectItem') }}" accept-charset="UTF-8" style="display:inline">
+                                                {{ csrf_field() }}
+                                                <input type="hidden" value="{{$detail->id}}" name="item_detail_id">
+                                                <button class="btn btn-sm btn-danger" onclick="return confirm(&quot;Confirm Reject?&quot;)">Reject</button>
+                                            </form>
+
+                                        @else
+                                            {{$detail->details_status }}
+                                        @endif
+                                    </td>
+                                </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
                 </div>
             </div>

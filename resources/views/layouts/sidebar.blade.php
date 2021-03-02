@@ -8,14 +8,26 @@
                             <span>{{ $section->section }}</span>
                         </li>
                         @foreach($section->items as $menu)
-                            <li>
-                                <a href="{{ url($menu->url) }}"> <span>{{ $menu->title }}</span></a>
-                            </li>
+                            @if ($menu->title == "Item")
+                                <li class="submenu">
+                                    <a href="#" class="subdrop"><span> {{ $menu->title }}</span> <span class="menu-arrow"></span></a>
+                                    <ul style="display: block;">
+                                        <li><a href="{{route('items.pending')}}">Pending Items</a></li>
+                                        <li><a href="{{route('items.approved')}}">Approved Items</a></li>
+                                    </ul>
+                                </li>
+
+                                @else
+                                <li>
+                                    <a href="{{ url($menu->url) }}"> <span>{{ $menu->title }}</span></a>
+                                </li>
+                            @endif
 
                         @endforeach
                         <br>
                     @endif
                 @endforeach
+
 
             </ul>
 
