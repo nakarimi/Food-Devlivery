@@ -37,7 +37,7 @@
                         <tr>
                            <td>{{ $loop->iteration or $item->id }}</td>
                            <td>{{ $item->title }}</td>
-                           <td>{{ $item->branchDetails->title }}</td>
+                           <td>{{ $item->branch->branchDetails->title }}</td>
                            <td>
                               @if($item->status == 1)
                                  <span class="badge bg-inverse-success">Active</span>

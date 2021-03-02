@@ -55,4 +55,7 @@ class Item extends Model
         return $this->hasMany(ItemDetails::class, 'item_id');
     }
     
+    public function branch(){
+        return $this->belongsTo(Branch::class);
+    }
 }

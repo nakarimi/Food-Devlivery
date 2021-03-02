@@ -28,7 +28,7 @@
                         </tr>
                         <tr>
                            <th> Branch </th>
-                           <td> {{ $menu->branchDetails->title }} </td>
+                           <td> {{ $menu->branch->branchDetails->title }} </td>
                         </tr>
                         <tr>
                            <th> Status </th>

@@ -33,9 +33,8 @@
                         </tr>
                         <tr>
                            <th> Branch </th>
-                           <td> {{ "###" }} </td>
+                           <td> {{ $item->branch->branchDetails->title }} </td>
                         </tr>
-                       
                         <tr>
                            <th> Price </th>
                            <td> {{ $item->itemDetails->price }} </td>

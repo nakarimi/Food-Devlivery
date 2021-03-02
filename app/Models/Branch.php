@@ -66,5 +66,5 @@ class Branch extends Model
     public function payment(){
         return $this->hasMany(Payment::class);
     }
-
+    
 }

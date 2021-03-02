@@ -45,7 +45,7 @@
                                 </h2>
                             </td>
                            <td>{{ $item->itemDetails->title }}</td>
-                           <td>{{ $item->branchDetails->title ?? "####" }}</td>
+                           <td>{{ @$item->branch->branchDetails->title}}</td>
                            <td>{{ $item->itemDetails->price }}</td>
                            <td>
                               @if($item->status == 1)

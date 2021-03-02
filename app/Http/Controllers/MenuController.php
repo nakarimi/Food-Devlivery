@@ -9,6 +9,7 @@ use App\Models\Menu;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\User;
+use App\Models\Branch;
 
 class MenuController extends Controller
 {
@@ -144,11 +145,11 @@ class MenuController extends Controller
 
         // Pass all available items.
         $data['items'] = Item::where('status', 1)
-            ->where('branch_id', 4)
+            ->where('branch_id', 2)
             ->get();
 
-        // Pass Users for dropdown list form.
-        $data['users'] = User::all();
+        // Pass branches for dropdown list form.
+        $data['branches'] = Branch::all();
 
         // Pass Users for dropdown list form.
         $data['current_items'] = [];
