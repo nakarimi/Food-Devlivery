@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Branch;
 
 class Commission extends Model
 {
@@ -43,5 +44,12 @@ class Commission extends Model
     public function getDescriptionForEvent($eventName)
     {
         return __CLASS__ . " model has been {$eventName}";
+    }
+
+    // Relation ship with Branch
+    public function branch(){
+        
+        return $this->hasMany(Branch::class);
+
     }
 }
