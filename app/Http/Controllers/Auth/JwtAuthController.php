@@ -97,14 +97,15 @@ class JwtAuthController extends Controller
         }
     }
   
-    public function getUser(Request $request)
-    {
-        $this->validate($request, [
-            'token' => 'required'
-        ]);
+    // public function userProfile(Request $request)
+    // {
+    //     $this->validate($request, [
+    //         'token' => 'required'
+    //     ]);
   
-        $user = JWTAuth::authenticate($request->token);
+    //     $user = JWTAuth::authenticate($request->token);
   
-        return response()->json(['user' => $user]);
-    }
+    //     return response()->json(['user' => $user]);
+    // }
+    
 }

@@ -3,6 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\JwtAuthController;
+use App\Http\Controllers\CustomerRequests;
+use App\Http\Controllers\DriverRequests;
+use App\Http\Controllers\BranchRequests;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -30,5 +34,28 @@ Route::group([
     Route::post('/register', [JwtAuthController::class, 'register']);
     Route::post('/logout', [JwtAuthController::class, 'logout']);
     Route::post('/refresh', [JwtAuthController::class, 'refresh']);
-    Route::get('/user-profile', [JwtAuthController::class, 'userProfile']);    
+});
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'customer'
+
+], function ($router) {
+    Route::get('/check', [CustomerRequests::class, 'check']);    
+});
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'driver'
+
+], function ($router) {
+    Route::get('/check', [DriverRequests::class, 'check']);    
+});
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'branch'
+
+], function ($router) {
+    Route::get('/check', [BranchRequests::class, 'check']);    
 });
