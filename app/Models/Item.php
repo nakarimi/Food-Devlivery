@@ -54,7 +54,7 @@ class Item extends Model
     public function itemFullDetails(){
         return $this->hasMany(ItemDetails::class, 'item_id');
     }
-    
+
     public function branch(){
         return $this->belongsTo(Branch::class);
     }
