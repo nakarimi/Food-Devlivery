@@ -67,5 +67,6 @@ class Kernel extends HttpKernel
         'driver' => \App\Http\Middleware\Driver::class,
         'support' => \App\Http\Middleware\Support::class,
         'customer' => \App\Http\Middleware\Customer::class,
+        'auth.jwt' => Tymon\JWTAuth\Middleware\GetUserFromToken::class,
     ];
 }
