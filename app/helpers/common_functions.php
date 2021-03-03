@@ -53,3 +53,12 @@ if (!function_exists('get_role')) {
     }
 }
 
+if (!function_exists('get_item_status')) {
+    /**
+     * Return an item latest details.
+     * */
+    function get_item_details($item) {
+        return $item->itemFullDetails->first();
+    }
+}
+

@@ -4,10 +4,10 @@
    <div class="row">
       <div class="col-md-12">
          <div class="card">
-            <div class="card-header">{{ $item->itemDetails->title }}</div>
+            <div class="card-header">test</div>
             <div class="profile-img-wrap" style="right: 0px; top: 10px; width: 190px;">
                <div class="profile-img">
-                  <a href="#"><img alt="" src="{{ url('storage/profile_images/'.$item->itemDetails->thumbnail) }}"></a>
+                  <a href="#"><img alt="" src="{{ url('storage/profile_images/'.get_item_details($item)->thumbnail) }}"></a>
                </div>
             </div>
             <div class="card-body">
@@ -29,7 +29,7 @@
                         </tr>
                          <tr>
                            <th> Title </th>
-                           <td> {{ $item->itemDetails->title }} </td>
+                           <td> {{ get_item_details($item)->details_status ?? ''}} </td>
                         </tr>
                         <tr>
                            <th> Branch </th>
@@ -37,19 +37,19 @@
                         </tr>
                         <tr>
                            <th> Price </th>
-                           <td> {{ $item->itemDetails->price }} </td>
+                           <td> {{ get_item_details($item)->price }} </td>
                         </tr>
                         <tr>
                            <th> Package Price </th>
-                           <td> {{ $item->itemDetails->package_price }} </td>
+                           <td> {{ get_item_details($item)->package_price }} </td>
                         </tr>
                         <tr>
                            <th> Unit </th>
-                           <td> {{ $item->itemDetails->unit }} </td>
+                           <td> {{ get_item_details($item)->unit }} </td>
                         </tr>
                         <tr>
                            <th> Description </th>
-                           <td> {{ $item->itemDetails->description }} </td>
+                           <td> {{ get_item_details($item)->description }} </td>
                         </tr>
                      </tbody>
                   </table>
