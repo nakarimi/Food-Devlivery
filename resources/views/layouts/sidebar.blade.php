@@ -10,8 +10,8 @@
                         @foreach($section->items as $menu)
                             @if ($menu->title == "Item")
                                 <li class="submenu">
-                                    <a href="#" class="subdrop"><span> {{ $menu->title }}</span> <span class="menu-arrow"></span></a>
-                                    <ul style="display: block;">
+                                    <a href="#"><span> {{ $menu->title }}</span> <span class="menu-arrow"></span></a>
+                                    <ul>
                                         <li><a href="{{route('items.pending')}}">Pending Items</a></li>
                                         <li><a href="{{route('items.approved')}}">Approved Items</a></li>
                                     </ul>
