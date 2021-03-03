@@ -31,7 +31,7 @@
                            <th>Branch</th>
                            <th>Price</th>
                            <th>Status</th>
-                           
+
                            <th>Actions</th>
                         </tr>
                      </thead>
@@ -41,12 +41,12 @@
                            <td>{{ $loop->iteration}}</td>
                            <td>
                             <h2 class="table-avatar">
-                                    <a href="#" class="avatar" style="width: 100px; height: 100px; background-color: transparent;"><img alt="" src="{{ url('storage/profile_images/' . $item->itemDetails->thumbnail) }}"></a>
+                                    <a href="#" class="avatar" style="width: 100px; height: 100px; background-color: transparent;"><img alt="" src="{{ url('storage/profile_images/' . get_item_details($item)->thumbnail) }}"></a>
                                 </h2>
                             </td>
-                           <td>{{ $item->itemDetails->title }}</td>
+                           <td>{{ get_item_details($item)->title }}</td>
                            <td>{{ @$item->branch->branchDetails->title}}</td>
-                           <td>{{ $item->itemDetails->price }}</td>
+                           <td>{{ get_item_details($item)->price }}</td>
                            <td>
                               @if($item->status == 1)
                                  <span class="badge bg-inverse-success">Active</span>
@@ -68,7 +68,7 @@
                      </tbody>
                   </table>
                   {{-- There is an issue with pagination of this list, so commented out for now. --}}
-                  {{-- 
+                  {{--
                   <div class="pagination-wrapper"> {!! $item->appends(['search' => Request::get('search')])->render() !!} </div>
                   --}}
                </div>
