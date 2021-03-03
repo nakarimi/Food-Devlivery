@@ -120,10 +120,10 @@ class DatabaseSeeder extends Seeder
         ));
 
         DB::table('items')->insert(array(
-            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'branch_id' => '4','category_id' => '1', 'status' => '1'),
-            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'branch_id' => '4','category_id' => '1', 'status' => '1'),
-            array('id' => '3','created_at' => NULL,'updated_at' => NULL,'branch_id' => '5','category_id' => '2','status' => '1'),
-            array('id' => '4','created_at' => NULL,'updated_at' => NULL,'branch_id' => '5','category_id' => '2','status' => '1')
+            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1', 'status' => '1'),
+            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1', 'status' => '1'),
+            array('id' => '3','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '2','status' => '1'),
+            array('id' => '4','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '2','status' => '1')
           ));
 
         DB::table('item_details')->insert(array(
@@ -139,7 +139,7 @@ class DatabaseSeeder extends Seeder
           ));
 
         DB::table('menus')->insert(array(
-            array('id' => '1','created_at' => '2021-03-01 10:44:29','updated_at' => '2021-03-01 10:44:29','title' => 'Menu 1','branch_id' => '4','status' => '1','items' => '["1", "2"]')
+            array('id' => '1','created_at' => '2021-03-01 10:44:29','updated_at' => '2021-03-01 10:44:29','title' => 'Menu 1','branch_id' => '1','status' => '1','items' => '["1", "2"]')
         ));
 
         // \App\Models\User::factory(10)->create();

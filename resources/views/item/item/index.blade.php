@@ -28,7 +28,7 @@
                            <th>#</th>
                            <th>Thumbnail</th>
                            <th>Title</th>
-                           <th>Branch Id</th>
+                           <th>Branch</th>
                            <th>Price</th>
                            <th>Status</th>
                            
