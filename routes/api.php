@@ -2,7 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\JWTAuthController;
+use App\Http\Controllers\Auth\JwtAuthController;
+use App\Http\Controllers\CustomerRequests;
+use App\Http\Controllers\DriverRequests;
+use App\Http\Controllers\BranchRequests;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -26,9 +30,32 @@ Route::group([
     'prefix' => 'auth'
 
 ], function ($router) {
-    Route::post('/login', [JWTAuthController::class, 'login']);
-    Route::post('/register', [JWTAuthController::class, 'register']);
-    Route::post('/logout', [JWTAuthController::class, 'logout']);
-    Route::post('/refresh', [JWTAuthController::class, 'refresh']);
-    Route::get('/user-profile', [JWTAuthController::class, 'userProfile']);    
+    Route::post('/login', [JwtAuthController::class, 'login']);
+    Route::post('/register', [JwtAuthController::class, 'register']);
+    Route::post('/logout', [JwtAuthController::class, 'logout']);
+    Route::post('/refresh', [JwtAuthController::class, 'refresh']);
+});
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'customer'
+
+], function ($router) {
+    Route::get('/check', [CustomerRequests::class, 'check']);    
+});
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'driver'
+
+], function ($router) {
+    Route::get('/check', [DriverRequests::class, 'check']);    
+});
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'branch'
+
+], function ($router) {
+    Route::get('/check', [BranchRequests::class, 'check']);    
 });

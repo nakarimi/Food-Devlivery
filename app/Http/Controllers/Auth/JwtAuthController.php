@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use JWTAuth;
 use Validator;
@@ -8,10 +8,21 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Controllers\Controller; 
  
 class JwtAuthController extends Controller
 {
     public $token = true;
+
+    /**
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
+    public function __construct() {
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+    }
+    
   
     public function register(Request $request)
     {
@@ -86,14 +97,15 @@ class JwtAuthController extends Controller
         }
     }
   
-    public function getUser(Request $request)
-    {
-        $this->validate($request, [
-            'token' => 'required'
-        ]);
+    // public function userProfile(Request $request)
+    // {
+    //     $this->validate($request, [
+    //         'token' => 'required'
+    //     ]);
   
-        $user = JWTAuth::authenticate($request->token);
+    //     $user = JWTAuth::authenticate($request->token);
   
-        return response()->json(['user' => $user]);
-    }
+    //     return response()->json(['user' => $user]);
+    // }
+    
 }
