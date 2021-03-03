@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\JWTAuthController;
+use App\Http\Controllers\Auth\JwtAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,9 +26,9 @@ Route::group([
     'prefix' => 'auth'
 
 ], function ($router) {
-    Route::post('/login', [JWTAuthController::class, 'login']);
-    Route::post('/register', [JWTAuthController::class, 'register']);
-    Route::post('/logout', [JWTAuthController::class, 'logout']);
-    Route::post('/refresh', [JWTAuthController::class, 'refresh']);
-    Route::get('/user-profile', [JWTAuthController::class, 'userProfile']);    
+    Route::post('/login', [JwtAuthController::class, 'login']);
+    Route::post('/register', [JwtAuthController::class, 'register']);
+    Route::post('/logout', [JwtAuthController::class, 'logout']);
+    Route::post('/refresh', [JwtAuthController::class, 'refresh']);
+    Route::get('/user-profile', [JwtAuthController::class, 'userProfile']);    
 });
