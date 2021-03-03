@@ -24,7 +24,7 @@ class ItemController extends Controller
     {
         // If it is restaurant then user will have some restricted data.
         if (get_role() == "restaurant"){
-            $item = $this->loadUserItemsData(['pending', 'approved', 'rejected']);
+            $item = loadUserItemsData(['pending', 'approved', 'rejected']);
             return view('dashboards.restaurant.items.index', compact('item'));
         }
 
@@ -142,7 +142,12 @@ class ItemController extends Controller
      */
     public function edit($id)
     {
-
+        // If it is restaurant then user will have some restricted data.
+        if (get_role() == "restaurant"){
+            $userId = auth()->user()->id;
+            $data = $this->dropdown_data($id, $userId);
+            return view('dashboards.restaurant.items.edit', $data);
+        }
         $data = $this->dropdown_data($id);
 
         return view('item.item.edit', $data);
@@ -237,7 +242,7 @@ class ItemController extends Controller
         // Pass branches for dropdown list form.
         if ($userId != null){
             // If User Id passed it will load branches to that specific user.
-            $data['branches'] = $this->getUserBranches($userId);
+            $data['branches'] = getUserBranches($userId);
         }
         else {
             $data['branches'] = Branch::all();
@@ -253,7 +258,7 @@ class ItemController extends Controller
     {
         // If it is restaurant then user will have some restricted data.
         if (get_role() == "restaurant"){
-            $item = $this->loadUserItemsData(['pending']);
+            $item = loadUserItemsData(['pending']);
             return view('dashboards.restaurant.items.index', compact('item'));
         }
         $item = $this->getItemsBasedOnStatus('pending');
@@ -264,7 +269,7 @@ class ItemController extends Controller
     {
         // If it is restaurant then user will have some restricted data.
         if (get_role() == "restaurant"){
-            $item = $this->loadUserItemsData(['approved']);
+            $item = loadUserItemsData(['approved']);
             return view('dashboards.restaurant.items.index', compact('item'));
         }
 
@@ -299,37 +304,5 @@ class ItemController extends Controller
         return $item;
     }
 
-    // This function loads all items of the current user based on status.
-    // Status can be an array so it will return multiple items of user.
-    public function loadUserItemsData($status)
-    {
-        $userId = auth()->user()->id;
-        // Get user branch.
-        $branches = $this->getUserBranches($userId);
-        $branchIds = [];
-        foreach ($branches as $branch){
-            array_push($branchIds, $branch->id);
-        }
-
-        // Get user Items.
-        $items = $this->getUserItemsBasedOnStatus($branchIds, $status);
-        return $items;
-    }
-
-    // This will return user branches based on user id.
-    public function getUserBranches($id)
-    {
-        $branches = Branch::where('user_id', $id)->get();
-        return $branches;
-    }
-
-    // This will return items based on status one or multiple status.
-    public function getUserItemsBasedOnStatus ($branchIds, $status){
-        $item = Item::whereHas(
-            'itemFullDetails', function ($query) use ($status) {
-            $query->whereIn('details_status', $status);
-        })->whereIn('branch_id',$branchIds)->latest()->paginate(10);
-        return $item;
-    }
 
 }
