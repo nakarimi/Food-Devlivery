@@ -46,7 +46,6 @@ Route::middleware(['admin'])->group(function () {
     Route::post('/approveItem', 'App\Http\Controllers\ItemController@approveItem');
     Route::post('/rejectItem', 'App\Http\Controllers\ItemController@rejectItem');
     Route::resource('category', 'App\Http\Controllers\CategoryController');
-    Route::resource('menu', 'App\Http\Controllers\MenuController');
 
 
 });
@@ -65,6 +64,8 @@ Route::middleware(['restaurant'])->group(function () {
     Route::get('/pendingItems', 'App\Http\Controllers\ItemController@pendingItems')->name('items.pending');
     Route::get('/approvedItems', 'App\Http\Controllers\ItemController@approvedItems')->name('items.approved');
     Route::resource('item', 'App\Http\Controllers\ItemController');
+    Route::resource('menu', 'App\Http\Controllers\MenuController');
+
 
 });
 
