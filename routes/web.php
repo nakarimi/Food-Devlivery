@@ -103,3 +103,5 @@ Route::middleware(['customer'])->group(function () {
 });
 
 
+
+Route::resource('orders', 'App\Http\Controllers\OrdersController');
