@@ -49,7 +49,7 @@ class BranchController extends Controller
      */
     public function create()
     {
-       
+
         $data = $this->dropdown_data();
         return view('branch.branch.create', $data);
     }
@@ -79,7 +79,7 @@ class BranchController extends Controller
             'deliver_commission_id' => $requestData['deliver_commission_id'],
             'status' => $requestData['status']]
         );
-        
+
 
         if ($id) {
             $details_id = DB::table('branche_main_info')->insertGetId(
@@ -88,7 +88,7 @@ class BranchController extends Controller
                 'description' => $requestData['description'],
                 'logo' => save_file($request),
                 'contact' => $requestData['contact'],
-                'location' => $requestData['location'], 
+                'location' => $requestData['location'],
                 'status' => 'approved']
             );
 
@@ -98,7 +98,7 @@ class BranchController extends Controller
         }
         else {
             return redirect('branch')->with('flash_message', 'Sorry there is problem, storing branch data');
-        }    
+        }
         return redirect('branch')->with('flash_message', 'Branch added!');
     }
 
@@ -124,7 +124,15 @@ class BranchController extends Controller
      */
     public function edit($id)
     {
-        $data = $this->dropdown_data($id); 
+        // If it is restaurant then user will have some restricted data.
+        if (get_role() == "restaurant"){
+            $userId = auth()->user()->id;
+            // Pass branches to view. (For Edit form for restaurant with limited data)
+            $data['branch'] = Branch::where('id', $id)->where('user_id', $userId)->with('branchDetails')->latest()->first();
+            return view('dashboards.restaurant.profile.editBranch', $data);
+        }
+
+        $data = $this->dropdown_data($id);
         return view('branch.branch.edit', $data);
     }
 
@@ -138,43 +146,59 @@ class BranchController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-			'user_id' => 'required',
-			'business_type' => 'required',
-			'main_commission_id' => 'required',
-			'status' => 'required',
-			'title' => 'required'
-		]);
+        $role = get_role();
+        $requestArray = [
+            'location' => 'required',
+            'title' => 'required',
+            'contact' => 'required'
+        ];
+
+        if ($role != "restaurant"){
+            $requestArray = [
+                'user_id' => 'required',
+                'business_type' => 'required',
+                'main_commission_id' => 'required',
+                'status' => 'required',
+                'title' => 'required'
+            ];
+        }
+        $this->validate($request, $requestArray);
         $requestData = $request->all();
-        
+
         $branch = Branch::findOrFail($id);
         $branch->update($requestData);
 
+
         // Also update the details table.
         // Todo, if edit is done by admin the status shoudl be approved otherwise it should be pending.
-        $status = 'pending';
+        $status = 'approved';
+        $returnUrl = 'brnach';
+        if ($role == 'restaurant'){
+            $status = 'pending';
+            $returnUrl = '/profile';
+        }
         $update = ['business_id' => $id,
         'title' => $requestData['title'],
         'description' => $requestData['description'],
         'contact' => $requestData['contact'],
-        'location' => $requestData['location'], 
-        'status' => 'pending'];
-        
+        'location' => $requestData['location'],
+        'status' => $status];
+
         // If there was a new image, use it otherwise get old image name.
         if ($request->file('logo')) {
             $update['logo'] = save_file($request);
         } else {
             $update['logo'] =  $branch->branchDetails->logo;
         }
-        
+
         // Update details.
         $details_id = DB::table('branche_main_info')->insertGetId($update);
 
         if (!$details_id) {
-            return redirect('branch')->with('flash_message', 'Sorry there is problem, storing branch data');
+            return redirect($returnUrl)->with('flash_message', 'Sorry there is problem, storing branch data');
         }
-   
-        return redirect('branch')->with('flash_message', 'Branch updated!');
+
+        return redirect($returnUrl)->with('flash_message', 'Branch updated!');
     }
 
     /**
@@ -207,10 +231,20 @@ class BranchController extends Controller
 
         // Pass branches to view. (For Edit form)
         $data['branch'] = ($id) ? Branch::findOrFail($id) : null;
-        
+
 
         return $data;
     }
 
-     
+    public function pendingBranches()
+    {
+        $branch = getBranchesBasedOnStatus("pending");
+        return view('branch.branch.index', compact('branch'));
+    }
+
+    public function approvedBranches()
+    {
+        $branch = getBranchesBasedOnStatus("approved");
+        return view('branch.branch.index', compact('branch'));
+    }
 }

@@ -106,7 +106,7 @@ if (!function_exists('getUserItemsBasedOnStatus')){
     }
 }
 
-// This function get specific  user branchs and return user menus.
+// This function get specific  user branches and returns user menus.
 if (!function_exists('loadUserMenuData')){
     function loadUserMenuData($userId){
         // Get user branch.
@@ -129,5 +129,19 @@ if (!function_exists('getUserMenus')){
         return $menu;
     }
 }
+
+
+// This will return menus based on branch ids.
+if (!function_exists('getBranchesBasedOnStatus')){
+    function getBranchesBasedOnStatus ($status){
+        $branches = Branch::whereHas(
+            'branchFullDetails', function ($query) use ($status) {
+            $query->where('status', '=', $status);
+        })->latest()->paginate(10);
+        return $branches;
+    }
+}
+
+
 
 
