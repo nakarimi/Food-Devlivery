@@ -16,6 +16,10 @@
                     </ul>
                 </li>
 
+                <li>
+                    <a href="{{route('menu.index')}}"><span>Menu</span></a>
+                </li>
+
 
             </ul>
 

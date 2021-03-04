@@ -20,6 +20,14 @@ class MenuController extends Controller
      */
     public function index(Request $request)
     {
+        // If it is restaurant then user will have some restricted data.
+        if (get_role() == "restaurant"){
+            $userId = auth()->user()->id;
+            $menu = loadUserMenuData($userId);
+            return view('dashboards.restaurant.menu.index', compact('menu'));
+        }
+
+        //Todo: Should setup search for other users.
         $keyword = $request->get('search');
         $perPage = 25;
 
@@ -42,6 +50,13 @@ class MenuController extends Controller
      */
     public function create()
     {
+        // If it is restaurant then user will have some restricted data.
+        if (get_role() == "restaurant"){
+            $userId = auth()->user()->id;
+            $data = $this->dropdown_data(false,$userId);
+            return view('dashboards.restaurant.menu.create', $data);
+        }
+
         $data = $this->dropdown_data();
         return view('menu.menu.create', $data);
     }
@@ -62,7 +77,7 @@ class MenuController extends Controller
 		]);
         $requestData = $request->all();
         $requestData['items'] = json_encode($requestData['items']);
-        
+
         Menu::create($requestData);
 
         return redirect('menu')->with('flash_message', 'Menu added!');
@@ -79,6 +94,9 @@ class MenuController extends Controller
     {
         $data['menu'] = Menu::findOrFail($id);
         $data['items'] = $this->get_menu_items($id);
+        if (get_role() == "restaurant"){
+            return view('dashboards.restaurant.menu.show', $data);
+        }
 
         return view('menu.menu.show', $data);
     }
@@ -92,6 +110,13 @@ class MenuController extends Controller
      */
     public function edit($id)
     {
+        // If it is restaurant then user will have some restricted data.
+        if (get_role() == "restaurant"){
+            $userId = auth()->user()->id;
+            $data = $this->dropdown_data($id, $userId);
+            return view('dashboards.restaurant.menu.edit', $data);
+        }
+
         $data = $this->dropdown_data($id);
         return view('menu.menu.edit', $data);
     }
@@ -113,7 +138,7 @@ class MenuController extends Controller
 		]);
         $requestData = $request->all();
         $requestData['items'] = json_encode($requestData['items']);
-        
+
         $menu = Menu::findOrFail($id);
         $menu->update($requestData);
 
@@ -141,22 +166,32 @@ class MenuController extends Controller
      *
      * @return array $data
      */
-    public function dropdown_data($id = false) {
+    public function dropdown_data($id = false, $userId = null) {
 
         // Pass all available items.
-        $data['items'] = Item::where('status', 1)
-            ->where('branch_id', 2)
-            ->get();
+        // If it is restaurant then user will have some restricted data.
+        if (get_role() == "restaurant"){
+            $data['items'] = loadUserItemsData(['approved']);
+        }
+        else {
+            $data['items'] = Item::where('status', 1)->get();
+        }
 
         // Pass branches for dropdown list form.
-        $data['branches'] = Branch::all();
+        if ($userId != null){
+            // If User Id passed it will load branches to that specific user.
+            $data['branches'] = getUserBranches($userId);
+        }
+        else {
+            $data['branches'] = Branch::all();
+        }
 
         // Pass Users for dropdown list form.
         $data['current_items'] = [];
 
         // Pass menu to view. (For Edit form)
         $data['menu'] = ($id) ? Menu::findOrFail($id) : null;
-        
+
         return $data;
     }
     // Get itmes for a menu.

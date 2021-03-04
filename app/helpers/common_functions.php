@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Branch;
+use App\Models\Item;
+use \App\Models\Menu;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -61,4 +64,70 @@ if (!function_exists('get_item_status')) {
         return $item->itemFullDetails->first();
     }
 }
+
+// This function loads all items of the current user based on status.
+// Status can be an array so it will return multiple items of user.
+if (!function_exists('loadUserItemsData')) {
+    function loadUserItemsData($status)
+    {
+        $userId = auth()->user()->id;
+        // Get user branch.
+        $branches =  getUserBranches($userId);
+        $branchIds = [];
+        foreach ($branches as $branch) {
+            array_push($branchIds, $branch->id);
+        }
+
+        // Get user Items.
+        $items =  getUserItemsBasedOnStatus($branchIds, $status);
+        return $items;
+    }
+}
+
+// This will return user branches based on user id.
+if (!function_exists('getUserBranches')){
+
+    function getUserBranches($id)
+    {
+        $branches = Branch::where('user_id', $id)->get();
+        return $branches;
+    }
+}
+
+// This will return items based on status one or multiple status.
+if (!function_exists('getUserItemsBasedOnStatus')){
+
+    function getUserItemsBasedOnStatus ($branchIds, $status){
+        $item = Item::whereHas(
+            'itemFullDetails', function ($query) use ($status) {
+            $query->whereIn('details_status', $status);
+        })->whereIn('branch_id',$branchIds)->latest()->paginate(10);
+        return $item;
+    }
+}
+
+// This function get specific  user branchs and return user menus.
+if (!function_exists('loadUserMenuData')){
+    function loadUserMenuData($userId){
+        // Get user branch.
+        $branches =  getUserBranches($userId);
+        $branchIds = [];
+        foreach ($branches as $branch) {
+            array_push($branchIds, $branch->id);
+        }
+
+        // Get user Items.
+        $menu =  getUserMenus($branchIds);
+        return $menu;
+    }
+}
+
+// This will return menus based on branch ids.
+if (!function_exists('getUserMenus')){
+    function getUserMenus ($branchIds){
+        $menu = Menu::whereIn('branch_id',$branchIds)->latest()->paginate(10);
+        return $menu;
+    }
+}
+
 

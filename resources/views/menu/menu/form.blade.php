@@ -37,7 +37,7 @@
     {{-- <textarea class="form-control" rows="5" name="items" type="textarea" id="items" >{{ $menu->items ?? ''}}</textarea> --}}
     <select class="custom-select mr-sm-2" name="items[]" id="items" multiple required>
         @foreach($items as $item)
-            <option value="{{ $item->id }}" >{{ $item->itemDetails->title }}</option>
+            <option value="{{ $item->id }}" >{{ get_item_details($item)->title }}</option>
         @endforeach
     </select>
     {!! $errors->first('items', '<p class="help-block">:message</p>') !!}
