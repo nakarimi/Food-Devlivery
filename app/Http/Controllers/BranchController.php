@@ -10,6 +10,7 @@ use App\Models\BranchDetails;
 use App\Models\Commission;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class BranchController extends Controller
@@ -247,6 +248,14 @@ class BranchController extends Controller
     {
         $branch = getBranchesBasedOnStatus("approved");
         return view('branch.branch.index', compact('branch'));
+    }
+
+
+    public function restaurantProfile()
+    {
+        $userId = Auth::user()->id;
+        $branch = Branch::where('user_id', $userId)->with('branchDetails')->latest()->first();
+        return view('dashboards.restaurant.profile.profile', compact('branch'));
     }
 
     public function approveBranch(Request $request)
