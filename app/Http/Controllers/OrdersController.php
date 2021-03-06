@@ -205,4 +205,20 @@ class OrdersController extends Controller
         $data['order'] = ($id) ? Order::findOrFail($id) : null;
         return $data;
     }
+
+    /**
+     * Load necessary data for dropdowns.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     */
+    public function updateOrderStatus(Request $request) {
+        
+        $id = $request['order_id'];
+        $status = $request['status'];
+
+        $order = Order::findOrFail($id);
+        $order->status = $status;
+        $order->save();
+    }
 }

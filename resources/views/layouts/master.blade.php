@@ -28,8 +28,11 @@
     <!-- Custome CSS -->
     <link rel="stylesheet" href="{{asset('css/custome.css')}}">
 
+    <!-- jQuery -->
+    <script src="{{asset('js/jquery-3.2.1.min.js')}}"></script>
 
-
+    <!-- Custom JS -->
+    <script src="{{asset('js/commmon_functions.js')}}"></script>
 
     {{--   Adding specific style of each page--}}
 
@@ -70,8 +73,7 @@
     </div>
     <!-- /Main Wrapper -->
 </div>
-<!-- jQuery -->
-<script src="{{asset('js/jquery-3.2.1.min.js')}}"></script>
+
 
 <!-- Bootstrap Core JS -->
 <script src="{{asset('js/popper.min.js')}}"></script>

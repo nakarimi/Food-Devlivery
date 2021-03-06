@@ -46,7 +46,7 @@ Route::middleware(['admin'])->group(function () {
     Route::post('/approveItem', 'App\Http\Controllers\ItemController@approveItem');
     Route::post('/rejectItem', 'App\Http\Controllers\ItemController@rejectItem');
     Route::resource('category', 'App\Http\Controllers\CategoryController');
-
+    Route::post('updateOrderStatus', 'App\Http\Controllers\OrdersController@updateOrderStatus')->name('updateOrderStatus');
 
 });
 
@@ -65,8 +65,7 @@ Route::middleware(['restaurant'])->group(function () {
     Route::get('/approvedItems', 'App\Http\Controllers\ItemController@approvedItems')->name('items.approved');
     Route::resource('item', 'App\Http\Controllers\ItemController');
     Route::resource('menu', 'App\Http\Controllers\MenuController');
-
-
+    Route::resource('orders', 'App\Http\Controllers\OrdersController');
 });
 
 /*
@@ -101,7 +100,3 @@ Route::middleware(['customer'])->group(function () {
         return view('dashboards.customer.dashboard');
     })->name('customer.dashboard');
 });
-
-
-
-Route::resource('orders', 'App\Http\Controllers\OrdersController');
