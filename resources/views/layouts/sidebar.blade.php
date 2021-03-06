@@ -8,12 +8,24 @@
                             <span>{{ $section->section }}</span>
                         </li>
                         @foreach($section->items as $menu)
-                            @if ($menu->title == "Item")
+                            @if ($menu->title == "Content Verification")
                                 <li class="submenu">
-                                    <a href="#"><span> {{ $menu->title }}</span> <span class="menu-arrow"></span></a>
-                                    <ul>
-                                        <li><a href="{{route('items.pending')}}">Pending Items</a></li>
-                                        <li><a href="{{route('items.approved')}}">Approved Items</a></li>
+                                    <a href="#" class="subdrop"><span> {{$menu->title}}</span> <span class="menu-arrow"></span></a>
+                                    <ul style="display: block;">
+                                        <li class="submenu">
+                                            <a href="#"><span> Items </span> <span class="menu-arrow"></span></a>
+                                            <ul>
+                                                <li><a href="{{route('items.pending')}}">Pending Items</a></li>
+                                                <li><a href="{{route('items.approved')}}">Approved Items</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="submenu">
+                                            <a href="#"><span> Branches </span> <span class="menu-arrow"></span></a>
+                                            <ul>
+                                                <li><a href="{{route('branches.pending')}}">Pending Branches</a></li>
+                                                <li><a href="{{route('branches.approved')}}">Approved Branches</a></li>
+                                            </ul>
+                                        </li>
                                     </ul>
                                 </li>
 

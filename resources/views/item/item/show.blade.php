@@ -77,6 +77,7 @@
                               <form method="POST" action="{{ url('/approveItem') }}" accept-charset="UTF-8" style="display:inline">
                                  {{ csrf_field() }}
                                  <input type="hidden" value="{{$detail->id}}" name="item_detail_id">
+                                 <input type="hidden" value="{{$item->id }}" name="item_id">
                                  <button class="btn btn-sm btn-info" onclick="return confirm(&quot;Confirm approve?&quot;)">Approve</button>
                               </form>
                               <form method="POST" action="{{ url('/rejectItem') }}" accept-charset="UTF-8" style="display:inline">

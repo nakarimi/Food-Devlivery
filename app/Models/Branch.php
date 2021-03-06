@@ -10,7 +10,7 @@ use App\Models\Item;
 class Branch extends Model
 {
     use LogsActivity;
-    
+
 
     /**
      * The database table used by the model.
@@ -33,7 +33,7 @@ class Branch extends Model
      */
     protected $fillable = ['user_id', 'business_type', 'main_commission_id', 'deliver_commission_id', 'status'];
 
-    
+
 
     /**
      * Change activity log event description
@@ -51,7 +51,7 @@ class Branch extends Model
     public function branchDetails(){
         return $this->hasOne(BranchDetails::class, 'business_id')->where('status', 'approved')->latest();
     }
-    
+
     // Relation ship with commission
     public function mainCommission(){
         return $this->hasOne(Commission::class, 'id', 'main_commission_id');
@@ -66,5 +66,10 @@ class Branch extends Model
     public function payment(){
         return $this->hasMany(Payment::class);
     }
-    
+
+    // Relationship with details table with full data.
+    public function branchFullDetails(){
+        return $this->hasMany(BranchDetails::class, 'business_id');
+    }
+
 }

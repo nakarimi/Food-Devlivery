@@ -39,13 +39,17 @@ Route::middleware(['admin'])->group(function () {
     Route::get('admin/generator', ['uses' => '\Appzcoder\LaravelAdmin\Controllers\ProcessController@getGenerator']);
     Route::post('admin/generator', ['uses' => '\Appzcoder\LaravelAdmin\Controllers\ProcessController@postGenerator']);
 
-    Route::resource('branch', 'App\Http\Controllers\BranchController');
     Route::resource('commission', 'App\Http\Controllers\CommissionController');
     Route::resource('driver', 'App\Http\Controllers\DriverController');
     Route::resource('payment', 'App\Http\Controllers\PaymentController');
     Route::post('/approveItem', 'App\Http\Controllers\ItemController@approveItem');
     Route::post('/rejectItem', 'App\Http\Controllers\ItemController@rejectItem');
+    Route::post('/approveBranch', 'App\Http\Controllers\BranchController@approveBranch');
+    Route::post('/rejectBranch', 'App\Http\Controllers\BranchController@rejectBranch');
     Route::resource('category', 'App\Http\Controllers\CategoryController');
+    Route::get('/pendingBranches', 'App\Http\Controllers\BranchController@pendingBranches')->name('branches.pending');
+    Route::get('/approvedBranches', 'App\Http\Controllers\BranchController@approvedBranches')->name('branches.approved');
+    Route::get('/loadItemsBasedOnBranch', 'App\Http\Controllers\MenuController@loadItemsBasedOnBranch');
 
 
 });
@@ -65,6 +69,9 @@ Route::middleware(['restaurant'])->group(function () {
     Route::get('/approvedItems', 'App\Http\Controllers\ItemController@approvedItems')->name('items.approved');
     Route::resource('item', 'App\Http\Controllers\ItemController');
     Route::resource('menu', 'App\Http\Controllers\MenuController');
+    Route::get('/profile', 'App\Http\Controllers\BranchController@restaurantProfile')->name('restaurant.profile');
+    Route::resource('branch', 'App\Http\Controllers\BranchController');
+
 
 
 });
