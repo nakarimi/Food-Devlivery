@@ -81,15 +81,16 @@ class OrdersController extends Controller
      */
     public function show($id)
     {
+        $data = $this->dropdown_data($id);
+        
         if (get_role() == "restaurant"){
             $userId = auth()->user()->id;
             $data = $this->dropdown_data(false, $userId);
         }
-        else {
-            $data = $this->dropdown_data();
-        }
+        
+        
 
-        return view('order.orders.show', compact('order'));
+        return view('order.orders.show', $data);
     }
 
     /**
