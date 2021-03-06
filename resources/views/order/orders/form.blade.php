@@ -76,11 +76,31 @@
       </div>
    </div>
 </div>
+
+<div class="form-row">
+   <div class="col">
+      <div class="form-group{{ $errors->has('delivery_type') ? 'has-error' : ''}}">
+         <label for="delivery_type" class="control-label">{{ 'Delivery Type' }}</label>
+         <select class="custom-select mr-sm-2" name="delivery_type" id="delivery_type" required>
+            <option value="self"  @if( (($order->has_delivery == 1)) && ($order->deliveryDetails->delivery_type) == 'pending') selected="self" @endif>Self</option>
+            <option value="own"  @if( (($order->has_delivery == 1)) && ($order->deliveryDetails->delivery_type) == 'own') selected="selected" @endif>Own</option>
+            <option value="company"  @if( (($order->has_delivery == 1)) && ($order->deliveryDetails->delivery_type) == 'company') selected="selected" @endif>Company</option>
+         </select>
+         {!! $errors->first('customer_id', '
+         <p class="help-block">:message</p>
+         ') !!}
+      </div>
+   </div>
+   <div class="col">
+      
+   </div>
+</div>
+
 <div class="form-row">
    <div class="col">
       <div class="form-group{{ $errors->has('driver_id') ? 'has-error' : ''}}">
          <label for="driver_id" class="control-label">{{ 'Driver Id' }}</label>
-         <select class="custom-select mr-sm-2" name="driver_id" id="driver_id" required>
+         <select class="custom-select mr-sm-2" name="driver_id" id="driver_id">
          <option value="" >No Driver Seleced</option>
          @foreach($drivers as $user)
          <option value="{{ $user->id }}" @if( (isset($order->driver_id) && $user->id == $order->driver_id)) selected="selected" @endif >{{ $user->title }}</option>
@@ -95,7 +115,7 @@
       <div class="form-group{{ $errors->has('delivery_adress') ? 'has-error' : ''}}">
          <label for="delivery_adress" class="control-label">{{ 'Delivery Adress' }}</label>
          {{-- <input class="form-control" name="status" type="text" id="status" value="{{ $order->status ?? ''}}" required> --}}
-         <input class="form-control" name="delivery_adress" type="text" id="delivery_adress" value="{{ $order->deliveryDetails->delivery_adress ?? ''}}" required>
+         <input class="form-control" name="delivery_adress" type="text" id="delivery_adress" value="{{ $order->deliveryDetails->delivery_adress ?? ''}}">
          {!! $errors->first('status', '
          <p class="help-block">:message</p>
          ') !!}

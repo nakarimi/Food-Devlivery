@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use App\Models\Branch;
 use App\Models\User;
 use App\Models\Driver;
+use App\Models\DeliveryDetails;
+use App\Models\OrderTimeDetails;
+use Illuminate\Support\Facades\DB;
 
 class OrdersController extends Controller
 {
@@ -21,20 +24,10 @@ class OrdersController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->get('search');
-        $perPage = 25;
+        $perPage = 5;
 
         if (!empty($keyword)) {
-            $orders = Order::where('title', 'LIKE', "%$keyword%")
-                ->orWhere('branch_id', 'LIKE', "%$keyword%")
-                ->orWhere('customer_id', 'LIKE', "%$keyword%")
-                ->orWhere('has_delivery', 'LIKE', "%$keyword%")
-                ->orWhere('total', 'LIKE', "%$keyword%")
-                ->orWhere('commission_value', 'LIKE', "%$keyword%")
-                ->orWhere('status', 'LIKE', "%$keyword%")
-                ->orWhere('note', 'LIKE', "%$keyword%")
-                ->orWhere('reciever_phone', 'LIKE', "%$keyword%")
-                ->orWhere('contents', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
+            $orders = Order::where('title', 'LIKE', "%$keyword%")->latest()->paginate($perPage);
         } else {
             $orders = Order::latest()->paginate($perPage);
         }
@@ -113,7 +106,6 @@ class OrdersController extends Controller
             $userId = auth()->user()->id;
             $data = $this->dropdown_data($id, $userId);
         }
-        
         return view('order.orders.edit', $data);
     }
 
@@ -131,17 +123,41 @@ class OrdersController extends Controller
 			'title' => 'required',
 			'branch_id' => 'required',
 			'customer_id' => 'required',
-			'has_delivery' => 'required',
-			'total' => 'required',
-			'commission_value' => 'required',
 			'status' => 'required',
 			'reciever_phone' => 'required',
 			'contents' => 'required'
 		]);
         $requestData = $request->all();
+
+        $deliver_update = false;
+
+        if ($requestData['delivery_type'] != 'self') {
+            $requestData['has_delivery'] = 1;
+            $deliver_update = true;
+        }
         
         $order = Order::findOrFail($id);
         $order->update($requestData);
+        
+        if ($deliver_update) {
+            $updateDeliveryDetails = [
+                'delivery_type' => $requestData['delivery_type'],
+                'delivery_adress' => $requestData['delivery_adress'],
+                'driver_id' => $requestData['driver_id'],
+            ];
+    
+            // Update delivery details. First check if there is a record for it, if not then insert a new record.
+            $record = DeliveryDetails::where('order_id', $id)->count();
+            if ($record) {
+                DeliveryDetails::where('order_id', $id)->update($updateDeliveryDetails);
+            }
+            else {
+                $updateDeliveryDetails['order_id'] = $id;
+                DB::table('order_delivery')->insertGetId($updateDeliveryDetails);
+            }
+            
+        }
+        
 
         return redirect('orders')->with('flash_message', 'Order updated!');
     }

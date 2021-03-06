@@ -56,4 +56,13 @@ class Order extends Model
     public function timeDetails(){
         return $this->hasOne(OrderTimeDetails::class, 'order_id');
     }
+
+    public function branchDetails(){
+        return $this->hasOne(BranchDetails::class, 'business_id', 'branch_id')->where('status', 'approved')->latest();
+    }
+
+    // Relation ship with User.
+    public function customer(){
+        return $this->hasOne(User::class, 'id', 'customer_id');
+    }
 }
