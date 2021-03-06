@@ -44,9 +44,12 @@ Route::middleware(['admin'])->group(function () {
     Route::resource('payment', 'App\Http\Controllers\PaymentController');
     Route::post('/approveItem', 'App\Http\Controllers\ItemController@approveItem');
     Route::post('/rejectItem', 'App\Http\Controllers\ItemController@rejectItem');
+    Route::post('/approveBranch', 'App\Http\Controllers\BranchController@approveBranch');
+    Route::post('/rejectBranch', 'App\Http\Controllers\BranchController@rejectBranch');
     Route::resource('category', 'App\Http\Controllers\CategoryController');
     Route::get('/pendingBranches', 'App\Http\Controllers\BranchController@pendingBranches')->name('branches.pending');
     Route::get('/approvedBranches', 'App\Http\Controllers\BranchController@approvedBranches')->name('branches.approved');
+    Route::get('/loadItemsBasedOnBranch', 'App\Http\Controllers\MenuController@loadItemsBasedOnBranch');
 
 
 });

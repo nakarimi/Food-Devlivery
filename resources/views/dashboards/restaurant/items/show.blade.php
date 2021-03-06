@@ -17,13 +17,14 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <a href="{{ url('/item') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
-                    <a href="{{ url('/item/' . $item->id . '/edit') }}" title="Edit Item"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
+                    <a href="{{ url('/item') }}" title="Back"><button class="btn btn-warning btn-sm float-right"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
+                    <a href="{{ url('/item/' . $item->id . '/edit') }}" title="Edit Item"><button class="btn btn-primary btn-sm float-right"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
                     <form method="POST" action="{{ url('item' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
                         {{ method_field('DELETE') }}
                         {{ csrf_field() }}
-                        <button type="submit" class="btn btn-danger btn-sm" title="Delete Item" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
+                        <button type="submit" class="btn btn-danger btn-sm float-right" title="Delete Item" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
                     </form>
+                    <br/>
                     <br/>
                     <br/>
                     <div class="table-responsive">
@@ -57,45 +58,6 @@
                                 <th> Description </th>
                                 <td> {{ get_item_details($item)->description }} </td>
                             </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <br>
-                    <div class="table-responsive">
-                        <h1>Item History</h1>
-                        <table class="table table-striped">
-                            <thead>
-                            <th>ID</th>
-                            <th>title</th>
-                            <th>Price</th>
-                            <th>Unit</th>
-                            <th>Status</th>
-                            </thead>
-                            <tbody>
-                            @foreach($item->itemFullDetails as $detail)
-                                <tr>
-                                    <td>{{$detail->id}}</td>
-                                    <td>{{$detail->title}}</td>
-                                    <td>{{$detail->price}}</td>
-                                    <td>{{$detail->unit}}</td>
-                                    <td>
-                                        @if ($detail->details_status == "pending" )
-                                            <form method="POST" action="{{ url('/approveItem') }}" accept-charset="UTF-8" style="display:inline">
-                                                {{ csrf_field() }}
-                                                <input type="hidden" value="{{$detail->id}}" name="item_detail_id">
-                                                <button class="btn btn-sm btn-info" onclick="return confirm(&quot;Confirm approve?&quot;)">Approve</button>
-                                            </form>
-                                            <form method="POST" action="{{ url('/rejectItem') }}" accept-charset="UTF-8" style="display:inline">
-                                                {{ csrf_field() }}
-                                                <input type="hidden" value="{{$detail->id}}" name="item_detail_id">
-                                                <button class="btn btn-sm btn-danger" onclick="return confirm(&quot;Confirm Reject?&quot;)">Reject</button>
-                                            </form>
-                                        @else
-                                            {{$detail->details_status }}
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
                             </tbody>
                         </table>
                     </div>

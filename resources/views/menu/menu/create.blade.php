@@ -34,3 +34,26 @@
         </div>
     </div>
 @endsection
+
+@section('scripts')
+    <script>
+        $("#branch_id").on('change', function (){
+            var branch_id = $(this).val(); // this.value
+            $.ajax({
+                url: '/loadItemsBasedOnBranch',
+                data: { branchId: branch_id },
+                type: 'get',
+                success: function (data) {
+                    $("#items option").remove();
+                    $.each(data,function(key, value)
+                    {
+                        $("#items").append('<option value=' + key + '>' + value + '</option>');
+                    });
+                },
+                error: function (e) {
+                    alert("Error Occurred!");
+                }
+            })
+        });
+    </script>
+@stop

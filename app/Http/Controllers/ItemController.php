@@ -206,11 +206,6 @@ class ItemController extends Controller
             return redirect('branch')->with('flash_message', 'Sorry there is problem, updating item data');
         }
 
-        else{
-            DB::table('item_details')->where('item_id', '=', $id)
-                ->where('id', '!=', $details_id)
-                ->update(array('details_status' => "old"));
-        }
         return redirect('item')->with('flash_message', 'Item updated!');
     }
 
@@ -280,9 +275,13 @@ class ItemController extends Controller
     public function approveItem(Request $request)
     {
         $detialId = $request->item_detail_id;
+        $itemId = $request->item_id;
         $item = ItemDetails::findOrFail($detialId);
         $item->details_status = "approved";
         $item->save();
+        DB::table('item_details')->where('item_id', '=', $itemId)
+                ->where('id', '!=', $detialId)
+                ->update(array('details_status' => "old"));
          return redirect()->back()->with('flash_message', 'Item Approved!');
     }
 

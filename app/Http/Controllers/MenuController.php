@@ -204,4 +204,22 @@ class MenuController extends Controller
 
         return $itmes;
     }
+
+    public function loadItemsBasedOnBranch()
+    {
+        $branchId = $_GET['branchId'];
+        $itemsArray = [];
+        if ($branchId != null){
+            $branch = Branch::findorfail($branchId);
+            $items = Item::whereHas(
+                'itemFullDetails', function ($query) {
+                $query->where('details_status', 'approved');
+            })->where('branch_id',$branchId)->get();
+
+            foreach ($items as $item){
+                $itemsArray[$item->itemDetails->id] = $item->itemDetails->title;
+            }
+        }
+        return $itemsArray;
+    }
 }

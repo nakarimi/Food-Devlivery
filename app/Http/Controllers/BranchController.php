@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 
 use App\Models\Branch;
+use App\Models\BranchDetails;
 use App\Models\Commission;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -246,5 +247,27 @@ class BranchController extends Controller
     {
         $branch = getBranchesBasedOnStatus("approved");
         return view('branch.branch.index', compact('branch'));
+    }
+
+    public function approveBranch(Request $request)
+    {
+        $detialId = $request->branch_detail_id;
+        $businessId = $request->branch_id;
+        $branch = BranchDetails::findOrFail($detialId);
+        $branch->status = "approved";
+        $branch->save();
+        DB::table('branche_main_info')->where('business_id', '=', $businessId)
+            ->where('id', '!=', $detialId)
+            ->update(array('status' => "old"));
+        return redirect()->back()->with('flash_message', 'Branch Approved!');
+    }
+
+    public function rejectBranch(Request $request)
+    {
+        $detialId = $request->branch_detail_id;
+        $branch = BranchDetails::findOrFail($detialId);
+        $branch->status = "rejected";
+        $branch->save();
+        return redirect()->back()->with('flash_message', 'Branch Rejected!');
     }
 }

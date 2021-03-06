@@ -56,7 +56,7 @@ if (!function_exists('get_role')) {
     }
 }
 
-if (!function_exists('get_item_status')) {
+if (!function_exists('get_item_details')) {
     /**
      * Return an item latest details.
      * */
@@ -68,9 +68,11 @@ if (!function_exists('get_item_status')) {
 // This function loads all items of the current user based on status.
 // Status can be an array so it will return multiple items of user.
 if (!function_exists('loadUserItemsData')) {
-    function loadUserItemsData($status)
+    function loadUserItemsData($status, $userId = null)
     {
-        $userId = auth()->user()->id;
+        if ($userId == null){
+            $userId = auth()->user()->id;
+        }
         // Get user branch.
         $branches =  getUserBranches($userId);
         $branchIds = [];
@@ -101,7 +103,7 @@ if (!function_exists('getUserItemsBasedOnStatus')){
         $item = Item::whereHas(
             'itemFullDetails', function ($query) use ($status) {
             $query->whereIn('details_status', $status);
-        })->whereIn('branch_id',$branchIds)->latest()->paginate(10);
+        })->whereIn('branch_id',$branchIds)->get();
         return $item;
     }
 }
