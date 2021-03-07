@@ -22,3 +22,37 @@
 .pagination-wrapper > nav > div:first-child > *:nth-child(2) {
     float: right;
 }
+
+/* Order status colors. */
+  
+  select[status="pending"] {
+    background: #ffffff;
+  }
+  select[status="approved"] {
+    background: #ff9800;
+    color: #fff;
+  }
+  select[status="reject"] {
+    background: #e91e63;
+    color: #fff;
+  }
+  select[status="processing"] {
+    background: #4caf50;
+    color: #c6e1c6;
+  }
+  select[status="delivered"] {
+    background:#cddc39;
+  }
+  select[status="completed"] {
+    color: white;
+    background: #00bcd4;
+  }
+  select[status="canceld"] {
+    background: #64646412;
+    
+  }
+
+  select#order_status option {
+    color: black;
+    background: white;
+  }
