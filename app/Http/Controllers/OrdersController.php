@@ -24,7 +24,7 @@ class OrdersController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->get('search');
-        $perPage = 5;
+        $perPage = 10;
 
         if (!empty($keyword)) {
             $orders = Order::where('title', 'LIKE', "%$keyword%")->latest()->paginate($perPage);
