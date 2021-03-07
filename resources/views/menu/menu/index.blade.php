@@ -35,7 +35,7 @@
                      <tbody>
                         @foreach($menu as $item)
                         <tr>
-                           <td>{{ $loop->iteration or $item->id }}</td>
+                           <td>{{ $loop->iteration }}</td>
                            <td>{{ $item->title }}</td>
                            <td>{{ $item->branch->branchDetails->title }}</td>
                            <td>

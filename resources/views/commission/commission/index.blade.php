@@ -36,7 +36,7 @@
                                 <tbody>
                                 @foreach($commission as $item)
                                     <tr>
-                                        <td>{{ $loop->iteration or $item->id }}</td>
+                                        <td>{{ $loop->iteration }}</td>
                                         <td>{{ $item->title }}</td><td>{{ $item->type }}</td><td>{{ $item->value }}</td><td>{{ $item->percentage }}</td>
                                         <td>
                                             <a href="{{ url('/commission/' . $item->id) }}" title="View Commission"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>

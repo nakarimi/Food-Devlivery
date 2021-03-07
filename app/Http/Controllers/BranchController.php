@@ -24,10 +24,13 @@ class BranchController extends Controller
     {
         abortUrlFor("restaurant");
         $keyword = $request->get('search');
-        $perPage = 25;
+        $perPage = 10;
 
         if (!empty($keyword)) {
-            $branch = Branch::where('user_id', 'LIKE', "%$keyword%")
+            $branch = Branch::wherehas(
+                'branchDetails' , function ($query) use ($keyword) {
+                $query->where('title', 'LIKE', "%$keyword%");
+            })
                 // ->orWhere('business_type', 'LIKE', "%$keyword%")
                 // ->orWhere('main_commission_id', 'LIKE', "%$keyword%")
                 // ->orWhere('deliver_commission_id', 'LIKE', "%$keyword%")

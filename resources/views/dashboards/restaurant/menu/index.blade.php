@@ -4,6 +4,7 @@
 @stop
 
 @section('styles')
+    <link rel="stylesheet" href="{{asset('css/dataTables.bootstrap4.min.css')}}">
 @stop
 
 @section('content')
@@ -18,7 +19,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped mb-0">
+                        <table class="table table-striped mb-0 datatable">
                             <thead>
                             <tr>
                                 <th>#</th>
@@ -62,5 +63,7 @@
 @endsection
 
 @section('scripts')
-
+    <!-- Datatable JS -->
+    <script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
+    <script src="{{asset('js/dataTables.bootstrap4.min.js')}}"></script>
 @stop

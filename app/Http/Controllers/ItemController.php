@@ -31,12 +31,14 @@ class ItemController extends Controller
 
         //Todo: Search should be configured for other roles.
         $keyword = $request->get('search');
-        $perPage = 25;
+        $perPage = 10;
 
         if (!empty($keyword)) {
-            $item = Item::where('branch_id', 'LIKE', "%$keyword%")
-                ->orWhere('status', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
+            $item = Item::wherehas(
+                'itemDetails', function ($query) use ($keyword) {
+                $query->where('title','LIKE', "%$keyword%")
+                    ->orwhere('price','LIKE', "%$keyword%");
+            })->orWhere('status', 'LIKE', "%$keyword%")->latest()->paginate($perPage);
         } else {
             $item = Item::latest()->paginate($perPage);
         }

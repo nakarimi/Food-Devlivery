@@ -43,7 +43,7 @@
                            <td>{{ $item->date_and_time }}</td>
                            <td>
                               <a href="{{ url('/payment/' . $item->id) }}" title="View Payment"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
-{{--                              <a href="{{ url('/payment/' . $item->id . '/edit') }}" title="Edit Payment"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>--}}
+                              <a href="{{ url('/payment/' . $item->id . '/edit') }}" title="Edit Payment"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
 {{--                              <form method="POST" action="{{ url('/payment' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">--}}
 {{--                                 {{ method_field('DELETE') }}--}}
 {{--                                 {{ csrf_field() }}--}}

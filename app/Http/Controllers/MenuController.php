@@ -30,7 +30,7 @@ class MenuController extends Controller
 
         //Todo: Should setup search for other users.
         $keyword = $request->get('search');
-        $perPage = 25;
+        $perPage = 10;
 
         if (!empty($keyword)) {
             $menu = Menu::where('title', 'LIKE', "%$keyword%")

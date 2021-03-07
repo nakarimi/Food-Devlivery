@@ -18,7 +18,7 @@ class CommissionController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->get('search');
-        $perPage = 25;
+        $perPage = 10;
 
         if (!empty($keyword)) {
             $commission = Commission::where('type', 'LIKE', "%$keyword%")
@@ -59,7 +59,7 @@ class CommissionController extends Controller
 			'title' => 'required'
 		]);
         $requestData = $request->all();
-        
+
         Commission::create($requestData);
 
         return redirect('commission')->with('flash_message', 'Commission added!');
@@ -109,7 +109,7 @@ class CommissionController extends Controller
 			'title' => 'required'
 		]);
         $requestData = $request->all();
-        
+
         $commission = Commission::findOrFail($id);
         $commission->update($requestData);
 
