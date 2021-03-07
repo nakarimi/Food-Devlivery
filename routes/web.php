@@ -70,15 +70,9 @@ Route::middleware(['restaurant'])->group(function () {
     Route::get('/approvedItems', 'App\Http\Controllers\ItemController@approvedItems')->name('items.approved');
     Route::resource('item', 'App\Http\Controllers\ItemController');
     Route::resource('menu', 'App\Http\Controllers\MenuController');
-<<<<<<< HEAD
-    Route::resource('orders', 'App\Http\Controllers\OrdersController');
-=======
     Route::get('/profile', 'App\Http\Controllers\BranchController@restaurantProfile')->name('restaurant.profile');
     Route::resource('branch', 'App\Http\Controllers\BranchController');
-
-
-
->>>>>>> 592dae4759c2bcfeddf437152fcf91e24c912d89
+    Route::resource('orders', 'App\Http\Controllers\OrdersController');
 });
 
 /*
