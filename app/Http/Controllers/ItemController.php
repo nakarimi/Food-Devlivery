@@ -9,6 +9,7 @@ use App\Models\Item;
 use App\Models\ItemDetails;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Category;
 use App\Models\Branch;
@@ -127,9 +128,17 @@ class ItemController extends Controller
     {
         $item = Item::with('itemFullDetails')->findOrFail($id);
 
+        // Prevent other roles from url restriction.
+        // the branch user id should equal current user id.
         if (get_role() == "restaurant"){
+            $userId = Auth::user()->id;
+            $branch = Branch::findOrFail($item->branch_id);
+            if ($branch->user_id != $userId){
+                abort(404);
+            }
             return view('dashboards.restaurant.items.show', compact('item'));
         }
+
         return view('item.item.show', compact('item'));
     }
 
@@ -246,6 +255,15 @@ class ItemController extends Controller
         // Pass Item to view. (For Edit form)
         // $item = Item::findOrFail($id);
         $data['item'] = ($id) ? Item::findOrFail($id) : null;
+
+        // Prevent other roles from url restriction.
+        // the branch user id should equal current user id.
+        if (get_role() == "restaurant"){
+            $branch = Branch::findOrFail($data['item']->branch_id);
+            if ($branch->user_id != $userId){
+             abort(404);
+            }
+        }
         return $data;
     }
 

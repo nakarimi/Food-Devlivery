@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\User;
 use App\Models\Branch;
+use Illuminate\Support\Facades\Auth;
 
 class MenuController extends Controller
 {
@@ -95,6 +96,11 @@ class MenuController extends Controller
         $data['menu'] = Menu::findOrFail($id);
         $data['items'] = $this->get_menu_items($id);
         if (get_role() == "restaurant"){
+            $userId = Auth::user()->id;
+            $branch = Branch::findOrFail($data['menu']->branch_id);
+            if ($branch->user_id != $userId){
+                abort(404);
+            }
             return view('dashboards.restaurant.menu.show', $data);
         }
 
@@ -191,6 +197,15 @@ class MenuController extends Controller
 
         // Pass menu to view. (For Edit form)
         $data['menu'] = ($id) ? Menu::findOrFail($id) : null;
+
+        // Prevent other roles from url restriction.
+        // the branch user id should equal current user id.
+        if (get_role() == "restaurant"){
+            $branch = Branch::findOrFail($data['menu']->branch_id);
+            if ($branch->user_id != $userId){
+                abort(404);
+            }
+        }
 
         return $data;
     }

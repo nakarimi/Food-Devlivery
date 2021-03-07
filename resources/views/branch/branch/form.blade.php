@@ -26,7 +26,7 @@
 <div class="form-row">
    <div class="col">
       <div class="form-group{{ $errors->has('main_commission_id') ? 'has-error' : ''}}">
-         <label for="main_commission_id" class="control-label">{{ 'Main Commission Id' }}</label>
+         <label for="main_commission_id" class="control-label">{{ 'Main Commission' }}</label>
          <select class="custom-select mr-sm-2" name="main_commission_id" id="main_commission_id" required>
             <option value="">Main Commission Type</option>
             @foreach($commissions as $commission)
@@ -42,7 +42,7 @@
    </div>
    <div class="col">
       <div class="form-group{{ $errors->has('deliver_commission_id') ? 'has-error' : ''}}">
-         <label for="deliver_commission_id" class="control-label">{{ 'Deliver Commission Id' }}</label>
+         <label for="deliver_commission_id" class="control-label">{{ 'Deliver Commission' }}</label>
          <!-- <input class="form-control" name="deliver_commission_id" type="number" id="deliver_commission_id" value="{{ $branch->deliver_commission_id ?? ''}}" > -->
 
          <select class="custom-select mr-sm-2" name="deliver_commission_id" id="deliver_commission_id" >
