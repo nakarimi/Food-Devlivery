@@ -13,6 +13,9 @@ jQuery(function ($) {
         });
 
         $(document).on('change','#order_status',function(){
+            
+            // Set correct color based on status.
+            set_select_box_color($(this));
 
             let order_id = $(this).attr('order_id');
             let status = $(this).val();
@@ -29,5 +32,8 @@ jQuery(function ($) {
             });
         });
 
+        function set_select_box_color(element) {
+            element.attr('status', element.val())
+        }
     });
 })
