@@ -133,9 +133,7 @@ class ItemController extends Controller
         if (get_role() == "restaurant"){
             $userId = Auth::user()->id;
             $branch = Branch::findOrFail($item->branch_id);
-            if ($branch->user_id != $userId){
-                abort(404);
-            }
+            abortUrlFor(null, $userId, $branch->user_id);
             return view('dashboards.restaurant.items.show', compact('item'));
         }
 
@@ -258,11 +256,9 @@ class ItemController extends Controller
 
         // Prevent other roles from url restriction.
         // the branch user id should equal current user id.
-        if (get_role() == "restaurant"){
+        if (get_role() == "restaurant" && $id != false){
             $branch = Branch::findOrFail($data['item']->branch_id);
-            if ($branch->user_id != $userId){
-             abort(404);
-            }
+            abortUrlFor(null, $userId, $branch->user_id);
         }
         return $data;
     }

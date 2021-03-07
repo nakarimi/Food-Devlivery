@@ -146,9 +146,16 @@ if (!function_exists('getBranchesBasedOnStatus')){
 
 // This function abort the process for the role we pass.
 if (!function_exists('abortUrlFor')){
-    function abortUrlFor ($role){
-        if (get_role() == $role){
-            abort(404);
+    function abortUrlFor ($role = null, $userId = null, $branchId = null){
+        if ($role != null){
+            if (get_role() == $role){
+                abort(404);
+            }
+        }
+        elseif($userId != null && $branchId != null){
+            if ($userId != $branchId){
+                abort(404);
+            }
         }
     }
 }

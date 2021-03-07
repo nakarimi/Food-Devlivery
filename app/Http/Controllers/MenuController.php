@@ -98,9 +98,7 @@ class MenuController extends Controller
         if (get_role() == "restaurant"){
             $userId = Auth::user()->id;
             $branch = Branch::findOrFail($data['menu']->branch_id);
-            if ($branch->user_id != $userId){
-                abort(404);
-            }
+            abortUrlFor(null, $userId, $branch->user_id);
             return view('dashboards.restaurant.menu.show', $data);
         }
 
@@ -177,7 +175,7 @@ class MenuController extends Controller
         // Pass all available items.
         // If it is restaurant then user will have some restricted data.
         if (get_role() == "restaurant"){
-            $data['items'] = loadUserItemsData(['approved']);
+            $data['items'] = loadUserItemsData(['approved', 'pending']);
         }
         else {
             $data['items'] = Item::where('status', 1)->get();
@@ -200,11 +198,9 @@ class MenuController extends Controller
 
         // Prevent other roles from url restriction.
         // the branch user id should equal current user id.
-        if (get_role() == "restaurant"){
+        if (get_role() == "restaurant" && $id != false){
             $branch = Branch::findOrFail($data['menu']->branch_id);
-            if ($branch->user_id != $userId){
-                abort(404);
-            }
+            abortUrlFor(null, $userId, $branch->user_id);
         }
 
         return $data;
