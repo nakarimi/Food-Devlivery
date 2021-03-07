@@ -142,6 +142,21 @@ class DatabaseSeeder extends Seeder
             array('id' => '1','created_at' => '2021-03-01 10:44:29','updated_at' => '2021-03-01 10:44:29','title' => 'Menu 1','branch_id' => '1','status' => '1','items' => '["1", "2"]')
         ));
 
+        DB::table('orders')->insert(array(
+            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'deleted_at' => NULL,'title' => 'First new order','branch_id' => '1','customer_id' => '7','has_delivery' => '1','total' => '200','commission_value' => '20','status' => 'pending','note' => 'test node','reciever_phone' => '0790909090','contents' => '{"contents": [{"item 1": {"count": "2", "price": "100", "item_id": "1"}}, {"item 2": {"count": "4", "price": "100", "item_id": "2"}}, {"item 3": {"count": "8", "price": "200", "item_id": "5"}}]}')
+        ));
+
+        DB::table('order_timing')->insert(array(
+            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'order_id' => '1','approved_time' => '2021-03-04 10:52:15','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL)
+        ));
+
+        DB::table('order_delivery')->insert(array(
+            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'order_id' => '1','delivery_type' => 'own','delivery_adress' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0')
+        ));
+
+
+        
+
         // \App\Models\User::factory(10)->create();
     }
 }

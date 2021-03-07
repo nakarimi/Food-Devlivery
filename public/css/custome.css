@@ -5,3 +5,20 @@
 {
     vertical-align: inherit;
 }
+
+/* Fixing Pagination styles for all lists. */
+.pagination-wrapper > nav {
+    margin: 24px;
+}
+.pagination-wrapper > nav svg{
+    max-width: 24px;
+}
+.pagination-wrapper > nav > div:first-child {
+    margin-bottom: 15px;
+}
+.pagination-wrapper > nav > div:nth-child(2) {
+    text-align: center;
+}
+.pagination-wrapper > nav > div:first-child > *:nth-child(2) {
+    float: right;
+}

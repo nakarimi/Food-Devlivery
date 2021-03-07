@@ -50,6 +50,7 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/pendingBranches', 'App\Http\Controllers\BranchController@pendingBranches')->name('branches.pending');
     Route::get('/approvedBranches', 'App\Http\Controllers\BranchController@approvedBranches')->name('branches.approved');
     Route::get('/loadItemsBasedOnBranch', 'App\Http\Controllers\MenuController@loadItemsBasedOnBranch');
+    Route::post('updateOrderStatus', 'App\Http\Controllers\OrdersController@updateOrderStatus')->name('updateOrderStatus');
 
 
 });
@@ -71,9 +72,7 @@ Route::middleware(['restaurant'])->group(function () {
     Route::resource('menu', 'App\Http\Controllers\MenuController');
     Route::get('/profile', 'App\Http\Controllers\BranchController@restaurantProfile')->name('restaurant.profile');
     Route::resource('branch', 'App\Http\Controllers\BranchController');
-
-
-
+    Route::resource('orders', 'App\Http\Controllers\OrdersController');
 });
 
 /*
@@ -108,5 +107,3 @@ Route::middleware(['customer'])->group(function () {
         return view('dashboards.customer.dashboard');
     })->name('customer.dashboard');
 });
-
-
