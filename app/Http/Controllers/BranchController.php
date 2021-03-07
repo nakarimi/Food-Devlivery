@@ -22,9 +22,7 @@ class BranchController extends Controller
      */
     public function index(Request $request)
     {
-        if (get_role() == "restaurant"){
-            abort(404);
-        }
+        abortUrlFor("restaurant");
         $keyword = $request->get('search');
         $perPage = 25;
 
@@ -54,9 +52,7 @@ class BranchController extends Controller
      */
     public function create()
     {
-        if (get_role() == "restaurant"){
-            abort(404);
-        }
+        abortUrlFor("restaurant");
         $data = $this->dropdown_data();
         return view('branch.branch.create', $data);
     }
@@ -118,9 +114,7 @@ class BranchController extends Controller
      */
     public function show($id)
     {
-        if (get_role() == "restaurant"){
-            abort(404);
-        }
+        abortUrlFor("restaurant");
         $branch = Branch::findOrFail($id);
         return view('branch.branch.show', compact('branch'));
     }
