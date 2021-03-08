@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\User;
 use App\Models\Branch;
+use Illuminate\Support\Facades\Auth;
 
 class MenuController extends Controller
 {
@@ -29,7 +30,7 @@ class MenuController extends Controller
 
         //Todo: Should setup search for other users.
         $keyword = $request->get('search');
-        $perPage = 25;
+        $perPage = 10;
 
         if (!empty($keyword)) {
             $menu = Menu::where('title', 'LIKE', "%$keyword%")
@@ -95,6 +96,9 @@ class MenuController extends Controller
         $data['menu'] = Menu::findOrFail($id);
         $data['items'] = $this->get_menu_items($id);
         if (get_role() == "restaurant"){
+            $userId = Auth::user()->id;
+            $branch = Branch::findOrFail($data['menu']->branch_id);
+            abortUrlFor(null, $userId, $branch->user_id);
             return view('dashboards.restaurant.menu.show', $data);
         }
 
@@ -171,7 +175,7 @@ class MenuController extends Controller
         // Pass all available items.
         // If it is restaurant then user will have some restricted data.
         if (get_role() == "restaurant"){
-            $data['items'] = loadUserItemsData(['approved']);
+            $data['items'] = loadUserItemsData(['approved', 'pending']);
         }
         else {
             $data['items'] = Item::where('status', 1)->get();
@@ -191,6 +195,13 @@ class MenuController extends Controller
 
         // Pass menu to view. (For Edit form)
         $data['menu'] = ($id) ? Menu::findOrFail($id) : null;
+
+        // Prevent other roles from url restriction.
+        // the branch user id should equal current user id.
+        if (get_role() == "restaurant" && $id != false){
+            $branch = Branch::findOrFail($data['menu']->branch_id);
+            abortUrlFor(null, $userId, $branch->user_id);
+        }
 
         return $data;
     }

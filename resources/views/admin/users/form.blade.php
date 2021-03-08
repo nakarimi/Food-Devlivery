@@ -9,8 +9,14 @@
     {!! Form::email('email', null, ['class' => 'form-control', 'required' => 'required']) !!}
     {!! $errors->first('email', '<p class="help-block">:message</p>') !!}
 </div>
+@if ($formMode === 'edit')
+    <div class="form-group">
+        <label>Old Password:</label>
+        <input type="password" class="form-control" value="12345678" readonly>
+    </div>
+@endif
 <div class="form-group{{ $errors->has('password') ? ' has-error' : ''}}">
-    {!! Form::label('password', 'Password: ', ['class' => 'control-label']) !!}
+    {!! Form::label('password', ($formMode == 'edit' ? 'Set New Password: ' : 'Password: '), ['class' => 'control-label']) !!}
     @php
         $passwordOptions = ['class' => 'form-control'];
         if ($formMode === 'create') {

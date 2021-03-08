@@ -11,7 +11,7 @@
     <label for="user_id" class="control-label">{{ 'User Id' }}</label>
     <!-- <input class="form-control" name="user_id" type="number" id="user_id" value="{{ $driver->user_id ?? ''}}" required> -->
 
-     <select class="custom-select mr-sm-2" name="user_id" id="user_id" required @if(isset($_GET['userId'])) disabled="disabled" @endif>
+     <select class="custom-select mr-sm-2" name="user_id" id="user_id" required @if(isset($_GET['userId'])) style="pointer-events: none" @endif>
       @foreach($users as $user)
          <option value="{{ $user->id }}" @if( (isset($driver->user_id) && $user->id == $driver->user_id) || $user->id == ($_GET['userId'] ?? '')) selected="selected" @endif >{{ $user->name }}</option>
       @endforeach

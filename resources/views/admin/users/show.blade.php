@@ -20,12 +20,7 @@ Single User
                             'url' => ['/admin/users', $user->id],
                             'style' => 'display:inline'
                         ]) !!}
-                            {!! Form::button('<i class="fa fa-trash-o" aria-hidden="true"></i> Delete', array(
-                                    'type' => 'submit',
-                                    'class' => 'btn btn-danger btn-sm',
-                                    'title' => 'Delete User',
-                                    'onclick'=>'return confirm("Confirm delete?")'
-                            ))!!}
+
                         {!! Form::close() !!}
                         <br/>
                         <br/>
@@ -54,9 +49,21 @@ Single User
                                                             <div class="staff-id">Location : {{$user->location}}</div>
                                                             <div class="small doj text-muted">Registered on: {{ date_format(date_create($user->created_at), "jS F Y") }}</div>
                                                             @if ($user->status == 1)
-                                                                <div class="staff-msg"><a class="btn btn-danger" href="#">Deactive User</a></div>
+                                                                {!! Form::open([
+                                                                'method' => 'PUT',
+                                                                'url' => ['/deactiveUser', $user->id],
+                                                                'style' => 'display:inline'
+                                                                ]) !!}
+                                                                <div class="staff-msg"><button type="submit" class="btn btn-danger"    onclick="return confirm(&quot;Are you sure you want to deactive this user?&quot;)">Deactive User</button></div>
+                                                                {!! Form::close() !!}
                                                             @else
-                                                                <div class="staff-msg"><a class="btn btn-custom" href="#">Activate User</a></div>
+                                                                {!! Form::open([
+                                                                 'method' => 'PUT',
+                                                                 'url' => ['/activateUser', $user->id],
+                                                                 'style' => 'display:inline'
+                                                                 ]) !!}
+                                                                <div class="staff-msg"><button class="btn btn-custom" onclick="return confirm(&quot;Are you sure you want to activate this user?&quot;)">Activate User</button></div>
+                                                                {!! Form::close() !!}
                                                             @endif
                                                         </div>
                                                     </div>

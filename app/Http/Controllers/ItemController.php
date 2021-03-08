@@ -9,6 +9,7 @@ use App\Models\Item;
 use App\Models\ItemDetails;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Category;
 use App\Models\Branch;
@@ -30,12 +31,14 @@ class ItemController extends Controller
 
         //Todo: Search should be configured for other roles.
         $keyword = $request->get('search');
-        $perPage = 25;
+        $perPage = 10;
 
         if (!empty($keyword)) {
-            $item = Item::where('branch_id', 'LIKE', "%$keyword%")
-                ->orWhere('status', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
+            $item = Item::wherehas(
+                'itemDetails', function ($query) use ($keyword) {
+                $query->where('title','LIKE', "%$keyword%")
+                    ->orwhere('price','LIKE', "%$keyword%");
+            })->orWhere('status', 'LIKE', "%$keyword%")->latest()->paginate($perPage);
         } else {
             $item = Item::latest()->paginate($perPage);
         }
@@ -127,9 +130,15 @@ class ItemController extends Controller
     {
         $item = Item::with('itemFullDetails')->findOrFail($id);
 
+        // Prevent other roles from url restriction.
+        // the branch user id should equal current user id.
         if (get_role() == "restaurant"){
+            $userId = Auth::user()->id;
+            $branch = Branch::findOrFail($item->branch_id);
+            abortUrlFor(null, $userId, $branch->user_id);
             return view('dashboards.restaurant.items.show', compact('item'));
         }
+
         return view('item.item.show', compact('item'));
     }
 
@@ -246,6 +255,13 @@ class ItemController extends Controller
         // Pass Item to view. (For Edit form)
         // $item = Item::findOrFail($id);
         $data['item'] = ($id) ? Item::findOrFail($id) : null;
+
+        // Prevent other roles from url restriction.
+        // the branch user id should equal current user id.
+        if (get_role() == "restaurant" && $id != false){
+            $branch = Branch::findOrFail($data['item']->branch_id);
+            abortUrlFor(null, $userId, $branch->user_id);
+        }
         return $data;
     }
 

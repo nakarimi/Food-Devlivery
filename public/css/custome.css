@@ -1,6 +1,6 @@
-.itemCategories .table td, 
-.itemCategories .table th, 
-.itemList .table td, 
+.itemCategories .table td,
+.itemCategories .table th,
+.itemList .table td,
 .itemList .table th
 {
     vertical-align: inherit;
@@ -24,7 +24,7 @@
 }
 
 /* Order status colors. */
-  
+
   select[status="pending"] {
     background: #ffffff;
   }
@@ -49,10 +49,14 @@
   }
   select[status="canceld"] {
     background: #64646412;
-    
+
   }
 
   select#order_status option {
     color: black;
     background: white;
   }
+
+.dataTables_filter{
+    float: left; !important;
+}

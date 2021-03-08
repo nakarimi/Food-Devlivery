@@ -4,6 +4,7 @@
 @stop
 
 @section('styles')
+    <link rel="stylesheet" href="{{asset('css/dataTables.bootstrap4.min.css')}}">
 @stop
 
 @section('content')
@@ -18,7 +19,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped mb-0">
+                        <table class="datatable table table-striped mb-0">
                             <thead>
                             <tr>
                                 <th>#</th>
@@ -53,11 +54,11 @@
                                     <td>
                                         <a href="{{ url('/item/' . $item->id) }}" title="View Item"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
                                         <a href="{{ url('/item/' . $item->id . '/edit') }}" title="Edit Item"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
-                                        <form method="POST" action="{{ url('/item' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
-                                            {{ method_field('DELETE') }}
-                                            {{ csrf_field() }}
-                                            <button type="submit" class="btn btn-danger btn-xs" title="Delete Item" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-                                        </form>
+{{--                                        <form method="POST" action="{{ url('/item' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">--}}
+{{--                                            {{ method_field('DELETE') }}--}}
+{{--                                            {{ csrf_field() }}--}}
+{{--                                            <button type="submit" class="btn btn-danger btn-xs" title="Delete Item" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>--}}
+{{--                                        </form>--}}
                                     </td>
                                 </tr>
                             @endforeach
@@ -71,5 +72,7 @@
 @endsection
 
 @section('scripts')
-
+    <!-- Datatable JS -->
+    <script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
+    <script src="{{asset('js/dataTables.bootstrap4.min.js')}}"></script>
 @stop

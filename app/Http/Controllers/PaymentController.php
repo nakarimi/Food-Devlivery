@@ -22,12 +22,13 @@ class PaymentController extends Controller
     {
 
         $keyword = $request->get('search');
-        $perPage = 25;
+        $perPage = 10;
 
         if (!empty($keyword)) {
-            $payment = Payment::where('branch_id', 'LIKE', "%$keyword%")
-                ->orWhere('reciever_id', 'LIKE', "%$keyword%")
-                ->orWhere('paid_amount', 'LIKE', "%$keyword%")
+            $payment = Payment::wherehas(
+                'branchDetails',  function ($query) use ($keyword) {
+                $query->where('title', 'LIKE', "%$keyword%");
+            })->orWhere('paid_amount', 'LIKE', "%$keyword%")
                 ->orWhere('date_and_time', 'LIKE', "%$keyword%")
                 ->orWhere('note', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
@@ -69,7 +70,7 @@ class PaymentController extends Controller
 			'date_and_time' => 'required'
 		]);
         $requestData = $request->all();
-        
+
         Payment::create($requestData);
 
         return redirect('payment')->with('flash_message', 'Payment added!');
@@ -120,7 +121,7 @@ class PaymentController extends Controller
 			'date_and_time' => 'required'
 		]);
         $requestData = $request->all();
-        
+
         $payment = Payment::findOrFail($id);
         $payment->update($requestData);
 
@@ -142,13 +143,13 @@ class PaymentController extends Controller
     }
 
     public function dropdown_data($id = false) {
-        
+
         // Pass Branches for dropdown list form.
         $data['branches'] = DB::table("branches")->select('branche_main_info.title', 'branches.id')->where('branche_main_info.status', 'like', 'approved')->join('branche_main_info', 'branche_main_info.business_id', '=', 'branches.id')->latest('branche_main_info.created_at')->get();
 
         // Pass Users for dropdown list form.
         $data['users'] = User::all();
-        
+
         return $data;
     }
 }
