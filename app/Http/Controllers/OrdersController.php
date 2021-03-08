@@ -35,7 +35,14 @@ class OrdersController extends Controller
         $perPage = 10;
 
         if (!empty($keyword)) {
-            $orders = Order::where('title', 'LIKE', "%$keyword%")->latest()->paginate($perPage);
+            $orders = Order::wherehas(
+                'branchDetails', function ($query) use ($keyword) {
+                $query->where('title','LIKE', "%$keyword%");
+            })->orwhere('title', 'LIKE', "%$keyword%")
+                ->orwhere('status', 'LIKE', "%$keyword%")
+                ->orwhere('total', 'LIKE', "%$keyword%")
+                ->orwhere('note', 'LIKE', "%$keyword%")
+                ->latest()->paginate($perPage);
         } else {
             $orders = Order::latest()->paginate($perPage);
         }
