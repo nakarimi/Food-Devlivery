@@ -25,6 +25,7 @@ class ItemController extends Controller
      */
     public function index(Request $request)
     {
+        Session::put('itemType', 'approved');
         // If it is restaurant then user will have some restricted data.
         if (get_role() == "restaurant"){
             $item = loadUserItemsData(['pending', 'approved', 'rejected']);
