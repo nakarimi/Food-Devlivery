@@ -160,6 +160,20 @@ if (!function_exists('abortUrlFor')){
     }
 }
 
+// This will return orders based on branch ids of a user.
+if (!function_exists('loadUserAllOrders')){
+    function loadUserAllOrders ($userId){
+        // Get user branch.
+        $branches =  getUserBranches($userId);
+        $branchIds = [];
+        foreach ($branches as $branch) {
+            array_push($branchIds, $branch->id);
+        }
+        $orders = \App\Models\Order::whereIn('branch_id', $branchIds)->latest()->get();
+        return $orders;
+    }
+}
+
 
 
 
