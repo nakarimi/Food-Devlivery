@@ -1339,8 +1339,8 @@ table.dataTable thead > tr > td.sorting {
  color: #ffffff;
 }
 .sidebar-menu li.active a {
-    color: #333;
-    background-color: #ffebda;
+    color: #ffffff;
+    background-color: #c23b5e;
 }
 .menu-title {
     color: #ebecf1;
@@ -1369,8 +1369,9 @@ table.dataTable thead > tr > td.sorting {
     padding: 10px 15px;
 }
 .sidebar-menu ul ul a.active {
-    color: #000;
-    text-decoration: underline;
+    color: #ffffff;
+    background-color: #c23b5e;
+    text-decoration: none;
 }
 .mobile-user-menu {
     color: #fff;
@@ -1427,7 +1428,7 @@ table.dataTable thead > tr > td.sorting {
 .sidebar-menu ul ul a {
     display: block;
     font-size: 14px;
-    padding: 9px 20px 9px 10px;
+    padding: 9px 50px 9px 10px;
     position: relative;
 }
 .sidebar-menu ul ul {

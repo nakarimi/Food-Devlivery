@@ -10,8 +10,8 @@
                         @foreach($section->items as $menu)
                             @if ($menu->title == "Content Verification")
                                 <li class="submenu">
-                                    <a href="#" class="subdrop"><span> {{$menu->title}}</span> <span class="menu-arrow"></span></a>
-                                    <ul style="display: block;">
+                                    <a href="#"><span> {{$menu->title}}</span> <span class="menu-arrow"></span></a>
+                                    <ul>
                                         <li class="submenu">
                                             <a href="#"><span> Items </span> <span class="menu-arrow"></span></a>
                                             <ul>

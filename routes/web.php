@@ -50,7 +50,6 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/pendingBranches', 'App\Http\Controllers\BranchController@pendingBranches')->name('branches.pending');
     Route::get('/approvedBranches', 'App\Http\Controllers\BranchController@approvedBranches')->name('branches.approved');
     Route::get('/loadItemsBasedOnBranch', 'App\Http\Controllers\MenuController@loadItemsBasedOnBranch');
-    Route::post('updateOrderStatus', 'App\Http\Controllers\OrdersController@updateOrderStatus')->name('updateOrderStatus');
     Route::put('/deactiveUser/{id}', 'App\Http\Controllers\Admin\UsersController@deactiveUser');
     Route::put('/activateUser/{id}', 'App\Http\Controllers\Admin\UsersController@activateUser');
 
@@ -74,6 +73,7 @@ Route::middleware(['restaurant'])->group(function () {
     Route::resource('menu', 'App\Http\Controllers\MenuController');
     Route::get('/profile', 'App\Http\Controllers\BranchController@restaurantProfile')->name('restaurant.profile');
     Route::resource('branch', 'App\Http\Controllers\BranchController');
+    Route::post('updateOrderStatus', 'App\Http\Controllers\OrdersController@updateOrderStatus')->name('updateOrderStatus');
     Route::resource('orders', 'App\Http\Controllers\OrdersController');
 });
 
