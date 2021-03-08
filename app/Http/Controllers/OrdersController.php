@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Driver;
 use App\Models\DeliveryDetails;
 use App\Models\OrderTimeDetails;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class OrdersController extends Controller
@@ -23,6 +24,13 @@ class OrdersController extends Controller
      */
     public function index(Request $request)
     {
+        // If it is restaurant then user will have some restricted data.
+        if (get_role() == "restaurant"){
+            $userId = Auth::user()->id;
+            $orders = loadUserAllOrders($userId);
+            return view('dashboards.restaurant.orders.index', compact('orders'));
+        }
+
         $keyword = $request->get('search');
         $perPage = 10;
 
@@ -66,7 +74,7 @@ class OrdersController extends Controller
 			'contents' => 'required'
 		]);
         $requestData = $request->all();
-        
+
         Order::create($requestData);
 
         return redirect('orders')->with('flash_message', 'Order added!');
@@ -81,14 +89,15 @@ class OrdersController extends Controller
      */
     public function show($id)
     {
+        abortUrlFor("restaurant");
         $data = $this->dropdown_data($id);
-        
+
         if (get_role() == "restaurant"){
             $userId = auth()->user()->id;
             $data = $this->dropdown_data(false, $userId);
         }
-        
-        
+
+
 
         return view('order.orders.show', $data);
     }
@@ -136,17 +145,17 @@ class OrdersController extends Controller
             $requestData['has_delivery'] = 1;
             $deliver_update = true;
         }
-        
+
         $order = Order::findOrFail($id);
         $order->update($requestData);
-        
+
         if ($deliver_update) {
             $updateDeliveryDetails = [
                 'delivery_type' => $requestData['delivery_type'],
                 'delivery_adress' => $requestData['delivery_adress'],
                 'driver_id' => $requestData['driver_id'],
             ];
-    
+
             // Update delivery details. First check if there is a record for it, if not then insert a new record.
             $record = DeliveryDetails::where('order_id', $id)->count();
             if ($record) {
@@ -156,9 +165,9 @@ class OrdersController extends Controller
                 $updateDeliveryDetails['order_id'] = $id;
                 DB::table('order_delivery')->insertGetId($updateDeliveryDetails);
             }
-            
+
         }
-        
+
 
         return redirect('orders')->with('flash_message', 'Order updated!');
     }
@@ -185,7 +194,8 @@ class OrdersController extends Controller
      * @return array $data
      */
     public function dropdown_data($id = false, $userId = null) {
-      
+        abortUrlFor("restaurant");
+
         // Pass branches for dropdown list form.
         if ($userId != null){
             // If User Id passed it will load branches to that specific user.
@@ -213,7 +223,7 @@ class OrdersController extends Controller
      *
      */
     public function updateOrderStatus(Request $request) {
-        
+
         $id = $request['order_id'];
         $status = $request['status'];
 

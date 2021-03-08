@@ -22,6 +22,10 @@
                     <a href="{{route('menu.index')}}"><span>Menu</span></a>
                 </li>
 
+                <li>
+                    <a href="{{route('orders.index')}}"><span>Orders</span></a>
+                </li>
+
 
             </ul>
 
