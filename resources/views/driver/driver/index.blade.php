@@ -36,17 +36,17 @@
                                 <tbody>
                                 @foreach($driver as $item)
                                     <tr>
-                                        <td>{{ $loop->iteration or $item->id }}</td>
+                                        <td>{{ $loop->iteration }}</td>
                                         <td>{{ $item->title }}</td><td>{{ $item->user_id }}</td><td>{{ $item->contact }}</td>
                                         <td>
                                             <a href="{{ url('/driver/' . $item->id) }}" title="View Driver"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
                                             <a href="{{ url('/driver/' . $item->id . '/edit') }}" title="Edit Driver"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
 
-                                            <form method="POST" action="{{ url('/driver' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
-                                                {{ method_field('DELETE') }}
-                                                {{ csrf_field() }}
-                                                <button type="submit" class="btn btn-danger btn-xs" title="Delete Driver" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-                                            </form>
+{{--                                            <form method="POST" action="{{ url('/driver' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">--}}
+{{--                                                {{ method_field('DELETE') }}--}}
+{{--                                                {{ csrf_field() }}--}}
+{{--                                                <button type="submit" class="btn btn-danger btn-xs" title="Delete Driver" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>--}}
+{{--                                            </form>--}}
                                         </td>
                                     </tr>
                                 @endforeach

@@ -26,7 +26,7 @@
 <div class="form-row">
    <div class="col">
       <div class="form-group{{ $errors->has('main_commission_id') ? 'has-error' : ''}}">
-         <label for="main_commission_id" class="control-label">{{ 'Main Commission Id' }}</label>
+         <label for="main_commission_id" class="control-label">{{ 'Main Commission' }}</label>
          <select class="custom-select mr-sm-2" name="main_commission_id" id="main_commission_id" required>
             <option value="">Main Commission Type</option>
             @foreach($commissions as $commission)
@@ -42,7 +42,7 @@
    </div>
    <div class="col">
       <div class="form-group{{ $errors->has('deliver_commission_id') ? 'has-error' : ''}}">
-         <label for="deliver_commission_id" class="control-label">{{ 'Deliver Commission Id' }}</label>
+         <label for="deliver_commission_id" class="control-label">{{ 'Deliver Commission' }}</label>
          <!-- <input class="form-control" name="deliver_commission_id" type="number" id="deliver_commission_id" value="{{ $branch->deliver_commission_id ?? ''}}" > -->
 
          <select class="custom-select mr-sm-2" name="deliver_commission_id" id="deliver_commission_id" >
@@ -99,7 +99,7 @@
    <div class="col">
       <div class="form-group{{ $errors->has('user_id') ? 'has-error' : ''}}">
          <label for="user_id" class="control-label">{{ 'User Id' }}</label>
-         <select class="custom-select mr-sm-2" name="user_id" id="user_id" required @if(isset($_GET['userId'])) disabled="disabled" @endif>
+         <select class="custom-select mr-sm-2" name="user_id" id="user_id" required @if(isset($_GET['userId'])) style="pointer-events: none" @endif>
             @foreach($users as $user)
                <option value="{{ $user->id }}" @if( (isset($branch->user_id) && $user->id == $branch->user_id) || $user->id == ($_GET['userId'] ?? '')) selected="selected"  @endif>{{ $user->name }}</option>
             @endforeach

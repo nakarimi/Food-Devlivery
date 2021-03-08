@@ -19,7 +19,7 @@ class DriverController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->get('search');
-        $perPage = 25;
+        $perPage = 10;
 
         if (!empty($keyword)) {
             $driver = Driver::where('title', 'LIKE', "%$keyword%")
@@ -61,7 +61,7 @@ class DriverController extends Controller
 			'status' => 'required'
 		]);
         $requestData = $request->all();
-        
+
         Driver::create($requestData);
 
         return redirect('driver')->with('flash_message', 'Driver added!');
@@ -111,7 +111,7 @@ class DriverController extends Controller
 			'status' => 'required'
 		]);
         $requestData = $request->all();
-        
+
         $driver = Driver::findOrFail($id);
         $driver->update($requestData);
 
@@ -133,7 +133,7 @@ class DriverController extends Controller
     }
 
     public function dropdown_data($id = false) {
-      
+
         // Pass Users for dropdown list form.
         $data['users'] = User::all();
 

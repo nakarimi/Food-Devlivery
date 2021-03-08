@@ -36,41 +36,38 @@
                         </tr>
                      </thead>
                      <tbody>
-                        @foreach($item as $item)
+                        @foreach($item as $singleItem)
                         <tr>
                            <td>{{ $loop->iteration}}</td>
                            <td>
                             <h2 class="table-avatar">
-                                    <a href="#" class="avatar" style="width: 100px; height: 100px; background-color: transparent;"><img alt="" src="{{ url('storage/profile_images/' . get_item_details($item)->thumbnail) }}"></a>
+                                    <a href="#" class="avatar" style="width: 100px; height: 100px; background-color: transparent;"><img alt="" src="{{ url('storage/profile_images/' . get_item_details($singleItem)->thumbnail) }}"></a>
                                 </h2>
                             </td>
-                           <td>{{ get_item_details($item)->title }}</td>
-                           <td>{{ @$item->branch->branchDetails->title}}</td>
-                           <td>{{ get_item_details($item)->price }}</td>
+                           <td>{{ get_item_details($singleItem)->title }}</td>
+                           <td>{{ @$singleItem->branch->branchDetails->title}}</td>
+                           <td>{{ get_item_details($singleItem)->price }}</td>
                            <td>
-                              @if($item->status == 1)
+                              @if($singleItem->status == 1)
                                  <span class="badge bg-inverse-success">Active</span>
                               @else
                                  <span class="badge bg-inverse-danger">Inactive</span>
                               @endif
                            </td>
                            <td>
-                              <a href="{{ url('/item/' . $item->id) }}" title="View Item"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
-                              <a href="{{ url('/item/' . $item->id . '/edit') }}" title="Edit Item"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
-                              <form method="POST" action="{{ url('/item' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
-                                 {{ method_field('DELETE') }}
-                                 {{ csrf_field() }}
-                                 <button type="submit" class="btn btn-danger btn-xs" title="Delete Item" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-                              </form>
+                              <a href="{{ url('/item/' . $singleItem->id) }}" title="View Item"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
+                              <a href="{{ url('/item/' . $singleItem->id . '/edit') }}" title="Edit Item"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
+{{--                              <form method="POST" action="{{ url('/item' . '/' . $singleItem->id) }}" accept-charset="UTF-8" style="display:inline">--}}
+{{--                                 {{ method_field('DELETE') }}--}}
+{{--                                 {{ csrf_field() }}--}}
+{{--                                 <button type="submit" class="btn btn-danger btn-xs" title="Delete Item" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>--}}
+{{--                              </form>--}}
                            </td>
                         </tr>
                         @endforeach
                      </tbody>
                   </table>
-                  {{-- There is an issue with pagination of this list, so commented out for now. --}}
-                  {{--
-                  <div class="pagination-wrapper"> {!! $item->appends(['search' => Request::get('search')])->render() !!} </div>
-                  --}}
+                   <div class="pagination-wrapper"> {!! $item->appends(['search' => Request::get('search')])->render() !!} </div>
                </div>
             </div>
          </div>

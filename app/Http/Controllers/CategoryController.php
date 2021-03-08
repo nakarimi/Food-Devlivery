@@ -20,7 +20,7 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->get('search');
-        $perPage = 25;
+        $perPage = 10;
 
         if (!empty($keyword)) {
             $category = Category::where('status', 'LIKE', "%$keyword%")
@@ -85,7 +85,7 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        
+
         $category = Category::findOrFail($id);
 
         return view('category.category.edit', compact('category'));
@@ -105,9 +105,9 @@ class CategoryController extends Controller
 			'status' => 'required',
 			'title' => 'required'
         ]);
-        
+
         $category = Category::findOrFail($id);
-        
+
         $update = [
             'title' => $request['title'],
             'description' => $request['description'],
@@ -119,8 +119,8 @@ class CategoryController extends Controller
         } else {
             $update['thumbnail'] =  $category->thumbnail;
         }
-        
-        
+
+
         $category->update($update);
 
         return redirect('category')->with('flash_message', 'Category updated!');
