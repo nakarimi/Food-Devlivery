@@ -57,7 +57,7 @@ class Item extends Model
 
     // Relationship with details table with full data.
     public function itemFullDetails(){
-        return $this->hasMany(ItemDetails::class, 'item_id');
+        return $this->hasMany(ItemDetails::class, 'item_id')->orderBy('id', 'desc');
     }
 
     public function branch(){
