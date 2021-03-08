@@ -31,7 +31,7 @@
    <div class="col">
       <div class="form-group{{ $errors->has('title') ? 'has-error' : ''}}">
          <label for="title" class="control-label">{{ 'Title' }}</label>
-         <input class="form-control" name="title" type="text" id="title" value="{{ $item->itemDetails->title ?? ''}}" required>
+         <input class="form-control" name="title" type="text" id="title" value="{{ get_item_details($item)->title ?? ''}}" required>
          {!! $errors->first('title', '
          <p class="help-block">:message</p>
          ') !!}
@@ -40,7 +40,6 @@
    <div class="col">
       <div class="form-group{{ $errors->has('code') ? 'has-error' : ''}}">
          <label for="category_id" class="control-label">{{ 'Category' }}</label>
-         {{-- <input class="form-control" name="code" type="text" id="code" value="{{ $item->itemDetails->code ?? ''}}" > --}}
          <select class="custom-select mr-sm-2" name="category_id" id="category_id" required>
             @foreach($categories as $category)
                 <option value="{{ $category->id }}" @if( isset($item->category_id) && $category->id == $item->category_id) selected="selected" @endif >{{ $category->title }}</option>
@@ -56,7 +55,7 @@
    <div class="col">
       <div class="form-group{{ $errors->has('description') ? 'has-error' : ''}}">
          <label for="description" class="control-label">{{ 'Description' }}</label>
-         <textarea class="form-control" name="description" id="description" rows="3">{{ $item->itemDetails->description ?? ''}}</textarea>
+         <textarea class="form-control" name="description" id="description" rows="3">{{ get_item_details($item)->description ?? ''}}</textarea>
          {!! $errors->first('description', '
          <p class="help-block">:message</p>
          ') !!}
@@ -67,7 +66,7 @@
    <div class="col">
       <div class="form-group{{ $errors->has('price') ? 'has-error' : ''}}">
          <label for="price" class="control-label">{{ 'Price' }}</label>
-         <input class="form-control" name="price" type="number" id="price" value="{{ $item->itemDetails->price ?? ''}}" required>
+         <input class="form-control" name="price" type="number" id="price" value="{{ get_item_details($item)->price ?? ''}}" required>
          {!! $errors->first('price', '
          <p class="help-block">:message</p>
          ') !!}
@@ -76,7 +75,7 @@
    <div class="col">
       <div class="form-group{{ $errors->has('package_price') ? 'has-error' : ''}}">
          <label for="package_price" class="control-label">{{ 'Package Price' }}</label>
-         <input class="form-control" name="package_price" type="number" id="package_price" value="{{ $item->itemDetails->package_price ?? ''}}" >
+         <input class="form-control" name="package_price" type="number" id="package_price" value="{{ get_item_details($item)->package_price ?? ''}}" >
          {!! $errors->first('package_price', '
          <p class="help-block">:message</p>
          ') !!}
@@ -87,7 +86,7 @@
    <div class="col">
       <div class="form-group{{ $errors->has('unit') ? 'has-error' : ''}}">
          <label for="unit" class="control-label">{{ 'Unit' }}</label>
-         <input class="form-control" name="unit" type="text" id="unit" value="{{ $item->itemDetails->unit ?? ''}}" >
+         <input class="form-control" name="unit" type="text" id="unit" value="{{ get_item_details($item)->unit ?? ''}}" >
          {!! $errors->first('unit', '
          <p class="help-block">:message</p>
          ') !!}
@@ -97,7 +96,7 @@
       <div class="form-group{{ $errors->has('thumbnail') ? 'has-error' : ''}}">
          <label for="thumbnail" class="control-label">{{ 'Thumbnail' }}</label>
          {{-- logo is used insetead thumbnail to avoid code changes. --}}
-         <input class="form-control-file" name="logo" type="file" id="logo" value="{{ $item->itemDetails->thumbnail ?? ''}}" accept="image/png, image/jpeg" >
+         <input class="form-control-file" name="logo" type="file" id="logo" value="{{ get_item_details($item)->thumbnail ?? ''}}" accept="image/png, image/jpeg" >
          {!! $errors->first('thumbnail', '
          <p class="help-block">:message</p>
          ') !!}

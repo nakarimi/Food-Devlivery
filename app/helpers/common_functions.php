@@ -60,8 +60,8 @@ if (!function_exists('get_item_details')) {
     /**
      * Return an item latest details.
      * */
-    function get_item_details($item) {
-        return $item->itemFullDetails->first();
+    function get_item_details($item, $pending = false) {
+        return ($pending) ? $item->pendingItemDetails : $item->approvedItemDetails;
     }
 }
 

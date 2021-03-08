@@ -29,7 +29,7 @@
                         </tr>
                          <tr>
                            <th> Title </th>
-                           <td> {{ get_item_details($item)->details_status ?? ''}} </td>
+                           <td> {{ get_item_details($item)->title ?? ''}} </td>
                         </tr>
                         <tr>
                            <th> Branch </th>
