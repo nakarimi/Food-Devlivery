@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Category;
 use App\Models\Branch;
+use Illuminate\Support\Facades\Session;
+
 
 class ItemController extends Controller
 {
@@ -23,6 +25,7 @@ class ItemController extends Controller
      */
     public function index(Request $request)
     {
+        Session::put('itemType', 'approved');
         // If it is restaurant then user will have some restricted data.
         if (get_role() == "restaurant"){
             $item = loadUserItemsData(['pending', 'approved', 'rejected']);
@@ -215,7 +218,7 @@ class ItemController extends Controller
             return redirect('branch')->with('flash_message', 'Sorry there is problem, updating item data');
         }
 
-        return redirect('item')->with('flash_message', 'Item updated!');
+        return redirect()->back()->with('flash_message', 'Item updated!');
     }
 
     /**
@@ -267,6 +270,7 @@ class ItemController extends Controller
 
     public function pendingItems()
     {
+        Session::put('itemType', 'pending');
         // If it is restaurant then user will have some restricted data.
         if (get_role() == "restaurant"){
             $item = loadUserItemsData(['pending']);
@@ -278,6 +282,7 @@ class ItemController extends Controller
 
     public function approvedItems()
     {
+        Session::put('itemType', 'approved');
         // If it is restaurant then user will have some restricted data.
         if (get_role() == "restaurant"){
             $item = loadUserItemsData(['approved']);

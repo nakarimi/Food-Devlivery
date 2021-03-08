@@ -41,12 +41,12 @@
                            <td>{{ $loop->iteration}}</td>
                            <td>
                             <h2 class="table-avatar">
-                                    <a href="#" class="avatar" style="width: 100px; height: 100px; background-color: transparent;"><img alt="" src="{{ url('storage/profile_images/' . get_item_details($singleItem)->thumbnail) }}"></a>
+                                    <a href="#" class="avatar" style="width: 100px; height: 100px; background-color: transparent;"><img alt="" src="{{ url('storage/profile_images/' . get_item_details($singleItem, Session::get('itemType'))->thumbnail) }}"></a>
                                 </h2>
                             </td>
-                           <td>{{ get_item_details($singleItem)->title }}</td>
+                           <td>{{ get_item_details($singleItem, Session::get('itemType'))->title }}</td>
                            <td>{{ @$singleItem->branch->branchDetails->title}}</td>
-                           <td>{{ get_item_details($singleItem)->price }}</td>
+                           <td>{{ get_item_details($singleItem, Session::get('itemType'))->price }}</td>
                            <td>
                               @if($singleItem->status == 1)
                                  <span class="badge bg-inverse-success">Active</span>

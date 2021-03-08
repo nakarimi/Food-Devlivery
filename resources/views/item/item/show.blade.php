@@ -7,7 +7,7 @@
             <div class="card-header">test</div>
             <div class="profile-img-wrap" style="right: 0px; top: 10px; width: 190px;">
                <div class="profile-img">
-                  <a href="#"><img alt="" src="{{ url('storage/profile_images/'.get_item_details($item)->thumbnail) }}"></a>
+                  <a href="#"><img alt="" src="{{ url('storage/profile_images/'.get_item_details($item, Session::get('itemType'))->thumbnail) }}"></a>
                </div>
             </div>
             <div class="card-body">
@@ -29,7 +29,7 @@
                         </tr>
                          <tr>
                            <th> Title </th>
-                           <td> {{ get_item_details($item)->details_status ?? ''}} </td>
+                           <td> {{ get_item_details($item, Session::get('itemType'))->title ?? ''}} </td>
                         </tr>
                         <tr>
                            <th> Branch </th>
@@ -37,19 +37,19 @@
                         </tr>
                         <tr>
                            <th> Price </th>
-                           <td> {{ get_item_details($item)->price }} </td>
+                           <td> {{ get_item_details($item, Session::get('itemType'))->price }} </td>
                         </tr>
                         <tr>
                            <th> Package Price </th>
-                           <td> {{ get_item_details($item)->package_price }} </td>
+                           <td> {{ get_item_details($item, Session::get('itemType'))->package_price }} </td>
                         </tr>
                         <tr>
                            <th> Unit </th>
-                           <td> {{ get_item_details($item)->unit }} </td>
+                           <td> {{ get_item_details($item, Session::get('itemType'))->unit }} </td>
                         </tr>
                         <tr>
                            <th> Description </th>
-                           <td> {{ get_item_details($item)->description }} </td>
+                           <td> {{ get_item_details($item, Session::get('itemType'))->description }} </td>
                         </tr>
                      </tbody>
                   </table>
