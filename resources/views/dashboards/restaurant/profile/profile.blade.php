@@ -14,7 +14,7 @@
                     <div class="profile-view">
                         <div class="profile-img-wrap">
                             <div class="profile-img">
-                                <a href="#"><img alt="" src="{{asset('img/user.jpg')}}"></a>
+                                <a href="#"><img alt="" src="{{ url('storage/profile_images/'.$branch->branchDetails->logo) }}"></a>
                             </div>
                         </div>
                         <div class="profile-basic">
