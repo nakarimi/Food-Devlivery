@@ -16,7 +16,7 @@
     </div>
 @endif
 <div class="form-group{{ $errors->has('password') ? ' has-error' : ''}}">
-    {!! Form::label('password', 'Password: ', ['class' => 'control-label']) !!}
+    {!! Form::label('password', ($formMode == 'edit' ? 'Set New Password: ' : 'Password: '), ['class' => 'control-label']) !!}
     @php
         $passwordOptions = ['class' => 'form-control'];
         if ($formMode === 'create') {

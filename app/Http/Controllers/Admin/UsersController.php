@@ -147,4 +147,20 @@ class UsersController extends Controller
         return redirect('admin/users')->with('flash_message', 'User deleted!');
     }
 
+    public function activateUser($id)
+    {
+        $user = User::findorfail($id);
+        $user->status = 1;
+        $user->save();
+        return redirect()->back()->with('flash_message', 'User activated!');
+    }
+
+    public function deactiveUser($id)
+    {
+        $user = User::findorfail($id);
+        $user->status = 0;
+        $user->save();
+        return redirect()->back()->with('flash_message', 'User deactivated!');
+    }
+
 }

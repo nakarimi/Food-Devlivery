@@ -28,9 +28,7 @@ class PaymentController extends Controller
             $payment = Payment::wherehas(
                 'branchDetails',  function ($query) use ($keyword) {
                 $query->where('title', 'LIKE', "%$keyword%");
-            })->orwhere('branch_id', 'LIKE', "%$keyword%")
-                ->orWhere('reciever_id', 'LIKE', "%$keyword%")
-                ->orWhere('paid_amount', 'LIKE', "%$keyword%")
+            })->orWhere('paid_amount', 'LIKE', "%$keyword%")
                 ->orWhere('date_and_time', 'LIKE', "%$keyword%")
                 ->orWhere('note', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);

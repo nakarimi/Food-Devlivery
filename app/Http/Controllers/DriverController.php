@@ -23,7 +23,6 @@ class DriverController extends Controller
 
         if (!empty($keyword)) {
             $driver = Driver::where('title', 'LIKE', "%$keyword%")
-                ->orWhere('user_id', 'LIKE', "%$keyword%")
                 ->orWhere('contact', 'LIKE', "%$keyword%")
                 ->orWhere('status', 'LIKE', "%$keyword%")
                 ->orWhere('token', 'LIKE', "%$keyword%")
