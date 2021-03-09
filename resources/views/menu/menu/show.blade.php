@@ -45,7 +45,7 @@
                            <td>
                               <p>
                                  @foreach($items as $item)
-                                 <a href="/item/{{$item->id}}">{{ $item->itemDetails->title }}</a> @if(!$loop->last) , @endif
+                                 <a href="/item/{{$item->id}}">{{ $item->approvedItemDetails->title }}</a> @if(!$loop->last) , @endif
                                  @endforeach
                               </p>
                            </td>
