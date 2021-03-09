@@ -58,5 +58,26 @@
   }
 
 .dataTables_filter{
-    float: left; !important;
+    float: left !important;
+}
+
+.max-width200 {
+  max-width: 200px;
+}
+.order_content_list {
+  display: contents;
+}
+
+.order_content_list ul {
+  line-height: 20px;
+}
+
+.order_content_list ul li {
+  list-style: none;
+  background-color: #e4e4e4;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  float: left;
+  margin: 3px;
+  padding: 0 5px;
 }

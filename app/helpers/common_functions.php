@@ -174,6 +174,46 @@ if (!function_exists('loadUserAllOrders')){
     }
 }
 
+// This will return order items for views.
+if (!function_exists('show_order_itmes')){
+    function show_order_itmes ($items){
+        
+        // Open html warapper for list of items.
+        $output = "<span class='order_content_list'><ul>";
+        
+        $items = json_decode($items);
+
+        $items = $items->contents;
+        
+        for ($k=0; $k < count($items); $k++) {
+
+            // Create the correct format of key.
+            $key = 'item_'.($k + 1);
+
+            // Get each item as single item.
+            $item = $items[$k]->$key;
+
+            // Load items data.
+            $itemRecord = Item::with('approvedItemDetails')->where('id', $item->item_id)->first();
+
+            // $title = $item->approvedItemDetails->title;
+            if (!$itemRecord) {
+                continue;
+            }
+
+            // Set title.
+            $title =  $itemRecord->approvedItemDetails->title;
+
+            $output .= "<li>$title, $item->count</li>";
+        }
+        // Close html Wrapper.
+        $output .= "</ul></span>"; 
+        
+        return $output;
+    }
+}
+
+
 
 
 
