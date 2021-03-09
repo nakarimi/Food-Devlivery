@@ -199,7 +199,7 @@ if (!function_exists('show_order_itmes')){
             // Load items data.
             $itemRecord = Item::with('approvedItemDetails')->where('id', $item->item_id)->first();
 
-            // $title = $item->approvedItemDetails->title;
+            // If item does not exist.
             if (!$itemRecord) {
                 continue;
             }
@@ -216,7 +216,15 @@ if (!function_exists('show_order_itmes')){
     }
 }
 
+// This will check if item is assigned for menu.
+if (!function_exists('select_item_logic')){
 
-
-
-
+    function select_item_logic($menu_items, $id){
+             
+        $item_ids = (array) json_decode($menu_items);
+        
+        if (in_array($id, $item_ids)) {
+            return 'selected="selected"';
+        }        
+    }
+}

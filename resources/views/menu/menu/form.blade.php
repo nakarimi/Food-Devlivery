@@ -21,7 +21,6 @@
 
 <div class="form-group{{ $errors->has('branch_id') ? 'has-error' : ''}}">
     
-    
     @if(Auth::user()->role->name == "restaurant")
     <div style="display: none;">
         <label for="branch_id" class="control-label">{{ 'Branch Id' }}</label>
@@ -36,11 +35,10 @@
     <select class="custom-select mr-sm-2" name="branch_id" id="branch_id" required>
         <option  value="" selected disabled>Select Branch</option>
         @foreach($branches as $branch)
-            <option value="{{ $branch->id }}" @if( isset($item->branch_id) && $branch->id == $item->branch_id) selected="selected" @endif >{{ $branch->branchDetails->title }}</option>
+            <option value="{{ $branch->id }}" @if( isset($menu->branch_id) && $branch->id == $menu->branch_id) selected="selected" @endif >{{ $branch->branchDetails->title }}</option>
         @endforeach
     </select>
     @endif
-    
     
     {!! $errors->first('branch_id', '
     <p class="help-block">:message</p>
@@ -52,7 +50,7 @@
     {{-- <textarea class="form-control" rows="5" name="items" type="textarea" id="items" >{{ $menu->items ?? ''}}</textarea> --}}
     <select class="custom-select mr-sm-2" name="items[]" id="items" multiple required>
         @foreach($items as $item)
-            <option value="{{ $item->id }}" >{{ get_item_details($item)->title }}</option>
+            <option value="{{ $item->id }}" {{ select_item_logic($menu->items, $item->id) }} >{{ get_item_details($item)->title }}</option>
         @endforeach
     </select>
     {!! $errors->first('items', '<p class="help-block">:message</p>') !!}
