@@ -61,7 +61,10 @@ if (!function_exists('get_item_details')) {
      * Return an item latest details.
      * */
     function get_item_details($item, $itemType = 'approved') {
-        return ($itemType == 'approved') ? $item->approvedItemDetails : $item->pendingItemDetails;
+        if($item) {
+            return ($itemType == 'approved') ? $item->approvedItemDetails : $item->pendingItemDetails;
+        }
+        return;
     }
 }
 

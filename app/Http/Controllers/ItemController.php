@@ -208,7 +208,7 @@ class ItemController extends Controller
        if ($request->file('logo')) {
            $update['thumbnail'] = save_file($request);
        } else {
-//           $update['thumbnail'] =  $item->itemDetails->thumbnail;
+          $update['thumbnail'] =  get_item_details($item, Session::get('itemType'))->thumbnail;
        }
 
         // Update details.
@@ -218,7 +218,7 @@ class ItemController extends Controller
             return redirect('branch')->with('flash_message', 'Sorry there is problem, updating item data');
         }
 
-        return redirect()->back()->with('flash_message', 'Item updated!');
+        return redirect('item')->with('flash_message', 'Item updated!');
     }
 
     /**
@@ -303,6 +303,9 @@ class ItemController extends Controller
         DB::table('item_details')->where('item_id', '=', $itemId)
                 ->where('id', '!=', $detialId)
                 ->update(array('details_status' => "old"));
+
+        // Set session, so that it consider this item as approve item, to avoid errors.
+        Session::put('itemType', 'approved');
          return redirect()->back()->with('flash_message', 'Item Approved!');
     }
 
