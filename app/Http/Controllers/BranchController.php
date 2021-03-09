@@ -179,7 +179,7 @@ class BranchController extends Controller
         // Also update the details table.
         // Todo, if edit is done by admin the status shoudl be approved otherwise it should be pending.
         $status = 'approved';
-        $returnUrl = 'brnach';
+        $returnUrl = 'branch';
         if ($role == 'restaurant'){
             $status = 'pending';
             $returnUrl = '/profile';
@@ -203,6 +203,10 @@ class BranchController extends Controller
 
         if (!$details_id) {
             return redirect($returnUrl)->with('flash_message', 'Sorry there is problem, storing branch data');
+        }
+
+        if (get_role() != "restaurant"){
+            $this->changeStatusToOld($branch->id, $details_id);
         }
 
         return redirect($returnUrl)->with('flash_message', 'Branch updated!');
@@ -270,9 +274,7 @@ class BranchController extends Controller
         $branch = BranchDetails::findOrFail($detialId);
         $branch->status = "approved";
         $branch->save();
-        DB::table('branche_main_info')->where('business_id', '=', $businessId)
-            ->where('id', '!=', $detialId)
-            ->update(array('status' => "old"));
+        $this->changeStatusToOld($businessId, $detialId);
         return redirect()->back()->with('flash_message', 'Branch Approved!');
     }
 
@@ -283,5 +285,13 @@ class BranchController extends Controller
         $branch->status = "rejected";
         $branch->save();
         return redirect()->back()->with('flash_message', 'Branch Rejected!');
+    }
+
+    // This function make the status of other records of same branch to old.
+    public function changeStatusToOld($business_id, $detailId)
+    {
+        DB::table('branche_main_info')->where('business_id', '=', $business_id)
+            ->where('id', '!=', $detailId)
+            ->update(array('status' => "old"));
     }
 }

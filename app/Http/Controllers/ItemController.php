@@ -217,6 +217,11 @@ class ItemController extends Controller
         if (!$details_id) {
             return redirect('branch')->with('flash_message', 'Sorry there is problem, updating item data');
         }
+        else {
+            if (get_role() != "restaurant"){
+                $this->changeStatusToOld($id, $details_id);
+            }
+        }
 
         return redirect()->back()->with('flash_message', 'Item updated!');
     }
@@ -300,9 +305,7 @@ class ItemController extends Controller
         $item = ItemDetails::findOrFail($detialId);
         $item->details_status = "approved";
         $item->save();
-        DB::table('item_details')->where('item_id', '=', $itemId)
-                ->where('id', '!=', $detialId)
-                ->update(array('details_status' => "old"));
+        $this->changeStatusToOld($itemId, $detialId);
          return redirect()->back()->with('flash_message', 'Item Approved!');
     }
 
@@ -324,5 +327,11 @@ class ItemController extends Controller
         return $item;
     }
 
-
+    // This function make the status of other records of same item to old.
+    public function changeStatusToOld($item_id, $detailId)
+    {
+        DB::table('item_details')->where('item_id', '=', $item_id)
+            ->where('id', '!=', $detailId)
+            ->update(array('details_status' => "old"));
+    }
 }
