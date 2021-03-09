@@ -98,7 +98,7 @@
 <div class="form-row">
    <div class="col">
       <div class="form-group{{ $errors->has('user_id') ? 'has-error' : ''}}">
-         <label for="user_id" class="control-label">{{ 'User Id' }}</label>
+         <label for="user_id" class="control-label">{{ 'User' }}</label>
          <select class="custom-select mr-sm-2" name="user_id" id="user_id" required @if(isset($_GET['userId'])) style="pointer-events: none" @endif>
             @foreach($users as $user)
                <option value="{{ $user->id }}" @if( (isset($branch->user_id) && $user->id == $branch->user_id) || $user->id == ($_GET['userId'] ?? '')) selected="selected"  @endif>{{ $user->name }}</option>

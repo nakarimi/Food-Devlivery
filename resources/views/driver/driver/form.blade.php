@@ -8,7 +8,7 @@
    </div>
    <div class="col">
       <div class="form-group{{ $errors->has('user_id') ? 'has-error' : ''}}">
-    <label for="user_id" class="control-label">{{ 'User Id' }}</label>
+    <label for="user_id" class="control-label">{{ 'User' }}</label>
     <!-- <input class="form-control" name="user_id" type="number" id="user_id" value="{{ $driver->user_id ?? ''}}" required> -->
 
      <select class="custom-select mr-sm-2" name="user_id" id="user_id" required @if(isset($_GET['userId'])) style="pointer-events: none" @endif>

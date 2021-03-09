@@ -26,8 +26,8 @@
                      <thead>
                         <tr>
                            <th>#</th>
-                           <th>Branch</th>
-                           <th>Reciever</th>
+                           <th>Payer</th>
+                           <th>Receiver</th>
                            <th>Paid Amount</th>
                             <th>Date</th>
                            <th>Actions</th>
