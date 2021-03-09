@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class BranchController extends Controller
 {
@@ -23,6 +24,7 @@ class BranchController extends Controller
     public function index(Request $request)
     {
         abortUrlFor("restaurant");
+        Session::put('branchType', 'approved');
         $keyword = $request->get('search');
         $perPage = 10;
 
@@ -179,7 +181,7 @@ class BranchController extends Controller
         // Also update the details table.
         // Todo, if edit is done by admin the status shoudl be approved otherwise it should be pending.
         $status = 'approved';
-        $returnUrl = 'brnach';
+        $returnUrl = 'branch';
         if ($role == 'restaurant'){
             $status = 'pending';
             $returnUrl = '/profile';
@@ -203,6 +205,13 @@ class BranchController extends Controller
 
         if (!$details_id) {
             return redirect($returnUrl)->with('flash_message', 'Sorry there is problem, storing branch data');
+        }
+
+        if (get_role() == "restaurant"){
+            $this->changeStatusToOld($branch->id, $details_id, 'pending', true);
+        }
+        else {
+            $this->changeStatusToOld($branch->id, $details_id, null, true);
         }
 
         return redirect($returnUrl)->with('flash_message', 'Branch updated!');
@@ -245,12 +254,14 @@ class BranchController extends Controller
 
     public function pendingBranches()
     {
+        Session::put('branchType', 'pending');
         $branch = getBranchesBasedOnStatus("pending");
         return view('branch.branch.index', compact('branch'));
     }
 
     public function approvedBranches()
     {
+        Session::put('branchType', 'approved');
         $branch = getBranchesBasedOnStatus("approved");
         return view('branch.branch.index', compact('branch'));
     }
@@ -270,9 +281,7 @@ class BranchController extends Controller
         $branch = BranchDetails::findOrFail($detialId);
         $branch->status = "approved";
         $branch->save();
-        DB::table('branche_main_info')->where('business_id', '=', $businessId)
-            ->where('id', '!=', $detialId)
-            ->update(array('status' => "old"));
+        $this->changeStatusToOld($businessId, $detialId, null, true);
         return redirect()->back()->with('flash_message', 'Branch Approved!');
     }
 
@@ -283,5 +292,18 @@ class BranchController extends Controller
         $branch->status = "rejected";
         $branch->save();
         return redirect()->back()->with('flash_message', 'Branch Rejected!');
+    }
+
+    // This function make the status of other records of same branch to old.
+    public function changeStatusToOld($business_id, $detailId, $status = null, $run = false)
+    {
+        if ($run){
+            $query = DB::table('branche_main_info')->where('business_id', '=', $business_id);
+            $update = $query->where('id', '!=', $detailId);
+            if ($status != null){
+                $update = $query->where('status', '=', $status);
+            }
+               $update->update(array('status' => "old"));
+        }
     }
 }

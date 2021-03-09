@@ -2,7 +2,7 @@
    <div class="col">
 
     <div class="form-group{{ $errors->has('branch_id') ? 'has-error' : ''}}">
-        <label for="branch_id" class="control-label">{{ 'Branch Id' }}</label>
+        <label for="branch_id" class="control-label">{{ 'Payer' }}</label>
         {{-- <input class="form-control" name="branch_id" type="number" id="branch_id" value="{{ $payment->branch_id ?? ''}}" required> --}}
         <select class="custom-select mr-sm-2" name="branch_id" id="branch_id" required>
             <option value="">Select Branch</option>
@@ -10,16 +10,16 @@
                 <option value="{{ $branch->id }}" @if( isset($payment->branch_id) && $branch->id == $payment->branch_id) selected="selected" @endif >{{ $branch->title }}</option>
             @endforeach
          </select>
-        
+
         {!! $errors->first('branch_id', '<p class="help-block">:message</p>') !!}
     </div>
 
    </div>
    <div class="col">
         <div class="form-group{{ $errors->has('reciever_id') ? 'has-error' : ''}}">
-            <label for="reciever_id" class="control-label">{{ 'Reciever Id' }}</label>
+            <label for="reciever_id" class="control-label">{{ 'Reciever' }}</label>
             {{-- <input class="form-control" name="reciever_id" type="number" id="reciever_id" value="{{ $payment->reciever_id ?? ''}}" required> --}}
-            
+
             <select class="custom-select mr-sm-2" name="reciever_id" id="reciever_id" required>
                 <option value="">Select Branch</option>
                 @foreach($users as $user)

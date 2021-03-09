@@ -23,6 +23,7 @@ class CreateItemDetailsTable extends Migration
             $table->double('price')->nullable();
             $table->double('package_price')->nullable();
             $table->string('unit')->nullable();
+            $table->longText('notes')->nullable();
             $table->string('details_status')->nullable();
         });
     }

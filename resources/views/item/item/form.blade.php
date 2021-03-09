@@ -1,7 +1,7 @@
 <div class="form-row">
    <div class="col">
       <div class="form-group{{ $errors->has('branch_id') ? 'has-error' : ''}}">
-         <label for="branch_id" class="control-label">{{ 'Branch Id' }}</label>
+         <label for="branch_id" class="control-label">{{ 'Branch' }}</label>
          {{-- <input class="form-control" name="branch_id" type="number" id="branch_id" value="{{ $item->branch_id ?? ''}}" required> --}}
          <select class="custom-select mr-sm-2" name="branch_id" id="branch_id" required>
             @foreach($branches as $branch)
