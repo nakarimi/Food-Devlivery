@@ -41,18 +41,24 @@
                            <td>{{ $loop->iteration}}</td>
                            <td>{{ $item->title }}</td>
                            <td>{{ $item->branchDetails->title }}</td>
-                           <td>{{ $item->customer->name }}</td>
+                           <td>{{ $item->customer->name }} <br> ({{$item->reciever_phone}}) </td>
                            <td class="max-width200">{!! show_order_itmes($item->contents) !!}</td>
                            <td>
                                 @if($item->has_delivery == 1)
                                     @if($item->deliveryDetails->delivery_type == 'own')
                                         <span class="badge bg-inverse-success">Own Delivery</span>
                                     @else
-                                        <span class="badge bg-inverse-primary">Company Delivery</span>
+                                        {{-- Here we show all free drivers. --}}
+                                        <select class="custom-select mr-sm-2" name="branch_id" id="branch_id" required>
+                                             @foreach($free_drivers as $driver)
+                                                <option value="{{ $driver->id }}" >{{ $driver->title }}</option>
+                                             @endforeach
+                                       </select>
                                     @endif
                                 @else
                                     <span class="badge bg-inverse-warning">Self Delivery2</span>
                                 @endif
+                           
                            </td>
                            <td>
                               <select class="custom-select mr-sm-2" order_id={{$item->id}} status="{{$item->status}}" name="order_status" id="order_status" required>

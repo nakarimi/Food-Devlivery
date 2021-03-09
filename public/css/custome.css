@@ -81,3 +81,6 @@
   margin: 3px;
   padding: 0 5px;
 }
+.container {
+  max-width: 1440px;
+}

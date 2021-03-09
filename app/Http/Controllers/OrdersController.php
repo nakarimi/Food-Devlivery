@@ -47,7 +47,9 @@ class OrdersController extends Controller
             $orders = Order::latest()->paginate($perPage);
         }
 
-        return view('order.orders.index', compact('orders'));
+        $free_drivers = Driver::all()->where('status', 'free');
+
+        return view('order.orders.index', compact('orders', 'free_drivers'));
     }
 
     /**
@@ -215,7 +217,7 @@ class OrdersController extends Controller
         $data['customers'] = User::where('role_id', 5)->get();
 
 
-        $data['drivers'] = Driver::all();
+        $data['free_drivers'] = Driver::all()->where('status', 'free');
 
         // Pass Item to view. (For Edit form)
         // $item = Item::findOrFail($id);
