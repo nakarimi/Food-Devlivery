@@ -177,17 +177,26 @@ if (!function_exists('loadUserAllOrders')){
     }
 }
 
+if (!function_exists('get_branch_details')) {
+    /**
+     * Return a branch latest details.
+     * */
+    function get_branch_details($branch, $branchType = 'approved') {
+        return ($branchType == 'approved') ? $branch->branchDetails : $branch->pendingBranchDetails;
+    }
+}
+
 // This will return order items for views.
 if (!function_exists('show_order_itmes')){
     function show_order_itmes ($items){
-        
+
         // Open html warapper for list of items.
         $output = "<span class='order_content_list'><ul>";
-        
+
         $items = json_decode($items);
 
         $items = $items->contents;
-        
+
         for ($k=0; $k < count($items); $k++) {
 
             // Create the correct format of key.
@@ -210,8 +219,8 @@ if (!function_exists('show_order_itmes')){
             $output .= "<li>$title, $item->count</li>";
         }
         // Close html Wrapper.
-        $output .= "</ul></span>"; 
-        
+        $output .= "</ul></span>";
+
         return $output;
     }
 }
@@ -220,11 +229,11 @@ if (!function_exists('show_order_itmes')){
 if (!function_exists('select_item_logic')){
 
     function select_item_logic($menu_items, $id){
-             
+
         $item_ids = (array) json_decode($menu_items);
-        
+
         if (in_array($id, $item_ids)) {
             return 'selected="selected"';
-        }        
+        }
     }
 }

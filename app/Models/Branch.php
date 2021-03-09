@@ -72,4 +72,8 @@ class Branch extends Model
         return $this->hasMany(BranchDetails::class, 'business_id');
     }
 
+    // Relationship with details table.
+    public function pendingBranchDetails(){
+        return $this->hasOne(BranchDetails::class, 'business_id')->where('status', 'pending')->latest();
+    }
 }

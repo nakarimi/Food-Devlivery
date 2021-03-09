@@ -20,10 +20,10 @@
 </div>
 
 <div class="form-group{{ $errors->has('branch_id') ? 'has-error' : ''}}">
-    
+
     @if(Auth::user()->role->name == "restaurant")
     <div style="display: none;">
-        <label for="branch_id" class="control-label">{{ 'Branch Id' }}</label>
+        <label for="branch_id" class="control-label">{{ 'Branch' }}</label>
         <select class="custom-select mr-sm-2" name="branch_id" id="branch_id" required>
         @foreach($branches as $branch)
             <option value="{{ $branch->id }}" selected="selected" >{{ $branch->branchDetails->title }}</option>
@@ -31,7 +31,7 @@
         </select>
     </div>
     @else
-    <label for="branch_id" class="control-label">{{ 'Branch Id' }}</label>
+    <label for="branch_id" class="control-label">{{ 'Branch' }}</label>
     <select class="custom-select mr-sm-2" name="branch_id" id="branch_id" required>
         <option  value="" selected disabled>Select Branch</option>
         @foreach($branches as $branch)
@@ -39,7 +39,6 @@
         @endforeach
     </select>
     @endif
-    
     {!! $errors->first('branch_id', '
     <p class="help-block">:message</p>
     ') !!}
