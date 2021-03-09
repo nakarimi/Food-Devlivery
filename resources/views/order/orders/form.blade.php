@@ -123,8 +123,7 @@
    </div>
 </div>
 <div class="form-group{{ $errors->has('contents') ? 'has-error' : ''}}">
-   <label for="contents" class="control-label">{{ 'Contents' }}</label>
-   <textarea class="form-control" rows="5" name="contents" type="textarea" id="contents" required>{{ $order->contents ?? ''}}</textarea>
+   <label for="contents" class="control-label" style="display: flex;"><span>{{ 'Contents' }}</span> {!! show_order_itmes($order->contents) !!}</label>
    {!! $errors->first('contents', '
    <p class="help-block">:message</p>
    ') !!}
