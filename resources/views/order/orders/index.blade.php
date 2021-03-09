@@ -29,6 +29,7 @@
                            <th>Title</th>
                            <th>Branch</th>
                            <th>Customer</th>
+                           <th>Contents</th>
                            <th>Delivery</th>
                            <th>Status</th>
                            <th>Actions</th>
@@ -41,6 +42,7 @@
                            <td>{{ $item->title }}</td>
                            <td>{{ $item->branchDetails->title }}</td>
                            <td>{{ $item->customer->name }}</td>
+                           <td class="max-width200">{!! show_order_itmes($item->contents) !!}</td>
                            <td>
                                 @if($item->has_delivery == 1)
                                     @if($item->deliveryDetails->delivery_type == 'own')

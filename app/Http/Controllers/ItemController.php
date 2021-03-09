@@ -208,7 +208,7 @@ class ItemController extends Controller
        if ($request->file('logo')) {
            $update['thumbnail'] = save_file($request);
        } else {
-//           $update['thumbnail'] =  $item->itemDetails->thumbnail;
+          $update['thumbnail'] =  get_item_details($item, Session::get('itemType'))->thumbnail;
        }
 
         // Update details.
@@ -226,7 +226,7 @@ class ItemController extends Controller
             }
         }
 
-        return redirect()->back()->with('flash_message', 'Item updated!');
+        return redirect('item')->with('flash_message', 'Item updated!');
     }
 
     /**
@@ -309,6 +309,9 @@ class ItemController extends Controller
         $item->details_status = "approved";
         $item->save();
         $this->changeStatusToOld($itemId, $detialId, null, true);
+
+        // Set session, so that it consider this item as approve item, to avoid errors.
+        Session::put('itemType', 'approved');
          return redirect()->back()->with('flash_message', 'Item Approved!');
     }
 

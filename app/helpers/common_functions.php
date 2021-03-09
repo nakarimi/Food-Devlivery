@@ -61,7 +61,10 @@ if (!function_exists('get_item_details')) {
      * Return an item latest details.
      * */
     function get_item_details($item, $itemType = 'approved') {
-        return ($itemType == 'approved') ? $item->approvedItemDetails : $item->pendingItemDetails;
+        if($item) {
+            return ($itemType == 'approved') ? $item->approvedItemDetails : $item->pendingItemDetails;
+        }
+        return;
     }
 }
 
@@ -183,6 +186,54 @@ if (!function_exists('get_branch_details')) {
     }
 }
 
+// This will return order items for views.
+if (!function_exists('show_order_itmes')){
+    function show_order_itmes ($items){
 
+        // Open html warapper for list of items.
+        $output = "<span class='order_content_list'><ul>";
 
+        $items = json_decode($items);
 
+        $items = $items->contents;
+
+        for ($k=0; $k < count($items); $k++) {
+
+            // Create the correct format of key.
+            $key = 'item_'.($k + 1);
+
+            // Get each item as single item.
+            $item = $items[$k]->$key;
+
+            // Load items data.
+            $itemRecord = Item::with('approvedItemDetails')->where('id', $item->item_id)->first();
+
+            // If item does not exist.
+            if (!$itemRecord) {
+                continue;
+            }
+
+            // Set title.
+            $title =  $itemRecord->approvedItemDetails->title;
+
+            $output .= "<li>$title, $item->count</li>";
+        }
+        // Close html Wrapper.
+        $output .= "</ul></span>";
+
+        return $output;
+    }
+}
+
+// This will check if item is assigned for menu.
+if (!function_exists('select_item_logic')){
+
+    function select_item_logic($menu_items, $id){
+
+        $item_ids = (array) json_decode($menu_items);
+
+        if (in_array($id, $item_ids)) {
+            return 'selected="selected"';
+        }
+    }
+}

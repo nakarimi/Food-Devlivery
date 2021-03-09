@@ -69,7 +69,7 @@
 
                         <tr>
                            <th> Items </th>
-                           <td> <textarea class="form-control" rows="5" name="contents" type="textarea" id="contents" required>{{ $order->contents ?? ''}}</textarea> </td>
+                           <td>{!! show_order_itmes($order->contents) !!}</td>
                         </tr>        
                      </tbody>
                   </table>

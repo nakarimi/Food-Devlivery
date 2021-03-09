@@ -93,6 +93,7 @@ class MenuController extends Controller
      */
     public function show($id)
     {
+
         $data['menu'] = Menu::findOrFail($id);
         $data['items'] = $this->get_menu_items($id);
         if (get_role() == "restaurant"){
@@ -101,7 +102,6 @@ class MenuController extends Controller
             abortUrlFor(null, $userId, $branch->user_id);
             return view('dashboards.restaurant.menu.show', $data);
         }
-
         return view('menu.menu.show', $data);
     }
 
@@ -228,7 +228,7 @@ class MenuController extends Controller
             })->where('branch_id',$branchId)->get();
 
             foreach ($items as $item){
-                $itemsArray[$item->itemDetails->id] = $item->itemDetails->title;
+                $itemsArray[$item->approvedItemDetails->id] = $item->approvedItemDetails->title;
             }
         }
         return $itemsArray;
