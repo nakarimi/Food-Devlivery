@@ -174,6 +174,15 @@ if (!function_exists('loadUserAllOrders')){
     }
 }
 
+if (!function_exists('get_branch_details')) {
+    /**
+     * Return a branch latest details.
+     * */
+    function get_branch_details($branch, $branchType = 'approved') {
+        return ($branchType == 'approved') ? $branch->branchDetails : $branch->pendingBranchDetails;
+    }
+}
+
 
 
 

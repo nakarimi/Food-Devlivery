@@ -48,13 +48,18 @@
                            <td>{{ @$singleItem->branch->branchDetails->title}}</td>
                            <td>{{ get_item_details($singleItem, Session::get('itemType'))->price }}</td>
                            <td>
-                              @if($singleItem->status == 1)
-                                 <span class="badge bg-inverse-success">Active</span>
-                              @else
-                                 <span class="badge bg-inverse-danger">Inactive</span>
-                              @endif
+                               @if(get_item_details($singleItem, Session::get('itemType'))->details_status == "pending")
+                                   <span class="badge bg-inverse-warning">Pending</span>
+                               @elseif (get_item_details($singleItem, Session::get('itemType'))->detials_status == "rejected")
+                                   <span class="badge bg-inverse-danger">Rejected</span>
+                               @else
+                                   <span class="badge bg-inverse-success">Active</span>
+                               @endif
                            </td>
                            <td>
+                               @if (\Request::is('pendingItems'))
+                                 @include('item.item.pendingActions')
+                               @endif
                               <a href="{{ url('/item/' . $singleItem->id) }}" title="View Item"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
                               <a href="{{ url('/item/' . $singleItem->id . '/edit') }}" title="Edit Item"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
 {{--                              <form method="POST" action="{{ url('/item' . '/' . $singleItem->id) }}" accept-charset="UTF-8" style="display:inline">--}}

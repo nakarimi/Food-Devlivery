@@ -38,17 +38,19 @@
                                     <td>{{ $loop->iteration}}</td>
                                     <td>
                                         <h2 class="table-avatar">
-                                            <a href="#" class="avatar" style="width: 100px; height: 100px; background-color: transparent;"><img alt="" src="{{ url('storage/profile_images/' . get_item_details($item)->thumbnail) }}"></a>
+                                            <a href="#" class="avatar" style="width: 100px; height: 100px; background-color: transparent;"><img alt="" src="{{ url('storage/profile_images/' . get_item_details($item, Session::get('itemType'))->thumbnail) }}"></a>
                                         </h2>
                                     </td>
-                                    <td>{{ get_item_details($item)->title }}</td>
+                                    <td>{{ get_item_details($item, Session::get('itemType'))->title }}</td>
                                     <td>{{ @$item->branch->branchDetails->title}}</td>
-                                    <td>{{ get_item_details($item)->price }}</td>
+                                    <td>{{ get_item_details($item, Session::get('itemType'))->price }}</td>
                                     <td>
-                                        @if($item->status == 1)
+                                        @if(get_item_details($item, Session::get('itemType'))->details_status == "pending")
+                                            <span class="badge bg-inverse-warning">Pending</span>
+                                        @elseif (get_item_details($item, Session::get('itemType'))->detials_status == "rejected")
+                                            <span class="badge bg-inverse-danger">Rejected</span>
+                                            @else
                                             <span class="badge bg-inverse-success">Active</span>
-                                        @else
-                                            <span class="badge bg-inverse-danger">Inactive</span>
                                         @endif
                                     </td>
                                     <td>

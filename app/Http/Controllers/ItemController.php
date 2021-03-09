@@ -218,8 +218,11 @@ class ItemController extends Controller
             return redirect('branch')->with('flash_message', 'Sorry there is problem, updating item data');
         }
         else {
-            if (get_role() != "restaurant"){
-                $this->changeStatusToOld($id, $details_id);
+            if (get_role() == "restaurant"){
+                $this->changeStatusToOld($id, $details_id, 'pending', true);
+            }
+            else {
+            $this->changeStatusToOld($id, $details_id, null, true);
             }
         }
 
@@ -305,7 +308,7 @@ class ItemController extends Controller
         $item = ItemDetails::findOrFail($detialId);
         $item->details_status = "approved";
         $item->save();
-        $this->changeStatusToOld($itemId, $detialId);
+        $this->changeStatusToOld($itemId, $detialId, null, true);
          return redirect()->back()->with('flash_message', 'Item Approved!');
     }
 
@@ -313,6 +316,7 @@ class ItemController extends Controller
     {
         $detialId = $request->item_detail_id;
         $item = ItemDetails::findOrFail($detialId);
+        $item->notes = $request->note;
         $item->details_status = "rejected";
         $item->save();
          return redirect()->back()->with('flash_message', 'Item Rejected!');
@@ -328,10 +332,15 @@ class ItemController extends Controller
     }
 
     // This function make the status of other records of same item to old.
-    public function changeStatusToOld($item_id, $detailId)
+    public function changeStatusToOld($item_id, $detailId, $status = null, $run = false)
     {
-        DB::table('item_details')->where('item_id', '=', $item_id)
-            ->where('id', '!=', $detailId)
-            ->update(array('details_status' => "old"));
+        if ($run){
+            $query = DB::table('item_details')->where('item_id', '=', $item_id);
+            $update= $query->where('id', '!=', $detailId);
+            if ($status != null){
+                $update = $query->where('details_status', '=', $status);
+            }
+            $update->update(array('details_status' => "old"));
+        }
     }
 }

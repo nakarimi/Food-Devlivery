@@ -70,6 +70,7 @@
                         <th>title</th>
                         <th>Price</th>
                         <th>Unit</th>
+                        <th>Notes</th>
                         <th>Status</th>
                      </thead>
                      <tbody>
@@ -79,6 +80,7 @@
                            <td>{{$detail->title}}</td>
                            <td>{{$detail->price}}</td>
                            <td>{{$detail->unit}}</td>
+                           <td>{{$detail->notes}}</td>
                            <td>
                               @if ($detail->details_status == "pending" and Auth::user()->role->name == "restaurant")
                              <button class="btn btn-sm btn-info" disabled="disabled" >Pending</button>

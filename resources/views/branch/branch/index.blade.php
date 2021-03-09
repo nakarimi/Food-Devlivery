@@ -36,10 +36,24 @@
                         @foreach($branch as $item)
                         <tr>
                            <td>{{ $loop->iteration }}</td>
-                           <td>{{ $item->branchDetails->title }}</td>
+                           <td>{{ get_branch_details($item, Session::get('branchType'))->title }}</td>
                            <td>{{ $item->business_type }}</td>
                            <td>{{ $item->mainCommission->title }} <br>{{ @$item->deliveryCommission->title }}</td>
                            <td>
+                               @if (\Request::is('pendingBranches'))
+                                   <form method="POST" action="{{ url('/approveBranch') }}" accept-charset="UTF-8" style="display:inline">
+                                       {{ csrf_field() }}
+                                       <input type="hidden" value="{{get_branch_details($item, Session::get('branchType'))->id}}" name="branch_detail_id">
+                                       <input type="hidden" value="{{$item->id}}" name="branch_id">
+                                       <button class="btn btn-sm btn-success" title="Approve" onclick="return confirm(&quot;Confirm approve?&quot;)"><i class="la la-check"></i></button>
+                                   </form>
+                                   <form method="POST" action="{{ url('/rejectBranch') }}" accept-charset="UTF-8" style="display:inline">
+                                       {{ csrf_field() }}
+                                       <input type="hidden" value="{{get_branch_details($item, Session::get('branchType'))->id}}" name="branch_detail_id">
+                                       <input type="hidden" value="{{$item->id}}" name="branch_id">
+                                       <button class="btn btn-sm btn-danger" title="Reject" onclick="return confirm(&quot;Confirm Reject?&quot;)"><i class="la la-times"></i></button>
+                                   </form>
+                               @endif
                               <a href="{{ url('/branch/' . $item->id) }}" title="View Branch"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
                               <a href="{{ url('/branch/' . $item->id . '/edit') }}" title="Edit Branch"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
 {{--                              <form method="POST" action="{{ url('/branch' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">--}}
@@ -47,8 +61,7 @@
 {{--                                 {{ csrf_field() }}--}}
 {{--                                 <button type="submit" class="btn btn-danger btn-xs" title="Delete Branch" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>--}}
 {{--                              </form>--}}
-                               <button type="submit" class="btn btn-danger btn-xs" title="Deactive Branch" onclick="return confirm(&quot;Confirm Deactivate?&quot;)"><i class="fa fa-ban" aria-hidden="true"></i></button>
-
+{{--                               <button type="submit" class="btn btn-danger btn-xs" title="Deactive Branch" onclick="return confirm(&quot;Confirm Deactivate?&quot;)"><i class="fa fa-ban" aria-hidden="true"></i></button>--}}
                            </td>
                         </tr>
                         @endforeach
