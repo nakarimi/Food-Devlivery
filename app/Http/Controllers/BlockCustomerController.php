@@ -6,6 +6,7 @@ use App\Models\BlockCustomer;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class BlockCustomerController extends Controller
 {
@@ -38,7 +39,6 @@ class BlockCustomerController extends Controller
      */
     public function store(Request $request)
     {
-
         $userId = Auth::user()->id;
         $order_id = $request->order_id;
         $blockCustomer = new BlockCustomer();
@@ -47,9 +47,7 @@ class BlockCustomerController extends Controller
         $blockCustomer->branch_id = $request->branch_id;
         $blockCustomer->notes = $request->note;
         $blockCustomer->save();
-        $order = Order::findOrFail($order_id);
-        $order->status = "canceld";
-        $order->save();
+        $this->changStatusToCancel($request->branch_id, $request->customer_id);
         return redirect()->back()->with('flash_message', 'Customer Successfully Blocked!');
 
     }
@@ -99,5 +97,13 @@ class BlockCustomerController extends Controller
         $customer = BlockCustomer::findOrFail($id);
         $customer->delete();
         return redirect()->back()->with('flash_message', 'Customer Unblocked!');
+    }
+
+    public function changStatusToCancel($branch_id, $customer_id)
+    {
+        $statuses = ['reject','canceld','completed'];
+        DB::table('orders')->where('branch_id', '=', $branch_id)
+            ->where('customer_id', $customer_id)->whereNotIn('status', $statuses)
+            ->update(array('status' => "canceld"));
     }
 }
