@@ -18,7 +18,7 @@
                                 <thead>
                                 <tr>
                                     <th>#</th><th>Customer Name</th><th>Branch</th>
-                                    <th>Blocked By</th><th>Actions</th>
+                                    <th>Blocked By</th><th>Notes</th><th>Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -28,6 +28,7 @@
                                         <td>{{ $customer->customer->name }}</td>
                                         <td>{{ $customer->branch->branchDetails->title }}</td>
                                         <td>{{ $customer->user->name }}</td>
+                                        <td>{{ $customer->notes }}</td>
                                         <td>
                                             {!! Form::open([
                                                 'method' => 'DELETE',
@@ -35,7 +36,7 @@
                                                 'style' => 'display:inline'
                                             ])
                                             !!}
-                                            <button class="btn btn-danger btn-sm" type="Submit" onclick="return confirm(&quot;Confirm delete?&quot;)">Delete</button>
+                                            <button class="btn btn-success btn-sm" type="Submit" onclick="return confirm(&quot;Confirm Unblock?&quot;)">Unblock</button>
                                             {!! Form::close() !!}
                                         </td>
                                     </tr>
