@@ -25,9 +25,9 @@
     <div style="display: none;">
         <label for="branch_id" class="control-label">{{ 'Branch' }}</label>
         <select class="custom-select mr-sm-2" name="branch_id" id="branch_id" required>
-            @foreach($branches as $branch)
-                <option value="{{ $branch->id }}" selected="selected" >{{ $branch->branchDetails->title }}</option>
-            @endforeach
+        @foreach($branches as $branch)
+            <option value="{{ $branch->id }}" selected="selected" >{{ $branch->branchDetails->title }}</option>
+         @endforeach
         </select>
     </div>
     @else
@@ -49,7 +49,11 @@
     {{-- <textarea class="form-control" rows="5" name="items" type="textarea" id="items" >{{ $menu->items ?? ''}}</textarea> --}}
     <select class="custom-select mr-sm-2" name="items[]" id="items" multiple required>
         @foreach($items as $item)
-            <option value="{{ $item->id }}" {{ select_item_logic($menu->items, $item->id) }} >{{ get_item_details($item)->title }}</option>
+            @if($menu)
+                <option value="{{ $item->id }}" {{ select_item_logic($menu->items, $item->id) }} >{{ get_item_details($item)->title }}</option>
+            @else
+                <option value="{{ $item->id }}"  >{{ get_item_details($item)->title }}</option>
+            @endif
         @endforeach
     </select>
     {!! $errors->first('items', '<p class="help-block">:message</p>') !!}
