@@ -81,7 +81,7 @@ class DatabaseSeeder extends Seeder
             array (
                 'name'     => 'Fifty-Fifty',
                 'email'    => '5050@pomtech.com',
-                'password' => bcrypt('business'),
+                'password' => bcrypt('5050'),
                 'role_id' => 4,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
