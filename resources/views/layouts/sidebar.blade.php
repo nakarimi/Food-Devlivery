@@ -82,6 +82,13 @@
                     </ul>
                 </li>
 
+                <li class="submenu">
+                    <a href="#"><i class="la la-user-times"></i> <span class="menu-title">Customers</span> <span class="menu-arrow"></span></a>
+                    <ul style="display: none;">
+                        <li><a  @if (\Request::is('blockedCustomer')) class="active" @endif href="{{ route('blockedCustomer.index') }}">Blocked Customers</a></li>
+                    </ul>
+                </li>
+
                 <li class="menu-title">
                     <span>System</span>
                 </li>

@@ -52,6 +52,7 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/loadItemsBasedOnBranch', 'App\Http\Controllers\MenuController@loadItemsBasedOnBranch');
     Route::put('/deactiveUser/{id}', 'App\Http\Controllers\Admin\UsersController@deactiveUser');
     Route::put('/activateUser/{id}', 'App\Http\Controllers\Admin\UsersController@activateUser');
+    Route::resource('blockedCustomer', 'App\Http\Controllers\BlockCustomerController');
 
 
 });
@@ -75,6 +76,7 @@ Route::middleware(['restaurant'])->group(function () {
     Route::resource('branch', 'App\Http\Controllers\BranchController');
     Route::post('updateOrderStatus', 'App\Http\Controllers\OrdersController@updateOrderStatus')->name('updateOrderStatus');
     Route::resource('orders', 'App\Http\Controllers\OrdersController');
+    Route::post('blockCustomer', 'App\Http\Controllers\BlockCustomerController@store')->name('blockCustomer');
 });
 
 /*

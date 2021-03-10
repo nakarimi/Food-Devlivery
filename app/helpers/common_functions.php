@@ -172,7 +172,7 @@ if (!function_exists('loadUserAllOrders')){
         foreach ($branches as $branch) {
             array_push($branchIds, $branch->id);
         }
-        $orders = \App\Models\Order::whereIn('branch_id', $branchIds)->latest()->get();
+        $orders = \App\Models\Order::whereIn('branch_id', $branchIds)->with('customer.blockedCustomer')->latest()->get();
         return $orders;
     }
 }
