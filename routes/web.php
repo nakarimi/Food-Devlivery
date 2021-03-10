@@ -75,6 +75,7 @@ Route::middleware(['restaurant'])->group(function () {
     Route::resource('branch', 'App\Http\Controllers\BranchController');
     Route::post('updateOrderStatus', 'App\Http\Controllers\OrdersController@updateOrderStatus')->name('updateOrderStatus');
     Route::resource('orders', 'App\Http\Controllers\OrdersController');
+    Route::post('blockCustomer', 'App\Http\Controllers\BlockCustomerController@store')->name('blockCustomer');
 });
 
 /*
