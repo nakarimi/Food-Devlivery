@@ -16,7 +16,8 @@ class BlockCustomerController extends Controller
      */
     public function index()
     {
-        //
+        $blockedCustomers = BlockCustomer::latest()->paginate(10);
+        return view('customer.BlockedCustomers.index', compact('blockedCustomers'));
     }
 
     /**
@@ -93,8 +94,10 @@ class BlockCustomerController extends Controller
      * @param  \App\Models\BlockCustomer  $blockCustomer
      * @return \Illuminate\Http\Response
      */
-    public function destroy(BlockCustomer $blockCustomer)
+    public function destroy(BlockCustomer $blockCustomer, $id)
     {
-        //
+        $customer = BlockCustomer::findOrFail($id);
+        $customer->delete();
+        return redirect()->back()->with('flash_message', 'Customer Unblocked!');
     }
 }

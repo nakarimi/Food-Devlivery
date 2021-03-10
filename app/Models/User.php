@@ -59,7 +59,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getJWTCustomClaims() {
         return [];
-    } 
+    }
 
     // user with role relationship
     public function role(){
@@ -69,5 +69,14 @@ class User extends Authenticatable implements JWTSubject
     // Relation ship with Branch
     public function payment(){
         return $this->hasMany(Payment::class);
+    }
+
+    // Relation ship Blocked Customers (user who blocked customer).
+    public function UserBlockedCustomer(){
+        return $this->hasMany(BlockCustomer::class, 'user_id');
+    }
+    // Relation ship with Blocked Customers (Customers who is being blocked).
+    public function blockedCustomers(){
+        return $this->hasMany(BlockCustomer::class, 'customer_id');
     }
 }

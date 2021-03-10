@@ -52,6 +52,7 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/loadItemsBasedOnBranch', 'App\Http\Controllers\MenuController@loadItemsBasedOnBranch');
     Route::put('/deactiveUser/{id}', 'App\Http\Controllers\Admin\UsersController@deactiveUser');
     Route::put('/activateUser/{id}', 'App\Http\Controllers\Admin\UsersController@activateUser');
+    Route::resource('blockedCustomer', 'App\Http\Controllers\BlockCustomerController');
 
 
 });
