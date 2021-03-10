@@ -79,6 +79,6 @@ class Branch extends Model
 
     // Relation ship Blocked Customers.
     public function blockedCustomers(){
-        return $this->hasMany(BlockCustomer::class, 'branch_id');
+        return $this->hasOne(BlockCustomer::class, 'branch_id');
     }
 }

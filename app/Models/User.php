@@ -73,10 +73,10 @@ class User extends Authenticatable implements JWTSubject
 
     // Relation ship Blocked Customers (user who blocked customer).
     public function UserBlockedCustomer(){
-        return $this->hasMany(BlockCustomer::class, 'user_id');
+        return $this->hasOne(BlockCustomer::class, 'user_id');
     }
     // Relation ship with Blocked Customers (Customers who is being blocked).
-    public function blockedCustomers(){
-        return $this->hasMany(BlockCustomer::class, 'customer_id');
+    public function blockedCustomer(){
+        return $this->hasOne(BlockCustomer::class, 'customer_id');
     }
 }

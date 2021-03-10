@@ -38,10 +38,20 @@
                                     <td>{{ $loop->iteration}}</td>
                                     <td>{{ $item->title }}</td>
                                     <td>{{ $item->branchDetails->title }}</td>
-                                    <td><a href="#" class="customer_detials" customer_email = "{{$item->customer->email}}"
+                                    <td>
+                                        <?php  $blocked = false ?>
+                                    @if ($item->customer->blockedCustomer['customer_id'] == $item->customer->id)
+                                        <?php $blocked = true; ?>
+                                        @endif
+                                        <a href="#" class="customer_detials" customer_email = "{{$item->customer->email}}"
                                            customer_id = "{{$item->customer->id}}" branch_id ="{{$item->branchDetails->id}}"
-                                           order_id="{{$item->id}}">
+                                           order_id="{{$item->id}}" blocked="{{$blocked}}">
                                             {{ $item->customer->name }}
+
+                                            @if ($item->customer->blockedCustomer['customer_id'] == $item->customer->id)
+                                                <span class="badge badge-danger">Blocked</span>
+                                            @endif
+
                                         </a></td>
                                     <td>{{ $item->total }}</td>
                                     <td>{{ $item->reciever_phone }}</td>
