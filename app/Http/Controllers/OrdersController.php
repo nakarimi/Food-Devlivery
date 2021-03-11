@@ -98,15 +98,12 @@ class OrdersController extends Controller
      */
     public function show($id)
     {
-        abortUrlFor("restaurant");
-        $data = $this->dropdown_data($id);
-
         if (get_role() == "restaurant"){
             $userId = auth()->user()->id;
-            $data = $this->dropdown_data(false, $userId);
+            $data = $this->dropdown_data($id, $userId);
+            return view('dashboards.restaurant.orders.show', $data);
         }
-
-
+        $data = $this->dropdown_data($id);
 
         return view('order.orders.show', $data);
     }
@@ -120,11 +117,8 @@ class OrdersController extends Controller
      */
     public function edit($id)
     {
+        abortUrlFor("restaurant");
         $data = $this->dropdown_data($id);
-        if (get_role() == "restaurant"){
-            $userId = auth()->user()->id;
-            $data = $this->dropdown_data($id, $userId);
-        }
         return view('order.orders.edit', $data);
     }
 
@@ -203,7 +197,6 @@ class OrdersController extends Controller
      * @return array $data
      */
     public function dropdown_data($id = false, $userId = null) {
-        abortUrlFor("restaurant");
 
         // Pass branches for dropdown list form.
         if ($userId != null){
@@ -222,6 +215,13 @@ class OrdersController extends Controller
         // Pass Item to view. (For Edit form)
         // $item = Item::findOrFail($id);
         $data['order'] = ($id) ? Order::findOrFail($id) : null;
+
+        // Prevent other roles from url restriction.
+        // the branch user id should equal current user id.
+        if (get_role() == "restaurant" && $id != false){
+            $branch = Branch::findOrFail($data['order']->branch_id);
+            abortUrlFor(null, $userId, $branch->user_id);
+        }
         return $data;
     }
 
