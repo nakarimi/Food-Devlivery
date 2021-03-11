@@ -14,7 +14,6 @@
                         <li><a href="{{route('item.create')}}" @if (\Request::is('item/create*')) class="active" @endif>Create New Item</a></li>
                         <li><a href="{{route('items.pending')}}" @if (\Request::is('pendingItems*')) class="active" @endif>Pending Items</a></li>
                         <li><a href="{{route('items.approved')}}" @if (\Request::is('approvedItems*')) class="active" @endif>Approved Items</a></li>
-                        <li><a href="{{route('item.index')}}" @if (\Request::is('item')) class="active" @endif>All Items</a></li>
                     </ul>
                 </li>
 
