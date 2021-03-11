@@ -17,7 +17,7 @@ class CreateBlockCustomersTable extends Migration
             $table->id();
             $table->foreignId('customer_id');
             $table->foreignId('user_id');
-            $table->foreignId('branch_id');
+            $table->unsignedInteger('branch_id');
             $table->longtext('notes')->nullable();
 
             $table->foreign('customer_id')
