@@ -24,12 +24,14 @@
                             <tr>
                                 <th>#</th>
                                 <th>Title</th>
-                                <th>Branch</th>
+{{--                                <th>Branch</th>--}}
                                 <th>Customer</th>
                                 <th>Total</th>
                                 <th>Phone</th>
                                 <th>Delivery</th>
+                                <th>Contents</th>
                                 <th>Status</th>
+                                <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -37,7 +39,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration}}</td>
                                     <td>{{ $item->title }}</td>
-                                    <td>{{ $item->branchDetails->title }}</td>
+{{--                                    <td>{{ $item->branchDetails->title }}</td>--}}
                                     <td>
                                         <?php  $blocked = false ?>
                                     @if ($item->customer->blockedCustomer['customer_id'] == $item->customer->id)
@@ -66,6 +68,7 @@
                                             <span class="badge bg-inverse-warning">Self Delivery2</span>
                                         @endif
                                     </td>
+                                    <td>{!! show_order_itmes($item->contents) !!}</td>
                                     <td>
                                         <select class="custom-select mr-sm-2" order_id={{$item->id}} status="{{$item->status}}" name="order_status" id="order_status" required>
                                             <option value="pending" @if($item->status == 'pending') selected="selected" @endif >Pending</option>
@@ -77,7 +80,8 @@
                                             <option value="canceld" @if($item->status == 'canceld') selected="selected" @endif >Cancel</option>
                                         </select>
                                     </td>
-
+                                    <td><a href="{{ url('/orders/' . $item->id) }}" title="View Order"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
+                                    </td>
                                 </tr>
                             @endforeach
                             </tbody>
