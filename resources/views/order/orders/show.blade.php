@@ -70,7 +70,18 @@
                         <tr>
                            <th> Items </th>
                            <td>{!! show_order_itmes($order->contents) !!}</td>
-                        </tr>        
+                        </tr>   
+
+                        <tr>
+                           <th> Recieved Time </th>
+                           <td> {{ $order->created_at }} </td>
+                        </tr>
+
+                        <tr>
+                           <th> Approved Time </th>
+                           <td> {{ $order->timeDetails->approved_time }} </td>
+                        </tr>
+
                      </tbody>
                   </table>
                </div>

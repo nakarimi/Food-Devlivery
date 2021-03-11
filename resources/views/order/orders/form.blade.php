@@ -102,8 +102,8 @@
          <label for="driver_id" class="control-label">{{ 'Driver Id' }}</label>
          <select class="custom-select mr-sm-2" name="driver_id" id="driver_id">
          <option value="" >No Driver Seleced</option>
-         @foreach($free_drivers as $user)
-         <option value="{{ $user->id }}" @if( (isset($order->driver_id) && $user->id == $order->driver_id)) selected="selected" @endif >{{ $user->title }}</option>
+         @foreach($drivers as $user)
+         <option value="{{ $user->id }}" @if( (isset($order->deliveryDetails->driver_id) && $user->id == $order->deliveryDetails->driver_id)) selected="selected" @endif >{{ $user->title }}</option>
          @endforeach
          </select>
          {!! $errors->first('customer_id', '

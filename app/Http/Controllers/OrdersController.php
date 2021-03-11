@@ -14,6 +14,7 @@ use App\Models\DeliveryDetails;
 use App\Models\OrderTimeDetails;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class OrdersController extends Controller
 {
@@ -39,17 +40,15 @@ class OrdersController extends Controller
                 'branchDetails', function ($query) use ($keyword) {
                 $query->where('title','LIKE', "%$keyword%");
             })->orwhere('title', 'LIKE', "%$keyword%")
-                ->orwhere('status', 'LIKE', "%$keyword%")
-                ->orwhere('total', 'LIKE', "%$keyword%")
-                ->orwhere('note', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
-        } else {
+        }
+        else {
             $orders = Order::latest()->paginate($perPage);
         }
 
-        $free_drivers = Driver::all()->where('status', 'free');
+        $drivers = Driver::all();
 
-        return view('order.orders.index', compact('orders', 'free_drivers'));
+        return view('order.orders.index', compact('orders', 'drivers'));
     }
 
     /**
@@ -171,7 +170,6 @@ class OrdersController extends Controller
 
         }
 
-
         return redirect('orders')->with('flash_message', 'Order updated!');
     }
 
@@ -209,11 +207,10 @@ class OrdersController extends Controller
 
         $data['customers'] = User::where('role_id', 5)->get();
 
+        // Free drivers.
+        $data['drivers'] = Driver::all();
 
-        $data['free_drivers'] = Driver::all()->where('status', 'free');
-
-        // Pass Item to view. (For Edit form)
-        // $item = Item::findOrFail($id);
+        // Pass Order to view. (For Edit form)
         $data['order'] = ($id) ? Order::findOrFail($id) : null;
 
         // Prevent other roles from url restriction.
@@ -226,7 +223,7 @@ class OrdersController extends Controller
     }
 
     /**
-     * Load necessary data for dropdowns.
+     * Update status of order via ajax call.
      *
      * @param  \Illuminate\Http\Request  $request
      *
@@ -235,9 +232,51 @@ class OrdersController extends Controller
 
         $id = $request['order_id'];
         $status = $request['status'];
+        $field = '';
+        switch($status) {
+            case 'approved' :
+                $field = 'approved_time';
+            break;
+            case 'reject' :
+                $field = 'rejected_time';
+            break;
+            case 'processing' :
+                $field = 'processing_time';
+            break;
+            case 'delivered' :
+                $field = 'delivery_time';
+            break;
+            case 'completed' :
+                $field = 'completed_time';
+            break;
+            default:
+                $field = 'caceled_time';
+        }
 
         $order = Order::findOrFail($id);
         $order->status = $status;
         $order->save();
+
+        // Update timing as well.
+        $updateDeliveryTimeDetails = [
+            $field => Carbon::now()->format('Y-m-d H:i:s'),
+        ];
+        OrderTimeDetails::where('order_id', $id)->update($updateDeliveryTimeDetails);
     }
+
+    /**
+     * Assign driver to order.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     */
+    public function assignDriver(Request $request) {
+
+        $id = $request['order_id'];
+        $driver_id = $request['driver_id'];
+        DeliveryDetails::where('order_id', $id)->update(['driver_id' => $driver_id]);
+        Driver::where('id', $driver_id)->update(['status' => 'busy']);
+    }
+
+    
 }
