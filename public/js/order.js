@@ -35,5 +35,22 @@ jQuery(function ($) {
         function set_select_box_color(element) {
             element.attr('status', element.val())
         }
+
+        $(document).on('change','#driver_id',function(){
+            
+            let order_id = $(this).attr('order_id');
+            let driver_id = $(this).val();
+            $.ajax({
+                type: 'POST',
+                url:'/assignDriver',
+                data: {order_id:order_id, driver_id: driver_id},
+                success: function (data) {                
+                    show_message("The Order assigned to Driver!")
+                },
+                error: function (e) {
+                    alert("js error in order.js file.")
+                }
+            });
+        });
     });
 })
