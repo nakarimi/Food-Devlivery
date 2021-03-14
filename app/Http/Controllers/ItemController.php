@@ -119,13 +119,13 @@ class ItemController extends Controller
         else {
             return redirect()->back()->with('flash_message', 'Sorry there is problem, storing Item data');
         }
-        
+
         if ($status == 'pending') {
             return redirect('pendingItems')->with('flash_message', 'Item added!');
         }
 
         return redirect('approvedItems')->with('flash_message', 'Item added!');
-        
+
     }
 
     /**
@@ -232,7 +232,7 @@ class ItemController extends Controller
             }
         }
 
-        return redirect('item')->with('flash_message', 'Item updated!');
+        return redirect(url('/pendingItems'))->with('flash_message', 'Item updated!');
     }
 
     /**

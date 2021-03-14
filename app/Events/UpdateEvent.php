@@ -34,11 +34,11 @@ class UpdateEvent implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new Channel('my-channel');
+        return new Channel('food-app');
     }
 
     public function broadcastAs()
     {
-        return 'my-event';
+        return 'update-event';
     }
 }

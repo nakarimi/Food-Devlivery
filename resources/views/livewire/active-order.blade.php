@@ -115,8 +115,8 @@
         cluster: 'ap1'
     });
 
-    var channel = pusher.subscribe('my-channel');
-    channel.bind('my-event', function(data) {
+    var channel = pusher.subscribe('food-app');
+    channel.bind('update-event', function(data) {
         // if (JSON.stringify(data['message']) == "Items Updated!"){
         Livewire.emit('refreshActiveOrders');
         // alert("updated!");
