@@ -37,6 +37,7 @@
     {{--   Adding specific style of each page--}}
 
     @yield('styles')
+    @livewireStyles
 
 </head>
 <body>
@@ -87,6 +88,7 @@
 
 <!-- Specific js of pages -->
 @yield('scripts')
+@livewireScripts
 
 </body>
 </html>
