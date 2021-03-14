@@ -12,7 +12,9 @@
                     <a href="#"><i class="la la-legal"></i> <span class="menu-title">Orders</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         {{--  <li><a  @if (\Request::is('orders/create*')) class="active" @endif href="{{ route('orders.create') }}">Add Order</a></li>--}}
-                        <li><a  @if (\Request::is('orders')) class="active" @endif href="{{ route('orders.index') }}">All Orders</a></li>
+                        {{-- <li><a  @if (\Request::is('orders')) class="active" @endif href="{{ route('orders.waitingOrders') }}">Waiting Orders</a></li> --}}
+                        <li><a  @if (\Request::is('orders')) class="active" @endif href="{{ route('orders.index') }}">Active Orders</a></li>
+                        <li><a  @if (\Request::is('order-history')) class="active" @endif href="{{ route('order.history') }}">Orders History</a></li>
                     </ul>
                 </li>
 
