@@ -55,13 +55,10 @@ class MenuController extends Controller
         if (get_role() == "restaurant"){
             $userId = auth()->user()->id;
             $data = $this->dropdown_data(false,$userId);
-            
             return view('dashboards.restaurant.menu.create', $data);
         }
 
         $data = $this->dropdown_data();
-
-       
         return view('menu.menu.create', $data);
     }
 
