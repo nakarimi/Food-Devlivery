@@ -49,14 +49,28 @@
                                         <span class="badge bg-inverse-success">Own Delivery</span>
                                     @else
                                         {{-- Here we show all free drivers. --}}
-                                        <select class="custom-select mr-sm-2" name="branch_id" id="branch_id" required>
-                                             @foreach($free_drivers as $driver)
-                                                <option value="{{ $driver->id }}" >{{ $driver->title }}</option>
-                                             @endforeach
-                                       </select>
+                                        @if($item->deliveryDetails->driver_id)
+                                          <select class="custom-select mr-sm-2" order_id={{$item->id}} name="driver_id" id="driver_id" required disabled="disabled">
+                                                @foreach($drivers as $driver)
+                                                   @if($driver->id == $item->deliveryDetails->driver_id)
+                                                      <option value="{{ $driver->id }}" >{{ $driver->title }}</option>
+                                                   @endif
+                                                @endforeach
+                                          </select>
+                                        @else
+                                          <select class="custom-select mr-sm-2" order_id={{$item->id}} name="driver_id" id="driver_id" required>
+                                                <option value="" >Selece Driver</option>
+                                                @foreach($drivers as $driver)
+                                                   @if($driver->status == 'free')
+                                                      <option value="{{ $driver->id }}" >{{ $driver->title }}</option>
+                                                   @endif
+                                                   
+                                                @endforeach
+                                          </select>
+                                       @endif
                                     @endif
                                 @else
-                                    <span class="badge bg-inverse-warning">Self Delivery2</span>
+                                    <span class="badge bg-inverse-warning">Self Delivery</span>
                                 @endif
                            
                            </td>

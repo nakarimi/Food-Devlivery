@@ -38,7 +38,7 @@
   }
   select[status="processing"] {
     background: #4caf50;
-    color: #c6e1c6;
+    color: #fff;
   }
   select[status="delivered"] {
     background:#cddc39;
