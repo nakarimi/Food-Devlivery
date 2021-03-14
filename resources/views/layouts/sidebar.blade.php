@@ -41,7 +41,7 @@
                 </li>
 
                 <li class="submenu">
-                    <a href="#"><i class="la la-user-times"></i> <span class="menu-title">Finance</span> <span class="menu-arrow"></span></a>
+                    <a href="#"><i class="la la-money"></i> <span class="menu-title">Finance</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         <li><a  @if (\Request::is('payment')) class="active" @endif href="{{ route('payment.index') }}">Payments</a></li>
                         <li><a  @if (\Request::is('commission')) class="active" @endif href="{{ route('commission.index') }}">Commissions</a></li>
