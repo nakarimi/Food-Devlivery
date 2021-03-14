@@ -12,7 +12,13 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/showItems',\App\Http\Livewire\ShowItems::class);
+Route::get('/postPusher', function (){
+    event(new \App\Events\UpdateEvent('Items Updated!'));
+//    return 'DOne!';
+//  Event::fire(new \App\Events\UpdateEvent('okll'));
 
+});
 
 Auth::routes([
     'register' => false

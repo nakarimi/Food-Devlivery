@@ -118,7 +118,7 @@ class ItemController extends Controller
         else {
             return redirect('branch')->with('flash_message', 'Sorry there is problem, storing Item data');
         }
-
+        event(new \App\Events\UpdateEvent('Items Updated!'));
         return redirect('item')->with('flash_message', 'Item added!');
     }
 
