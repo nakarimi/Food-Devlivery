@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/showItems',\App\Http\Livewire\ShowItems::class);
+Route::get('/show_menus',\App\Http\Livewire\Counter::class);
+
 Route::get('/postPusher', function (){
     event(new \App\Events\UpdateEvent('Items Updated!'));
 //    return 'DOne!';

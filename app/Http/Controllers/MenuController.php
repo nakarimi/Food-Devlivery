@@ -21,11 +21,15 @@ class MenuController extends Controller
      */
     public function index(Request $request)
     {
+
         // If it is restaurant then user will have some restricted data.
         if (get_role() == "restaurant"){
             $userId = auth()->user()->id;
             $menu = loadUserMenuData($userId);
             return view('dashboards.restaurant.menu.index', compact('menu'));
+        }
+        else {
+            return redirect('/show_menus');
         }
 
         //Todo: Should setup search for other users.
@@ -80,7 +84,7 @@ class MenuController extends Controller
         $requestData['items'] = json_encode($requestData['items']);
 
         Menu::create($requestData);
-
+        event(new \App\Events\UpdateEvent('Menu Updated!'));
         return redirect('menu')->with('flash_message', 'Menu added!');
     }
 
@@ -145,7 +149,7 @@ class MenuController extends Controller
 
         $menu = Menu::findOrFail($id);
         $menu->update($requestData);
-
+        event(new \App\Events\UpdateEvent('Menu Updated!'));
         return redirect('menu')->with('flash_message', 'Menu updated!');
     }
 
@@ -159,7 +163,7 @@ class MenuController extends Controller
     public function destroy($id)
     {
         Menu::destroy($id);
-
+        event(new \App\Events\UpdateEvent('Menu Updated!'));
         return redirect('menu')->with('flash_message', 'Menu deleted!');
     }
 

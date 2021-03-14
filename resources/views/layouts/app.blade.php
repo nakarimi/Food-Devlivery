@@ -64,10 +64,11 @@
 
         <main class="py-4">
             @yield('content')
-            {{$slot}}
+            {{$slot ?? ''}}
         </main>
     </div>
-
+    <!-- jQuery -->
+    <script src="{{asset('js/jquery-3.2.1.min.js')}}"></script>
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
     @livewireScripts

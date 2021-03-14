@@ -36,7 +36,7 @@
     channel.bind('my-event', function(data) {
         // if (JSON.stringify(data['message']) == "Items Updated!"){
             Livewire.emit('refreshItems');
-            alert("updated!");
+            // alert("updated!");
         // }
         // alert();
     });

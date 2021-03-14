@@ -6,17 +6,26 @@ use Livewire\Component;
 use App\Models\Menu;
 class Counter extends Component
 {
-    public $count = 0;
-    public $menu;
-
-    public function increment()
-    {
-        $this->count++;
-        $this->menu =  Menu::all();      
-    }
-
+    public $listeners = ['refreshMenus' => '$refresh'];
+//    public $menu = [];
+    public $keyword;
     public function render()
     {
-    	return view('livewire.counter', ['menu' => $this->menu]);
+//        $keyword ;
+        $perPage = 10;
+        $keyword = $this->keyword;
+        if (!empty($keyword)) {
+            $menu = Menu::where('title', 'LIKE', "%$keyword%")
+                ->orWhere('status', 'LIKE', "%$keyword%")
+                ->orWhere('items', 'LIKE', "%$keyword%")
+                ->latest()->paginate($perPage);
+        }
+        else {
+            $menu = Menu::latest()->paginate($perPage);
+        }
+        return view('livewire.counter', compact('menu'));
+
+        // In case we want to use another layout.
+    	// return view('livewire.counter')->extends('dashboards.restaurant.layouts.master');
     }
 }
