@@ -21,48 +21,12 @@
                </form>
                <br/>
                <br/>
-               <div class="table-responsive">
-                  <table class="table">
-                     <thead>
-                        <tr>
-                           <th>#</th>
-                           <th>Title</th>
-                           <th>Branch</th>
-                           <th>Status</th>
-                           <th>Actions</th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        @foreach($menu as $item)
-                        <tr>
-                           <td>{{ $loop->iteration }}</td>
-                           <td>{{ $item->title }}</td>
-                           <td>{{ $item->branch->branchDetails->title }}</td>
-                           <td>
-                              @if($item->status == 1)
-                                 <span class="badge bg-inverse-success">Active</span>
-                              @else
-                                 <span class="badge bg-inverse-danger">Inactive</span>
-                              @endif
-                           </td>
-                           <td>
-                              <a href="{{ url('/menu/' . $item->id) }}" title="View Menu"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
-                              <a href="{{ url('/menu/' . $item->id . '/edit') }}" title="Edit Menu"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
-{{--                              <form method="POST" action="{{ url('/menu' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">--}}
-{{--                                 {{ method_field('DELETE') }}--}}
-{{--                                 {{ csrf_field() }}--}}
-{{--                                 <button type="submit" class="btn btn-danger btn-xs" title="Delete Menu" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>--}}
-{{--                              </form>--}}
-                           </td>
-                        </tr>
-                        @endforeach
-                     </tbody>
-                  </table>
-                  <div class="pagination-wrapper"> {!! $menu->appends(['search' => Request::get('search')])->render() !!} </div>
-               </div>
+               <livewire:counter />
             </div>
          </div>
       </div>
    </div>
 </div>
+<!-- Custom JS -->
+<script src="{{asset('js/livewire_automation.js')}}"></script>
 @endsection
