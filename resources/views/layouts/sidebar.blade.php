@@ -13,7 +13,7 @@
                     <ul style="display: none;">
                         {{--  <li><a  @if (\Request::is('orders/create*')) class="active" @endif href="{{ route('orders.create') }}">Add Order</a></li>--}}
                         {{-- <li><a  @if (\Request::is('orders')) class="active" @endif href="{{ route('orders.waitingOrders') }}">Waiting Orders</a></li> --}}
-                        <li><a  @if (\Request::is('orders')) class="active" @endif href="{{ route('orders.index') }}">Active Orders</a></li>
+                        <li><a  @if (\Request::is('activeOrders')) class="active" @endif href="{{url('activeOrders')}}">Active Orders</a></li>
                         <li><a  @if (\Request::is('order-history')) class="active" @endif href="{{ route('order.history') }}">Orders History</a></li>
                     </ul>
                 </li>
@@ -35,7 +35,7 @@
                         <li><a @if (\Request::is('approvedBranches')) class="active" @endif href="{{route('branches.approved')}}">Approved Branches</a></li>
                     </ul>
                 </li>
-                
+
                 <li>
                     <a  @if (\Request::is('driver')) class="active" @endif href="{{ route('driver.index') }}"><i class="la la-truck"></i> <span class="menu-title">Drivers</span> </a>
                 </li>
@@ -61,7 +61,7 @@
                             <a @if (\Request::is('admin/activitylogs*')) class="active" @endif href="{{url('/admin/activitylogs')}}">Activity Logs</a>
                         </li>
                         <li><a  @if (\Request::is('admin/backup')) class="active" @endif href="#">Backup & Restore</a></li>
-                        
+
                     </ul>
                 </li>
                 <li class="submenu">

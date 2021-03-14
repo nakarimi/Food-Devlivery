@@ -7,11 +7,12 @@ use App\Models\Menu;
 class Counter extends Component
 {
     public $listeners = ['refreshMenus' => '$refresh'];
-//    public $menu = [];
+
     public $keyword;
+
+
     public function render()
     {
-//        $keyword ;
         $perPage = 10;
         $keyword = $this->keyword;
         if (!empty($keyword)) {
