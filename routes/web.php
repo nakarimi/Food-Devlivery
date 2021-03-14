@@ -76,7 +76,9 @@ Route::middleware(['restaurant'])->group(function () {
     Route::resource('branch', 'App\Http\Controllers\BranchController');
     Route::post('updateOrderStatus', 'App\Http\Controllers\OrdersController@updateOrderStatus')->name('updateOrderStatus');
     Route::post('assignDriver', 'App\Http\Controllers\OrdersController@assignDriver')->name('assignDriver');
+    Route::get('/order-history', 'App\Http\Controllers\OrdersController@orderHistory')->name('order.history');
     Route::resource('orders', 'App\Http\Controllers\OrdersController');
+    
     Route::post('blockCustomer', 'App\Http\Controllers\BlockCustomerController@store')->name('blockCustomer');
 });
 

@@ -165,14 +165,14 @@ if (!function_exists('abortUrlFor')){
 
 // This will return orders based on branch ids of a user.
 if (!function_exists('loadUserAllOrders')){
-    function loadUserAllOrders ($userId){
+    function loadUserAllOrders ($userId, $status){
         // Get user branch.
         $branches =  getUserBranches($userId);
         $branchIds = [];
         foreach ($branches as $branch) {
             array_push($branchIds, $branch->id);
         }
-        $orders = \App\Models\Order::whereIn('branch_id', $branchIds)->with('customer.blockedCustomer')->latest()->get();
+        $orders = \App\Models\Order::whereIn('branch_id', $branchIds)->whereIn('status', $status)->with('customer.blockedCustomer')->latest()->get();
         return $orders;
     }
 }
