@@ -76,6 +76,7 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
+
         $this->validate($request, [
             'branch_id' => 'required',
             'category_id' => 'required',
@@ -116,10 +117,15 @@ class ItemController extends Controller
             }
         }
         else {
-            return redirect('branch')->with('flash_message', 'Sorry there is problem, storing Item data');
+            return redirect()->back()->with('flash_message', 'Sorry there is problem, storing Item data');
+        }
+        
+        if ($status == 'pending') {
+            return redirect('pendingItems')->with('flash_message', 'Item added!');
         }
 
-        return redirect('item')->with('flash_message', 'Item added!');
+        return redirect('approvedItems')->with('flash_message', 'Item added!');
+        
     }
 
     /**
