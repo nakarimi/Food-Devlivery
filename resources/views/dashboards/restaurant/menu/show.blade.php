@@ -48,13 +48,7 @@
                             </tr>
                             <tr>
                                 <th> Items </th>
-                                <td>
-                                    <p>
-                                        @foreach($items as $item)
-                                            <a href="/item/{{$item->id}}">{{ $item->approvedItemDetails->title }}</a> @if(!$loop->last) , @endif
-                                        @endforeach
-                                    </p>
-                                </td>
+                                <td> {!! show_menu_itmes($menu->items) !!} </td>
                             </tr>
                             </tbody>
                         </table>

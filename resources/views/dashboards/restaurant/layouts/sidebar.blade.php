@@ -19,12 +19,20 @@
 
                 <li @if (\Request::is('menu*')) class="active" @endif>
                     <a href="{{route('menu.index')}}"><i class="la la-edit"></i><span>Menu</span></a>
+                </li>  
+                <li class="submenu">
+                    <a href="#"><i class="la la-legal"></i> <span class="menu-title">Orders</span> <span class="menu-arrow"></span></a>
+                    <ul style="display: none;">
+                        {{--  <li><a  @if (\Request::is('orders/create*')) class="active" @endif href="{{ route('orders.create') }}">Add Order</a></li>--}}
+                        {{-- <li><a  @if (\Request::is('orders')) class="active" @endif href="{{ route('orders.waitingOrders') }}">Waiting Orders</a></li> --}}
+                        <li><a  @if (\Request::is('orders')) class="active" @endif href="{{ route('orders.index') }}">Active Orders</a></li>
+                        <li><a  @if (\Request::is('order-history')) class="active" @endif href="{{ route('order.history') }}">Orders History</a></li>
+                    </ul>
                 </li>
-
-                <li @if (\Request::is('orders*')) class="active" @endif>
-                    <a href="{{route('orders.index')}}"><i class="la la-object-group"></i><span>Orders</span></a>
-                </li>
-
+                
+                <li @if (\Request::is('paymentHistory')) class="active" @endif>
+                    <a href="{{ route('payment.index') }}"><i class="la la-money"></i><span>Payment History</span></a>
+                </li> 
 
         </div>
     </div>

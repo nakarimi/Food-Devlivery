@@ -5,7 +5,7 @@
         <label for="branch_id" class="control-label">{{ 'Payer' }}</label>
         {{-- <input class="form-control" name="branch_id" type="number" id="branch_id" value="{{ $payment->branch_id ?? ''}}" required> --}}
         <select class="custom-select mr-sm-2" name="branch_id" id="branch_id" required>
-            <option value="">Select Branch</option>
+            <option value="">Select Payer</option>
             @foreach($branches as $branch)
                 <option value="{{ $branch->id }}" @if( isset($payment->branch_id) && $branch->id == $payment->branch_id) selected="selected" @endif >{{ $branch->title }}</option>
             @endforeach
@@ -21,9 +21,11 @@
             {{-- <input class="form-control" name="reciever_id" type="number" id="reciever_id" value="{{ $payment->reciever_id ?? ''}}" required> --}}
 
             <select class="custom-select mr-sm-2" name="reciever_id" id="reciever_id" required>
-                <option value="">Select Branch</option>
+                <option value="">Select Reciever</option>
                 @foreach($users as $user)
-                    <option value="{{ $user->id }}" @if( isset($payment->reciever_id) && $user->id == $payment->reciever_id) selected="selected" @endif >{{ $user->name }}</option>
+                    @if($user->role->name == "admin" || $user->role->name == "support")
+                        <option value="{{ $user->id }}" @if( isset($payment->reciever_id) && $user->id == $payment->reciever_id) selected="selected" @endif >{{ $user->name }}</option>
+                    @endif
                 @endforeach
             </select>
 

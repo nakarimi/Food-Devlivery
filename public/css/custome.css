@@ -84,3 +84,8 @@
 .container {
   max-width: 1440px;
 }
+
+.dataTable > thead > tr > th[class*="disable_sort"]:before,
+.dataTable > thead > tr > th[class*="disable_sort"]:after {
+    content: "";
+}

@@ -95,7 +95,6 @@ class MenuController extends Controller
     {
 
         $data['menu'] = Menu::findOrFail($id);
-        $data['items'] = $this->get_menu_items($id);
         if (get_role() == "restaurant"){
             $userId = Auth::user()->id;
             $branch = Branch::findOrFail($data['menu']->branch_id);
@@ -175,7 +174,7 @@ class MenuController extends Controller
         // Pass all available items.
         // If it is restaurant then user will have some restricted data.
         if (get_role() == "restaurant"){
-            $data['items'] = loadUserItemsData(['approved', 'pending']);
+            $data['items'] = loadUserItemsData(['approved']);
         }
         else {
             $data['items'] = Item::where('status', 1)->get();
@@ -204,16 +203,6 @@ class MenuController extends Controller
         }
 
         return $data;
-    }
-    // Get itmes for a menu.
-    public function get_menu_items($id) {
-
-        $menu = Menu::findOrFail($id);
-        $itemIDs = json_decode($menu->items);
-
-        $itmes = Item::whereIn('id', $itemIDs)->get();
-
-        return $itmes;
     }
 
     public function loadItemsBasedOnBranch()

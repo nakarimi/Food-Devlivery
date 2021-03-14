@@ -70,13 +70,16 @@ Route::middleware(['restaurant'])->group(function () {
 
     Route::get('/pendingItems', 'App\Http\Controllers\ItemController@pendingItems')->name('items.pending');
     Route::get('/approvedItems', 'App\Http\Controllers\ItemController@approvedItems')->name('items.approved');
+    Route::get('paymentHistory', 'App\Http\Controllers\PaymentController@restaurantPayments')->name('payment.index');
     Route::resource('item', 'App\Http\Controllers\ItemController');
     Route::resource('menu', 'App\Http\Controllers\MenuController');
     Route::get('/profile', 'App\Http\Controllers\BranchController@restaurantProfile')->name('restaurant.profile');
     Route::resource('branch', 'App\Http\Controllers\BranchController');
     Route::post('updateOrderStatus', 'App\Http\Controllers\OrdersController@updateOrderStatus')->name('updateOrderStatus');
     Route::post('assignDriver', 'App\Http\Controllers\OrdersController@assignDriver')->name('assignDriver');
+    Route::get('/order-history', 'App\Http\Controllers\OrdersController@orderHistory')->name('order.history');
     Route::resource('orders', 'App\Http\Controllers\OrdersController');
+    
     Route::post('blockCustomer', 'App\Http\Controllers\BlockCustomerController@store')->name('blockCustomer');
 });
 

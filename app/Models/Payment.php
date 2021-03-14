@@ -47,13 +47,13 @@ class Payment extends Model
         return __CLASS__ . " model has been {$eventName}";
     }
 
-    public function branchDetails(){
-        return $this->hasOne(BranchDetails::class, 'business_id')->where('status', 'approved')->latest();
-    }
-
     // Relation ship with commission
     public function user(){
         return $this->hasOne(User::class, 'id', 'reciever_id');
+    }
+
+    public function branchDetails(){
+        return $this->hasOne(BranchDetails::class, 'business_id', 'branch_id')->where('status', 'approved')->latest();
     }
 
 }

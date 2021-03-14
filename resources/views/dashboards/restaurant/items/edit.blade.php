@@ -11,7 +11,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title mb-0">Edit Item #{{ $item->id }}</h4>
+                    <h4 class="card-title mb-0">Edit ({{ get_item_details($item, Session::get('itemType'))->title }})</h4>
                 </div>
                 <div class="card-body">
                     @if ($errors->any())
