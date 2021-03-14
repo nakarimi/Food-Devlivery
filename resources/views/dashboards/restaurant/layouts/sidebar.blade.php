@@ -29,7 +29,10 @@
                         <li><a  @if (\Request::is('order-history')) class="active" @endif href="{{ route('order.history') }}">Orders History</a></li>
                     </ul>
                 </li>
-
+                
+                <li @if (\Request::is('paymentHistory')) class="active" @endif>
+                    <a href="{{ route('payment.index') }}"><i class="la la-money"></i><span>Payment History</span></a>
+                </li> 
 
         </div>
     </div>

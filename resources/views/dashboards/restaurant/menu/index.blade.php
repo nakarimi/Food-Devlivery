@@ -22,11 +22,11 @@
                         <table class="table table-striped mb-0 datatable">
                             <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Title</th>
-                                <th>Branch</th>
+                                <th class="disable_sort">#</th>
+                                <th class="disable_sort">Title</th>
                                 <th>Status</th>
-                                <th>Actions</th>
+                                <th class="disable_sort">Contents</th>
+                                <th class="disable_sort">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -34,7 +34,6 @@
                                 <tr>
                                     <td>{{ $loop->iteration or $item->id }}</td>
                                     <td>{{ $item->title }}</td>
-                                    <td>{{ $item->branch->branchDetails->title }}</td>
                                     <td>
                                         @if($item->status == 1)
                                             <span class="badge bg-inverse-success">Active</span>
@@ -42,6 +41,7 @@
                                             <span class="badge bg-inverse-danger">Inactive</span>
                                         @endif
                                     </td>
+                                    <td>{!! show_menu_itmes($item->items) !!}</td>
                                     <td>
                                         <a href="{{ url('/menu/' . $item->id) }}" title="View Menu"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
                                         <a href="{{ url('/menu/' . $item->id . '/edit') }}" title="Edit Menu"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>

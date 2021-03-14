@@ -24,13 +24,12 @@
                   <table class="table table-striped mb-0 datatable">
                      <thead>
                         <tr>
-                           <th>#</th>
-                           <th>Thumbnail</th>
-                           <th>Title</th>
-                           <th>Branch</th>
+                           <th class="disable_sort">#</th>
+                           <th class="disable_sort">Thumbnail</th>
+                           <th class="disable_sort">Title</th>
                            <th>Price</th>
                            <th>Status</th>
-                            <th>Actions</th>
+                            <th class="disable_sort">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -43,7 +42,6 @@
                                         </h2>
                                     </td>
                                     <td>{{ get_item_details($item, Session::get('itemType'))->title }}</td>
-                                    <td>{{ @$item->branch->branchDetails->title}}</td>
                                     <td>{{ get_item_details($item, Session::get('itemType'))->price }}</td>
                                     <td>
                                         @if(get_item_details($item, Session::get('itemType'))->details_status == "pending")

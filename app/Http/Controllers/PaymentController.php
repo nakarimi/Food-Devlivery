@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\Branch;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
@@ -145,11 +146,25 @@ class PaymentController extends Controller
     public function dropdown_data($id = false) {
 
         // Pass Branches for dropdown list form.
-        $data['branches'] = DB::table("branches")->select('branche_main_info.title', 'branches.id')->where('branche_main_info.status', 'like', 'approved')->join('branche_main_info', 'branche_main_info.business_id', '=', 'branches.id')->latest('branche_main_info.created_at')->get();
-
+        $data['branches'] = DB::table("branches")->select('branche_main_info.title', 'branches.id')->where('branche_main_info.status', 'approved')->join('branche_main_info', 'branche_main_info.business_id', '=', 'branches.id')->latest('branche_main_info.created_at')->get();
         // Pass Users for dropdown list form.
         $data['users'] = User::all();
 
         return $data;
+    }
+
+    /**
+     * Payment history.
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function restaurantPayments(Request $request)
+    {
+        $perPage = 10;
+        $userId = Auth::user()->id;
+        $branchID = Branch::where('user_id', $userId)->first();
+        $payment = Payment::where('branch_id', $branchID->id)->latest()->paginate($perPage);
+        
+        return view('dashboards.restaurant.payment.index', compact('payment'));
     }
 }
