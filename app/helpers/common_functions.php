@@ -237,3 +237,21 @@ if (!function_exists('select_item_logic')){
         }
     }
 }
+
+// This will return menu items for views.
+if (!function_exists('show_menu_itmes')){
+    function show_menu_itmes ($items){
+
+        $itemIDs = json_decode($items);
+        $items = Item::whereIn('id', $itemIDs)->get();
+
+        $allItems = [];
+        foreach($items as $item) {
+            $allItems[] = '<a href="/item/'.$item->id.'">'.$item->approvedItemDetails->title.'</a>';
+        }
+        $allItems = implode(", ", $allItems);
+        
+        return "<p>$allItems</p>";
+    }
+}
+
