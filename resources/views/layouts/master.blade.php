@@ -64,6 +64,7 @@
 
 
                 @yield('content')
+                {{$slot ?? ''}}
 
             </div>
             <!-- /Page Content -->

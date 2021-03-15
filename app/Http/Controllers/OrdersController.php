@@ -62,7 +62,7 @@ class OrdersController extends Controller
         else {
             $orders = Order::whereIn('status', $status)->latest()->paginate($perPage);
         }
-        
+
         $drivers = Driver::all();
 
         return view('order.orders.index', compact('orders', 'drivers'));
@@ -102,7 +102,7 @@ class OrdersController extends Controller
         $requestData = $request->all();
 
         Order::create($requestData);
-
+        event(new \App\Events\UpdateEvent('Order Updated!'));
         return redirect('orders')->with('flash_message', 'Order added!');
     }
 
@@ -155,7 +155,7 @@ class OrdersController extends Controller
 			'customer_id' => 'required',
 			'status' => 'required',
 			'reciever_phone' => 'required',
-			'contents' => 'required'
+//			'contents' => 'required'
 		]);
         $requestData = $request->all();
 
@@ -187,8 +187,8 @@ class OrdersController extends Controller
             }
 
         }
-
-        return redirect('orders')->with('flash_message', 'Order updated!');
+        event(new \App\Events\UpdateEvent('Order Updated!'));
+        return redirect()->back()->with('flash_message', 'Order updated!');
     }
 
     /**
@@ -202,7 +202,7 @@ class OrdersController extends Controller
     {
         Order::destroy($id);
 
-        return redirect('orders')->with('flash_message', 'Order deleted!');
+        return redirect()->back()->with('flash_message', 'Order deleted!');
     }
 
     /**
@@ -280,6 +280,8 @@ class OrdersController extends Controller
             $field => Carbon::now()->format('Y-m-d H:i:s'),
         ];
         OrderTimeDetails::where('order_id', $id)->update($updateDeliveryTimeDetails);
+        event(new \App\Events\UpdateEvent('Order Updated!'));
+
     }
 
     /**
@@ -294,5 +296,6 @@ class OrdersController extends Controller
         $driver_id = $request['driver_id'];
         DeliveryDetails::where('order_id', $id)->update(['driver_id' => $driver_id]);
         Driver::where('id', $driver_id)->update(['status' => 'busy']);
+        event(new \App\Events\UpdateEvent('Order Updated!'));
     }
 }

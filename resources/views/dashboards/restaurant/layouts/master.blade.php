@@ -28,13 +28,17 @@
     <!-- Custome CSS -->
     <link rel="stylesheet" href="{{asset('css/custome.css')}}">
 
+    <!-- jQuery -->
+    <script src="{{asset('js/jquery-3.2.1.min.js')}}"></script>
 
-
+{{--    TODO: this should only push based on component--}}
+    <link rel="stylesheet" href="{{asset('css/dataTables.bootstrap4.min.css')}}">
 
     {{--   Adding specific style of each page--}}
 
     @yield('styles')
-
+    @livewireStyles
+    @stack('styles')
 </head>
 <body>
 <div id="app">
@@ -60,6 +64,7 @@
 
 
                 @yield('content')
+                {{$slot ?? ''}}
 
             </div>
             <!-- /Page Content -->
@@ -70,8 +75,7 @@
     </div>
     <!-- /Main Wrapper -->
 </div>
-<!-- jQuery -->
-<script src="{{asset('js/jquery-3.2.1.min.js')}}"></script>
+
 
 <!-- Bootstrap Core JS -->
 <script src="{{asset('js/popper.min.js')}}"></script>
@@ -85,6 +89,7 @@
 
 <!-- Specific js of pages -->
 @yield('scripts')
-
+@livewireScripts
+@stack('scripts')
 </body>
 </html>
