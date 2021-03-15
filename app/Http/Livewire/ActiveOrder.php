@@ -9,14 +9,13 @@ use Livewire\Component;
 
 class ActiveOrder extends Component
 {
-    public $listeners = ['refreshActiveOrders' => '$refresh'];
+    public $listeners = ['refreshActiveOrders'];
     public $keyword;
 
     public function render()
     {
         $drivers = Driver::all();
         // If it is restaurant then user will have some restricted data.
-//        dd(get_role());
         if (get_role() == "restaurant"){
             $userId = Auth::user()->id;
             $status = ['pending', 'approved', 'reject', 'processing', 'delivered'];
@@ -35,7 +34,6 @@ class ActiveOrder extends Component
 
         $keyword = $this->keyword;
         $perPage = 10;
-
         if (!empty($keyword)) {
             $orders = Order::whereIn('status', $status)->wherehas(
                 'branchDetails', function ($query) use ($keyword) {
@@ -48,5 +46,18 @@ class ActiveOrder extends Component
         }
         return $orders;
 
+    }
+
+    // this name should be same as listener name
+    // this function refresh data and reinitiliaze javascript files.
+    public function refreshActiveOrders()
+    {
+        $this->emit('refresh');
+        $this->addJs();
+    }
+    // this function reinitiliaze javascript files.
+    public function addJs()
+    {
+        $this->dispatchBrowserEvent('reinitializaJSs');
     }
 }
