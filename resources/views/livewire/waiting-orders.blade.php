@@ -7,16 +7,16 @@
                     <a href="{{ url('/orders/create') }}" class="btn btn-success btn-sm" title="Add New Order">
                         <i class="fa fa-plus" aria-hidden="true"></i> Add New
                     </a>
-{{--                    <form  accept-charset="UTF-8" class="form-inline my-2 my-lg-0 float-right" role="search">--}}
+                    <form  accept-charset="UTF-8" class="form-inline my-2 my-lg-0 float-right" role="search">
                         <div class="input-group">
-                            <input type="text" class="form-control" name="search" placeholder="Search...">
+                            <input type="text" class="form-control" name="search" placeholder="Search..." wire:model="keyword">
                             <span class="input-group-append">
-{{--                     <button class="btn btn-secondary" type="submit">--}}
+                     <button class="btn btn-secondary" type="submit">
                      <i class="fa fa-search"></i>
                      </button>
                      </span>
                         </div>
-{{--                    </form>--}}
+                    </form>
                     <br/>
                     <br/>
                     <div class="table-responsive">
@@ -94,8 +94,8 @@
     // Enable pusher logging - don't include this in production
     Pusher.logToConsole = true;
 
-    var pusher = new Pusher('21bc4b7163b1064323d3', {
-        cluster: 'ap1'
+    var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+        cluster: '{{ env('PUSHER_APP_CLUSTER') }}'
     });
 
     var channel = pusher.subscribe('food-app');

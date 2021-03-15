@@ -9,12 +9,25 @@ use Livewire\Component;
 
 class ActiveOrder extends Component
 {
-    public $listeners = ['refreshActiveOrders' => '$refresh'];
+    public $listeners = ['refreshActiveOrders'];
     public $keyword;
 
     public function render()
     {
-        // Get all wating orders, true (means realTime);
-        return get_orders('active-orders', NULL, true);
+       // Get all wating orders, true (means realTime);
+       return get_orders('active-orders', NULL, true);
+    }
+
+    // this name should be same as listener name
+    // this function refresh data and reinitiliaze javascript files.
+    public function refreshActiveOrders()
+    {
+        $this->emit('refresh');
+        $this->addJs();
+    }
+    // this function reinitiliaze javascript files.
+    public function addJs()
+    {
+        $this->dispatchBrowserEvent('reinitializaJSs');
     }
 }

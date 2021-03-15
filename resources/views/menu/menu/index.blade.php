@@ -65,6 +65,4 @@
       </div>
    </div>
 </div>
-<!-- Custom JS -->
-{{--<script src="{{asset('js/livewire_automation.js')}}"></script>--}}
 @endsection

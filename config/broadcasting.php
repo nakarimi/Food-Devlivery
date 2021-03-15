@@ -31,12 +31,12 @@ return [
     'connections' => [
 
         'pusher' => [
-            'driver' => 'pusher',
-            'key' => '21bc4b7163b1064323d3',
-            'secret' =>'a882584b76168d58214d',
-            'app_id' => '1171323',
+            'driver' => env('BROADCAST_DRIVER'),
+            'key' => env('PUSHER_APP_KEY'),
+            'secret' =>env('PUSHER_APP_SECRET'),
+            'app_id' => env('PUSHER_APP_ID'),
             'options' => [
-                'cluster' => 'ap1',
+                'cluster' => env('PUSHER_APP_CLUSTER'),
                 'useTLS' => true
             ],
         ],
