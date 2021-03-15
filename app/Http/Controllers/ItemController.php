@@ -232,7 +232,11 @@ class ItemController extends Controller
             }
         }
 
-        return redirect(url('/pendingItems'))->with('flash_message', 'Item updated!');
+        if ($status == 'pending') {
+            return redirect('pendingItems')->with('flash_message', 'Item Updated!');
+        }
+
+        return redirect('approvedItems')->with('flash_message', 'Item Updated!');
     }
 
     /**

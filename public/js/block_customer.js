@@ -7,7 +7,7 @@ jQuery(function ($) {
         var order_id = '';
         var timer = 0;
         var blocked = '';
-        $('.customer_detials').click(function () {
+        $(document).on('click','.customer_detials',function(){
             customer_email = $(this).attr('customer_email');
             branch_id = $(this).attr('branch_id');
             customer_id = $(this).attr('customer_id');
