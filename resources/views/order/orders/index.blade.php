@@ -46,28 +46,11 @@
                            <td>
                                 @if($item->has_delivery == 1)
                                     @if($item->deliveryDetails->delivery_type == 'own')
-                                        <span class="badge bg-inverse-success">Own Delivery</span>
+                                       <span class="badge bg-inverse-success">Own Delivery</span>
                                     @else
-                                        {{-- Here we show all free drivers. --}}
-                                        @if($item->deliveryDetails->driver_id)
-                                          <select class="custom-select mr-sm-2" order_id={{$item->id}} name="driver_id" id="driver_id" required disabled="disabled">
-                                                @foreach($drivers as $driver)
-                                                   @if($driver->id == $item->deliveryDetails->driver_id)
-                                                      <option value="{{ $driver->id }}" >{{ $driver->title }}</option>
-                                                   @endif
-                                                @endforeach
-                                          </select>
-                                        @else
-                                          <select class="custom-select mr-sm-2" order_id={{$item->id}} name="driver_id" id="driver_id" required>
-                                                <option value="" >Selece Driver</option>
-                                                @foreach($drivers as $driver)
-                                                   @if($driver->status == 'free')
-                                                      <option value="{{ $driver->id }}" >{{ $driver->title }}</option>
-                                                   @endif
-                                                   
-                                                @endforeach
-                                          </select>
-                                       @endif
+                                       <span class="badge bg-inverse-primary">(Company Delivery) <br>
+                                          <span class="badge bg-inverse-danger">{{$item->deliveryDetails->driver->title ?? 'Pending'}}</span>
+                                       </span>
                                     @endif
                                 @else
                                     <span class="badge bg-inverse-warning">Self Delivery</span>

@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Active Orders</div>
+                <div class="card-header">Waiting Orders</div>
                 <div class="card-body">
                     <a href="{{ url('/orders/create') }}" class="btn btn-success btn-sm" title="Add New Order">
                         <i class="fa fa-plus" aria-hidden="true"></i> Add New
@@ -24,7 +24,7 @@
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Title</th>
+                                <th>Time</th>
                                 <th>Branch</th>
                                 <th>Customer</th>
                                 <th>Contents</th>
@@ -37,7 +37,7 @@
                             @foreach($orders as $item)
                                 <tr>
                                     <td>{{ $loop->iteration}}</td>
-                                    <td>{{ $item->title }}</td>
+                                    <td>{{ $item->created_at->diffForHumans() }}</td>
                                     <td>{{ $item->branchDetails->title }}</td>
                                     <td>{{ $item->customer->name }} <br> ({{$item->reciever_phone}}) </td>
                                     <td class="max-width200">{!! show_order_itmes($item->contents) !!}</td>
@@ -101,7 +101,7 @@
     var channel = pusher.subscribe('food-app');
     channel.bind('update-event', function(data) {
         // if (JSON.stringify(data['message']) == "Items Updated!"){
-        Livewire.emit('refreshActiveOrders');
+        Livewire.emit('refreshWaitingOrder');
         // alert("updated!");
         // }
         // alert();

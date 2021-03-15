@@ -12,13 +12,13 @@
                     <a href="#"><i class="la la-legal"></i> <span class="menu-title">Orders</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         {{--  <li><a  @if (\Request::is('orders/create*')) class="active" @endif href="{{ route('orders.create') }}">Add Order</a></li>--}}
-                        {{-- <li><a  @if (\Request::is('orders')) class="active" @endif href="{{ route('orders.waitingOrders') }}">Waiting Orders</a></li> --}}
+                        <li><a  @if (\Request::is('waitingOrders')) class="active" @endif href="{{ url('waitingOrders') }}">Waiting Orders</a></li>
                         <li><a  @if (\Request::is('activeOrders')) class="active" @endif href="{{url('activeOrders')}}">Active Orders</a></li>
                         <li><a  @if (\Request::is('order-history')) class="active" @endif href="{{ route('order.history') }}">Orders History</a></li>
                     </ul>
                 </li>
 
-                 <li class="submenu">
+                <li class="submenu">
                     <a href="#"><i class="la la-list"></i><span class="menu-title">Item</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         <li><a href="{{route('items.pending')}}" @if (\Request::is('pendingItems*')) class="active" @endif>Pending Items</a></li>

@@ -5,7 +5,9 @@ use App\Models\Item;
 use \App\Models\Menu;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-
+use App\Models\Order;
+use App\Models\Driver;
+use Carbon\Carbon;
 
 if (!function_exists('save_file')) {
      /**
@@ -255,3 +257,72 @@ if (!function_exists('show_menu_itmes')){
     }
 }
 
+
+// General function to get orders, based on the provided params.
+if (!function_exists('get_orders')){
+    function get_orders($type, $request, $realTime = false) {
+        // Order lists based on different status. active([Pending, Accept, Processing, Delivery]) and history ([completed, Canceled])
+        $status = [];
+        switch($type) {
+            case 'history':
+                $status = ['completed', 'canceld'];
+            break;
+            case 'active-orders':
+                $status = ['pending', 'approved', 'reject', 'processing', 'delivered'];
+            break;
+            default:
+            $status = [];
+        };
+
+        $drivers = Driver::all();
+
+        if ($type == 'waiting-orders') {
+            $status = ['delivered'];
+        }
+    
+        // If it is restaurant then user will have some restricted data.
+        if (get_role() == "restaurant"){
+            $userId = Auth::user()->id;
+            $orders = loadUserAllOrders($userId, $status);
+            if ($realTime) {
+                return view('livewire.restaurant.active-orders', compact('orders', 'drivers'))->extends('dashboards.restaurant.layouts.master');
+            }
+            return view('dashboards.restaurant.orders.index', compact('orders'));
+        }
+    
+        $perPage = 10;
+
+        // For real time data, datatable search is enogh.
+        // Todo: dynamic search is needed for amdin section. 
+        $keyword = ($request) ? $request->get('search') : NULL;
+        if (!empty($keyword)) {
+            $orders = Order::whereIn('status', $status)->wherehas(
+                'branchDetails', function ($query) use ($keyword) {
+                $query->where('title','LIKE', "%$keyword%");
+            })->orwhere('title', 'LIKE', "%$keyword%")
+                ->latest()->paginate($perPage);
+        }
+        elseif ($type == 'waiting-orders'){
+            // Get orders from 10 minutes ago.
+            $timeOffSet = Carbon::now()->subMinutes(1)->toDateTimeString();
+            $orders = Order::where(function ($query) use ($timeOffSet) {
+                $query->where('status', 'pending')->where('orders.created_at', '<', $timeOffSet);
+            })->orwhere(function ( $query ) {
+                $query->whereHas('deliveryDetails', function ($subquery) {
+                $subquery->where('delivery_type', 'company')->whereNull('driver_id');
+            });
+            })->latest()->paginate($perPage);
+        }
+        else {
+            $orders = Order::whereIn('status', $status)->latest()->paginate($perPage);
+        }
+
+        // Real time template are in livewire dir.
+        if ($realTime) {
+            return ($type == 'waiting-orders') ? view('livewire.waiting-orders', compact('orders', 'drivers')) : view('livewire.active-order', compact('orders', 'drivers'));
+        }
+        
+        // Order history routes are using main template.
+        return view('order.orders.index', compact('orders', 'drivers'));
+    }
+}

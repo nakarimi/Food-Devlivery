@@ -25,7 +25,7 @@ class OrdersController extends Controller
      */
     public function index(Request $request)
     {
-        return $this->get_orders('active-orders', $request);
+        return get_orders('active-orders', $request);
     }
 
     /**
@@ -34,39 +34,7 @@ class OrdersController extends Controller
      * @return \Illuminate\View\View
      */
     public function orderHistory(Request $request) {
-        return $this->get_orders('history', $request);
-    }
-
-    // General function to get orders, based on the provided params.
-    public function get_orders($type, $request) {
-        // Order lists based on different status. active([Pending, Accept, Processing, Delivery]) and history ([completed, Canceled])
-        $status = ($type == 'history') ? ['completed', 'canceld'] : ['pending', 'approved', 'reject', 'processing', 'delivered'];
-
-        // If it is restaurant then user will have some restricted data.
-        if (get_role() == "restaurant"){
-            $userId = Auth::user()->id;
-            $orders = loadUserAllOrders($userId, $status);
-            return view('dashboards.restaurant.orders.index', compact('orders'));
-        }
-
-        $keyword = $request->get('search');
-        $perPage = 10;
-
-        if (!empty($keyword)) {
-            $orders = Order::whereIn('status', $status)->wherehas(
-                'branchDetails', function ($query) use ($keyword) {
-                $query->where('title','LIKE', "%$keyword%");
-            })->orwhere('title', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
-        }
-        else {
-            $orders = Order::whereIn('status', $status)->latest()->paginate($perPage);
-        }
-
-        $drivers = Driver::all();
-
-        return view('order.orders.index', compact('orders', 'drivers'));
-
+        return get_orders('history', $request);
     }
 
     /**

@@ -7,14 +7,14 @@ use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class ActiveOrder extends Component
+class WaitingOrder extends Component
 {
-    public $listeners = ['refreshActiveOrders' => '$refresh'];
+    public $listeners = ['refreshWaitingOrder' => '$refresh'];
     public $keyword;
 
     public function render()
     {
         // Get all wating orders, true (means realTime);
-        return get_orders('active-orders', NULL, true);
+        return get_orders('waiting-orders', NULL, true);
     }
 }
