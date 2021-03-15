@@ -45,10 +45,12 @@
                                         @if($item->deliveryDetails->delivery_type == 'own')
                                             <span class="badge bg-inverse-success">Own Delivery</span>
                                         @else
-                                            <span class="badge bg-inverse-primary">Company Delivery</span>
+                                            <span class="badge bg-inverse-primary">(Company Delivery) <br>
+                                                <span class="badge bg-inverse-danger">{{$item->deliveryDetails->driver->title ?? 'Pending'}}</span>
+                                            </span>
                                         @endif
                                     @else
-                                        <span class="badge bg-inverse-warning">Self Delivery2</span>
+                                        <span class="badge bg-inverse-warning">Self Delivery</span>
                                     @endif
                                 </td>
                                 <td>{!! show_order_itmes($item->contents) !!}</td>

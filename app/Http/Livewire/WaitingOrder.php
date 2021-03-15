@@ -7,27 +7,27 @@ use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class ActiveOrder extends Component
+class WaitingOrder extends Component
 {
-    public $listeners = ['refreshActiveOrders'];
+    public $listeners = ['refreshWaitingOrder'];
     public $keyword;
 
     public function render()
     {
-       // Get all wating orders, true (means realTime);
-       return get_orders('active-orders', NULL, true);
+        // Get all wating orders, true (means realTime);
+        return get_orders('waiting-orders', NULL, true);
     }
 
     // this name should be same as listener name
     // this function refresh data and reinitiliaze javascript files.
-    public function refreshActiveOrders()
+    public function refreshWaitingOrder()
     {
         $this->emit('refresh');
         $this->addJs();
     }
     // this function reinitiliaze javascript files.
-    public function addJs()
-    {
-        $this->dispatchBrowserEvent('reinitializaJSs');
-    }
+    // public function addJs()
+    // {
+    //     $this->dispatchBrowserEvent('reinitializaJSs');
+    // }
 }
