@@ -111,8 +111,8 @@
     // Enable pusher logging - don't include this in production
     Pusher.logToConsole = true;
 
-    var pusher = new Pusher('21bc4b7163b1064323d3', {
-        cluster: 'ap1'
+    var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+        cluster: '{{env('PUSHER_APP_CLUSTER')}}'
     });
 
     var channel = pusher.subscribe('food-app');
