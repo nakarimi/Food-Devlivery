@@ -1,3 +1,6 @@
+@section('title')
+    Active Orders
+@stop
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -24,7 +27,7 @@
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Title</th>
+                                <th>Time</th>
                                 <th>Branch</th>
                                 <th>Customer</th>
                                 <th>Contents</th>
@@ -37,7 +40,7 @@
                             @foreach($orders as $item)
                                 <tr>
                                     <td>{{ $loop->iteration}}</td>
-                                    <td>{{ $item->title }}</td>
+                                    <td>{{ $item->created_at->diffForHumans() }}</td>
                                     <td>{{ $item->branchDetails->title }}</td>
                                     <td>{{ $item->customer->name }} <br> ({{$item->reciever_phone}}) </td>
                                     <td class="max-width200">{!! show_order_itmes($item->contents) !!}</td>

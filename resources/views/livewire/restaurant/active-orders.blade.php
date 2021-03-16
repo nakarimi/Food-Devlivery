@@ -1,3 +1,6 @@
+@section('title')
+    Active Orders
+@stop
 
 <div class="row">
     <div class="col-lg-12">

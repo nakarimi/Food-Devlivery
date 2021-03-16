@@ -234,6 +234,7 @@ class OrdersController extends Controller
             break;
             case 'completed' :
                 $field = 'completed_time';
+                $this->update_driver_status($id, 'free');
             break;
             default:
                 $field = 'caceled_time';
@@ -279,4 +280,21 @@ class OrdersController extends Controller
         DeliveryDetails::where('order_id', $id)->update(['delivery_type' => 'company']);
         event(new \App\Events\UpdateEvent('Order Updated!'));
     }
+
+    /**
+     * Update driver status.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     */
+    public function update_driver_status($order_id, $status) {
+        // Get driver id from order.
+        $order = Order::findOrFail($order_id);
+        $driver_id = $order->deliveryDetails->driver->id;
+        // Update status of driver.
+        $driver = Driver::findOrFail($driver_id);
+        $driver->status = $status;
+        $driver->save();
+    }
+
 }
