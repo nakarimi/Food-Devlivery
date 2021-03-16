@@ -60,9 +60,9 @@ jQuery(function ($) {
                 type: 'POST',
                 url:'/requestDelivery',
                 data: {order_id:order_id},
-                success: function (data) {   
+                success: function (data) {
                     $(this).closest('span').replaceWith('<span class="badge bg-inverse-primary">(Company Delivery) <br><span class="badge bg-inverse-danger">Pending</span></span>');             
-                    show_message("Devlivery requested!")
+                    show_message("Devlivery requested Successfully!")
                 },
                 error: function (e) {
                     alert("js error in order.js file.")

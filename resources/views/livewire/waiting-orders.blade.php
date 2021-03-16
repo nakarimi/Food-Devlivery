@@ -45,13 +45,24 @@
                                                 <span class="badge bg-inverse-success">Own Delivery</span>
                                             @else
                                                 <select class="custom-select mr-sm-2" order_id={{$item->id}} name="driver_id" id="driver_id" required>
-                                                    <option value="" disabled selected >Selece Driver</option>
+                                                    
+                                                    @php $noFreeDriver = true; @endphp
+
                                                     @foreach($drivers as $driver)
-                                                    @if($driver->status == 'free')
-                                                        <option value="{{ $driver->id }}" >{{ $driver->title }}</option>
-                                                    @endif
+                                                        
+                                                        @if($driver->status == 'free')
+                                                            @if($loop->first)
+                                                                <option value="" disabled selected >Selece Driver</option>
+                                                            @endif
+
+                                                            <option value="{{ $driver->id }}" >{{ $driver->title }}</option>
+                                                        @endif
                                                     
                                                     @endforeach
+
+                                                    @if($noFreeDriver)
+                                                        <option value="" disabled selected >Driver N/A</option>
+                                                    @endif
                                                 </select>
                                             @endif
                                         @else
