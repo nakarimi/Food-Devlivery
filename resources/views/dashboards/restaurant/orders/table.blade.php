@@ -33,7 +33,7 @@
                         @if ($item->deliveryDetails->delivery_type == 'own')
                             <span class="badge bg-inverse-success hover">Own Delivery
                                 <div class="tooltip">
-                                    <button type="button" order_id="3" class="btn .btn-default request_delivery_btn" title="Request Delivery from Company.">Request Delivery</button>
+                                    <button type="button" order_id="{{ $item->id }}" class="btn .btn-default request_delivery_btn" title="Request Delivery from Company.">Request Delivery</button>
                                 </div>
                             </span>
                         @else
