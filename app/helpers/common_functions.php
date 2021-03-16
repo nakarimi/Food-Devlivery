@@ -132,7 +132,7 @@ if (!function_exists('loadUserMenuData')){
 // This will return menus based on branch ids.
 if (!function_exists('getUserMenus')){
     function getUserMenus ($branchIds){
-        $menu = Menu::whereIn('branch_id',$branchIds)->latest()->paginate(10);
+        $menu = Menu::whereIn('branch_id',$branchIds)->where('status', '1')->latest()->paginate(10);
         return $menu;
     }
 }
