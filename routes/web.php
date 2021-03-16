@@ -83,7 +83,9 @@ Route::middleware(['restaurant'])->group(function () {
     Route::get('/waitingOrders', \App\Http\Livewire\WaitingOrder::class);
 
     Route::get('/order-history', 'App\Http\Controllers\OrdersController@orderHistory')->name('order.history');
-    Route::resource('orders', 'App\Http\Controllers\OrdersController');
+    Route::resource('orders', 'App\Http\Controllers\OrdersController')->only([
+        'edit', 'show', 'destroy', 'update'
+    ]);;
 
     Route::post('blockCustomer', 'App\Http\Controllers\BlockCustomerController@store')->name('blockCustomer');
     Route::get('get_orders_by_status', 'App\Http\Controllers\DashboardsController@get_orders_by_status');
