@@ -1,4 +1,7 @@
 @extends('layouts.master')
+@section('title')
+   Category
+@stop
 @section('content')
 <div class="container">
    <div class="row">

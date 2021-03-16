@@ -1,5 +1,5 @@
 @extends('layouts.master')
-
+Edit Branch
 @section('content')
     <div class="container">
         <div class="row">
