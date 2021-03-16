@@ -44,6 +44,9 @@
                                     @if($item->has_delivery == 1)
                                         @if($item->deliveryDetails->delivery_type == 'own')
                                             <span class="badge bg-inverse-success">Own Delivery</span>
+                                            
+                                            <span class="badge badge-info" ><button type="button" class="btn btn-info btn-sm" title="Request Delivery from Company.">Request Delivery</button></span>
+
                                         @else
                                             <span class="badge bg-inverse-primary">(Company Delivery) <br>
                                                 <span class="badge bg-inverse-danger">{{$item->deliveryDetails->driver->title ?? 'Pending'}}</span>
