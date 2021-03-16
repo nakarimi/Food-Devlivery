@@ -1,5 +1,5 @@
 @extends('layouts.master')
-
+Create New Branch
 @section('content')
     <div class="container">
         <div class="row">

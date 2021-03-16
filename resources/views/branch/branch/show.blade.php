@@ -1,4 +1,7 @@
 @extends('layouts.master')
+@section('title')
+   {{ $branch->branchDetails->title }}
+@stop
 @section('content')
 <div class="container">
    <div class="row">

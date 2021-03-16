@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('title')
+  {{ $commission->title }}
+@stop
 @section('content')
     <div class="container">
         <div class="row">
