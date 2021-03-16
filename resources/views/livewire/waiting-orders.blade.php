@@ -44,18 +44,28 @@
                                             @if($item->deliveryDetails->delivery_type == 'own')
                                                 <span class="badge bg-inverse-success">Own Delivery</span>
                                             @else
+                                                @if($item->deliveryDetails->driver)
+
+                                                    <span class="badge bg-inverse-primary">(Company Delivery) <br>
+                                                        <span class="badge bg-inverse-danger">{{$item->deliveryDetails->driver->title}}</span>
+                                                    </span>
+
+                                                @else
                                                 <select class="custom-select mr-sm-2" order_id={{$item->id}} name="driver_id" id="driver_id" required>
                                                     
-                                                    @php $noFreeDriver = true; @endphp
+                                                    @php $noFreeDriver = true; $isFirstFree = true; @endphp
 
                                                     @foreach($drivers as $driver)
                                                         
                                                         @if($driver->status == 'free')
-                                                            @if($loop->first)
-                                                                <option value="" disabled selected >Selece Driver</option>
-                                                            @endif
+                                                            
+                                                            @if($isFirstFree)  <option value="" disabled selected >Selece Driver</option> @endif
+                                                            
+                                                            @php $noFreeDriver = false; $isFirstFree = false; @endphp
 
                                                             <option value="{{ $driver->id }}" >{{ $driver->title }}</option>
+
+
                                                         @endif
                                                     
                                                     @endforeach
@@ -64,6 +74,7 @@
                                                         <option value="" disabled selected >Driver N/A</option>
                                                     @endif
                                                 </select>
+                                                @endif
                                             @endif
                                         @else
                                             <span class="badge bg-inverse-warning">Self Delivery</span>
