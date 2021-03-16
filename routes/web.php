@@ -64,9 +64,7 @@ Route::middleware(['admin'])->group(function () {
 */
 Route::middleware(['restaurant'])->group(function () {
 
-    Route::get('restaurant/dashboard', function (){
-        return view('dashboards.restaurant.dashboard');
-    })->name('restaurant.dashboard');
+    Route::get('restaurant/dashboard', 'App\Http\Controllers\DashboardsController@restaurantDashboard')->name('restaurant.dashboard');
 
     Route::get('/pendingItems', 'App\Http\Controllers\ItemController@pendingItems')->name('items.pending');
     Route::get('/approvedItems', 'App\Http\Controllers\ItemController@approvedItems')->name('items.approved');
@@ -87,6 +85,7 @@ Route::middleware(['restaurant'])->group(function () {
     Route::resource('orders', 'App\Http\Controllers\OrdersController');
 
     Route::post('blockCustomer', 'App\Http\Controllers\BlockCustomerController@store')->name('blockCustomer');
+    Route::get('get_orders_by_status', 'App\Http\Controllers\DashboardsController@get_orders_by_status');
 });
 
 /*
@@ -95,9 +94,7 @@ Route::middleware(['restaurant'])->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['driver'])->group(function () {
-    Route::get('driver/dashboard', function (){
-        return view('dashboards.driver.dashboard');
-    })->name('driver.dashboard');
+    Route::get('driver/dashboard', 'App\Http\Controllers\DashboardsController@driverDashboard')->name('driver.dashboard');
 });
 
 /*
@@ -106,9 +103,7 @@ Route::middleware(['driver'])->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['support'])->group(function () {
-    Route::get('support/dashboard', function (){
-        return view('dashboards.support.dashboard');
-    })->name('support.dashboard');
+    Route::get('support/dashboard', 'App\Http\Controllers\DashboardsController@supportDashboard')->name('support.dashboard');
 });
 
 /*
@@ -117,7 +112,5 @@ Route::middleware(['support'])->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['customer'])->group(function () {
-    Route::get('customer/dashboard', function (){
-        return view('dashboards.customer.dashboard');
-    })->name('customer.dashboard');
+    Route::get('customer/dashboard', 'App\Http\Controllers\DashboardsController@customerDashboard')->name('customer.dashboard');
 });

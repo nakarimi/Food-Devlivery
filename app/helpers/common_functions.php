@@ -252,7 +252,7 @@ if (!function_exists('show_menu_itmes')){
             $allItems[] = '<a href="/item/'.$item->id.'">'.$item->approvedItemDetails->title.'</a>';
         }
         $allItems = implode(", ", $allItems);
-        
+
         return "<p>$allItems</p>";
     }
 }
@@ -260,7 +260,7 @@ if (!function_exists('show_menu_itmes')){
 
 // General function to get orders, based on the provided params.
 if (!function_exists('get_orders')){
-    function get_orders($type, $request, $realTime = false) {
+    function get_orders($type, $request, $realTime = false, $keyword = null) {
         // Order lists based on different status. active([Pending, Accept, Processing, Delivery]) and history ([completed, Canceled])
         $status = [];
         switch($type) {
@@ -279,7 +279,7 @@ if (!function_exists('get_orders')){
         if ($type == 'waiting-orders') {
             $status = ['delivered'];
         }
-    
+
         // If it is restaurant then user will have some restricted data.
         if (get_role() == "restaurant"){
             $userId = Auth::user()->id;
@@ -289,17 +289,16 @@ if (!function_exists('get_orders')){
             }
             return view('dashboards.restaurant.orders.index', compact('orders'));
         }
-    
+
         $perPage = 10;
 
         // For real time data, datatable search is enogh.
-        // Todo: dynamic search is needed for amdin section. 
-        $keyword = ($request) ? $request->get('search') : NULL;
+        $keyword = ($request) ? $request->get('search') : $keyword;
         if (!empty($keyword)) {
             $orders = Order::whereIn('status', $status)->wherehas(
                 'branchDetails', function ($query) use ($keyword) {
                 $query->where('title','LIKE', "%$keyword%");
-            })->orwhere('title', 'LIKE', "%$keyword%")
+            })->orwhere('title', 'LIKE', "%$keyword%")->whereIn('status',$status)
                 ->latest()->paginate($perPage);
         }
         elseif ($type == 'waiting-orders'){
@@ -321,7 +320,7 @@ if (!function_exists('get_orders')){
         if ($realTime) {
             return ($type == 'waiting-orders') ? view('livewire.waiting-orders', compact('orders', 'drivers')) : view('livewire.active-order', compact('orders', 'drivers'));
         }
-        
+
         // Order history routes are using main template.
         return view('order.orders.index', compact('orders', 'drivers'));
     }
