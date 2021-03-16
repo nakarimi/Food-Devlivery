@@ -26,8 +26,8 @@ class WaitingOrder extends Component
         $this->addJs();
     }
     // this function reinitiliaze javascript files.
-    // public function addJs()
-    // {
-    //     $this->dispatchBrowserEvent('reinitializaJSs');
-    // }
+    public function addJs()
+    {
+        $this->dispatchBrowserEvent('reinitializaJSs');
+    }
 }

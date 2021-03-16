@@ -4,19 +4,17 @@
             <div class="card">
                 <div class="card-header">Waiting Orders</div>
                 <div class="card-body">
-                    <a href="{{ url('/orders/create') }}" class="btn btn-success btn-sm" title="Add New Order">
-                        <i class="fa fa-plus" aria-hidden="true"></i> Add New
-                    </a>
                     <form  accept-charset="UTF-8" class="form-inline my-2 my-lg-0 float-right" role="search">
                         <div class="input-group">
                             <input type="text" class="form-control" name="search" placeholder="Search..." wire:model="keyword">
                             <span class="input-group-append">
-                     <button class="btn btn-secondary" type="submit">
-                     <i class="fa fa-search"></i>
-                     </button>
-                     </span>
+                                <button class="btn btn-secondary" type="submit">
+                                <i class="fa fa-search"></i>
+                                </button>
+                            </span>
                         </div>
                     </form>
+                    <br/>
                     <br/>
                     <br/>
                     <div class="table-responsive">
@@ -46,9 +44,15 @@
                                             @if($item->deliveryDetails->delivery_type == 'own')
                                                 <span class="badge bg-inverse-success">Own Delivery</span>
                                             @else
-                                                <span class="badge bg-inverse-primary">(Company Delivery) <br>
-                                                    <span class="badge bg-inverse-danger">{{$item->deliveryDetails->driver->title ?? 'Pending'}}</span>
-                                                </span>
+                                                <select class="custom-select mr-sm-2" order_id={{$item->id}} name="driver_id" id="driver_id" required>
+                                                    <option value="" disabled selected >Selece Driver</option>
+                                                    @foreach($drivers as $driver)
+                                                    @if($driver->status == 'free')
+                                                        <option value="{{ $driver->id }}" >{{ $driver->title }}</option>
+                                                    @endif
+                                                    
+                                                    @endforeach
+                                                </select>
                                             @endif
                                         @else
                                             <span class="badge bg-inverse-warning">Self Delivery</span>

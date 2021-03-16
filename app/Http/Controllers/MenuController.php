@@ -156,8 +156,8 @@ class MenuController extends Controller
      */
     public function destroy($id)
     {
-        Menu::destroy($id);
-        return redirect('menu')->with('flash_message', 'Menu deleted!');
+        Menu::where('id', $id)->update(['status' => '0']);
+        return redirect('menu')->with('flash_message', 'Menu Deactivated!');
     }
 
     /**

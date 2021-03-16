@@ -75,6 +75,7 @@ Route::middleware(['restaurant'])->group(function () {
     Route::resource('branch', 'App\Http\Controllers\BranchController');
     Route::post('updateOrderStatus', 'App\Http\Controllers\OrdersController@updateOrderStatus')->name('updateOrderStatus');
     Route::post('assignDriver', 'App\Http\Controllers\OrdersController@assignDriver')->name('assignDriver');
+    Route::post('requestDelivery', 'App\Http\Controllers\OrdersController@requestDelivery')->name('requestDelivery');
 
     // Livewire Route for active orders.
     Route::get('/activeOrders', \App\Http\Livewire\ActiveOrder::class);

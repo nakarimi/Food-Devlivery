@@ -52,5 +52,22 @@ jQuery(function ($) {
                 }
             });
         });
+
+        $(document).on('click','.request_delivery_btn',function(){
+            console.log("delivery requsted!");
+            let order_id = $(this).attr('order_id');
+            $.ajax({
+                type: 'POST',
+                url:'/requestDelivery',
+                data: {order_id:order_id},
+                success: function (data) {   
+                    $(this).closest('span').replaceWith('<span class="badge bg-inverse-primary">(Company Delivery) <br><span class="badge bg-inverse-danger">Pending</span></span>');             
+                    show_message("Devlivery requested!")
+                },
+                error: function (e) {
+                    alert("js error in order.js file.")
+                }
+            });
+        });
     });
 })

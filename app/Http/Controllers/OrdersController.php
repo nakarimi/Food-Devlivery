@@ -266,4 +266,17 @@ class OrdersController extends Controller
         Driver::where('id', $driver_id)->update(['status' => 'busy']);
         event(new \App\Events\UpdateEvent('Order Updated!'));
     }
+
+    /**
+     * Request Delivery for order.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     */
+    public function requestDelivery(Request $request) {
+
+        $id = $request['order_id'];
+        DeliveryDetails::where('order_id', $id)->update(['delivery_type' => 'company']);
+        event(new \App\Events\UpdateEvent('Order Updated!'));
+    }
 }
