@@ -45,7 +45,7 @@
                                                 <span class="badge bg-inverse-success">Own Delivery</span>
                                             @else
                                                 <select class="custom-select mr-sm-2" order_id={{$item->id}} name="driver_id" id="driver_id" required>
-                                                    <option value="" >Selece Driver</option>
+                                                    <option value="" disabled selected >Selece Driver</option>
                                                     @foreach($drivers as $driver)
                                                     @if($driver->status == 'free')
                                                         <option value="{{ $driver->id }}" >{{ $driver->title }}</option>
