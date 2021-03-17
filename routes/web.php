@@ -117,3 +117,5 @@ Route::middleware(['support'])->group(function () {
 Route::middleware(['customer'])->group(function () {
     Route::get('customer/dashboard', 'App\Http\Controllers\DashboardsController@customerDashboard')->name('customer.dashboard');
 });
+
+Route::resource('test', 'App\Http\Controllers\testController');
