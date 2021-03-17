@@ -1,6 +1,6 @@
 @extends('dashboards.restaurant.layouts.master')
 @section('title')
-    Create Item
+    اضافه کردن غذا جدید
 @stop
 
 @section('styles')
@@ -11,7 +11,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title mb-0">Create Item</h4>
+                    <h4 class="card-title mb-0">اضافه کردن غذا جدید</h4>
                 </div>
                 <div class="card-body">
                     @if ($errors->any())
