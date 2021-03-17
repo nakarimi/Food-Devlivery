@@ -1,6 +1,6 @@
 @extends('dashboards.restaurant.layouts.master')
 @section('title')
-    Create Item
+    اضافه کردن غذا جدید
 @stop
 
 @section('styles')

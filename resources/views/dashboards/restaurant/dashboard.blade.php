@@ -1,6 +1,6 @@
 @extends('dashboards.restaurant.layouts.master')
 @section('title')
-    Dashboard
+    داشبورد
 @stop
 
 @section('styles')

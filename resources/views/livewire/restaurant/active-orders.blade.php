@@ -1,5 +1,5 @@
 @section('title')
-    Active Orders
+    سفارشات فعال
 @stop
 
 <div class="row">

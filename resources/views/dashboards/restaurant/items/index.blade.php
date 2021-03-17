@@ -1,6 +1,6 @@
 @extends('dashboards.restaurant.layouts.master')
 @section('title')
-    Items
+    غذا ها
 @stop
 
 @section('styles')
