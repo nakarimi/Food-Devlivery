@@ -23,10 +23,10 @@ class OrdersController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index(Request $request)
-    {
-        return get_orders('active-orders', $request);
-    }
+//    public function index(Request $request)
+//    {
+//        return get_orders('active-orders', $request);
+//    }
 
     /**
      * Display a listing of old orders.

@@ -15,7 +15,7 @@ class ActiveOrder extends Component
     public function render()
     {
        // Get all wating orders, true (means realTime);
-       return get_orders('active-orders', NULL, true);
+       return get_orders('active-orders', NULL, true, $this->keyword);
     }
 
     // this name should be same as listener name
