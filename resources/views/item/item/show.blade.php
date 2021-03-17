@@ -1,10 +1,13 @@
 @extends('layouts.master')
+@section('title')
+   {{ get_item_details($item, Session::get('itemType'))->title}}
+@stop
 @section('content')
 <div class="container">
    <div class="row">
       <div class="col-md-12">
          <div class="card">
-            <div class="card-header">test</div>
+            <div class="card-header">{{ get_item_details($item, Session::get('itemType'))->title}}</div>
             <div class="profile-img-wrap" style="right: 0px; top: 10px; width: 190px;">
                <div class="profile-img">
                   <a href="#"><img alt="" src="{{ url('storage/profile_images/'.get_item_details($item, Session::get('itemType'))->thumbnail) }}"></a>
