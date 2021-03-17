@@ -1,6 +1,6 @@
 @extends('dashboards.restaurant.layouts.master')
 @section('title')
-    Menus
+    مینیو ها
 @stop
 
 @section('styles')
@@ -13,8 +13,8 @@
             <div class="card">
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
-                        <h4 class="card-title mb-0">Menus</h4>
-                        <a class="btn btn-success" href="{{route('menu.create')}}">Add New Menu</a>
+                        <h4 class="card-title mb-0">مینیو ها</h4>
+                        <a class="btn btn-success" href="{{route('menu.create')}}">اضافه کردن مینیو جدید</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -23,10 +23,10 @@
                             <thead>
                             <tr>
                                 <th class="disable_sort">#</th>
-                                <th class="disable_sort">Title</th>
-                                <th>Status</th>
-                                <th class="disable_sort">Contents</th>
-                                <th class="disable_sort">Actions</th>
+                                <th class="disable_sort">عنوان</th>
+                                <th>حالت</th>
+                                <th class="disable_sort">غذا ها</th>
+                                <th class="disable_sort">تغیرات</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -36,9 +36,9 @@
                                     <td>{{ $item->title }}</td>
                                     <td>
                                         @if($item->status == 1)
-                                            <span class="badge bg-inverse-success">Active</span>
+                                            <span class="badge bg-inverse-success">فعال</span>
                                         @else
-                                            <span class="badge bg-inverse-danger">Inactive</span>
+                                            <span class="badge bg-inverse-danger">غیر فعال</span>
                                         @endif
                                     </td>
                                     <td>{!! show_menu_itmes($item->items) !!}</td>

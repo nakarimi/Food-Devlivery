@@ -1,6 +1,6 @@
 @extends('dashboards.restaurant.layouts.master')
 @section('title')
-    Order 
+    Order
 @stop
 
 @section('styles')
@@ -13,7 +13,7 @@
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
                         <h4 class="card-title mb-0">{{ $order->title }} <b>[{{ ucfirst($order->status) }}]</b></h4>
-                    <a class="btn btn-warning" href="{{route('orders.index')}}"><i class="la la-arrow-left"></i>Back</a>
+                    <a class="btn btn-warning" href="{{url('activeOrders')}}"><i class="la la-arrow-left"></i>Back</a>
                     </div>
                     </div>
                 <div class="card-body">

@@ -1,14 +1,14 @@
 <div class="form-row">
    <div class="col">
       <div class="form-group{{ $errors->has('title') ? 'has-error' : ''}}">
-    <label for="title" class="control-label">{{ 'Title' }}</label>
+    <label for="title" class="control-label">{{ (get_role() == "restaurant") ? 'عنوان' : 'Title' }}</label>
     <input class="form-control" name="title" type="text" id="title" value="{{ $menu->title ?? ''}}" required>
     {!! $errors->first('title', '<p class="help-block">:message</p>') !!}
 </div>
    </div>
    <div class="col">
       <div class="form-group{{ $errors->has('status') ? 'has-error' : ''}}">
-    <label for="status" class="control-label">{{ 'Status' }}</label>
+    <label for="status" class="control-label">{{ (get_role() == "restaurant") ? 'حالت' : 'Status' }}</label>
     {{-- <input class="form-control" name="status" type="number" id="status" value="{{ $menu->status ?? ''}}" required> --}}
     <select class="custom-select mr-sm-2" name="status" id="status" required>
         <option value="1"  @if( (isset($menu->status)) && ($menu->status) == '1') selected="selected" @endif>Enable</option>
@@ -45,7 +45,7 @@
 </div>
 
 <div class="form-group{{ $errors->has('items') ? 'has-error' : ''}}">
-    <label for="items" class="control-label">{{ 'Items' }}</label>
+    <label for="items" class="control-label">{{ (get_role() == "restaurant") ? 'غذا ها' : 'Items' }}</label>
     {{-- <textarea class="form-control" rows="5" name="items" type="textarea" id="items" >{{ $menu->items ?? ''}}</textarea> --}}
     <select class="custom-select mr-sm-2" name="items[]" id="items" multiple required>
         @foreach($items as $item)
@@ -60,5 +60,5 @@
 </div>
 
 <div class="form-group">
-    <input class="btn btn-primary" type="submit" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}">
+    <input class="btn btn-primary" type="submit" value="{{ $formMode === 'edit' ? ((get_role() == "restaurant") ? 'ثبت کردن' : 'Update') : ((get_role() == "restaurant") ? 'اضافه کردن' : 'Create') }}">
 </div>
