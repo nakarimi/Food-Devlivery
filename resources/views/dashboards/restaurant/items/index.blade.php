@@ -14,8 +14,8 @@
          <div class="card">
             <div class="card-header">
                 <div class="d-flex justify-content-between">
-                    <h4 class="card-title mb-0">Items</h4>
-                    <a class="btn btn-success" href="{{route('item.create')}}">Add New Item</a>
+                    <h4 class="card-title mb-0">غذا ها</h4>
+                    <a class="btn btn-success" href="{{route('item.create')}}">اضافه کردن غذا جدید</a>
                 </div>
             </div>
 
@@ -25,11 +25,11 @@
                      <thead>
                         <tr>
                            <th class="disable_sort">#</th>
-                           <th class="disable_sort">Thumbnail</th>
-                           <th class="disable_sort">Title</th>
-                           <th>Price</th>
-                           <th>Status</th>
-                            <th class="disable_sort">Actions</th>
+                           <th class="disable_sort">تصویر</th>
+                           <th class="disable_sort">عنوان</th>
+                           <th>قیمت</th>
+                           <th>حالت</th>
+                            <th class="disable_sort">تغیرات</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -45,11 +45,11 @@
                                     <td>{{ get_item_details($item, Session::get('itemType'))->price }}</td>
                                     <td>
                                         @if(get_item_details($item, Session::get('itemType'))->details_status == "pending")
-                                            <span class="badge bg-inverse-warning">Pending</span>
+                                            <span class="badge bg-inverse-warning">معطل</span>
                                         @elseif (get_item_details($item, Session::get('itemType'))->detials_status == "rejected")
-                                            <span class="badge bg-inverse-danger">Rejected</span>
+                                            <span class="badge bg-inverse-danger">رد شده</span>
                                             @else
-                                            <span class="badge bg-inverse-success">Active</span>
+                                            <span class="badge bg-inverse-success">فعال</span>
                                         @endif
                                     </td>
                                     <td>

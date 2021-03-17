@@ -14,9 +14,9 @@
         <div class="page-header">
             <div class="row">
                 <div class="col-sm-12">
-                    <h3 class="page-title">Welcome {{auth()->user()->name}}!</h3>
+{{--                    <h3 class="page-title">خوش امدی {{auth()->user()->name}}!</h3>--}}
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item active">Dashboard</li>
+                        <li class="breadcrumb-item active">داشبورد</li>
                     </ul>
                 </div>
             </div>
@@ -30,7 +30,7 @@
                         <span class="dash-widget-icon"><i class="fa fa-cubes"></i></span>
                         <div class="dash-widget-info">
                             <h3>{{$todayOrders}}</h3>
-                            <span>Today Orders</span>
+                            <span>سفارشات امروز</span>
                         </div>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
                         <span class="dash-widget-icon"><i class="fa fa-usd"></i></span>
                         <div class="dash-widget-info">
                             <h3>{{$lastSevenDaysOrders}}</h3>
-                            <span>Last 7 Days Orders</span>
+                            <span>سفارشات ۷ روز اخر</span>
                         </div>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
                         <span class="dash-widget-icon"><i class="fa fa-diamond"></i></span>
                         <div class="dash-widget-info">
                             <h3>{{$thisMonthOrders}}</h3>
-                            <span>This Month Orders</span>
+                            <span> مجموعه سفارشات همین ماه</span>
                         </div>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
                         <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
                         <div class="dash-widget-info">
                             <h3>{{$lastMonthOrders}}</h3>
-                            <span>Last Month Orders</span>
+                            <span>مجموعه سفارشات ماه گذشته</span>
                         </div>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                     <div class="col-md-12 text-center">
                         <div class="card">
                             <div class="card-body">
-                                <h3 class="card-title">Orders Statistics Based on Status</h3>
+                                <h3 class="card-title">مجموعه سفارشات به اساس حالت‌ </h3>
                                 <div id="orders_status_chart"></div>
                             </div>
                         </div>

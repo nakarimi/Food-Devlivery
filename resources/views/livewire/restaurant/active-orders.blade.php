@@ -7,7 +7,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex justify-content-between">
-                    <h4 class="card-title mb-0">Active Orders</h4>
+                    <h4 class="card-title mb-0">سفارشات فعال</h4>
                 </div>
             </div>
             <div class="card-body">
@@ -17,7 +17,7 @@
             </div>
         </div>
     </div>
-   
+
 </div>
 </div>
 <!-- Datatable JS -->

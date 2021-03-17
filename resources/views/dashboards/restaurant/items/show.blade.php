@@ -35,27 +35,27 @@
                            <td>{{ $item->id }}</td>
                         </tr>
                          <tr>
-                           <th> Title </th>
+                           <th> عنوان </th>
                            <td> {{ get_item_details($item, Session::get('itemType'))->title ?? ''}} </td>
                         </tr>
                         <tr>
-                           <th> Branch </th>
+                           <th> رستورانت </th>
                            <td> {{ $item->branch->branchDetails->title }} </td>
                         </tr>
                         <tr>
-                           <th> Price </th>
+                           <th> قیمت </th>
                            <td> {{ get_item_details($item, Session::get('itemType'))->price }} </td>
                         </tr>
                         <tr>
-                           <th> Package Price </th>
+                           <th> قیمت پکیج </th>
                            <td> {{ get_item_details($item, Session::get('itemType'))->package_price }} </td>
                         </tr>
                         <tr>
-                           <th> Unit </th>
+                           <th> تعداد </th>
                            <td> {{ get_item_details($item, Session::get('itemType'))->unit }} </td>
                         </tr>
                         <tr>
-                           <th> Description </th>
+                           <th> توضیحات </th>
                            <td> {{ get_item_details($item, Session::get('itemType'))->description }} </td>
                         </tr>
                      </tbody>
@@ -63,15 +63,15 @@
                </div>
                <br>
                <div class="table-responsive">
-                  <h1>Item History</h1>
+                  <h1>گذشته غذا</h1>
                   <table class="table table-striped">
                      <thead>
-                        <th>ID</th>
-                        <th>title</th>
-                        <th>Price</th>
-                        <th>Unit</th>
-                        <th>Notes</th>
-                        <th>Status</th>
+                        <th>ای دی</th>
+                        <th>عنوان</th>
+                        <th>قیمت</th>
+                        <th>تعداد</th>
+                        <th>توضیحات</th>
+                        <th>حالت</th>
                      </thead>
                      <tbody>
                         @foreach($item->itemFullDetails as $detail)
@@ -83,7 +83,7 @@
                            <td>{{$detail->notes}}</td>
                            <td>
                               @if ($detail->details_status == "pending" and Auth::user()->role->name == "restaurant")
-                             <button class="btn btn-sm btn-info" disabled="disabled" >Pending</button>
+                             <button class="btn btn-sm btn-info" disabled="disabled" >معطل</button>
                               @elseif ($detail->details_status == "pending")
                                <form method="POST" action="{{ url('/approveItem') }}" accept-charset="UTF-8" style="display:inline">
                                  {{ csrf_field() }}
