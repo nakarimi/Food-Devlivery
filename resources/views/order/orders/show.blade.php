@@ -1,7 +1,4 @@
 @extends('layouts.master')
-@section('title')
-  {{ $order->title }}
-@stop
 @section('content')
 <div class="container">
    <div class="row">

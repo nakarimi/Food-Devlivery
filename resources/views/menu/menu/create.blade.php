@@ -1,7 +1,5 @@
 @extends('layouts.master')
-@section('title')
-   Create New Menu
-@stop
+
 @section('content')
     <div class="container">
         <div class="row">
