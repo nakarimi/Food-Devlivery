@@ -1,6 +1,6 @@
 @extends('dashboards.restaurant.layouts.master')
 @section('title')
-    Your Profile
+    Your Profile ({{ $branch->branchDetails->title }})
 @stop
 
 @section('styles')

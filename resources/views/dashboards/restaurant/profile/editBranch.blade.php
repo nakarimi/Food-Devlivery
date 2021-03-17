@@ -1,6 +1,6 @@
 @extends('dashboards.restaurant.layouts.master')
 @section('title')
-    Edit Branch
+    Edit ({{ $branch->branchDetails->title}})
 @stop
 
 @section('styles')

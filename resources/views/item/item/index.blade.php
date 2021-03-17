@@ -1,10 +1,13 @@
 @extends('layouts.master')
+@section('title')
+   Items
+@stop
 @section('content')
 <div class="container">
    <div class="row">
       <div class="col-md-12">
          <div class="card">
-            <div class="card-header">Item</div>
+            <div class="card-header">Items</div>
             <div class="card-body">
                <a href="{{ url('/item/create') }}" class="btn btn-success btn-sm" title="Add New Item">
                <i class="fa fa-plus" aria-hidden="true"></i> Add New
