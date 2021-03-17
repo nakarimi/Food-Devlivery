@@ -14,7 +14,7 @@
                <form method="POST" action="{{ url('driver' . '/' . $driver->id) }}" accept-charset="UTF-8" style="display:inline">
                   {{ method_field('DELETE') }}
                   {{ csrf_field() }}
-                  <button type="submit" class="btn btn-danger btn-sm" title="Delete Driver" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
+                  <button type="submit" class="btn btn-danger btn-sm" title="Delete Driver" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i> Inactive</button>
                </form>
                <br/>
                <br/>
@@ -30,10 +30,6 @@
                            <td> {{ $driver->title }} </td>
                         </tr>
                         <tr>
-                           <th> User Id </th>
-                           <td> {{ $driver->user_id }} </td>
-                        </tr>
-                        <tr>
                            <th> Contact </th>
                            <td> {{ $driver->contact }} </td>
                         </tr>
@@ -43,7 +39,7 @@
                         </tr>
                         <tr>
                            <th> Status </th>
-                            <td><span class="badge bg-inverse-success"> {{ucfirst($driver->status)}}</span></td>
+                           <td><span class="badge @if($driver->status == 'inactive') {{'bg-inverse-danger'}} @else {{'bg-inverse-success'}} @endif"> {{ucfirst($driver->status)}}</span></td>
                         </tr>
                      </tbody>
                   </table>

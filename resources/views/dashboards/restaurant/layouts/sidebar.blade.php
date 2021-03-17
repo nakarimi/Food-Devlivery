@@ -31,8 +31,8 @@
                 </li>
 
                 <li @if (\Request::is('paymentHistory')) class="active" @endif>
-                    <a href="{{ route('payment.index') }}"><i class="la la-money"></i><span>پرداخت ها</span></a>
-                </li>
+                    <a href="{{ route('paymentHistory') }}"><i class="la la-money"></i><span>پرداخت ها</span></a>
+                </li> 
 
         </div>
     </div>

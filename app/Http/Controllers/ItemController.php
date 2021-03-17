@@ -248,9 +248,8 @@ class ItemController extends Controller
      */
     public function destroy($id)
     {
-        Item::destroy($id);
-
-        return redirect('item')->with('flash_message', 'Item deleted!');
+        Item::where('id', $id)->update(['status' => '0']);
+        return redirect('item')->with('flash_message', 'Item Inactivated!');
     }
 
      /**

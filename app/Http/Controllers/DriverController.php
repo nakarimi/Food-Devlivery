@@ -126,9 +126,8 @@ class DriverController extends Controller
      */
     public function destroy($id)
     {
-        Driver::destroy($id);
-
-        return redirect('driver')->with('flash_message', 'Driver deleted!');
+        Driver::where('id', $id)->update(['status' => 'inactive']);
+        return redirect('driver')->with('flash_message', 'Driver Inactivated!');
     }
 
     public function dropdown_data($id = false) {
