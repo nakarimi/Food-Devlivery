@@ -249,7 +249,7 @@ class OrdersController extends Controller
             $field => Carbon::now()->format('Y-m-d H:i:s'),
         ];
         OrderTimeDetails::where('order_id', $id)->update($updateDeliveryTimeDetails);
-        event(new \App\Events\UpdateEvent('Order Updated!'));
+        // event(new \App\Events\UpdateEvent('Order Updated!'));
 
     }
 
@@ -290,11 +290,12 @@ class OrdersController extends Controller
     public function update_driver_status($order_id, $status) {
         // Get driver id from order.
         $order = Order::findOrFail($order_id);
-        $driver_id = $order->deliveryDetails->driver->id;
-        // Update status of driver.
-        $driver = Driver::findOrFail($driver_id);
-        $driver->status = $status;
-        $driver->save();
+        if ($order->has_delivery != 0) {
+            $driver_id = $order->deliveryDetails->driver->id;
+            // Update status of driver.
+            $driver = Driver::findOrFail($driver_id);
+            $driver->status = $status;
+            $driver->save();
+        }
     }
-
 }

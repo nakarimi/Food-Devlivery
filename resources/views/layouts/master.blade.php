@@ -48,8 +48,10 @@
         <!-- Header -->
     @include('layouts.top-header')
     <!-- /Header -->
-
-        <!-- Sidebar -->
+    
+    @include('layouts.alert')
+    
+    <!-- Sidebar -->
     @include('layouts.sidebar')
     <!-- /Sidebar -->
 
