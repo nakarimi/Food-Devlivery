@@ -51,8 +51,10 @@
         <!-- Header -->
     @include('dashboards.restaurant.layouts.top-header')
     <!-- /Header -->
+    
+    @include('layouts.alert')
 
-        <!-- Sidebar -->
+    <!-- Sidebar -->
     @include('dashboards.restaurant.layouts.sidebar')
     <!-- /Sidebar -->
 
