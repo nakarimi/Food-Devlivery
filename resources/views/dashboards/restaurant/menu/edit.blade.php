@@ -1,6 +1,7 @@
 @extends('dashboards.restaurant.layouts.master')
+
 @section('title')
-    Menu
+    Edit {{ $menu->title }}
 @stop
 
 @section('styles')
@@ -11,7 +12,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title mb-0">Edit Menu #{{ $menu->id }}</h4>
+                    <h4 class="card-title mb-0">Edit {{ $menu->title }}</h4>
                 </div>
                 <div class="card-body">
                     @if ($errors->any())

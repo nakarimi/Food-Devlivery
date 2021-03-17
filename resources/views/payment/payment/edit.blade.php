@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('title')
+  Edit Payment {{ $payment->date_and_time }}
+@stop
 @section('content')
     <div class="container">
         <div class="row">
@@ -7,7 +9,7 @@
 
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">Edit Payment #{{ $payment->id }}</div>
+                    <div class="card-header">Edit Payment {{ $payment->date_and_time }}</div>
                     <div class="card-body">
                         <a href="{{ url('/payment') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
                         <br />

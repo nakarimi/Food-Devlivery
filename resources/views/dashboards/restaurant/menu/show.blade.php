@@ -1,6 +1,6 @@
 @extends('dashboards.restaurant.layouts.master')
 @section('title')
-    Single Menu
+    {{ $menu->title }}
 @stop
 
 @section('styles')

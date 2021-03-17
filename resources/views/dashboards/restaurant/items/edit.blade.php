@@ -1,6 +1,6 @@
 @extends('dashboards.restaurant.layouts.master')
 @section('title')
-    Dashboard
+    Edit ({{ get_item_details($item, Session::get('itemType'))->title }})
 @stop
 
 @section('styles')

@@ -1,10 +1,13 @@
 @extends('layouts.master')
+@section('title')
+   Driver {{ $driver->title }}
+@stop
 @section('content')
 <div class="container">
    <div class="row">
       <div class="col-md-12">
          <div class="card">
-            <div class="card-header">Driver {{ $driver->id }}</div>
+            <div class="card-header">Driver {{ $driver->title }}</div>
             <div class="card-body">
                <a href="{{ url('/driver') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
                <a href="{{ url('/driver/' . $driver->id . '/edit') }}" title="Edit Driver"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>

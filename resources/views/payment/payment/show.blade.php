@@ -1,4 +1,7 @@
 @extends('layouts.master')
+@section('title')
+   Payment {{ $payment->date_and_time }}
+@stop
 @section('content')
 <div class="container">
    <div class="row">
