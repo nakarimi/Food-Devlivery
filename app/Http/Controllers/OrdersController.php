@@ -123,7 +123,6 @@ class OrdersController extends Controller
 			'customer_id' => 'required',
 			'status' => 'required',
 			'reciever_phone' => 'required',
-//			'contents' => 'required'
 		]);
         $requestData = $request->all();
 
@@ -135,28 +134,41 @@ class OrdersController extends Controller
         }
 
         $order = Order::findOrFail($id);
-        $order->update($requestData);
 
-        if ($deliver_update) {
-            $updateDeliveryDetails = [
-                'delivery_type' => $requestData['delivery_type'],
-                'delivery_adress' => $requestData['delivery_adress'],
-                'driver_id' => $requestData['driver_id'],
-            ];
+        try {
 
-            // Update delivery details. First check if there is a record for it, if not then insert a new record.
-            $record = DeliveryDetails::where('order_id', $id)->count();
-            if ($record) {
-                DeliveryDetails::where('order_id', $id)->update($updateDeliveryDetails);
+            DB::beginTransaction();
+
+            $order->update($requestData);
+
+            if ($deliver_update) {
+                $updateDeliveryDetails = [
+                    'delivery_type' => $requestData['delivery_type'],
+                    'delivery_adress' => $requestData['delivery_adress'],
+                    'driver_id' => $requestData['driver_id'],
+                ];
+
+                // Update delivery details. First check if there is a record for it, if not then insert a new record.
+                $record = DeliveryDetails::where('order_id', $id)->count();
+                if ($record) {
+                    DeliveryDetails::where('order_id', $id)->update($updateDeliveryDetails);
+                }
+                else {
+                    $updateDeliveryDetails['order_id'] = $id;
+                    DB::table('order_delivery')->insertGetId($updateDeliveryDetails);
+                }
+
             }
-            else {
-                $updateDeliveryDetails['order_id'] = $id;
-                DB::table('order_delivery')->insertGetId($updateDeliveryDetails);
-            }
+            DB::commit();
+            event(new \App\Events\UpdateEvent('Order Updated!'));
+            return redirect('/activeOrders')->with('flash_message', 'Order updated!');
 
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('flash_message', 'Sorry,  update faced a problem!');
         }
-        event(new \App\Events\UpdateEvent('Order Updated!'));
-        return redirect()->back()->with('flash_message', 'Order updated!');
+        
     }
 
     /**
