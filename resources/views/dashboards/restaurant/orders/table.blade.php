@@ -2,13 +2,13 @@
     <thead>
         <tr>
             <th class="disable_sort">#</th>
-            <th class="disable_sort">Time</th>
-            <th class="disable_sort">Customer</th>
-            <th>Total</th>
-            <th class="disable_sort">Delivery</th>
-            <th class="disable_sort">Contents</th>
-            <th>Status</th>
-            <th class="disable_sort">Actions</th>
+            <th class="disable_sort">زمان</th>
+            <th class="disable_sort">مشتری</th>
+            <th>مجموعه</th>
+            <th class="disable_sort">نوعیت انتقال</th>
+            <th class="disable_sort">غذا ها</th>
+            <th>حالت</th>
+            <th class="disable_sort">تغیرات</th>
         </tr>
     </thead>
     <tbody>

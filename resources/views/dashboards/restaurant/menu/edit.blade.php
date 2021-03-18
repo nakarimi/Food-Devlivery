@@ -1,7 +1,7 @@
 @extends('dashboards.restaurant.layouts.master')
 
 @section('title')
-    Edit {{ $menu->title }}
+     ویرایش {{ $menu->title }}
 @stop
 
 @section('styles')

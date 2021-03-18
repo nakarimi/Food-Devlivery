@@ -1,6 +1,6 @@
 @extends('dashboards.restaurant.layouts.master')
 @section('title')
-   Orders History
+   تاریخجه سفارشات
 @stop
 
 @section('styles')
@@ -13,7 +13,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
-                        <h4 class="card-title mb-0">Orders</h4>
+                        <h4 class="card-title mb-0">سفارشات</h4>
                     </div>
                 </div>
                 <div class="card-body">

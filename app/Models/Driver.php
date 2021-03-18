@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\User;
 
 class Driver extends Model
 {
@@ -43,5 +44,9 @@ class Driver extends Model
     public function getDescriptionForEvent($eventName)
     {
         return __CLASS__ . " model has been {$eventName}";
+    }
+
+    public function user(){
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }

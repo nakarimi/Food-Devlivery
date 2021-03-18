@@ -192,7 +192,7 @@ class DatabaseSeeder extends Seeder
 
         DB::table('drivers')->insert(array(
             array('id' => '1','created_at' => '2021-03-11 05:17:44','updated_at' => '2021-03-11 05:17:44','title' => 'Driver','user_id' => '3','contact' => '45854654','status' => 'free','token' => NULL),
-            array('id' => '2','created_at' => '2021-03-11 05:18:32','updated_at' => '2021-03-11 05:18:32','title' => 'Paik Motor1','user_id' => '7','contact' => '45854654','status' => 'free','token' => NULL)          
+            array('id' => '2','created_at' => '2021-03-11 05:18:32','updated_at' => '2021-03-11 05:18:32','title' => 'Paik Motor1','user_id' => '6','contact' => '45854654','status' => 'free','token' => NULL)          
         ));
         // \App\Models\User::factory(10)->create();
     }
