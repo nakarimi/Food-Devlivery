@@ -18,15 +18,6 @@ use Carbon\Carbon;
 
 class OrdersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\View\View
-     */
-//    public function index(Request $request)
-//    {
-//        return get_orders('active-orders', $request);
-//    }
 
     /**
      * Display a listing of old orders.

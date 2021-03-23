@@ -318,7 +318,7 @@ if (!function_exists('get_orders')){
 
         // Real time template are in livewire dir.
         if ($realTime) {
-            return ($type == 'waiting-orders') ? view('livewire.waiting-orders', compact('orders', 'drivers')) : view('livewire.active-order', compact('orders', 'drivers'));
+            return view('livewire.waiting-orders', compact('orders', 'drivers'));
         }
 
         // Order history routes are using main template.
