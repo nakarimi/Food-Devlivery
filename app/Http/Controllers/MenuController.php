@@ -81,6 +81,10 @@ class MenuController extends Controller
         $requestData['items'] = json_encode($requestData['items']);
 
         Menu::create($requestData);
+        if (get_role() == "restaurant"){
+            $userId = \auth()->user()->id;
+            send_notification([1], $userId, 'Has added New Menu');
+        }
         return redirect('menu')->with('flash_message', 'Menu added!');
     }
 

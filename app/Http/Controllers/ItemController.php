@@ -121,6 +121,8 @@ class ItemController extends Controller
         }
 
         if ($status == 'pending') {
+            $userId = \auth()->user()->id;
+            send_notification([1], $userId, 'Has added New Item');
             return redirect('pendingItems')->with('flash_message', 'Item added!');
         }
 
@@ -321,7 +323,13 @@ class ItemController extends Controller
 
         // Set session, so that it consider this item as approve item, to avoid errors.
         Session::put('itemType', 'approved');
-         return redirect()->back()->with('flash_message', 'Item Approved!');
+
+        // Send Notification to restaurant.
+        $branchId = Item::find($itemId)->branch_id;
+        $notifyUser = Branch::find($branchId)->user_id;
+        send_notification([$notifyUser], 1, '('.$item->title.') توسط ادمین قبول شد');
+        
+        return redirect()->back()->with('flash_message', 'Item Approved!');
     }
 
     public function rejectItem(Request $request)

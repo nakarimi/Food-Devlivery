@@ -3,6 +3,7 @@
 use App\Models\Branch;
 use App\Models\Item;
 use \App\Models\Menu;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Order;
@@ -323,5 +324,14 @@ if (!function_exists('get_orders')){
 
         // Order history routes are using main template.
         return view('order.orders.index', compact('orders', 'drivers'));
+    }
+}
+
+// Send notification based on user Ids and message we provide.
+if (!function_exists('send_notification')){
+    function send_notification(array $notifyUsers, $userId, $message) {
+        event(new \App\Events\NotificationEvent('Notification'));
+        $notifyUsers = User::whereIn('id', $notifyUsers)->get();
+        \Illuminate\Support\Facades\Notification::send($notifyUsers, new \App\Notifications\UpdateNotification($message, $userId));
     }
 }

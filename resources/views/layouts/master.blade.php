@@ -48,9 +48,9 @@
         <!-- Header -->
     @include('layouts.top-header')
     <!-- /Header -->
-    
+
     @include('layouts.alert')
-    
+
     <!-- Sidebar -->
     @include('layouts.sidebar')
     <!-- /Sidebar -->
@@ -88,6 +88,23 @@
 
 <!-- Custom JS -->
 <script src="{{asset('js/app.js')}}"></script>
+
+<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+<script>
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+        cluster: '{{ env('PUSHER_APP_CLUSTER') }}'
+    });
+
+    var channel = pusher.subscribe('food-app-notification');
+    channel.bind('notification-event', function(data) {
+        if (data['message'] === "Notification") {
+           Livewire.emit('refreshNotifications');
+        }
+    });
+</script>
 
 <!-- Specific js of pages -->
 @yield('scripts')
