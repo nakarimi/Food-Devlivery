@@ -76,7 +76,7 @@ if (!function_exists('get_item_details')) {
 // This function loads all items of the current user based on status.
 // Status can be an array so it will return multiple items of user.
 if (!function_exists('loadUserItemsData')) {
-    function loadUserItemsData($status, $userId = null)
+    function loadUserItemsData($status, $userId = null, $count = false)
     {
         if ($userId == null){
             $userId = auth()->user()->id;
@@ -89,7 +89,7 @@ if (!function_exists('loadUserItemsData')) {
         }
 
         // Get user Items.
-        $items =  getUserItemsBasedOnStatus($branchIds, $status);
+        $items =  getUserItemsBasedOnStatus($branchIds, $status, $count);
         return $items;
     }
 }
@@ -107,11 +107,17 @@ if (!function_exists('getUserBranches')){
 // This will return items based on status one or multiple status.
 if (!function_exists('getUserItemsBasedOnStatus')){
 
-    function getUserItemsBasedOnStatus ($branchIds, $status){
+    function getUserItemsBasedOnStatus ($branchIds, $status, $count){
         $item = Item::whereHas(
             'itemFullDetails', function ($query) use ($status) {
             $query->whereIn('details_status', $status);
-        })->whereIn('branch_id',$branchIds)->get();
+        })->whereIn('branch_id',$branchIds);
+        if ($count){
+            $item = $item->count();
+        }
+        else {
+            $item = $item->get();
+        }
         return $item;
     }
 }
