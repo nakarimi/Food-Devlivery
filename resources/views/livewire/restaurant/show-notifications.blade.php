@@ -10,18 +10,17 @@
         <div class="noti-content">
             <ul class="notification-list">
                 @foreach(auth()->user()->unreadNotifications as $notification)
-                    <li class="notification-message"><a href="#"><div class="media"><div class="media-body d-flex">
-                                    <p class="noti-details"><span class="noti-title">{{ $notification->data['message'] }}.</span></p>
+                    <li class="notification-message"><a href="#"><div class="media"><div class="media-body">
+                                    <div class="d-flex">
+                                        <p class="noti-details"><span class="noti-title">{{ $notification->data['message'] }}.</span></p>
+                                        <button class="read-notification-button" notification_id="{{$notification->id}}" title="Mark as read" style="right: 90%; border: none; position: absolute"><i class="la la-check"></i></button>
+                                    </div>
                                     <p class="noti-time"><span class="notification-time"> {{$notification->created_at->diffForHumans()}}</span></p>
-                                    <button class="read-notification-button" notification_id="{{$notification->id}}" title="Mark as read" style="right: 90%; border: none; position: absolute"><i class="la la-check"></i></button>
                                 </div></div></a>
 
                     </li>
                 @endforeach
             </ul>
-        </div>
-        <div class="topnav-dropdown-footer">
-            <a href="activities.html">View all Notifications</a>
         </div>
     </div>
 </li>

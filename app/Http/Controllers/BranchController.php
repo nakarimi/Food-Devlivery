@@ -208,6 +208,8 @@ class BranchController extends Controller
         }
 
         if (get_role() == "restaurant"){
+            $userId = \auth()->user()->id;
+            send_notification([1], $userId, 'Updated its Branch Details');
             $this->changeStatusToOld($branch->id, $details_id, 'pending', true);
         }
         else {
@@ -282,6 +284,8 @@ class BranchController extends Controller
         $branch->status = "approved";
         $branch->save();
         $this->changeStatusToOld($businessId, $detialId, null, true);
+        $notifyUser = Branch::find($businessId)->user_id;
+        send_notification([$notifyUser], 1, 'تغیرات روی پروفایل تان توسط ادمین قبول شد');
         return redirect()->back()->with('flash_message', 'Branch Approved!');
     }
 
@@ -291,6 +295,8 @@ class BranchController extends Controller
         $branch = BranchDetails::findOrFail($detialId);
         $branch->status = "rejected";
         $branch->save();
+        $notifyUser = Branch::find($branch->business_id)->user_id;
+        send_notification([$notifyUser], 1, 'تغیرات روی پروفایل تان توسط ادمین رد شد');
         return redirect()->back()->with('flash_message', 'Branch Rejected!');
     }
 

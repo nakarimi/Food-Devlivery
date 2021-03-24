@@ -235,6 +235,8 @@ class ItemController extends Controller
         }
 
         if ($status == 'pending') {
+            $userId = \auth()->user()->id;
+            send_notification([1], $userId, 'Updated an Item');
             return redirect('pendingItems')->with('flash_message', 'Item Updated!');
         }
 
@@ -328,7 +330,7 @@ class ItemController extends Controller
         $branchId = Item::find($itemId)->branch_id;
         $notifyUser = Branch::find($branchId)->user_id;
         send_notification([$notifyUser], 1, '('.$item->title.') توسط ادمین قبول شد');
-        
+
         return redirect()->back()->with('flash_message', 'Item Approved!');
     }
 
@@ -339,6 +341,11 @@ class ItemController extends Controller
         $item->notes = $request->note;
         $item->details_status = "rejected";
         $item->save();
+
+        // Send Notification to restaurant.
+        $branchId = Item::find($item->item_id)->branch_id;
+        $notifyUser = Branch::find($branchId)->user_id;
+        send_notification([$notifyUser], 1, '('.$item->title.') توسط ادمین رد شد');
          return redirect()->back()->with('flash_message', 'Item Rejected!');
     }
 

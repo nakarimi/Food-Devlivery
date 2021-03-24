@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,7 +12,7 @@ class CustomerRequests extends Controller
 {
     public function submit_new_order(Request $request)
     {
-        validateOrderInputs($request);	
+        validateOrderInputs($request);
         $requestData = $request->all();
         $has_delivery = ($requestData['delivery_type'] != 'self') ? true : false;
 
@@ -32,10 +33,10 @@ class CustomerRequests extends Controller
                 'contents' => $requestData['contents'],
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ];
-    
+
             // Add order to table.
             $order_id = DB::table('orders')->insertGetId($newOrder);
-    
+
             if ($has_delivery) {
                 $updateDeliveryDetails = [
                     'order_id' => $order_id,
@@ -47,7 +48,10 @@ class CustomerRequests extends Controller
                 DB::table('order_delivery')->insertGetId($updateDeliveryDetails);
             }
             DB::commit();
+            // Update the active orders page and send notification.
             // event(new \App\Events\UpdateEvent('Order Updated!'));
+            $notifyUser = Branch::find($requestData['branch_id'])->user_id;
+            send_notification([$notifyUser], 1, 'سفارش جدید ااضافه شد');
             return 1;
 
 
@@ -60,6 +64,6 @@ class CustomerRequests extends Controller
     public function update_order(Request $request) {
         validateOrderInputs($request);
         $requestData = $request->all();
-        update_order($requestData, $requestData['order_id'], true);   
+        update_order($requestData, $requestData['order_id'], true);
     }
 }
