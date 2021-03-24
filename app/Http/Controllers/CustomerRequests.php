@@ -47,7 +47,7 @@ class CustomerRequests extends Controller
                 DB::table('order_delivery')->insertGetId($updateDeliveryDetails);
             }
             DB::commit();
-            // event(new \App\Events\UpdateEvent('Order Updated!'));
+            event(new \App\Events\UpdateEvent('New Order Recieved!'));
             return 1;
 
 

@@ -166,7 +166,7 @@ class OrdersController extends Controller
             $field => Carbon::now()->format('Y-m-d H:i:s'),
         ];
         OrderTimeDetails::where('order_id', $id)->update($updateDeliveryTimeDetails);
-        // event(new \App\Events\UpdateEvent('Order Updated!'));
+        event(new \App\Events\UpdateEvent('Order Updated!'));
 
     }
 
