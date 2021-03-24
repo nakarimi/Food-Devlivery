@@ -43,7 +43,7 @@
                                     <td>{{ $item->branchDetails->title }}</td>
                                     <td>{{ $item->customer->name }} <br> ({{$item->reciever_phone}}) </td>
                                     <td class="max-width200">{!! show_order_itmes($item->contents) !!}</td>
-                                    <td>
+                                    <td class='@if ($item->deliveryDetails->driver) hasDriver @endif '>
                                         @if($item->has_delivery == 1)
                                             @if($item->deliveryDetails->delivery_type == 'own')
                                                 <span class="badge bg-inverse-success">Own Delivery</span>
@@ -109,7 +109,9 @@
                             @endforeach
                             </tbody>
                         </table>
-                        <div class="pagination-wrapper"> {!! $orders->appends(['search' => Request::get('search')])->render() !!} </div>
+                        <div class="pagination-wrapper"> 
+                            {!! $orders->appends(['search' => Request::get('search')])->render() !!} 
+                        </div>
                     </div>
                 </div>
             </div>

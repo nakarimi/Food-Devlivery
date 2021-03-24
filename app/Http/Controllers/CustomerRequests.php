@@ -32,22 +32,30 @@ class CustomerRequests extends Controller
                 'contents' => $requestData['contents'],
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ];
-    
-            // Add order to table.
-            $order_id = DB::table('orders')->insertGetId($newOrder);
-    
-            if ($has_delivery) {
-                $updateDeliveryDetails = [
-                    'order_id' => $order_id,
-                    'delivery_type' => $requestData['delivery_type'],
-                    'delivery_adress' => $requestData['delivery_adress'],
-                    'driver_id' => NULL,
-                ];
-                // Insert delivery details.
-                DB::table('order_delivery')->insertGetId($updateDeliveryDetails);
+
+            // This loop here is for speed test issues and will be removed.
+            for ($k=0; $k < 1; $k++) {
+            	// Add order to table.
+	            $order_id = DB::table('orders')->insertGetId($newOrder);
+	    
+	            if ($has_delivery) {
+	                $updateDeliveryDetails = [
+	                    'order_id' => $order_id,
+	                    'delivery_type' => $requestData['delivery_type'],
+	                    'delivery_adress' => $requestData['delivery_adress'],
+	                    'driver_id' => NULL,
+	                ];
+	                // Insert delivery details.
+	                DB::table('order_delivery')->insertGetId($updateDeliveryDetails);
+	            }
+	            
+	            event(new \App\Events\UpdateEvent('New Order Recieved!'));
+	            if (($k % 5) == 0) {
+	            	sleep(0.25);
+	            }
             }
+    
             DB::commit();
-            event(new \App\Events\UpdateEvent('New Order Recieved!'));
             return 1;
 
 

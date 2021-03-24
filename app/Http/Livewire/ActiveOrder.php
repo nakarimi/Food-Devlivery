@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use Livewire\WithPagination;
 use App\Models\Driver;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
@@ -9,8 +10,13 @@ use Livewire\Component;
 
 class ActiveOrder extends Component
 {
+     use WithPagination;
+     
     public $listeners = ['refreshActiveOrders'];
     public $keyword;
+    protected $paginationTheme = 'bootstrap';
+
+   
 
     public function render()
     {
