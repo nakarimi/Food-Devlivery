@@ -31,4 +31,18 @@ class HomeController extends Controller
         }
         return redirect('/home');
     }
+
+    public function markNotificationAsRead(Request $request)
+    {
+        $notificationid = $request->id;
+        if ($notificationid == "all"){
+            auth()->user()->notifications()->update(['read_at' => now()]);
+            return true;
+        }
+        $notification = auth()->user()->notifications()->find($notificationid);
+        if($notification) {
+            $notification->markAsRead();
+        }
+        return true;
+    }
 }
