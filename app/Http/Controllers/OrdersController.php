@@ -18,15 +18,6 @@ use Carbon\Carbon;
 
 class OrdersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\View\View
-     */
-//    public function index(Request $request)
-//    {
-//        return get_orders('active-orders', $request);
-//    }
 
     /**
      * Display a listing of old orders.
@@ -35,43 +26,6 @@ class OrdersController extends Controller
      */
     public function orderHistory(Request $request) {
         return get_orders('history', $request);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\View\View
-     */
-    // public function create()
-    // {
-    //     return view('order.orders.create');
-    // }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function store(Request $request)
-    {
-        $this->validate($request, [
-			'title' => 'required',
-			'branch_id' => 'required',
-			'customer_id' => 'required',
-			'has_delivery' => 'required',
-			'total' => 'required',
-			'commission_value' => 'required',
-			'status' => 'required',
-			'reciever_phone' => 'required',
-			'contents' => 'required'
-		]);
-        $requestData = $request->all();
-
-        Order::create($requestData);
-        event(new \App\Events\UpdateEvent('Order Updated!'));
-        return redirect('orders')->with('flash_message', 'Order added!');
     }
 
     /**
@@ -117,58 +71,9 @@ class OrdersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-			'title' => 'required',
-			'branch_id' => 'required',
-			'customer_id' => 'required',
-			'status' => 'required',
-			'reciever_phone' => 'required',
-		]);
+        validateOrderInputs($request);
         $requestData = $request->all();
-
-        $deliver_update = false;
-
-        if ($requestData['delivery_type'] != 'self') {
-            $requestData['has_delivery'] = 1;
-            $deliver_update = true;
-        }
-
-        $order = Order::findOrFail($id);
-
-        try {
-
-            DB::beginTransaction();
-
-            $order->update($requestData);
-
-            if ($deliver_update) {
-                $updateDeliveryDetails = [
-                    'delivery_type' => $requestData['delivery_type'],
-                    'delivery_adress' => $requestData['delivery_adress'],
-                    'driver_id' => $requestData['driver_id'],
-                ];
-
-                // Update delivery details. First check if there is a record for it, if not then insert a new record.
-                $record = DeliveryDetails::where('order_id', $id)->count();
-                if ($record) {
-                    DeliveryDetails::where('order_id', $id)->update($updateDeliveryDetails);
-                }
-                else {
-                    $updateDeliveryDetails['order_id'] = $id;
-                    DB::table('order_delivery')->insertGetId($updateDeliveryDetails);
-                }
-
-            }
-            DB::commit();
-            event(new \App\Events\UpdateEvent('Order Updated!'));
-            return redirect('/activeOrders')->with('flash_message', 'Order updated!');
-
-
-        } catch (\Exception $e) {
-            DB::rollback();
-            return redirect()->back()->with('flash_message', 'Sorry,  update faced a problem!');
-        }
-        
+        update_order($requestData, $id);   
     }
 
     /**

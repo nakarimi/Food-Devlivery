@@ -4,72 +4,62 @@ namespace App\Http\Controllers;
 
 use Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class CustomerRequests extends Controller
 {
     public function submit_new_order(Request $request)
     {
-
-		$validator = Validator::make($request->all(), 
-			[ 
-				'branch_id' => 'required|integer',
-				'customer_id' => 'required|integer',
-				'has_delivery' => 'required',
-				'total' => 'required|integer',
-				'commission_value' => 'required',
-				'status' => 'required',
-				'reciever_phone' => 'required',  
-				'contents' => 'required', 
-			]
-		);  
- 
-         if ($validator->fails()) {  
-           return response()->json(['error'=>$validator->errors()], 401); 
-        }   
-
-    	return "weldone";
-
+        validateOrderInputs($request);	
         $requestData = $request->all();
-
-        $has_delivery = false;
-
-        if ($requestData['delivery_type'] != 'self') {
-            $requestData['has_delivery'] = 1;
-            $has_delivery = true;
-        }
+        $has_delivery = ($requestData['delivery_type'] != 'self') ? true : false;
 
         try {
 
+            // Since we deal with multiple tables, so we use transactions for handling conflicts and other issues.
             DB::beginTransaction();
 
-            $order->insert($requestData);
-
+            $newOrder = [
+                'branch_id' => $requestData['branch_id'],
+                'customer_id' => $requestData['customer_id'],
+                'has_delivery' => ($has_delivery) ? '1' : '0',
+                'total' => $requestData['total'],
+                'commission_value' => $requestData['commission_value'],
+                'status' => 'pending',
+                'note' => $requestData['note'],
+                'reciever_phone' => $requestData['reciever_phone'],
+                'contents' => $requestData['contents'],
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            ];
+    
+            // Add order to table.
+            $order_id = DB::table('orders')->insertGetId($newOrder);
+    
             if ($has_delivery) {
                 $updateDeliveryDetails = [
+                    'order_id' => $order_id,
                     'delivery_type' => $requestData['delivery_type'],
                     'delivery_adress' => $requestData['delivery_adress'],
                     'driver_id' => NULL,
                 ];
-
-                // Update delivery details. First check if there is a record for it, if not then insert a new record.
-                $record = DeliveryDetails::where('order_id', $id)->count();
-                if ($record) {
-                    DeliveryDetails::where('order_id', $id)->update($updateDeliveryDetails);
-                }
-                else {
-                    $updateDeliveryDetails['order_id'] = $id;
-                    DB::table('order_delivery')->insertGetId($updateDeliveryDetails);
-                }
-
+                // Insert delivery details.
+                DB::table('order_delivery')->insertGetId($updateDeliveryDetails);
             }
             DB::commit();
-            event(new \App\Events\UpdateEvent('Order Updated!'));
-            return redirect('/activeOrders')->with('flash_message', 'Order updated!');
+            // event(new \App\Events\UpdateEvent('Order Updated!'));
+            return 1;
 
 
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->back()->with('flash_message', 'Sorry,  update faced a problem!');
+            return -1;
         }
+    }
+
+    public function update_order(Request $request) {
+        validateOrderInputs($request);
+        $requestData = $request->all();
+        update_order($requestData, $requestData['order_id'], true);   
     }
 }

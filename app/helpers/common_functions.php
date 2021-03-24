@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Driver;
 use Carbon\Carbon;
+use App\Models\DeliveryDetails;
+
 
 if (!function_exists('save_file')) {
      /**
@@ -318,10 +320,90 @@ if (!function_exists('get_orders')){
 
         // Real time template are in livewire dir.
         if ($realTime) {
-            return ($type == 'waiting-orders') ? view('livewire.waiting-orders', compact('orders', 'drivers')) : view('livewire.active-order', compact('orders', 'drivers'));
+            return view('livewire.waiting-orders', compact('orders', 'drivers'));
         }
 
         // Order history routes are using main template.
         return view('order.orders.index', compact('orders', 'drivers'));
     }
 }
+
+
+// This will return menu items for views.
+if (!function_exists('update_order')){
+    function update_order ($requestData, $id, $api = false) {
+        $deliver_update = false;
+    
+        if ($requestData['delivery_type'] != 'self') {
+            $requestData['has_delivery'] = 1;
+            $deliver_update = true;
+        }
+        
+        try {
+            
+            $order = Order::findOrFail($id);
+
+            DB::beginTransaction();
+            
+            $orderData = [
+                'branch_id' => $requestData['branch_id'],
+                'customer_id' => $requestData['customer_id'],
+                'has_delivery' => $requestData['has_delivery'],
+                'total' => $requestData['total'],
+                'commission_value' => $requestData['commission_value'],
+                'status' => $requestData['status'],
+                'note' => $requestData['note'],
+                'reciever_phone' => $requestData['reciever_phone'],
+                'contents' => $requestData['contents'],
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            ];
+
+            $order->update($orderData);
+            
+            if ($deliver_update) {
+                $updateDeliveryDetails = [
+                    'delivery_type' => $requestData['delivery_type'],
+                    'delivery_adress' => $requestData['delivery_adress'],
+                ];
+                // Update delivery details. 
+                $result = DeliveryDetails::updateOrCreate(['order_id' => $id], $updateDeliveryDetails);
+            }
+            
+            DB::commit();
+            // event(new \App\Events\UpdateEvent('Order Updated!'));
+            return ($api) ? 'order updated' : redirect('/activeOrders')->with('flash_message', 'Order updated!');
+    
+    
+        } catch (\Exception $e) {
+            DB::rollback();
+            return ($api) ? 'order not updated' : redirect()->back()->with('flash_message', 'Sorry,  update faced a problem!');
+        }
+    }
+}
+
+ /**
+ * Validate request inputs.
+ *
+ * @param object $request
+ */
+if (!function_exists('validateOrderInputs')){
+    function validateOrderInputs($request) {
+        $validator = Validator::make($request->all(), 
+            [ 
+                'branch_id' => 'required|integer',
+                'customer_id' => 'required|integer',
+                'delivery_type' => 'required',
+                'total' => 'required|integer',
+                'commission_value' => 'required',
+                'status' => 'required',
+                'reciever_phone' => 'required',  
+                'contents' => 'required', 
+            ]
+        );  
+
+        if ($validator->fails()) {  
+            return response()->json(['error'=>$validator->errors()], 401); 
+        }   
+    }
+}
+

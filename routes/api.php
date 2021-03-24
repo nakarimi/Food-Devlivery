@@ -41,7 +41,8 @@ Route::group([
     'prefix' => 'customer'
 
 ], function ($router) {
-    Route::post('/subit-new-order', [CustomerRequests::class, 'submit_new_order']);    
+    Route::post('/subit-new-order', [CustomerRequests::class, 'submit_new_order']);
+    Route::post('/update-order', [CustomerRequests::class, 'update_order']);    
 });
 
 Route::group([

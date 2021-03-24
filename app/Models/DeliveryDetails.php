@@ -12,6 +12,13 @@ class DeliveryDetails extends Model
 
     protected $table = 'order_delivery';
 
+    /**
+     * Attributes that should be mass-assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['delivery_adress', 'delivery_type'];
+
     public function driver(){
         return $this->hasOne(Driver::class, 'id', 'driver_id')->latest();
     }
