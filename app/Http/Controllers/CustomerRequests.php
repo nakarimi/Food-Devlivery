@@ -11,15 +11,9 @@ class CustomerRequests extends Controller
 {
     public function submit_new_order(Request $request)
     {
-
-        $this->validateInputs($request);
-		
+        validateOrderInputs($request);	
         $requestData = $request->all();
-
         $has_delivery = ($requestData['delivery_type'] != 'self') ? true : false;
-        
-       
-
 
         try {
 
@@ -63,27 +57,9 @@ class CustomerRequests extends Controller
         }
     }
 
-    /**
-     * Validate request inputs.
-     *
-     * @param object $request
-     */
-    public function validateInputs($request) {
-        $validator = Validator::make($request->all(), 
-            [ 
-                'branch_id' => 'required|integer',
-                'customer_id' => 'required|integer',
-                'delivery_type' => 'required',
-                'total' => 'required|integer',
-                'commission_value' => 'required',
-                'status' => 'required',
-                'reciever_phone' => 'required',  
-                'contents' => 'required', 
-            ]
-        );  
-
-        if ($validator->fails()) {  
-            return response()->json(['error'=>$validator->errors()], 401); 
-        }   
+    public function update_order(Request $request) {
+        validateOrderInputs($request);
+        $requestData = $request->all();
+        update_order($requestData, $requestData['order_id'], true);   
     }
 }
