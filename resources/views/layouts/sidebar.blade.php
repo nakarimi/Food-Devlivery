@@ -6,14 +6,14 @@
                     <span>Main</span>
                 </li>
                 <li @if (\Request::is('admin/dashboard*')) class="active" @endif>
-                    <a href="{{url('/admin/dashboard')}}"><i class="la la-dashboard"></i> <span>Dashboard</span></a>
+                    <a href="{{url('/admin/dashboard')}}"><i class="la la-dashboard"></i> <span>Dashboard </span></a>
                 </li>
                 <li class="submenu">
                     <a href="#"><i class="la la-legal"></i> <span class="menu-title">Orders</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         {{--  <li><a  @if (\Request::is('orders/create*')) class="active" @endif href="{{ route('orders.create') }}">Add Order</a></li>--}}
-                        <li><a  @if (\Request::is('waitingOrders')) class="active" @endif href="{{ url('waitingOrders') }}">Waiting Orders</a></li>
-                        <li><a  @if (\Request::is('activeOrders')) class="active" @endif href="{{url('activeOrders')}}">Active Orders</a></li>
+                        <li><a  @if (\Request::is('waitingOrders')) class="active" @endif href="{{ url('waitingOrders') }}">Waiting Orders</a>@if($sidebarData['waitingOrders'] != 0) <span class="badge badge-danger">{{$sidebarData['waitingOrders']}}</span>@endif</li>
+                        <li><a  @if (\Request::is('activeOrders')) class="active" @endif href="{{url('activeOrders')}}">Active Orders</a>@if($sidebarData['activeOrders'] != 0)<span class="badge badge-danger">{{$sidebarData['activeOrders']}}</span>@endif</li>
                         <li><a  @if (\Request::is('order-history')) class="active" @endif href="{{ route('order.history') }}">Orders History</a></li>
                     </ul>
                 </li>
@@ -21,7 +21,7 @@
                 <li class="submenu">
                     <a href="#"><i class="la la-list"></i><span class="menu-title">Item</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
-                        <li><a href="{{route('items.pending')}}" @if (\Request::is('pendingItems*')) class="active" @endif>Pending Items</a></li>
+                        <li><a href="{{route('items.pending')}}" @if (\Request::is('pendingItems*')) class="active" @endif>Pending Items</a>@if($sidebarData['pendingItems'] != 0)<span class="badge badge-danger">{{$sidebarData['pendingItems']}}</span>@endif</li>
                         <li><a href="{{route('items.approved')}}" @if (\Request::is('approvedItems*')) class="active" @endif>Approved Items</a></li>
                         <li><a  @if (\Request::is('category')) class="active" @endif href="{{ route('category.index') }}">Category</a></li>
                         {{-- <li><a  @if (\Request::is('menu')) class="active" @endif href="{{ route('menu.index') }}">Menus</a></li> --}}
@@ -31,7 +31,7 @@
                 <li class="submenu">
                     <a href="#"><i class="la la-recycle"></i> <span class="menu-title">Branch</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
-                        <li><a @if (\Request::is('pendingBranches')) class="active" @endif href="{{route('branches.pending')}}">Pending Branches</a></li>
+                        <li><a @if (\Request::is('pendingBranches')) class="active" @endif href="{{route('branches.pending')}}">Pending Branches</a>@if($sidebarData['pendingBranches'] != 0)<span class="badge badge-danger">{{$sidebarData['pendingBranches']}}</span>@endif</li>
                         <li><a @if (\Request::is('approvedBranches')) class="active" @endif href="{{route('branches.approved')}}">Approved Branches</a></li>
                     </ul>
                 </li>

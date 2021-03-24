@@ -55,23 +55,23 @@
                                                     </span>
 
                                                 @else
-                                                <select class="custom-select mr-sm-2" order_id={{$item->id}} name="driver_id" id="driver_id" required>
-                                                    
+                                                <select class="custom-select mr-sm-2" order_id={{$item->id}} name="driver_id" id="driver_id" customer_id="{{ $item->customer_id }}" required>
+
                                                     @php $noFreeDriver = true; $isFirstFree = true; @endphp
 
                                                     @foreach($drivers as $driver)
-                                                        
+
                                                         @if($driver->status == 'free')
-                                                            
+
                                                             @if($isFirstFree)  <option value="" disabled selected >Selece Driver</option> @endif
-                                                            
+
                                                             @php $noFreeDriver = false; $isFirstFree = false; @endphp
 
                                                             <option value="{{ $driver->id }}" >{{ $driver->title }}</option>
 
 
                                                         @endif
-                                                    
+
                                                     @endforeach
 
                                                     @if($noFreeDriver)

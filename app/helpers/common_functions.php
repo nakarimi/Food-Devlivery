@@ -3,6 +3,7 @@
 use App\Models\Branch;
 use App\Models\Item;
 use \App\Models\Menu;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Order;
@@ -75,7 +76,7 @@ if (!function_exists('get_item_details')) {
 // This function loads all items of the current user based on status.
 // Status can be an array so it will return multiple items of user.
 if (!function_exists('loadUserItemsData')) {
-    function loadUserItemsData($status, $userId = null)
+    function loadUserItemsData($status, $userId = null, $count = false)
     {
         if ($userId == null){
             $userId = auth()->user()->id;
@@ -88,7 +89,7 @@ if (!function_exists('loadUserItemsData')) {
         }
 
         // Get user Items.
-        $items =  getUserItemsBasedOnStatus($branchIds, $status);
+        $items =  getUserItemsBasedOnStatus($branchIds, $status, $count);
         return $items;
     }
 }
@@ -106,11 +107,17 @@ if (!function_exists('getUserBranches')){
 // This will return items based on status one or multiple status.
 if (!function_exists('getUserItemsBasedOnStatus')){
 
-    function getUserItemsBasedOnStatus ($branchIds, $status){
+    function getUserItemsBasedOnStatus ($branchIds, $status, $count){
         $item = Item::whereHas(
             'itemFullDetails', function ($query) use ($status) {
             $query->whereIn('details_status', $status);
-        })->whereIn('branch_id',$branchIds)->get();
+        })->whereIn('branch_id',$branchIds);
+        if ($count){
+            $item = $item->count();
+        }
+        else {
+            $item = $item->get();
+        }
         return $item;
     }
 }
@@ -328,23 +335,31 @@ if (!function_exists('get_orders')){
     }
 }
 
+// Send notification based on user Ids and message we provide.
+if (!function_exists('send_notification')){
+    function send_notification(array $notifyUsers, $userId, $message) {
+        event(new \App\Events\NotificationEvent('Notification'));
+        $notifyUsers = User::whereIn('id', $notifyUsers)->get();
+        \Illuminate\Support\Facades\Notification::send($notifyUsers, new \App\Notifications\UpdateNotification($message, $userId));
+    }
+}
 
 // This will return menu items for views.
 if (!function_exists('update_order')){
     function update_order ($requestData, $id, $api = false) {
         $deliver_update = false;
-    
+
         if ($requestData['delivery_type'] != 'self') {
             $requestData['has_delivery'] = 1;
             $deliver_update = true;
         }
-        
+
         try {
-            
+
             $order = Order::findOrFail($id);
 
             DB::beginTransaction();
-            
+
             $orderData = [
                 'branch_id' => $requestData['branch_id'],
                 'customer_id' => $requestData['customer_id'],
@@ -359,21 +374,21 @@ if (!function_exists('update_order')){
             ];
 
             $order->update($orderData);
-            
+
             if ($deliver_update) {
                 $updateDeliveryDetails = [
                     'delivery_type' => $requestData['delivery_type'],
                     'delivery_adress' => $requestData['delivery_adress'],
                 ];
-                // Update delivery details. 
+                // Update delivery details.
                 $result = DeliveryDetails::updateOrCreate(['order_id' => $id], $updateDeliveryDetails);
             }
-            
+
             DB::commit();
             // event(new \App\Events\UpdateEvent('Order Updated!'));
             return ($api) ? 'order updated' : redirect('/activeOrders')->with('flash_message', 'Order updated!');
-    
-    
+
+
         } catch (\Exception $e) {
             DB::rollback();
             return ($api) ? 'order not updated' : redirect()->back()->with('flash_message', 'Sorry,  update faced a problem!');
@@ -388,22 +403,21 @@ if (!function_exists('update_order')){
  */
 if (!function_exists('validateOrderInputs')){
     function validateOrderInputs($request) {
-        $validator = Validator::make($request->all(), 
-            [ 
+        $validator = Validator::make($request->all(),
+            [
                 'branch_id' => 'required|integer',
                 'customer_id' => 'required|integer',
                 'delivery_type' => 'required',
                 'total' => 'required|integer',
                 'commission_value' => 'required',
                 'status' => 'required',
-                'reciever_phone' => 'required',  
-                'contents' => 'required', 
+                'reciever_phone' => 'required',
+                'contents' => 'required',
             ]
-        );  
+        );
 
-        if ($validator->fails()) {  
-            return response()->json(['error'=>$validator->errors()], 401); 
-        }   
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 401);
+        }
     }
 }
-

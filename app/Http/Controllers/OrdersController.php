@@ -73,7 +73,7 @@ class OrdersController extends Controller
     {
         validateOrderInputs($request);
         $requestData = $request->all();
-        update_order($requestData, $id);   
+        update_order($requestData, $id);
     }
 
     /**
@@ -135,13 +135,19 @@ class OrdersController extends Controller
 
         $id = $request['order_id'];
         $status = $request['status'];
+        $customer_id = $request['customer_id'];
+        $userId = \auth()->user()->id;
         $field = '';
+
+        // TODO: we will add notificaiton for company as well.
         switch($status) {
             case 'approved' :
                 $field = 'approved_time';
-            break;
+                send_notification([$customer_id], $userId, 'Your order has been Approved');
+                break;
             case 'reject' :
                 $field = 'rejected_time';
+                send_notification([$customer_id], $userId, 'Your order has been rejected');
             break;
             case 'processing' :
                 $field = 'processing_time';
@@ -180,9 +186,13 @@ class OrdersController extends Controller
 
         $id = $request['order_id'];
         $driver_id = $request['driver_id'];
+        $customer_id = $request['customer_id'];
+        $userId = \auth()->user()->id;
         DeliveryDetails::where('order_id', $id)->update(['driver_id' => $driver_id]);
         Driver::where('id', $driver_id)->update(['status' => 'busy']);
         event(new \App\Events\UpdateEvent('Order Updated!'));
+        send_notification([$driver_id], $userId, 'New Order has been assigned to you');
+
     }
 
     /**

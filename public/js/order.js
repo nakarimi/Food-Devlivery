@@ -13,17 +13,18 @@ jQuery(function ($) {
         });
 
         $(document).on('change','#order_status',function(){
-            
+
             // Set correct color based on status.
             set_select_box_color($(this));
 
             let order_id = $(this).attr('order_id');
+            let customer_id = $(this).attr('customer_id');
             let status = $(this).val();
             $.ajax({
                 type: 'POST',
                 url:'/updateOrderStatus',
-                data: {order_id:order_id, status: status},
-                success: function (data) {                
+                data: {order_id:order_id, status: status, customer_id:customer_id},
+                success: function (data) {
                     show_message("The Order status updated!.")
                 },
                 error: function (e) {
@@ -37,14 +38,15 @@ jQuery(function ($) {
         }
 
         $(document).on('change','#driver_id',function(){
-            
+
             let order_id = $(this).attr('order_id');
+            let customer_id = $(this).attr('customer_id');
             let driver_id = $(this).val();
             $.ajax({
                 type: 'POST',
                 url:'/assignDriver',
-                data: {order_id:order_id, driver_id: driver_id},
-                success: function (data) {                
+                data: {order_id:order_id, driver_id: driver_id, customer_id:customer_id},
+                success: function (data) {
                     show_message("The Order assigned to Driver!")
                 },
                 error: function (e) {
@@ -61,7 +63,7 @@ jQuery(function ($) {
                 url:'/requestDelivery',
                 data: {order_id:order_id},
                 success: function (data) {
-                    $(this).closest('span').replaceWith('<span class="badge bg-inverse-primary">(Company Delivery) <br><span class="badge bg-inverse-danger">Pending</span></span>');             
+                    $(this).closest('span').replaceWith('<span class="badge bg-inverse-primary">(Company Delivery) <br><span class="badge bg-inverse-danger">Pending</span></span>');
                     show_message("Devlivery requested Successfully!")
                 },
                 error: function (e) {

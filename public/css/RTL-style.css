@@ -8140,3 +8140,7 @@ ul.comment-list li ul.children {
         min-width: inherit;
     }
 }
+.custom-badge {
+    float: left; !important;
+    background-color: orange !important;
+}
