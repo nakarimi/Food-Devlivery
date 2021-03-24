@@ -1,12 +1,12 @@
 
 @section('title')
-    Waiting Orders
+    @if (last(request()->segments()) == "activeOrders") Active Orders @else Waiting Orders @endif
 @stop
 <div class="container">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Waiting Orders</div>
+                <div class="card-header">@if (last(request()->segments()) == "activeOrders") Active Orders @else Waiting Orders @endif</div>
                 <div class="card-body">
                     <form  accept-charset="UTF-8" class="form-inline my-2 my-lg-0 float-right" role="search">
                         <div class="input-group">
@@ -124,6 +124,9 @@
     // Enable pusher logging - don't include this in production
     Pusher.logToConsole = true;
 
+    // Since we are using one blade fro active and pending orders, then this mapping is need to consider for separate pages.
+    let page = (location.pathname.substring(1) == 'activeOrders') ? 'refreshActiveOrders' : 'refreshWaitingOrder';
+
     var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
         cluster: '{{ env('PUSHER_APP_CLUSTER') }}'
     });
@@ -131,7 +134,7 @@
     var channel = pusher.subscribe('food-app');
     channel.bind('update-event', function(data) {
         // if (JSON.stringify(data['message']) == "Items Updated!"){
-        Livewire.emit('refreshWaitingOrder');
+        Livewire.emit(page);
         // alert("updated!");
         // }
         // alert();
