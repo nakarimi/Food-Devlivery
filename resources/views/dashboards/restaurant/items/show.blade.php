@@ -51,7 +51,7 @@
                            <td> {{ get_item_details($item, Session::get('itemType'))->package_price }} </td>
                         </tr>
                         <tr>
-                           <th> تعداد </th>
+                           <th> واحد </th>
                            <td> {{ get_item_details($item, Session::get('itemType'))->unit }} </td>
                         </tr>
                         <tr>
@@ -69,7 +69,7 @@
                         <th>ای دی</th>
                         <th>عنوان</th>
                         <th>قیمت</th>
-                        <th>تعداد</th>
+                        <th>واحد</th>
                         <th>توضیحات</th>
                         <th>حالت</th>
                      </thead>
