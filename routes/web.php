@@ -53,6 +53,10 @@ Route::middleware(['admin'])->group(function () {
     Route::put('/deactiveUser/{id}', 'App\Http\Controllers\Admin\UsersController@deactiveUser');
     Route::put('/activateUser/{id}', 'App\Http\Controllers\Admin\UsersController@activateUser');
     Route::resource('blockedCustomer', 'App\Http\Controllers\BlockCustomerController');
+    Route::post('/backup-create','App\Http\Controllers\BackupController@create')->name('get-backup');
+    Route::get('/backups','App\Http\Controllers\BackupController@index')->name('backups');
+    Route::delete('/delete-backup/{name}', 'App\Http\Controllers\BackupController@destroy')->name('backup.destroy');
+    Route::post('/download-backup/', 'App\Http\Controllers\BackupController@downloadBackup')->name('backup.download');
 
 
 });

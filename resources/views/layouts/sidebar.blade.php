@@ -60,8 +60,9 @@
                         <li>
                             <a @if (\Request::is('admin/activitylogs*')) class="active" @endif href="{{url('/admin/activitylogs')}}">Activity Logs</a>
                         </li>
-                        <li><a  @if (\Request::is('admin/backup')) class="active" @endif href="#">Backup & Restore</a></li>
-
+                        <li>
+                            <a @if (\Request::is('backups*')) class="active" @endif href="{{url('/backups')}}">Backups</a>
+                        </li>
                     </ul>
                 </li>
                 <li class="submenu">
