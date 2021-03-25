@@ -7,20 +7,9 @@
 }
 
 /* Fixing Pagination styles for all lists. */
-.pagination-wrapper > nav {
-    margin: 24px;
-}
-.pagination-wrapper > nav svg{
-    max-width: 24px;
-}
-.pagination-wrapper > nav > div:first-child {
-    margin-bottom: 15px;
-}
-.pagination-wrapper > nav > div:nth-child(2) {
-    text-align: center;
-}
-.pagination-wrapper > nav > div:first-child > *:nth-child(2) {
-    float: right;
+.pagination-wrapper  nav {
+    width: fit-content;
+    margin: 0 auto;
 }
 
 /* Order status colors. */
@@ -141,4 +130,9 @@
   left: 50%;
   top: 25px;
   padding: 0.75em 2em;
+}
+
+/*this is due ot a bug for rendering view of orders, showing select item next to already selected driver.*/
+td.hasDriver select {
+    display: none;
 }

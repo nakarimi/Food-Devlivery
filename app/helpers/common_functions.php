@@ -303,7 +303,7 @@ if (!function_exists('get_orders')){
 
         // For real time data, datatable search is enogh.
         $keyword = ($request) ? $request->get('search') : $keyword;
-        if (!empty($keyword)) {
+        if ($type != 'waiting-orders' && !empty($keyword)) {
             $orders = Order::whereIn('status', $status)->wherehas(
                 'branchDetails', function ($query) use ($keyword) {
                 $query->where('title','LIKE', "%$keyword%");
@@ -313,11 +313,18 @@ if (!function_exists('get_orders')){
         elseif ($type == 'waiting-orders'){
             // Get orders from 10 minutes ago.
             $timeOffSet = Carbon::now()->subMinutes(1)->toDateTimeString();
-            $orders = Order::where(function ($query) use ($timeOffSet) {
-                $query->where('status', 'pending')->where('orders.created_at', '<', $timeOffSet);
-            })->orwhere(function ( $query ) {
+            
+            $orders = Order::where(function ($query) use ($timeOffSet, $keyword) {
+                // Get orders that created 2 mins ago and still not responsed by restaurant.
+                $query->where('status', 'pending')->where('orders.created_at', '<', $timeOffSet)->whereHas('branchDetails', function ($sub) use ($keyword) {
+                        $sub->where('title','LIKE', "%".$keyword."%");
+                    });
+            })->orwhere(function ( $query ) use ($keyword) {
+                // Get orders that are assigned to company to delivery and yet have no driver assigned to them.
                 $query->whereHas('deliveryDetails', function ($subquery) {
                 $subquery->where('delivery_type', 'company')->whereNull('driver_id');
+            })->whereHas('branchDetails', function ($sub) use ($keyword) {
+                $sub->where('title','LIKE', "%".$keyword."%");
             });
             })->latest()->paginate($perPage);
         }

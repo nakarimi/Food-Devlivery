@@ -44,7 +44,8 @@
     document.addEventListener('reinitializaJSs', function () {
         $('.datatable').dataTable({
             'bPaginate': true,
-            'searching' : true
+            'searching' : true,
+            "bDestroy": true
         });
     });
 </script>

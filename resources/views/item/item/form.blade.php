@@ -74,7 +74,7 @@
    </div>
    <div class="col">
       <div class="form-group{{ $errors->has('package_price') ? 'has-error' : ''}}">
-         <label for="package_price" class="control-label">{{ (get_role() == "restaurant") ? 'قیمت پکیچ' : 'Package Price'}}</label>
+         <label for="package_price" class="control-label">{{ (get_role() == "restaurant") ? 'قیمت بسته بندی' : 'Package Price'}}</label>
          <input class="form-control" name="package_price" type="number" id="package_price" value="{{ get_item_details($item, Session::get('itemType'))->package_price ?? ''}}" >
          {!! $errors->first('package_price', '
          <p class="help-block">:message</p>
@@ -85,7 +85,7 @@
 <div class="form-row">
    <div class="col">
       <div class="form-group{{ $errors->has('unit') ? 'has-error' : ''}}">
-         <label for="unit" class="control-label">{{ (get_role() == "restaurant") ? 'تعداد' : 'Unit' }}</label>
+         <label for="unit" class="control-label">{{ (get_role() == "restaurant") ? 'واحد' : 'Unit' }}</label>
          <input class="form-control" name="unit" type="text" id="unit" value="{{ get_item_details($item, Session::get('itemType'))->unit ?? ''}}" >
          {!! $errors->first('unit', '
          <p class="help-block">:message</p>
