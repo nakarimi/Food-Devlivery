@@ -10,14 +10,12 @@ use Livewire\Component;
 
 class ActiveOrder extends Component
 {
-     use WithPagination;
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
      
     public $listeners = ['refreshActiveOrders'];
     public $keyword;
-    protected $paginationTheme = 'bootstrap';
-
-   
-
+    
     public function render()
     {
        // Get all wating orders, true (means realTime);

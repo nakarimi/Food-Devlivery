@@ -217,7 +217,7 @@ class OrdersController extends Controller
     public function update_driver_status($order_id, $status) {
         // Get driver id from order.
         $order = Order::findOrFail($order_id);
-        if ($order->has_delivery != 0) {
+        if ($order->has_delivery != 0 && isset($order->deliveryDetails->driver)) {
             $driver_id = $order->deliveryDetails->driver->id;
             // Update status of driver.
             $driver = Driver::findOrFail($driver_id);

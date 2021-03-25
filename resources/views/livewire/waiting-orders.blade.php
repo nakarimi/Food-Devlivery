@@ -43,7 +43,7 @@
                                     <td>{{ $item->branchDetails->title }}</td>
                                     <td>{{ $item->customer->name }} <br> ({{$item->reciever_phone}}) </td>
                                     <td class="max-width200">{!! show_order_itmes($item->contents) !!}</td>
-                                    <td class='@if ($item->deliveryDetails->driver) hasDriver @endif '>
+                                    <td class='@if (($item->has_delivery == 1) && ($item->deliveryDetails->driver)) hasDriver @endif '>
                                         @if($item->has_delivery == 1)
                                             @if($item->deliveryDetails->delivery_type == 'own')
                                                 <span class="badge bg-inverse-success">Own Delivery</span>
