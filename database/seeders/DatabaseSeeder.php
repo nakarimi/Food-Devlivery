@@ -134,28 +134,51 @@ class DatabaseSeeder extends Seeder
 
         DB::table('branche_main_info')->insert(array(
             array('id' => '1','created_at' => NULL,'updated_at' => NULL,'business_id' => '1','title' => 'Fifty-Fifty','description' => 'Eat anything with 50 Afs.','logo' => 'test_1614666474.png','contact' => '+937909090','location' => 'Herat-Chawk Golha','status' => 'approved'),
-            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'business_id' => '2','title' => 'Herat Super Market','description' => 'Any you need, we have.','logo' => 'logo_1614666570.png','contact' => '+937303030','location' => 'Herat-Chawk Shahre Now','status' => 'approved'),
-            array('id' => '3','created_at' => NULL,'updated_at' => NULL,'business_id' => '3','title' => 'Ghulam Bargar','description' => 'Any you need, we have.','logo' => 'logo_1614666570.png','contact' => '+937303030','location' => 'Herat-Chawk Shahre Now','status' => 'approved')
-        ));
+            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'business_id' => '2','title' => 'Herat Super Market','description' => 'Any you need, we have.','logo' => 'logo_1614666570.png','contact' => '+937303030','location' => 'Herat-Chawk Shahre Now','status' => 'old'),
+            array('id' => '3','created_at' => NULL,'updated_at' => NULL,'business_id' => '3','title' => 'Ghulam Bargar','description' => 'Any you need, we have.','logo' => 'logo_1614666570.png','contact' => '+937303030','location' => 'Herat-Chawk Shahre Now','status' => 'approved'),
+            array('id' => '4','created_at' => NULL,'updated_at' => '2021-03-24 16:05:20','business_id' => '1','title' => 'Fifty-Fifty','description' => 'Eat anything with 50 Afs. and 100','logo' => 'test_1614666474.png','contact' => '+937909090','location' => 'Herat-Chawk Golha','status' => 'rejected'),
+            array('id' => '5','created_at' => NULL,'updated_at' => '2021-03-25 12:15:55','business_id' => '2','title' => 'Herat Super Market','description' => 'Any you need, we have.','logo' => 'grocery-store_1616657916.jpg','contact' => '+937303030','location' => 'Herat-Chawk Shahre Now','status' => 'approved')
+          ));
 
         DB::table('items')->insert(array(
-            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1', 'status' => '1'),
-            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1', 'status' => '1'),
+            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1','status' => '1'),
+            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1','status' => '1'),
             array('id' => '3','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '2','status' => '1'),
             array('id' => '4','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '2','status' => '1'),
-             array('id' => '5','created_at' => NULL,'updated_at' => NULL,'branch_id' => '3','category_id' => '2','status' => '1'),
-              array('id' => '6','created_at' => NULL,'updated_at' => NULL,'branch_id' => '3','category_id' => '2','status' => '1')
+            array('id' => '5','created_at' => NULL,'updated_at' => NULL,'branch_id' => '3','category_id' => '2','status' => '1'),
+            array('id' => '6','created_at' => NULL,'updated_at' => NULL,'branch_id' => '3','category_id' => '2','status' => '1'),
+            array('id' => '7','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1','status' => '1'),
+            array('id' => '8','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1','status' => '1'),
+            array('id' => '9','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '1','status' => '1'),
+            array('id' => '10','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '1','status' => '1'),
+            array('id' => '11','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '1','status' => '1')
 
           ));
 
         DB::table('item_details')->insert(array(
-            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'item_id' => '1','title' => 'Pizza','description' => 'پیتزا مخصوص با سوس','thumbnail' => 'noimage.jpg','price' => '50','package_price' => '0','unit' => 'piece','details_status' => 'approved'),
-            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'item_id' => '2','title' => 'همبرگر','description' => 'همبرگر با نون اضافی','thumbnail' => 'noimage.jpg','price' => '70','package_price' => '10','unit' => 'piece','details_status' => 'approved'),
-            array('id' => '3','created_at' => NULL,'updated_at' => NULL,'item_id' => '3','title' => 'روغن','description' => '1 کیلو','thumbnail' => 'noimage.jpg','price' => '120','package_price' => '0','unit' => 'bottle','details_status' => 'approved'),
-            array('id' => '4','created_at' => NULL,'updated_at' => NULL,'item_id' => '4','title' => 'کچالو','description' => 'کچالوی غزنی','thumbnail' => 'noimage.jpg','price' => '25','package_price' => '0','unit' => 'کیلو','details_status' => 'approved'),
-             array('id' => '5','created_at' => NULL,'updated_at' => NULL,'item_id' => '5','title' => 'شوربا','description' => 'کچالوی غزنی','thumbnail' => 'noimage.jpg','price' => '25','package_price' => '0','unit' => 'کیلو','details_status' => 'approved'),
-              array('id' => '6','created_at' => NULL,'updated_at' => NULL,'item_id' => '6','title' => 'دیزی','description' => 'کچالوی غزنی','thumbnail' => 'noimage.jpg','price' => '25','package_price' => '0','unit' => 'کیلو','details_status' => 'approved')
-          ));
+            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'item_id' => '1','title' => 'Pizza','description' => 'پیتزا مخصوص با سوس','thumbnail' => 'noimage.jpg','price' => '50','package_price' => '0','unit' => 'piece','notes' => NULL,'details_status' => 'old'),
+  array('id' => '2','created_at' => NULL,'updated_at' => NULL,'item_id' => '2','title' => 'همبرگر','description' => 'همبرگر با نون اضافی','thumbnail' => 'noimage.jpg','price' => '70','package_price' => '10','unit' => 'piece','notes' => NULL,'details_status' => 'old'),
+  array('id' => '3','created_at' => NULL,'updated_at' => NULL,'item_id' => '3','title' => 'روغن','description' => '1 کیلو','thumbnail' => 'noimage.jpg','price' => '120','package_price' => '0','unit' => 'bottle','notes' => NULL,'details_status' => 'old'),
+  array('id' => '4','created_at' => NULL,'updated_at' => NULL,'item_id' => '4','title' => 'کچالو','description' => 'کچالوی غزنی','thumbnail' => 'noimage.jpg','price' => '25','package_price' => '0','unit' => 'کیلو','notes' => NULL,'details_status' => 'old'),
+  array('id' => '5','created_at' => NULL,'updated_at' => NULL,'item_id' => '5','title' => 'شوربا','description' => 'کچالوی غزنی','thumbnail' => 'noimage.jpg','price' => '25','package_price' => '0','unit' => 'کیلو','notes' => NULL,'details_status' => 'old'),
+  array('id' => '6','created_at' => NULL,'updated_at' => NULL,'item_id' => '6','title' => 'دیزی','description' => 'کچالوی غزنی','thumbnail' => 'noimage.jpg','price' => '25','package_price' => '0','unit' => 'کیلو','notes' => NULL,'details_status' => 'old'),
+  array('id' => '7','created_at' => NULL,'updated_at' => '2021-03-24 15:47:18','item_id' => '1','title' => 'Pizza 2','description' => 'پیتزا مخصوص با سوس','thumbnail' => 'noimage.jpg','price' => '50','package_price' => '0','unit' => 'piece','notes' => NULL,'details_status' => 'old'),
+  array('id' => '8','created_at' => NULL,'updated_at' => NULL,'item_id' => '7','title' => 'چای','description' => NULL,'thumbnail' => 'noimage.jpg','price' => '120','package_price' => NULL,'unit' => NULL,'notes' => NULL,'details_status' => 'old'),
+  array('id' => '9','created_at' => NULL,'updated_at' => '2021-03-24 16:05:07','item_id' => '7','title' => 'چای ۱','description' => NULL,'thumbnail' => 'noimage.jpg','price' => '120','package_price' => NULL,'unit' => NULL,'notes' => NULL,'details_status' => 'old'),
+  array('id' => '10','created_at' => NULL,'updated_at' => '2021-03-25 09:39:36','item_id' => '8','title' => 'همبرگر 4','description' => 'asdfasdf','thumbnail' => 'noimage.jpg','price' => '47','package_price' => NULL,'unit' => 'piece','notes' => NULL,'details_status' => 'old'),
+  array('id' => '11','created_at' => NULL,'updated_at' => '2021-03-25 12:03:45','item_id' => '1','title' => 'چپس ساده','description' => 'پیتزا مخصوص با سوس','thumbnail' => 'chips1_1616657218.jpg','price' => '50','package_price' => '0','unit' => 'piece','notes' => NULL,'details_status' => 'approved'),
+  array('id' => '12','created_at' => NULL,'updated_at' => '2021-03-25 12:03:47','item_id' => '2','title' => 'همبرگر نونی','description' => 'همبرگر با نون اضافی','thumbnail' => 'bargar_1616657483.jpg','price' => '80','package_price' => '10','unit' => 'piece','notes' => NULL,'details_status' => 'approved'),
+  array('id' => '13','created_at' => NULL,'updated_at' => '2021-03-25 12:03:48','item_id' => '7','title' => 'چپس مخصوص','description' => NULL,'thumbnail' => 'chips_1616657523.jpg','price' => '75','package_price' => NULL,'unit' => NULL,'notes' => NULL,'details_status' => 'approved'),
+  array('id' => '14','created_at' => NULL,'updated_at' => '2021-03-25 12:03:50','item_id' => '8','title' => 'سمبوسه','description' => 'همراه با چپس','thumbnail' => 'content9555_1616657586.jpg','price' => '120','package_price' => NULL,'unit' => 'piece','notes' => NULL,'details_status' => 'approved'),
+  array('id' => '15','created_at' => NULL,'updated_at' => '2021-03-25 12:16:03','item_id' => '3','title' => 'روغن','description' => '1 کیلو','thumbnail' => 'oil_1616657704.jpg','price' => '120','package_price' => '0','unit' => 'bottle','notes' => NULL,'details_status' => 'approved'),
+  array('id' => '16','created_at' => NULL,'updated_at' => NULL,'item_id' => '4','title' => 'برنج','description' => '20 کیلو','thumbnail' => 'rice_1616657750.jpg','price' => '25','package_price' => '0','unit' => 'بوجی','notes' => NULL,'details_status' => 'old'),
+  array('id' => '17','created_at' => NULL,'updated_at' => '2021-03-25 12:16:07','item_id' => '9','title' => 'آیسکریم','description' => '300 گرم','thumbnail' => 'cream_1616657797.jpg','price' => '60','package_price' => NULL,'unit' => 'عدد','notes' => NULL,'details_status' => 'approved'),
+  array('id' => '18','created_at' => NULL,'updated_at' => '2021-03-25 12:16:05','item_id' => '4','title' => 'برنج','description' => '20 کیلو','thumbnail' => 'rice_1616657750.jpg','price' => '1200','package_price' => '0','unit' => 'بوجی','notes' => NULL,'details_status' => 'approved'),
+  array('id' => '19','created_at' => NULL,'updated_at' => '2021-03-25 12:16:09','item_id' => '10','title' => 'روغن گیاهی','description' => 'آفتاب گردان','thumbnail' => 'oil2_1616657874.jpg','price' => '140','package_price' => NULL,'unit' => 'بوتل','notes' => NULL,'details_status' => 'approved'),
+  array('id' => '20','created_at' => NULL,'updated_at' => '2021-03-25 12:19:46','item_id' => '5','title' => 'کیک','description' => 'کیک نانپزی','thumbnail' => 'image_1616658523.jpg','price' => '40','package_price' => '0','unit' => 'piece','notes' => NULL,'details_status' => 'approved'),
+  array('id' => '21','created_at' => NULL,'updated_at' => '2021-03-25 12:19:48','item_id' => '6','title' => 'پیزا مخصوص','description' => NULL,'thumbnail' => 'images_1616658572.jpg','price' => '80','package_price' => '0','unit' => 'piece','notes' => NULL,'details_status' => 'approved'),
+  array('id' => '22','created_at' => NULL,'updated_at' => '2021-03-25 12:29:06','item_id' => '11','title' => 'صابون','description' => 'گلنار','thumbnail' => '-زرد._1616659021.jpg','price' => '15','package_price' => NULL,'unit' => 'piece','notes' => NULL,'details_status' => 'approved')
+));
 
         DB::table('categories')->insert(array(
             array('id' => '1','created_at' => '2021-03-01 10:40:55','updated_at' => '2021-03-01 10:40:55','title' => 'پیتزا','description' => NULL,'thumbnail' => 'noimage.jpg','status' => '1'),
@@ -163,7 +186,7 @@ class DatabaseSeeder extends Seeder
           ));
 
         DB::table('menus')->insert(array(
-            array('id' => '1','created_at' => '2021-03-01 10:44:29','updated_at' => '2021-03-01 10:44:29','title' => 'Menu 1','branch_id' => '1','status' => '1','items' => '["1", "2"]')
+            array('id' => '1','created_at' => '2021-03-01 10:44:29','updated_at' => '2021-03-01 10:44:29','title' => 'سنی مخصوص','branch_id' => '3','status' => '1','items' => '["5", "6"]')
         ));
 
         DB::table('orders')->insert(array(
