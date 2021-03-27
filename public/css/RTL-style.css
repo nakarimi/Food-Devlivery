@@ -8144,3 +8144,15 @@ ul.comment-list li ul.children {
     float: left; !important;
     background-color: orange !important;
 }
+
+button.read-notification-button {
+    right: 90%;
+    border: none;
+    position: absolute
+}
+button.read-notification-button:hover {
+    background-color: #9D3A6E;
+}
+a.read-notification-button:hover{
+    color: #9D3A6E;
+}

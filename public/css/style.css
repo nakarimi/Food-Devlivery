@@ -8155,3 +8155,14 @@ ul.comment-list li ul.children {
 		min-width: inherit;
 	}
 }
+button.read-notification-button {
+    left: 90%;
+    border: none;
+    position: absolute
+}
+button.read-notification-button:hover {
+    background-color: #018FE5;
+}
+a.read-notification-button:hover{
+    color: #018FE5;
+}
