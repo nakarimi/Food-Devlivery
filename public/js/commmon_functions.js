@@ -23,11 +23,19 @@ $(document).on('click','.read-notification-button',function(event){
             if (not_id !== "all"){
                 $( event.target ).closest( "li" )
                     .remove();
+                $('#notification_number').text( function(i, oldval) {
+                    return oldval-1;
+                });
             }
-            Livewire.emit('refreshNotifications');
+            else {
+                Livewire.emit('refreshNotifications');
+            }
         },
         error: function (e) {
             console.log(e);
         }
     });
+});
+$(document).on('click', 'div.dropdown-menu.notifications', function (e) {
+    e.stopPropagation();
 });
