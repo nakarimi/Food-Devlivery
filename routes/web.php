@@ -30,7 +30,7 @@ Route::middleware(['auth'])->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['admin'])->group(function () {
-    Route::get('admin/dashboard', 'App\Http\Controllers\Admin\AdminController@index')->name('admin.dashboard');
+    Route::get('admin/dashboard', 'App\Http\Controllers\DashboardsController@adminDashboard')->name('admin.dashboard');
     Route::resource('admin/users', 'App\Http\Controllers\Admin\UsersController');
     Route::resource('admin/activitylogs', 'App\Http\Controllers\Admin\ActivityLogsController')->only([
         'index', 'show', 'destroy'
