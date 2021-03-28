@@ -102,7 +102,9 @@
                             </div>
                             <div>
 
-                                <span class={{format_percentage(calculate_percentage($data['yesterdayOrders'], $data['todayOrders']))[1]}}>{{format_percentage(calculate_percentage($data['yesterdayOrders'], $data['todayOrders']))[0]}}%</span>
+                                <span class={{format_percentage(calculate_percentage($data['yesterdayOrders'], $data['todayOrders']))[1]}}>
+                                    {{format_percentage(calculate_percentage($data['yesterdayOrders'], $data['todayOrders']))[0]}}%
+                                </span>
                             </div>
                         </div>
                         <h3 class="mb-3">{{$data['todayOrders']}}</h3>
@@ -120,7 +122,9 @@
                                 <span class="d-block">Total Orders This Week</span>
                             </div>
                             <div>
-                                <span class={{format_percentage(calculate_percentage($data['lastWeekOrders'], $data['thisWeekOrders']))[1]}}>{{format_percentage(calculate_percentage($data['lastWeekOrders'], $data['thisWeekOrders']))[0]}}</span>
+                                <span class={{format_percentage(calculate_percentage($data['lastWeekOrders'], $data['thisWeekOrders']))[1]}}>
+                                    {{format_percentage(calculate_percentage($data['lastWeekOrders'], $data['thisWeekOrders']))[0]}}%
+                                </span>
                             </div>
                         </div>
                         <h3 class="mb-3">{{$data['thisWeekOrders']}}</h3>
@@ -139,7 +143,7 @@
                             </div>
                             <div>
                                 <span class={{format_percentage(calculate_percentage($data['lastMonthOrders'], $data['thisMonthOrders']))[1]}}>
-                                    {{format_percentage(calculate_percentage($data['lastMonthOrders'], $data['thisMonthOrders']))[0]}}
+                                    {{format_percentage(calculate_percentage($data['lastMonthOrders'], $data['thisMonthOrders']))[0]}}%
                                 </span>
                             </div>
                         </div>
@@ -159,7 +163,7 @@
                             </div>
                             <div>
                                 <span class={{format_percentage(calculate_percentage($data['lastYearOrders'], $data['thisYearOrders']))[1]}}>
-                                {{format_percentage(calculate_percentage($data['lastYearOrders'], $data['thisYearOrders']))[0]}}
+                                {{format_percentage(calculate_percentage($data['lastYearOrders'], $data['thisYearOrders']))[0]}}%
                                 </span>
                             </div>
                         </div>

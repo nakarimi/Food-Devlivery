@@ -429,11 +429,15 @@ if (!function_exists('validateOrderInputs')){
     }
 }
 
-// Calculate the percentage of a number
+// Calculate the percentage between two numbers.
 if (!function_exists('calculate_percentage')){
     function calculate_percentage($oldValue, $newValue){
-        $percentChange = (1 - $oldValue / $newValue) * 100;
-        return round($percentChange, 2);
+        if ($oldValue == 0) {
+            $oldValue++;
+            $newValue++;
+        }
+        $percentage = (($newValue - $oldValue) / $oldValue) * 100;
+        return round($percentage, 2);
     }
 }
 
@@ -444,7 +448,7 @@ if (!function_exists('format_percentage')){
             $percentage = ['+'.$percentage, 'text-success'];
         }
         else {
-            $percentage = ['-'.$percentage, 'text-danger'];
+            $percentage = [$percentage, 'text-danger'];
         }
         return $percentage;
     }
