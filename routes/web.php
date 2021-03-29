@@ -73,6 +73,8 @@ Route::middleware(['restaurant'])->group(function () {
     Route::get('/pendingItems', 'App\Http\Controllers\ItemController@pendingItems')->name('items.pending');
     Route::get('/approvedItems', 'App\Http\Controllers\ItemController@approvedItems')->name('items.approved');
     Route::get('paymentHistory', 'App\Http\Controllers\PaymentController@restaurantPayments')->name('paymentHistory');
+    Route::get('paymentsCreate', 'App\Http\Controllers\PaymentController@restaurantPaymentsCreate');
+    Route::post('saveRestaurantPayment', 'App\Http\Controllers\PaymentController@SaveRestaurantPayments');
     Route::resource('item', 'App\Http\Controllers\ItemController');
     Route::resource('menu', 'App\Http\Controllers\MenuController');
     Route::get('/profile', 'App\Http\Controllers\BranchController@restaurantProfile')->name('restaurant.profile');
