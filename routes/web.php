@@ -57,7 +57,8 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/backups','App\Http\Controllers\BackupController@index')->name('backups');
     Route::delete('/delete-backup/{name}', 'App\Http\Controllers\BackupController@destroy')->name('backup.destroy');
     Route::post('/download-backup/', 'App\Http\Controllers\BackupController@downloadBackup')->name('backup.download');
-
+    Route::post('/approvePayment', 'App\Http\Controllers\PaymentController@approvePayment');
+    Route::post('/rejectPayment', 'App\Http\Controllers\PaymentController@rejectPayment');
 
 });
 

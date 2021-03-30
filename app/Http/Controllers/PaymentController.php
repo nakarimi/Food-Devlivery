@@ -70,6 +70,9 @@ class PaymentController extends Controller
 			'paid_amount' => 'required',
 			'date_and_time' => 'required'
 		]);
+        if (get_role() == "admin" || get_role() == "support"){
+            $request->request->add( ['status' => 'approved']);
+        }
         $requestData = $request->all();
 
         Payment::create($requestData);
@@ -188,4 +191,28 @@ class PaymentController extends Controller
         Payment::create($requestData );
         return redirect('paymentHistory')->with('flash_message', 'Payment Added!');
     }
+
+    public function rejectPayment(Request $request)
+    {
+        $paymentId = $request->payment_id;
+        $this->changePaymentStatus($paymentId,'rejected');
+        return redirect()->back()->with('flash_message', 'Payment Rejected!');
+
+    }
+
+    public function approvePayment(Request $request)
+    {
+        $paymentId = $request->payment_id;
+       $this->changePaymentStatus($paymentId,'approved');
+        return redirect()->back()->with('flash_message', 'Payment Approved!');
+
+    }
+
+    public function changePaymentStatus($paymentId, $status)
+    {
+        $payment = Payment::findOrFail($paymentId);
+        $payment->status = $status;
+        $payment->save();
+    }
+
 }

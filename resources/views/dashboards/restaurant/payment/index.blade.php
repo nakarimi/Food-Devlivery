@@ -19,6 +19,7 @@
                            <th class="disable_sort">Receiver</th>
                            <th>Paid Amount</th>
                             <th>Date</th>
+                            <th>Status</th>
                         </tr>
                      </thead>
                      <tbody>
@@ -29,6 +30,15 @@
                            <td>{{ $item->user->name }}</td>
                            <td>{{ $item->paid_amount }}</td>
                            <td>{{ $item->date_and_time }}</td>
+                            <td>
+                                @if ($item->status == "pending")
+                                    <span class="badge badge-warning">{{$item->status}}</span>
+                                @elseif ($item->status == "approved")
+                                    <span class="badge badge-success">{{$item->status}}</span>
+                                @else
+                                    <span class="badge badge-danger">{{$item->status}}</span>
+                                @endif
+                            </td>
                         </tr>
                         @endforeach
                      </tbody>
