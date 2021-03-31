@@ -28,7 +28,7 @@ class UpdateEvent implements ShouldBroadcastNow
     public function __construct($message, $orderId)
     {
         $this->message = $message;
-        $this->userId = Branch::findOrFail(Order::findOrFail($orderId)->branch_id)->user_id;
+        $this->userId = (!is_null($orderId)) ? Branch::findOrFail(Order::findOrFail($orderId)->branch_id)->user_id : NULL;
     }
 
     /**

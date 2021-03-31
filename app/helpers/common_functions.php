@@ -345,8 +345,12 @@ if (!function_exists('get_orders')){
 // Send notification based on user Ids and message we provide.
 if (!function_exists('send_notification')){
     function send_notification(array $notifyUsers, $userId, $message) {
-        event(new \App\Events\NotificationEvent('Notification'));
         $notifyUsers = User::whereIn('id', $notifyUsers)->get();
+
+        for ($i=0; $i < sizeof($notifyUsers) ; $i++) { 
+            event(new \App\Events\NotificationEvent('Notification', $notifyUsers[$i]));
+        }
+        
         \Illuminate\Support\Facades\Notification::send($notifyUsers, new \App\Notifications\UpdateNotification($message, $userId));
     }
 }

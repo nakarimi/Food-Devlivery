@@ -45,6 +45,12 @@
 </head>
 <body>
 <div id="app">
+
+    <!-- Get current user id and stor for later uses. -->
+    <script>
+        let userId = @php echo auth()->user()->id; @endphp
+    </script>
+
     <!-- Main Wrapper -->
     <div class="main-wrapper">
 
@@ -103,7 +109,7 @@
 
     var channel = pusher.subscribe('food-app-notification');
     channel.bind('notification-event', function(data) {
-        if (data['message'] === "Notification") {
+        if (data['message'] === "Notification" && userId == data.userId.id) {
             Livewire.emit('refreshNotifications');
         }
     });

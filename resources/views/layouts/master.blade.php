@@ -39,6 +39,10 @@
     @yield('styles')
     @livewireStyles
 
+    <script>
+        let userId = @php echo auth()->user()->id; @endphp
+    </script>
+
 </head>
 <body>
 <div id="app">
@@ -100,7 +104,7 @@
 
     var channel = pusher.subscribe('food-app-notification');
     channel.bind('notification-event', function(data) {
-        if (data['message'] === "Notification") {
+        if (data['message'] === "Notification" && userId == JSON.stringify(data['userId'])) {
            Livewire.emit('refreshNotifications');
         }
     });

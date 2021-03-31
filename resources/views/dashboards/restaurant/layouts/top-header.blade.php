@@ -27,12 +27,6 @@
     <!-- Header Menu -->
     <ul class="nav user-menu">
 
-        <!-- Get current user id and stor for later uses. -->
-        <script>
-            let userId = @php echo auth()->user()->id; @endphp
-        </script>
-
-
         <!-- Notifications -->
         <livewire:show-notifications />
         <!-- /Notifications -->

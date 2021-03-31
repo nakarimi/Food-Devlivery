@@ -139,6 +139,7 @@ class ItemController extends Controller
      */
     public function show($id)
     {
+
         $item = Item::with('itemFullDetails')->findOrFail($id);
 
         // Prevent other roles from url restriction.
@@ -191,56 +192,57 @@ class ItemController extends Controller
 			'price' => 'required'
 		]);
         $requestData = $request->all();
-        $role = get_role();
 
         $item = Item::findOrFail($id);
-        $item->update($requestData);
 
-        // Also update the details table.
-        // Todo, if edit is done by admin the status shoudl be approved otherwise it should be pending.
-        $status = 'approved';
-        if ($role == 'restaurant'){
-            $status = 'pending';
-        }
+         try {
 
-        $update = ['item_id' => $id,
-            'title' => $requestData['title'],
-            'description' => $requestData['description'],
-            'price' => $requestData['price'],
-            'package_price' => $requestData['package_price'],
-            'unit' => $requestData['unit'],
-            'details_status' => $status,
-        ];
+            // Since we deal with multiple tables, so we use transactions for handling conflicts and other issues.
+            DB::beginTransaction();
 
-        // If there was a new image, use it otherwise get old image name.
-       if ($request->file('logo')) {
-           $update['thumbnail'] = save_file($request);
-       } else {
-          $update['thumbnail'] =  get_item_details($item, Session::get('itemType'))->thumbnail;
-       }
+            $item->update($requestData);
 
-        // Update details.
-        $details_id = DB::table('item_details')->insertGetId($update);
+            // Also update the details table.
+            $status = (get_role() == "restaurant") ? 'pending' : 'approved';
 
-        if (!$details_id) {
-            return redirect('branch')->with('flash_message', 'Sorry there is problem, updating item data');
-        }
-        else {
-            if (get_role() == "restaurant"){
-                $this->changeStatusToOld($id, $details_id, 'pending', true);
+            $update = ['item_id' => $id,
+                'title' => $requestData['title'],
+                'description' => $requestData['description'],
+                'price' => $requestData['price'],
+                'package_price' => $requestData['package_price'],
+                'unit' => $requestData['unit'],
+                'details_status' => $status,
+            ];
+
+            // If there was a new image, use it otherwise get old image name.
+           if ($request->file('logo')) {
+               $update['thumbnail'] = save_file($request);
+           } else {
+              $update['thumbnail'] =  get_item_details($item, Session::get('itemType'))->thumbnail;
+           }
+
+            // Update details.
+            $details_id = DB::table('item_details')->insertGetId($update);
+
+            
+            $this->changeStatusToOld($id, $details_id, $status, true);
+
+            DB::commit();
+
+            if ($status == 'pending') {
+                $userId = \auth()->user()->id;
+                send_notification([1], $userId, 'Updated an Item');
+                return redirect('pendingItems')->with('flash_message', 'Item Updated!');
             }
-            else {
-            $this->changeStatusToOld($id, $details_id, null, true);
-            }
+            return redirect('approvedItems')->with('flash_message', 'Item Updated!');
+        } 
+        catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('flash_message', 'Sorry there is problem, updating item data');
         }
 
-        if ($status == 'pending') {
-            $userId = \auth()->user()->id;
-            send_notification([1], $userId, 'Updated an Item');
-            return redirect('pendingItems')->with('flash_message', 'Item Updated!');
-        }
 
-        return redirect('approvedItems')->with('flash_message', 'Item Updated!');
+        
     }
 
     /**
