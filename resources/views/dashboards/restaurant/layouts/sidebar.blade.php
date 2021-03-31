@@ -29,10 +29,19 @@
                         <li><a  @if (\Request::is('order-history')) class="active" @endif href="{{ route('order.history') }}">تاریخچه سفارشات</a></li>
                     </ul>
                 </li>
+                <li class="submenu">
+                    <a href="#"><i class="la la-money"></i> <span>پرداخت ها</span> <span class="menu-arrow"></span></a>
+                    <ul style="display: none;">
+                        <li>
+                            <a  @if (\Request::is('paymentsCreate')) class="active" @endif href="{{ url('paymentsCreate') }}"><span>اضافه کردن پرداخت جدید</span></a>
+                        </li>
+                        <li>
+                            <a  @if (\Request::is('paymentHistory')) class="active" @endif href="{{ route('paymentHistory') }}"><span> لست پرداخت ها</span></a>
+                        </li>
 
-                <li @if (\Request::is('paymentHistory')) class="active" @endif>
-                    <a href="{{ route('paymentHistory') }}"><i class="la la-money"></i><span>پرداخت ها</span></a>
+                    </ul>
                 </li>
+
 
         </div>
     </div>

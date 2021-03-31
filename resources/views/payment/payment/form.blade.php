@@ -1,3 +1,4 @@
+@if (get_role() != "restaurant")
 <div class="form-row">
    <div class="col">
 
@@ -33,19 +34,19 @@
         </div>
    </div>
 </div>
-
+@endif
 
 <div class="form-row">
    <div class="col">
         <div class="form-group{{ $errors->has('paid_amount') ? 'has-error' : ''}}">
-            <label for="paid_amount" class="control-label">{{ 'Paid Amount' }}</label>
+            <label for="paid_amount" class="control-label">{{ (get_role() == "restaurant") ? 'مقدار قابل پرداخت' : 'Paid Amount' }}</label>
             <input class="form-control" name="paid_amount" type="number" step="0.01" id="paid_amount" value="{{ $payment->paid_amount ?? ''}}" required>
             {!! $errors->first('paid_amount', '<p class="help-block">:message</p>') !!}
         </div>
    </div>
    <div class="col">
         <div class="form-group{{ $errors->has('date_and_time') ? 'has-error' : ''}}">
-            <label for="date_and_time" class="control-label">{{ 'Date And Time' }}</label>
+            <label for="date_and_time" class="control-label">{{ (get_role() == "restaurant") ? 'تاریخ' : 'Date and Time' }}</label>
             <input class="form-control" name="date_and_time" type="date" id="date_and_time" value="{{ $payment->date_and_time ?? ''}}" required>
             {!! $errors->first('date_and_time', '<p class="help-block">:message</p>') !!}
         </div>
@@ -53,7 +54,7 @@
 </div>
 
 <div class="form-group{{ $errors->has('note') ? 'has-error' : ''}}">
-    <label for="note" class="control-label">{{ 'Note' }}</label>
+    <label for="note" class="control-label">{{ (get_role() == "restaurant") ? 'توضیحات' : 'Note' }}</label>
     {{-- <input class="form-control" name="note" type="text" id="note" value="" > --}}
     <textarea class="form-control" name="note" id="note" rows="3">{{ $payment->note ?? ''}}</textarea>
 
@@ -61,5 +62,5 @@
 </div>
 
 <div class="form-group">
-    <input class="btn btn-primary" type="submit" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}">
+    <input class="btn btn-primary" type="submit" value="{{ $formMode === 'edit' ? ((get_role() == "restaurant") ? 'ثبت کردن' : 'Update') : ((get_role() == "restaurant") ? 'اضافه کردن' : 'Create') }}">
 </div>

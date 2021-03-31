@@ -20,6 +20,7 @@ class CreatePaymentsTable extends Migration
             $table->double('paid_amount')->nullable();
             $table->date('date_and_time')->nullable();
             $table->string('note')->nullable();
+            $table->string('status')->default('pending');
             });
     }
 

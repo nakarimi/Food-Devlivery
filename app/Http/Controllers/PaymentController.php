@@ -70,6 +70,9 @@ class PaymentController extends Controller
 			'paid_amount' => 'required',
 			'date_and_time' => 'required'
 		]);
+        if (get_role() == "admin" || get_role() == "support"){
+            $request->request->add( ['status' => 'approved']);
+        }
         $requestData = $request->all();
 
         Payment::create($requestData);
@@ -164,7 +167,52 @@ class PaymentController extends Controller
         $userId = Auth::user()->id;
         $branchID = Branch::where('user_id', $userId)->first();
         $payment = Payment::where('branch_id', $branchID->id)->latest()->paginate($perPage);
-        
+
         return view('dashboards.restaurant.payment.index', compact('payment'));
     }
+
+    public function restaurantPaymentsCreate()
+    {
+        if (get_role() == "restaurant"){
+            return view('dashboards.restaurant.payment.create');
+        }
+    }
+
+    public function SaveRestaurantPayments(Request $request)
+    {
+        $userId = Auth::user()->id;
+        $branchID = Branch::where('user_id', $userId)->first()->id;
+        $this->validate($request, [
+            'paid_amount' => 'required',
+            'date_and_time' => 'required'
+        ]);
+        $request->request->add( ['branch_id' => $branchID, 'reciever_id' => 1]);
+        $requestData = $request->all();
+        Payment::create($requestData );
+        return redirect('paymentHistory')->with('flash_message', 'Payment Added!');
+    }
+
+    public function rejectPayment(Request $request)
+    {
+        $paymentId = $request->payment_id;
+        $this->changePaymentStatus($paymentId,'rejected');
+        return redirect()->back()->with('flash_message', 'Payment Rejected!');
+
+    }
+
+    public function approvePayment(Request $request)
+    {
+        $paymentId = $request->payment_id;
+       $this->changePaymentStatus($paymentId,'approved');
+        return redirect()->back()->with('flash_message', 'Payment Approved!');
+
+    }
+
+    public function changePaymentStatus($paymentId, $status)
+    {
+        $payment = Payment::findOrFail($paymentId);
+        $payment->status = $status;
+        $payment->save();
+    }
+
 }

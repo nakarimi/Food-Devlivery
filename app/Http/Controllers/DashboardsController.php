@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
 use App\Models\Order;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,6 +12,12 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardsController extends Controller
 {
+    public function adminDashboard()
+    {
+        $data = $this->adminDashboardData();
+        return view('admin.dashboard', compact('data'));
+    }
+
     public function restaurantDashboard()
     {
         $userId = Auth::user()->id;
@@ -35,15 +43,21 @@ class DashboardsController extends Controller
         return view('dashboards.customer.dashboard');
     }
 
-    public function getOrderDetails($userId, $count = false, $date = null)
+    public function getOrderDetails($userId = null, $count = false, $date = null, $forAdmin = false)
     {
-        // Get user branch.
-        $branches =  getUserBranches($userId);
         $branchIds = [];
-        foreach ($branches as $branch) {
-            array_push($branchIds, $branch->id);
+        if ($userId != null) {
+            // Get user branch.
+            $branches = getUserBranches($userId);
+            foreach ($branches as $branch) {
+                array_push($branchIds, $branch->id);
+            }
         }
-        $query = Order::WhereIn('branch_id', $branchIds);
+        $query = Order::query();
+        if (!$forAdmin) {
+            $query = $query->WhereIn('branch_id', $branchIds);
+        }
+
         if ($date == "Today"){
             $query->whereDate('created_at', Carbon::today());
         }
@@ -52,9 +66,25 @@ class DashboardsController extends Controller
         }
         elseif ($date == "This Month"){
             $query->whereMonth('created_at', Carbon::now()->month);
+            $query->whereYear('created_at', date('Y'));
+
         }
-        elseif ($date = "Last Month"){
+        elseif ($date == "Last Month"){
             $query->whereMonth('created_at', Carbon::now()->subMonth()->month);
+            $query->whereYear('created_at', date('Y'));
+        }
+        elseif ($date == "Yesterday"){
+            $query->whereDate('created_at', Carbon::yesterday());
+        }
+        elseif ($date == "Last Week"){
+            $query->whereDate('created_at', '<',Carbon::now()->subDays(7));
+            $query->whereDate('created_at', '>',Carbon::now()->subDays(14));
+        }
+        elseif ($date == "This Year"){
+            $query->whereYear('created_at', date('Y'));
+        }
+        elseif ($date == "Last Year"){
+            $query->whereYear('created_at', now()->subYear(1));
         }
 
         if ($count){
@@ -78,17 +108,41 @@ class DashboardsController extends Controller
             array_push($branchIds, $branch->id);
         }
         foreach ($statuses as $key => $status){
-           array_push($chartData,  $this->CreateOrdersChart($key, $status, $key, $branchIds));
+           array_push($chartData,  $this->CreateOrdersChart($key, $status, $key, $branchIds, (get_role() == "admin") ? true : false));
         }
         return response()->json($chartData);
     }
 
-    public function CreateOrdersChart($status, $color, $title, $branchIds)
+    public function CreateOrdersChart($status, $color, $title, $branchIds, $forAdmin = false)
     {
+        $query = Order::where('status', $status);
+        if (!$forAdmin){
+            $query = $query->WhereIn('branch_id', $branchIds);
+        }
+        $query = $query->count();
          $status = [
-            ucfirst($title),
-            Order::WhereIn('branch_id', $branchIds)->where('status', $status)->count(),
-            $color ];
+             ucfirst($title),
+             $query,
+             $color ];
          return $status;
+    }
+
+    public function adminDashboardData()
+    {
+        $data = [
+            'totalRestaurants' => User::where('role_id', 4)->count(),
+            'totalDrivers' => User::where('role_id', 3)->count(),
+            'totalItems' => Item::count(),
+            'totalOrders' => Order::count(),
+            'todayOrders' => $this->getOrderDetails(null, true,'Today', true),
+            'yesterdayOrders' => $this->getOrderDetails(null, true,'Yesterday', true),
+            'thisMonthOrders' => $this->getOrderDetails(null, true,'This Month', true),
+            'lastMonthOrders' => $this->getOrderDetails(null, true,'Last Month', true),
+            'thisWeekOrders' => $this->getOrderDetails(null, true,'Last 7 Days', true),
+            'lastWeekOrders' => $this->getOrderDetails(null, true,'Last Week', true),
+            'thisYearOrders' => $this->getOrderDetails(null, true,'This Year', true),
+            'lastYearOrders' => $this->getOrderDetails(null, true,'Last Year', true),
+        ];
+        return $data;
     }
 }

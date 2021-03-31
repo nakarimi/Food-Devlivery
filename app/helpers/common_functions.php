@@ -313,7 +313,7 @@ if (!function_exists('get_orders')){
         elseif ($type == 'waiting-orders'){
             // Get orders from 10 minutes ago.
             $timeOffSet = Carbon::now()->subMinutes(1)->toDateTimeString();
-            
+
             $orders = Order::where(function ($query) use ($timeOffSet, $keyword) {
                 // Get orders that created 2 mins ago and still not responsed by restaurant.
                 $query->where('status', 'pending')->where('orders.created_at', '<', $timeOffSet)->whereHas('branchDetails', function ($sub) use ($keyword) {
@@ -425,5 +425,30 @@ if (!function_exists('validateOrderInputs')){
         if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors()], 401);
         }
+    }
+}
+
+// Calculate the percentage between two numbers.
+if (!function_exists('calculate_percentage')){
+    function calculate_percentage($oldValue, $newValue){
+        if ($oldValue == 0) {
+            $oldValue++;
+            $newValue++;
+        }
+        $percentage = (($newValue - $oldValue) / $oldValue) * 100;
+        return round($percentage, 2);
+    }
+}
+
+// Format a percentage number to show on blade.
+if (!function_exists('format_percentage')){
+    function format_percentage($percentage){
+        if ($percentage >= 1){
+            $percentage = ['+'.$percentage, 'text-success'];
+        }
+        else {
+            $percentage = [$percentage, 'text-danger'];
+        }
+        return $percentage;
     }
 }

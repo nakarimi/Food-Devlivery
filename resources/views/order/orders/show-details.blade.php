@@ -1,7 +1,3 @@
-<tr>
-    <th> Title </th>
-    <td> {{ $order->title }} </td>
-</tr>
 
 <tr>
     <th> Customer </th>
