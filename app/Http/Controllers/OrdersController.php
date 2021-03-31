@@ -194,7 +194,7 @@ class OrdersController extends Controller
         $userId = \auth()->user()->id;
         DeliveryDetails::where('order_id', $id)->update(['driver_id' => $driver_id]);
         Driver::where('id', $driver_id)->update(['status' => 'busy']);
-        event(new \App\Events\UpdateEvent('Order Updated!'));
+        event(new \App\Events\UpdateEvent('Driver assigned!', $id));
         send_notification([$driver_id], $userId, 'New Order has been assigned to you');
 
     }
@@ -209,7 +209,7 @@ class OrdersController extends Controller
 
         $id = $request['order_id'];
         DeliveryDetails::where('order_id', $id)->update(['delivery_type' => 'company']);
-        event(new \App\Events\UpdateEvent('Order Updated!'));
+        event(new \App\Events\UpdateEvent('Delivery requested!', $id));
     }
 
     /**

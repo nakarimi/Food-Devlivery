@@ -50,15 +50,13 @@ class CustomerRequests extends Controller
 	                DB::table('order_delivery')->insertGetId($updateDeliveryDetails);
 	            }
 	            
-	            event(new \App\Events\UpdateEvent('New Order Recieved!'));
+	            event(new \App\Events\UpdateEvent('New Order Recieved!', $order_id));
 	            if (($k % 5) == 0) {
 	            	sleep(0.25);
 	            }
             }
     
             DB::commit();
-            // Update the active orders page and send notification.
-            // event(new \App\Events\UpdateEvent('Order Updated!'));
             $notifyUser = Branch::find($requestData['branch_id'])->user_id;
             send_notification([$notifyUser], 1, 'سفارش جدید ااضافه شد');
             return 1;

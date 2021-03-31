@@ -53,7 +53,7 @@ class UpdateNotification extends Notification
 
     public function toDatabase($notifiable)
     {
-        event(new \App\Events\UpdateEvent('Notification'));
+        event(new \App\Events\UpdateEvent('Notification', NULL));
         return [
             'message' => $this->message,
             'userName' => $this->userName,

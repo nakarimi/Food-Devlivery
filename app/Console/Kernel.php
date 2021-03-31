@@ -40,7 +40,7 @@ class Kernel extends ConsoleKernel
             $ordersCount = Order::where('status', 'pending')->where('orders.created_at', '>', $threeMinuteAgo)->where('orders.created_at', '<', $oneMinuteAgo)->get()->count();
             if ($ordersCount) {
             	// Update waiting order list on front-end. 
-            	event(new \App\Events\UpdateEvent('Late Order Detected!'));
+            	event(new \App\Events\UpdateEvent('Late Order Detected!', NULL));
             }
         })->everyMinute();
     }
