@@ -10,7 +10,7 @@ use App\Models\User;
 class Payment extends Model
 {
     use LogsActivity;
-    
+
 
     /**
      * The database table used by the model.
@@ -31,9 +31,9 @@ class Payment extends Model
      *
      * @var array
      */
-    protected $fillable = ['branch_id', 'reciever_id', 'paid_amount', 'date_and_time', 'note'];
+    protected $fillable = ['branch_id', 'reciever_id', 'paid_amount', 'date_and_time', 'note', 'status'];
 
-    
+
 
     /**
      * Change activity log event description

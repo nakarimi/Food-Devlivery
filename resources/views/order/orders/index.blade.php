@@ -31,7 +31,6 @@
                      <thead>
                         <tr>
                            <th>#</th>
-                           <th>Title</th>
                            <th>Branch</th>
                            <th>Customer</th>
                            <th>Contents</th>
@@ -44,7 +43,6 @@
                         @foreach($orders as $item)
                         <tr>
                            <td>{{ $loop->iteration}}</td>
-                           <td>{{ $item->title }}</td>
                            <td>{{ $item->branchDetails->title }}</td>
                            <td>{{ $item->customer->name }} <br> ({{$item->reciever_phone}}) </td>
                            <td class="max-width200">{!! show_order_itmes($item->contents) !!}</td>
@@ -60,7 +58,7 @@
                                 @else
                                     <span class="badge bg-inverse-warning">Self Delivery</span>
                                 @endif
-                           
+
                            </td>
                            <td>
                               <select class="custom-select mr-sm-2" order_id={{$item->id}} status="{{$item->status}}" name="order_status" id="order_status" required>

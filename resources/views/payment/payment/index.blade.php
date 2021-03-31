@@ -33,6 +33,7 @@
                            <th>Receiver</th>
                            <th>Paid Amount</th>
                             <th>Date</th>
+                            <th>Status</th>
                            <th>Actions</th>
                         </tr>
                      </thead>
@@ -44,14 +45,31 @@
                            <td>{{ $item->user->name }}</td>
                            <td>{{ $item->paid_amount }}</td>
                            <td>{{ $item->date_and_time }}</td>
+                            <td>
+                                @if ($item->status == "pending")
+                                    <span class="badge badge-warning">{{$item->status}}</span>
+                                @elseif ($item->status == "approved")
+                                    <span class="badge badge-success">{{$item->status}}</span>
+                                @else
+                                    <span class="badge badge-danger">{{$item->status}}</span>
+                                @endif
+                            </td>
                            <td>
+                               @if ($item ->status == "pending")
+                                   <form method="POST" action="{{ url('/approvePayment') }}" accept-charset="UTF-8" style="display:inline">
+                                       {{ csrf_field() }}
+                                       <input type="hidden" value="{{$item->id}}" name="payment_id">
+                                       <button class="btn btn-sm btn-success" title="Approve" onclick="return confirm(&quot;Confirm approve?&quot;)"><i class="la la-check"></i></button>
+                                   </form>
+                                   <form method="POST" action="{{ url('/rejectPayment') }}" accept-charset="UTF-8" style="display:inline">
+                                       {{ csrf_field() }}
+                                       <input type="hidden" value="{{$item->id}}" name="payment_id">
+                                       <button class="btn btn-sm btn-danger" title="Reject" onclick="return confirm(&quot;Confirm Rejcect?&quot;)"><i class="la la-times"></i></button>
+                                   </form>
+
+                               @endif
                               <a href="{{ url('/payment/' . $item->id) }}" title="View Payment"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
                               <a href="{{ url('/payment/' . $item->id . '/edit') }}" title="Edit Payment"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
-{{--                              <form method="POST" action="{{ url('/payment' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">--}}
-{{--                                 {{ method_field('DELETE') }}--}}
-{{--                                 {{ csrf_field() }}--}}
-{{--                                 <button type="submit" class="btn btn-danger btn-xs" title="Delete Payment" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>--}}
-{{--                              </form>--}}
                            </td>
                         </tr>
                         @endforeach
