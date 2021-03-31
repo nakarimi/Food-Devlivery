@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 class OrdersController extends Controller
 {
 
@@ -143,11 +147,11 @@ class OrdersController extends Controller
         switch($status) {
             case 'approved' :
                 $field = 'approved_time';
-                send_notification([$customer_id], $userId, 'Your order has been Approved');
+                // send_notification([$customer_id], $userId, 'Your order has been Approved');
                 break;
             case 'reject' :
                 $field = 'rejected_time';
-                send_notification([$customer_id], $userId, 'Your order has been rejected');
+                // send_notification([$customer_id], $userId, 'Your order has been rejected');
             break;
             case 'processing' :
                 $field = 'processing_time';
@@ -172,7 +176,7 @@ class OrdersController extends Controller
             $field => Carbon::now()->format('Y-m-d H:i:s'),
         ];
         OrderTimeDetails::where('order_id', $id)->update($updateDeliveryTimeDetails);
-        event(new \App\Events\UpdateEvent('Order Updated!'));
+        event(new \App\Events\UpdateEvent('Order Updated!', $id));
 
     }
 

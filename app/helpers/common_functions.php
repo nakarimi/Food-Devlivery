@@ -355,15 +355,14 @@ if (!function_exists('send_notification')){
 if (!function_exists('update_order')){
     function update_order ($requestData, $id, $api = false) {
         $deliver_update = false;
+        $requestData['has_delivery'] = 0;
 
         if ($requestData['delivery_type'] != 'self') {
             $requestData['has_delivery'] = 1;
             $deliver_update = true;
         }
 
-        try {
-
-            $order = Order::findOrFail($id);
+        $order = Order::findOrFail($id);
 
             DB::beginTransaction();
 
@@ -371,12 +370,12 @@ if (!function_exists('update_order')){
                 'branch_id' => $requestData['branch_id'],
                 'customer_id' => $requestData['customer_id'],
                 'has_delivery' => $requestData['has_delivery'],
-                'total' => $requestData['total'],
-                'commission_value' => $requestData['commission_value'],
+                // 'total' => $requestData['total'],
+                // 'commission_value' => $requestData['commission_value'],
                 'status' => $requestData['status'],
                 'note' => $requestData['note'],
                 'reciever_phone' => $requestData['reciever_phone'],
-                'contents' => $requestData['contents'],
+                // 'contents' => $requestData['contents'],
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ];
 
@@ -392,14 +391,14 @@ if (!function_exists('update_order')){
             }
 
             DB::commit();
+            // die ("hey");
             // event(new \App\Events\UpdateEvent('Order Updated!'));
-            return ($api) ? 'order updated' : redirect('/activeOrders')->with('flash_message', 'Order updated!');
-
-
-        } catch (\Exception $e) {
-            DB::rollback();
-            return ($api) ? 'order not updated' : redirect()->back()->with('flash_message', 'Sorry,  update faced a problem!');
-        }
+            if ($api) {
+            	return 'order updated';
+            }
+            // die("hie");
+            redirect()->back()->with('flash_message', 'Order updated!');
+            
     }
 }
 

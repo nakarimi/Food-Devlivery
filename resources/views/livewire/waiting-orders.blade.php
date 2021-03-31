@@ -135,11 +135,7 @@
 
     var channel = pusher.subscribe('food-app');
     channel.bind('update-event', function(data) {
-        // if (JSON.stringify(data['message']) == "Items Updated!"){
         Livewire.emit(page);
-        // alert("updated!");
-        // }
-        // alert();
     });
 </script>
 
