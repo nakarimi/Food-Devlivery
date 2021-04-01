@@ -11,7 +11,6 @@ use App\Models\Driver;
 use Carbon\Carbon;
 use App\Models\DeliveryDetails;
 
-
 if (!function_exists('save_file')) {
      /**
      * Store the image and return it's address.
@@ -374,7 +373,7 @@ if (!function_exists('update_order')){
                 'branch_id' => $requestData['branch_id'],
                 'customer_id' => $requestData['customer_id'],
                 'has_delivery' => $requestData['has_delivery'],
-                // 'total' => $requestData['total'],
+                'title' => $requestData['title'],
                 // 'commission_value' => $requestData['commission_value'],
                 'status' => $requestData['status'],
                 'note' => $requestData['note'],
@@ -387,9 +386,11 @@ if (!function_exists('update_order')){
 
             if ($deliver_update) {
                 $updateDeliveryDetails = [
+                    'order_id' => $id,
                     'delivery_type' => $requestData['delivery_type'],
                     'delivery_adress' => $requestData['delivery_adress'],
                 ];
+               
                 // Update delivery details.
                 $result = DeliveryDetails::updateOrCreate(['order_id' => $id], $updateDeliveryDetails);
             }
@@ -400,8 +401,8 @@ if (!function_exists('update_order')){
             if ($api) {
             	return 'order updated';
             }
-            // die("hie");
-            redirect()->back()->with('flash_message', 'Order updated!');
+            // die($_SERVER['HTTP_REFERER']);
+            return redirect()->back()->with('flash_message', 'Order updated!');
             
     }
 }

@@ -1,6 +1,7 @@
 @extends('layouts.master')
+
 @section('title')
-Single User
+        Single User ({{ucfirst($user->name)}})
 @stop
 
 @section('content')
@@ -10,7 +11,7 @@ Single User
 
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">User</div>
+                    <div class="card-header">User ({{ucfirst($user->name)}})</div>
                     <div class="card-body">
 
                         <a href="{{ url('/admin/users') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
