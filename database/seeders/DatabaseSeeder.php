@@ -46,8 +46,22 @@ class DatabaseSeeder extends Seeder
             ),
             array(
                 'id'    => '5',
-                'name' => 'Jalil Ahmad Karimi',
+                'name' => '',
                 'label' => 'Customer Account',
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ),
+            array(
+                'id'    => '6',
+                'name' => 'finance_officer',
+                'label' => 'Finance Officer',
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ),
+            array(
+                'id'    => '7',
+                'name' => 'finance_manager',
+                'label' => 'Finance Manager',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             ),
@@ -115,6 +129,22 @@ class DatabaseSeeder extends Seeder
                 'email'    => 'g.long@bargar.com',
                 'password' => bcrypt('asdfasdf'),
                 'role_id' => 4,
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            )
+            array (
+                'name'     => 'Ahmad Zia',
+                'email'    => 'zia@pomtech.com',
+                'password' => bcrypt('zia'),
+                'role_id' => 6,
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ), 
+             array (
+                'name'     => 'Karima Salehi',
+                'email'    => 'salehi@pomtech.com',
+                'password' => bcrypt('salehi'),
+                'role_id' => 7,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             )
