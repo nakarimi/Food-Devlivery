@@ -43,7 +43,6 @@
          {{-- <input class="form-control" name="status" type="text" id="status" value="{{ $order->status ?? ''}}" required> --}}
          <select class="custom-select mr-sm-2" name="status" id="status" required>
          <option value="pending"  @if( (isset($order->status)) && ($order->status) == 'pending') selected="selected" @endif>Pending</option>
-         <option value="approved"  @if( (isset($order->status)) && ($order->status) == 'approved') selected="selected" @endif>Approved</option>
          <option value="reject"  @if( (isset($order->status)) && ($order->status) == 'reject') selected="selected" @endif>Reject</option>
          <option value="processing"  @if( (isset($order->status)) && ($order->status) == 'processing') selected="selected" @endif>Processing</option>
          <option value="delivered"  @if( (isset($order->status)) && ($order->status) == 'delivered') selected="selected" @endif>Delivered</option>

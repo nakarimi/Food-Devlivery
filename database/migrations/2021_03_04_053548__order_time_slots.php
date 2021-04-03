@@ -17,7 +17,6 @@ class OrderTimeSlots extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->integer('order_id');
-            $table->timestamp('approved_time')->nullable();
             $table->timestamp('rejected_time')->nullable();
             $table->timestamp('processing_time')->nullable();
             $table->timestamp('caceled_time')->nullable();

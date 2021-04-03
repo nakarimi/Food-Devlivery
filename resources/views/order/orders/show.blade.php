@@ -7,7 +7,7 @@
    <div class="row">
       <div class="col-md-12">
          <div class="card">
-            <div class="card-header">{{ $order->title }} <b>[{{ ucfirst($order->status) }}]</b></div>
+            <div class="card-header"><h4 class="card-title mb-0">Order  <b>[{{$order->id}} - {{ ucfirst($order->status) }}]</b></h4></div>
             <div class="card-body">
                <a href="{{ url('/orders') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
                <a href="{{ url('/orders/' . $order->id . '/edit') }}" title="Edit Order"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>

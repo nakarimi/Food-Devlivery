@@ -276,7 +276,7 @@ if (!function_exists('get_orders')){
                 $status = ['completed', 'canceld'];
             break;
             case 'active-orders':
-                $status = ['pending', 'approved', 'reject', 'processing', 'delivered'];
+                $status = ['pending', 'reject', 'processing', 'delivered'];
             break;
             default:
             $status = [];
@@ -455,5 +455,30 @@ if (!function_exists('format_percentage')){
             $percentage = [$percentage, 'text-danger'];
         }
         return $percentage;
+    }
+}
+
+// Format a percentage number to show on blade.
+if (!function_exists('translate_status')){
+    function translate_status($status){
+        switch($status) {
+            case 'pending':
+                return 'انتظار';
+            break;
+            case 'processing':
+                return 'آماده شدن';
+            break;
+            case 'reject':
+                return 'رد شده';
+            break;
+            case 'delivered':
+                return 'ارسال شده';
+            break;
+            case 'completed':
+                return 'تکمیل شده';
+            break;
+            default:
+            return 'لغو شده';
+        }
     }
 }

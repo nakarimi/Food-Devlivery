@@ -141,16 +141,13 @@ class OrdersController extends Controller
 
         // TODO: we will add notificaiton for company as well.
         switch($status) {
-            case 'approved' :
-                $field = 'approved_time';
+            case 'processing' :
+                $field = 'processing_time';
                 send_notification([$customer_id], $userId, 'Your order has been Approved');
                 break;
             case 'reject' :
                 $field = 'rejected_time';
                 send_notification([$customer_id], $userId, 'Your order has been rejected');
-            break;
-            case 'processing' :
-                $field = 'processing_time';
             break;
             case 'delivered' :
                 $field = 'delivery_time';

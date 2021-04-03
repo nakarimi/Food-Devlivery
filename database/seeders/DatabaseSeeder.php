@@ -236,17 +236,17 @@ class DatabaseSeeder extends Seeder
         ));
 
         DB::table('order_timing')->insert(array(
-            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'order_id' => '1','approved_time' => '2021-03-04 04:52:15','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL), 
-            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'order_id' => '2','approved_time' => '2021-03-04 05:52:15','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL),
-            array('id' => '3','created_at' => NULL,'updated_at' => NULL,'order_id' => '3','approved_time' => '2021-03-04 10:52:15','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL),
-            array('id' => '4','created_at' => NULL,'updated_at' => NULL,'order_id' => '4','approved_time' => '2021-03-04 11:52:15','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL),
-            array('id' => '5','created_at' => NULL,'updated_at' => NULL,'order_id' => '5','approved_time' => '2021-03-04 10:52:15','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL),
-            array('id' => '6','created_at' => NULL,'updated_at' => NULL,'order_id' => '11','approved_time' => '2021-03-04 10:52:15','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL),
-            array('id' => '7','created_at' => NULL,'updated_at' => NULL,'order_id' => '5','approved_time' => '2021-03-04 04:52:15','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL), 
-            array('id' => '8','created_at' => NULL,'updated_at' => NULL,'order_id' => '6','approved_time' => '2021-03-04 05:52:15','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL),
-            array('id' => '9','created_at' => NULL,'updated_at' => NULL,'order_id' => '7','approved_time' => '2021-03-04 10:52:15','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL),
-            array('id' => '10','created_at' => NULL,'updated_at' => NULL,'order_id' => '8','approved_time' => '2021-03-04 11:52:15','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL),
-            array('id' => '11','created_at' => NULL,'updated_at' => NULL,'order_id' => '9','approved_time' => '2021-03-04 10:52:15','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL),            
+            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'order_id' => '1','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL), 
+            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'order_id' => '2','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL),
+            array('id' => '3','created_at' => NULL,'updated_at' => NULL,'order_id' => '3','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL),
+            array('id' => '4','created_at' => NULL,'updated_at' => NULL,'order_id' => '4','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL),
+            array('id' => '5','created_at' => NULL,'updated_at' => NULL,'order_id' => '5','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL),
+            array('id' => '6','created_at' => NULL,'updated_at' => NULL,'order_id' => '11','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL),
+            array('id' => '7','created_at' => NULL,'updated_at' => NULL,'order_id' => '5','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL), 
+            array('id' => '8','created_at' => NULL,'updated_at' => NULL,'order_id' => '6','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL),
+            array('id' => '9','created_at' => NULL,'updated_at' => NULL,'order_id' => '7','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL),
+            array('id' => '10','created_at' => NULL,'updated_at' => NULL,'order_id' => '8','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL),
+            array('id' => '11','created_at' => NULL,'updated_at' => NULL,'order_id' => '9','rejected_time' => NULL,'processing_time' => NULL,'caceled_time' => NULL,'delivery_time' => NULL,'completed_time' => NULL),            
         ));
 
         DB::table('order_delivery')->insert(array(

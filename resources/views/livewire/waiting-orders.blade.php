@@ -25,7 +25,7 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>#</th>
+                                <th>Order Code</th>
                                 <th>Time</th>
                                 <th>Branch</th>
                                 <th>Customer</th>
@@ -38,7 +38,7 @@
                             <tbody>
                             @foreach($orders as $item)
                                 <tr>
-                                    <td>{{ $loop->iteration}}</td>
+                                    <td>{{ $item->id}}</td>
                                     <td>{{ $item->created_at->diffForHumans() }}</td>
                                     <td>{{ $item->branchDetails->title }}</td>
                                     <td>{{ $item->customer->name }} <br> ({{$item->reciever_phone}}) </td>
@@ -88,7 +88,6 @@
                                     <td>
                                         <select class="custom-select mr-sm-2" order_id={{$item->id}} status="{{$item->status}}" name="order_status" id="order_status" required>
                                             <option value="pending" @if($item->status == 'pending') selected="selected" @endif >Pending</option>
-                                            <option value="approved" @if($item->status == 'approved') selected="selected" @endif >Approved</option>
                                             <option value="reject" @if($item->status == 'reject') selected="selected" @endif >Reject</option>
                                             <option value="processing" @if($item->status == 'processing') selected="selected" @endif >Processing</option>
                                             <option value="delivered" @if($item->status == 'delivered') selected="selected" @endif >Delivered</option>

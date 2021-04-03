@@ -99,7 +99,7 @@ class DashboardsController extends Controller
     public function get_orders_by_status()
     {
         $chartData = [];
-        $statuses = ['pending' => '#f27d09' , 'completed' => '#00BCD4', 'approved'=>'#FF9800', 'reject' => '#E91E63',
+        $statuses = ['pending' => '#f27d09' , 'completed' => '#00BCD4', 'reject' => '#E91E63',
             'processing'=> '#4CAF50', 'delivered' => '#CDDC39', 'canceld' => '#f23409'];
         $userId = Auth::user()->id;
         $branches =  getUserBranches($userId);

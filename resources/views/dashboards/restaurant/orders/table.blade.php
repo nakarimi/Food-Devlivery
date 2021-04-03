@@ -1,9 +1,8 @@
 <table class="table table-striped mb-0 datatable">
     <thead>
         <tr>
-            <th class="disable_sort">#</th>
+            <th>کد سفارش</th>
             <th class="disable_sort">زمان</th>
-            <th class="disable_sort">مشتری</th>
             <th>مجموعه</th>
             <th class="disable_sort">نوعیت انتقال</th>
             <th class="disable_sort">غذا ها</th>
@@ -14,26 +13,15 @@
     <tbody>
         @foreach ($orders as $item)
             <tr>
-                <td>{{ $loop->iteration }}</td>
+                <td>{{ $item->id }}</td>
                 <td>{{ $item->created_at->diffForHumans() }}</td>
-                <td>
-                    <?php $blocked = @$item->customer->blockedCustomer['customer_id'] ==
-                    $item->customer->id ? true : false; ?>
-                    <a href="#" class="customer_detials" customer_email="{{ $item->customer->email }}"
-                        customer_id="{{ $item->customer->id }}" branch_id="{{ $item->branchDetails->id }}"
-                        order_id="{{ $item->id }}" blocked="{{ $blocked }}">
-                        {{ $item->customer->name }}
-                        @if ($blocked) <span class="badge badge-danger">Blocked</span>
-                        @endif
-                    </a><br> ({{ $item->reciever_phone }})
-                </td>
                 <td>{{ $item->total }}</td>
                 <td>
                     @if ($item->has_delivery == 1)
                         @if ($item->deliveryDetails->delivery_type == 'own')
                             <span class="badge bg-inverse-success hover">Own Delivery
                                 <div class="tooltip">
-                                    <button type="button" order_id="{{ $item->id }}" class="btn .btn-default request_delivery_btn" title="Request Delivery from Company.">Request Delivery</button>
+                                    <button type="button" order_id="{{ $item->id }}" class="btn .btn-default request_delivery_btn" title="درخواست سرویس پیک برای این سفارش">درخواست پیک</button>
                                 </div>
                             </span>
                         @else
@@ -51,7 +39,6 @@
                     <select class="custom-select mr-sm-2" order_id={{ $item->id }} status="{{ $item->status }}"
                         name="order_status" id="order_status" customer_id="{{ $item->customer_id }}" required>
                         <option value="pending" @if ($item->status == 'pending') selected="selected" @endif>Pending</option>
-                        <option value="approved" @if ($item->status == 'approved') selected="selected" @endif>Approved</option>
                         <option value="reject" @if ($item->status == 'reject') selected="selected" @endif>Reject</option>
                         <option value="processing" @if ($item->status == 'processing') selected="selected" @endif>Processing</option>
                         <option value="delivered" @if ($item->status == 'delivered') selected="selected" @endif>Delivered</option>

@@ -35,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
 
        // Share data for sidebar badges for restaurant and admin.
        View::composer(['layouts.sidebar', 'dashboards.restaurant.layouts.sidebar'], function ($view) {
-            $status = ['pending', 'approved', 'reject', 'processing', 'delivered'];
+            $status = ['pending', 'reject', 'processing', 'delivered'];
             if (get_role() == "restaurant"){
                 $userId = auth()->user()->id;
                 $pendingItems = loadUserItemsData(['pending'], $userId, true);
