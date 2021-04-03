@@ -138,11 +138,13 @@ class OrdersController extends Controller
         $customer_id = $request['customer_id'];
         $userId = \auth()->user()->id;
         $field = '';
+        $promissed_time = NULL;
 
         // TODO: we will add notificaiton for company as well.
         switch($status) {
             case 'processing' :
                 $field = 'processing_time';
+                $promissed_time = $request['promissed_time'];
                 send_notification([$customer_id], $userId, 'Your order has been Approved');
                 break;
             case 'reject' :
@@ -168,6 +170,14 @@ class OrdersController extends Controller
         $updateDeliveryTimeDetails = [
             $field => Carbon::now()->format('Y-m-d H:i:s'),
         ];
+
+        if (!is_null($promissed_time)) {
+            $updateDeliveryTimeDetails = [
+                $field => Carbon::now()->format('Y-m-d H:i:s'),
+                'promissed_time' => Carbon::parse($promissed_time)->format('Y-m-d H:i:s')
+            ];
+        }
+
         OrderTimeDetails::where('order_id', $id)->update($updateDeliveryTimeDetails);
         event(new \App\Events\UpdateEvent('Order Updated!', $id));
 

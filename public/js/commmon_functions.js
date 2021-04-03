@@ -11,6 +11,11 @@ function show_message(msg) {
 
 }
 
+function js_error_callback() {
+    alert("js error in order.js file.")
+    console.trace();
+}
+
 $(document).on('click','.read-notification-button',function(event){
     var not_id =  $(this).attr('notification_id');
     var token = $("meta[name='csrf-token']").attr("content");

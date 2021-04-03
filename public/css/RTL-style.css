@@ -8156,3 +8156,7 @@ button.read-notification-button:hover {
 a.read-notification-button:hover{
     color: #9D3A6E;
 }
+
+tr.order_is_late {
+    background: #ff00002e !important;
+}

@@ -20,19 +20,47 @@ jQuery(function ($) {
             let order_id = $(this).attr('order_id');
             let customer_id = $(this).attr('customer_id');
             let status = $(this).val();
+
+            order_status_ajax_request(order_id, status, customer_id, null);
+        });
+        
+        $('#order_approve_btn').on('click',function(event){
+            $('#order_approved_form #order_id').val($(this).attr('order_id'));
+            $('#order_approved_form #customer_id').val($(this).attr('customer_id'));
+        });
+
+        $('#order_approved_form_submit_btn').on('click',function(event){
+
+            // Avoid form redirect on submit.
+            event.preventDefault();
+            let order_id = $('#order_approved_form #order_id').val();
+            let promissed_time =  $('#order_approved_form #promissed_time').val();
+            let customer_id =  $('#order_approved_form #customer_id').val();
+            let status =  'processing';
+            
+            // IF correct values are not provided.
+            if (!order_id > 0 || !customer_id > 0) {
+                return;
+            }
+            order_status_ajax_request(order_id, status, customer_id, promissed_time);
+            
+        });
+
+        function order_status_ajax_request(order_id, status, customer_id, promissed_time = null) {
             $.ajax({
                 type: 'POST',
                 url:'/updateOrderStatus',
-                data: {order_id:order_id, status: status, customer_id:customer_id},
-                success: function (data) {
-                    show_message("The Order status updated!.")
+                data: {order_id:order_id, status: status, customer_id:customer_id, promissed_time: promissed_time},
+                success: function (promissed_time) {
+                    show_message("سفارش توسط شما قبول شد، زمان تحویل دهی " + promissed_time);
                 },
                 error: function (e) {
                     alert("js error in order.js file.")
+                    
                 }
             });
-        });
-
+        }
+        
         function set_select_box_color(element) {
             element.attr('status', element.val())
         }
@@ -51,6 +79,7 @@ jQuery(function ($) {
                 },
                 error: function (e) {
                     alert("js error in order.js file.")
+                    
                 }
             });
         });
@@ -68,6 +97,7 @@ jQuery(function ($) {
                 },
                 error: function (e) {
                     alert("js error in order.js file.")
+                    
                 }
             });
         });

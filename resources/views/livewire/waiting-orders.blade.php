@@ -25,7 +25,7 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>Order Code</th>
+                                <th>Code</th>
                                 <th>Time</th>
                                 <th>Branch</th>
                                 <th>Customer</th>
@@ -40,7 +40,7 @@
                                 <tr>
                                     <td>{{ $item->id}}</td>
                                     <td>{{ $item->created_at->diffForHumans() }}</td>
-                                    <td>{{ $item->branchDetails->title }}</td>
+                                    <td>{{ $item->branchDetails->title }} <br> ({{$item->branchDetails->contact}}) </td>
                                     <td>{{ $item->customer->name }} <br> ({{$item->reciever_phone}}) </td>
                                     <td class="max-width200">{!! show_order_itmes($item->contents) !!}</td>
                                     <td class='@if (($item->has_delivery == 1) && ($item->deliveryDetails->driver)) hasDriver @endif '>

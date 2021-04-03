@@ -20,6 +20,71 @@
 
 </div>
 </div>
+
+<!-- Add complete time for order -->
+    <div class="modal custom-modal fade" id="add_order_completion_time" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="form-header">
+                        <h3>زمان تکمیل سفارش</h3>
+                    </div>
+                    <div class="modal-btn delete-action">
+                        <div class="row">
+                            <form id="order_approved_form" method="POST" style="width:100%;">
+                                {!! csrf_field() !!}
+                                <div class="form-group">
+                                    <input type="datetime-local" class="form-control" id="promissed_time" />
+                                    <input type="hidden" class="form-control" id="order_id" />
+                                    <input type="hidden" class="form-control" id="customer_id" />
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-primary continue-btn"  id="order_approved_form_submit_btn">تائید</a>
+                                        </div>
+                                        <div class="col-6">
+                                            <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-primary cancel-btn">لغو</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Add reject reason for order -->
+    <div class="modal custom-modal fade" id="add_order_reject_reason" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="form-header">
+                        <h3>علت رد کردن سفارش</h3>
+                    </div>
+                    <div class="modal-btn delete-action">
+                        <div class="row">
+                            <form id="delete_backup_form" method="POST" style="width:100%;">
+                                <div class="form-group">
+                                    <div class="row">
+                                        {!! csrf_field() !!}
+                                        <div class="col-12">
+                                            <a href="javascript:void(0);" class="form-control btn btn-primary continue-btn" onclick="document.getElementById('delete_backup_form').submit();">نبود بعضی محتویات سفارش</a>
+                                            <a href="javascript:void(0);" class="form-control btn btn-primary continue-btn" onclick="document.getElementById('delete_backup_form').submit();">عدم امکان سرویس دهی، ازدحام</a>
+                                            <a href="javascript:void(0);" class="form-control btn btn-primary continue-btn" onclick="document.getElementById('delete_backup_form').submit();">خارج از ساحه</a>
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 <!-- Datatable JS -->
 @push('scripts')
 @include('dashboards.restaurant.orders.scripts')

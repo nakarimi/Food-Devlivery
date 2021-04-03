@@ -2,7 +2,7 @@
     <thead>
         <tr>
             <th>کد سفارش</th>
-            <th class="disable_sort">زمان</th>
+            <th class="disable_sort">زمان تحویل دهی </th>
             <th>مجموعه</th>
             <th class="disable_sort">نوعیت انتقال</th>
             <th class="disable_sort">غذا ها</th>
@@ -12,9 +12,9 @@
     </thead>
     <tbody>
         @foreach ($orders as $item)
-            <tr>
+            <tr class="{{is_order_late($item->timeDetails->promissed_time, $item->status)}}">
                 <td>{{ $item->id }}</td>
-                <td>{{ $item->created_at->diffForHumans() }}</td>
+                <td> {{get_promissed_date($item->timeDetails->promissed_time)}} </td>
                 <td>{{ $item->total }}</td>
                 <td>
                     @if ($item->has_delivery == 1)
@@ -36,15 +36,27 @@
                 </td>
                 <td>{!! show_order_itmes($item->contents) !!}</td>
                 <td>
-                    <select class="custom-select mr-sm-2" order_id={{ $item->id }} status="{{ $item->status }}"
-                        name="order_status" id="order_status" customer_id="{{ $item->customer_id }}" required>
-                        <option value="pending" @if ($item->status == 'pending') selected="selected" @endif>Pending</option>
-                        <option value="reject" @if ($item->status == 'reject') selected="selected" @endif>Reject</option>
-                        <option value="processing" @if ($item->status == 'processing') selected="selected" @endif>Processing</option>
-                        <option value="delivered" @if ($item->status == 'delivered') selected="selected" @endif>Delivered</option>
-                        <option value="completed" @if ($item->status == 'completed') selected="selected" @endif>Complete</option>
-                        <option value="canceld" @if ($item->status == 'canceld') selected="selected" @endif>Cancel</option>
-                    </select>
+                 
+                    @if(($item->status == "canceld" || $item->status == "completed")) 
+                         <span class="badge bg-inverse hover" status="{{$item->status}}">
+                            {{translate_status($item->status)}}
+                        </span>
+                    @elseif($item->status == "pending")
+                        <span class="badge bg-inverse hover" status="{{$item->status}}">
+                            {{translate_status($item->status)}}
+                            <div class="tooltip status">
+                                <button type="button" id="order_approve_btn" order_id="{{ $item->id }}" customer_id="{{ $item->customer_id }}"  class="btn .btn-success order_confirm_processing_btn" value="processing" data-toggle="modal" data-target="#add_order_completion_time" >قبول</button>
+                                <button type="button" order_id="{{ $item->id }}" class="btn .btn-danger order_reject_btn" value="reject" data-toggle="modal" data-target="#add_order_reject_reason">رد</button>
+                            </div>
+                        
+                        </span>
+                    @else
+
+                        <span class="badge bg-inverse hover" status="{{$item->status}}">
+                            {{translate_status($item->status)}}
+                        </span>
+
+                    @endif
                 </td>
                 <td><a href="{{ url('/orders/' . $item->id) }}" title="View Order"><button
                             class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
@@ -54,6 +66,7 @@
     </tbody>
 </table>
 
+{{-- @Todo: This should be moved to order details. --}}
 <!-- Add reject reason Modal -->
 <div id="customer_details_modal" class="modal custom-modal fade" role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">

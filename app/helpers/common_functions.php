@@ -482,3 +482,25 @@ if (!function_exists('translate_status')){
         }
     }
 }
+
+// Format promissed date to a farsi readable date.
+if (!function_exists('get_promissed_date')){
+    function get_promissed_date($date){
+        if ($date){
+            Carbon::setLocale('fa');             
+            return Carbon::parse($date)->diffForHumans();
+        }
+        
+        return '';
+    }
+}
+
+// Check if an order is late, add a class for css style applying.
+if (!function_exists('is_order_late')){
+    function is_order_late($date, $status){
+        $completed_status = ['reject', 'canceld', 'completed'];
+
+        return (!in_array($status, $completed_status) && Carbon::parse($date)->isPast()) ? 'order_is_late' : '';
+    }
+}
+
