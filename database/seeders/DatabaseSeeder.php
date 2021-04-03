@@ -131,7 +131,7 @@ class DatabaseSeeder extends Seeder
                 'role_id' => 4,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
-            )
+            ),
             array (
                 'name'     => 'Ahmad Zia',
                 'email'    => 'zia@pomtech.com',
