@@ -147,12 +147,12 @@ class OrdersController extends Controller
             case 'processing' :
                 $field = 'processing_time';
                 $promissed_time = $request['promissed_time'];
-                // send_notification([$customer_id], $userId, 'Your order has been Approved');
+                send_notification([$customer_id], $userId, 'Your order has been Approved');
                 break;
             case 'reject' :
                 $field = 'rejected_time';
                 $message = $request['promissed_time']; // promissed_time variable carries message here.
-                // send_notification([$customer_id], $userId, 'Your order has been rejected');
+                send_notification([$customer_id], $userId, 'Your order has been rejected');
             break;
             case 'delivered' :
                 $field = 'delivery_time';
@@ -189,7 +189,7 @@ class OrdersController extends Controller
         }
 
         OrderTimeDetails::where('order_id', $id)->update($updateDeliveryTimeDetails);
-        // event(new \App\Events\UpdateEvent('Order Updated!', $id));
+        event(new \App\Events\UpdateEvent('Order Updated!', $id));
 
     }
 
