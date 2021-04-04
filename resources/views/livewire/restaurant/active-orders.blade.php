@@ -35,13 +35,13 @@
                                 {!! csrf_field() !!}
                                 <div class="form-group">
                                     <input type="datetime-local" class="form-control" id="promissed_time" />
-                                    <input type="hidden" class="form-control" id="order_id" />
-                                    <input type="hidden" class="form-control" id="customer_id" />
+                                    <input type="hidden" class="form-control" name="order_id" />
+                                    <input type="hidden" class="form-control" name="customer_id" />
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-6">
-                                            <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-primary continue-btn"  id="order_approved_form_submit_btn">تائید</a>
+                                            <a href="javascript:void(0);" data-dismiss="modal" style="pointer-events: none;" class="btn btn-primary continue-btn"  id="order_approved_form_submit_btn">تائید</a>
                                         </div>
                                         <div class="col-6">
                                             <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-primary cancel-btn">لغو</a>
@@ -71,8 +71,8 @@
                                     <div class="row">
                                         {!! csrf_field() !!}
                                         <div class="col-12">
-                                            <input type="hidden" class="form-control" id="order_id" />
-                                            <input type="hidden" class="form-control" id="customer_id" />
+                                            <input type="hidden" class="form-control" name="order_id" />
+                                            <input type="hidden" class="form-control" name="customer_id" />
                                             <a href="javascript:void(0);" data-dismiss="modal" class="form-control btn btn-primary continue-btn add_reject_reason_btn" message="نبود بعضی محتویات سفارش" >نبود بعضی محتویات سفارش</a>
                                             <a href="javascript:void(0);" data-dismiss="modal" class="form-control btn btn-primary continue-btn add_reject_reason_btn" message="عدم امکان سرویس دهی، ازدحام">عدم امکان سرویس دهی، ازدحام</a>
                                             <a href="javascript:void(0);" data-dismiss="modal" class="form-control btn btn-primary continue-btn add_reject_reason_btn" message="خارج از ساحه">خارج از ساحه</a>
@@ -101,8 +101,9 @@
 
     var channel = pusher.subscribe('food-app');
     channel.bind('update-event', function(data) {
-
+        // console.log('evetn called!')
         if (userId == JSON.stringify(data['userId'])) {
+            // console.log('emit!')
             Livewire.emit('refreshActiveOrders');
         }
         
@@ -115,9 +116,19 @@
         $('.datatable').dataTable({
             'bPaginate': true,
             'searching' : true,
-            "bDestroy": true
+            'bDestroy': true,
+            'order': [[0, 'desc']]
+
         });
     });
+
+    $(document).ready(function() {
+        var table = $('#example').DataTable( {
+            rowReorder: true,
+            order: [[ 0, "desc" ]]
+        });
+    });
+
 </script>
 
 @endpush

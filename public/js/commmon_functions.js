@@ -4,9 +4,18 @@ Description  : Js codes related to orders.
 */
 
 function show_message(msg) {
-    $('div.header').after('<div class="alertDiv"><div id="success-alert" class="alert alert-'+msg[1]+' alert-dismissible fade show" role="alert"><strong>'+msg[0]+'</strong></div></div>');
-    $("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
-        $("#success-alert").slideUp(2500);
+
+    let message = '<div id="success-alert" class="alert alert-'+msg[1]+' alert-dismissible fade show" role="alert"><strong>'+msg[0]+'</strong></div>';
+
+    if ($('div.alertDiv').length) {
+            $('div.alertDiv').html(message);
+    }
+    else {
+        $('div.header').after('<div class="alertDiv">'+message+'</div>');
+    }
+
+    $(".alertDiv").fadeTo(2000, 500).slideUp(500, function(){
+        $(".alertDiv").slideUp(2500);
     });
 
 }

@@ -1,8 +1,8 @@
-<table class="table table-striped mb-0 datatable">
+<table class="table table-striped mb-0" id="example">
     <thead>
         <tr>
             <th>کد سفارش</th>
-            <th class="disable_sort">زمان تحویل دهی </th>
+            <th>زمان ثبت/ تحویل دهی</th>
             <th>مجموعه</th>
             <th class="disable_sort">نوعیت انتقال</th>
             <th class="disable_sort">غذا ها</th>
@@ -12,16 +12,16 @@
     </thead>
     <tbody>
         @foreach ($orders as $item)
-            <tr class="{{is_order_late($item->timeDetails->promissed_time, $item->status)}}">
+            <tr class="{{ !empty($item->timeDetails->promissed_time) ? is_order_late($item->timeDetails->promissed_time, $item->status) : ''}}">
                 <td>{{ $item->id }}</td>
-                <td> {{get_promissed_date($item->timeDetails->promissed_time)}} </td>
+                <td> {{ !empty($item->timeDetails->promissed_time) ? get_promissed_date($item->timeDetails->promissed_time) : get_promissed_date($item->created_at)}} </td>
                 <td>{{ $item->total }}</td>
                 <td>
                     @if ($item->has_delivery == 1)
                         @if ($item->deliveryDetails->delivery_type == 'own')
                             <span class="badge bg-inverse-success hover">Own Delivery
                                 <div class="tooltip">
-                                    <button type="button" order_id="{{ $item->id }}" class="btn .btn-default request_delivery_btn" title="درخواست سرویس پیک برای این سفارش">درخواست پیک</button>
+                                    <button type="button" order_id="{{ $item->id }}" class="btn .btn-default " title="درخواست سرویس پیک برای این سفارش">درخواست پیک</button>
                                 </div>
                             </span>
                         @else
@@ -45,8 +45,9 @@
                         <span class="badge bg-inverse hover" status="{{$item->status}}">
                             {{translate_status($item->status)}}
                             <div class="tooltip status">
-                                <button type="button" id="order_approve_btn" order_id="{{ $item->id }}" customer_id="{{ $item->customer_id }}" class="btn btn-success order_confirm_processing_btn" value="processing" data-toggle="modal" data-target="#add_order_completion_time" >قبول</button>
-                                <button type="button" id="order_reject_btn" order_id="{{ $item->id }}" customer_id="{{ $item->customer_id }}" class="btn btn-danger order_reject_btn" value="reject" data-toggle="modal" data-target="#add_order_reject_reason">رد</button>
+                                <button type="button" order_id="{{ $item->id }}" customer_id="{{ $item->customer_id }}" class="btn btn-success order_confirm_processing_btn order_approve_btn" value="processing" data-toggle="modal" data-target="#add_order_completion_time" >قبول</button>
+
+                                <button type="button" order_id="{{ $item->id }}" customer_id="{{ $item->customer_id }}" class="btn btn-danger order_reject_btn" value="reject" data-toggle="modal" data-target="#add_order_reject_reason">رد</button>
                             </div>
                         
                         </span>
