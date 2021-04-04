@@ -25,6 +25,12 @@ function js_error_callback() {
     console.trace();
 }
 
+// New order sound
+function playSound() {
+  var sound = document.getElementById("audio");
+  sound.play();
+}
+
 $(document).on('click','.read-notification-button',function(event){
     var not_id =  $(this).attr('notification_id');
     var token = $("meta[name='csrf-token']").attr("content");

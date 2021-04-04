@@ -103,7 +103,9 @@
     channel.bind('update-event', function(data) {
         // console.log('evetn called!')
         if (userId == JSON.stringify(data['userId'])) {
-            // console.log('emit!')
+            if (JSON.stringify(data['message']) == '"New Order Recieved!"') {
+                playSound();
+            }
             Livewire.emit('refreshActiveOrders');
         }
         
