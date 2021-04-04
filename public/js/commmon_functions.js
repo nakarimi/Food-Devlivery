@@ -27,9 +27,30 @@ function js_error_callback() {
 
 // New order sound
 function playSound() {
-  var sound = document.getElementById("audio");
-  sound.play();
+    var audioElement = document.createElement('audio');
+    audioElement.setAttribute('src', '/audio/short_notification.mp3');
+    audioElement.play();
 }
+
+$(document).on('change','#audio',function(){
+
+    let order_id = $(this).attr('order_id');
+    let customer_id = $(this).attr('customer_id');
+    let driver_id = $(this).val();
+    $.ajax({
+        type: 'POST',
+        url:'/assignDriver',
+        data: {order_id:order_id, driver_id: driver_id, customer_id:customer_id},
+        success: function (data) {
+            show_message("The Order assigned to Driver!")
+        },
+        error: function (e) {
+            alert("js error in order.js file.")
+            
+        }
+    });
+});
+
 
 $(document).on('click','.read-notification-button',function(event){
     var not_id =  $(this).attr('notification_id');

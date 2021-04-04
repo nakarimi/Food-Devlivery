@@ -30,8 +30,6 @@
         <!-- Notifications -->
         <livewire:show-notifications />
         <!-- /Notifications -->
-
-        <audio id="audio" src="{{asset('audio/short_notification.mp3')}}" autoplay="false" ></audio>
         
         <li class="nav-item dropdown has-arrow main-drop">
             <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">

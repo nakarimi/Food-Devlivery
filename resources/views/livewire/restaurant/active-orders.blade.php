@@ -104,6 +104,7 @@
         // console.log('evetn called!')
         if (userId == JSON.stringify(data['userId'])) {
             if (JSON.stringify(data['message']) == '"New Order Recieved!"') {
+                // console.log("New order arrived!");
                 playSound();
             }
             Livewire.emit('refreshActiveOrders');
