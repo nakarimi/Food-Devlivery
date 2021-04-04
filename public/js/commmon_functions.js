@@ -4,7 +4,7 @@ Description  : Js codes related to orders.
 */
 
 function show_message(msg) {
-    $('div.header').after('<div class="alertDiv"><div id="success-alert" class="alert alert-success alert-dismissible fade show" role="alert"><strong>'+msg+'</strong></div></div>');
+    $('div.header').after('<div class="alertDiv"><div id="success-alert" class="alert alert-'+msg[1]+' alert-dismissible fade show" role="alert"><strong>'+msg[0]+'</strong></div></div>');
     $("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
         $("#success-alert").slideUp(2500);
     });

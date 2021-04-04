@@ -23,6 +23,7 @@ class OrderTimeSlots extends Migration
             $table->timestamp('caceled_time')->nullable();
             $table->timestamp('delivery_time')->nullable();
             $table->timestamp('completed_time')->nullable();
+            $table->string('reject_reason')->nullable();
             });
     }
 

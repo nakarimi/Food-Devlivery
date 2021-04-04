@@ -66,14 +66,16 @@
                     </div>
                     <div class="modal-btn delete-action">
                         <div class="row">
-                            <form id="delete_backup_form" method="POST" style="width:100%;">
+                            <form id="add_reject_reason" method="POST" style="width:100%;">
                                 <div class="form-group">
                                     <div class="row">
                                         {!! csrf_field() !!}
                                         <div class="col-12">
-                                            <a href="javascript:void(0);" class="form-control btn btn-primary continue-btn" onclick="document.getElementById('delete_backup_form').submit();">نبود بعضی محتویات سفارش</a>
-                                            <a href="javascript:void(0);" class="form-control btn btn-primary continue-btn" onclick="document.getElementById('delete_backup_form').submit();">عدم امکان سرویس دهی، ازدحام</a>
-                                            <a href="javascript:void(0);" class="form-control btn btn-primary continue-btn" onclick="document.getElementById('delete_backup_form').submit();">خارج از ساحه</a>
+                                            <input type="hidden" class="form-control" id="order_id" />
+                                            <input type="hidden" class="form-control" id="customer_id" />
+                                            <a href="javascript:void(0);" data-dismiss="modal" class="form-control btn btn-primary continue-btn add_reject_reason_btn" message="نبود بعضی محتویات سفارش" >نبود بعضی محتویات سفارش</a>
+                                            <a href="javascript:void(0);" data-dismiss="modal" class="form-control btn btn-primary continue-btn add_reject_reason_btn" message="عدم امکان سرویس دهی، ازدحام">عدم امکان سرویس دهی، ازدحام</a>
+                                            <a href="javascript:void(0);" data-dismiss="modal" class="form-control btn btn-primary continue-btn add_reject_reason_btn" message="خارج از ساحه">خارج از ساحه</a>
                                         </div>
                                        
                                     </div>

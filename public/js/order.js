@@ -21,7 +21,8 @@ jQuery(function ($) {
             let customer_id = $(this).attr('customer_id');
             let status = $(this).val();
 
-            order_status_ajax_request(order_id, status, customer_id, null);
+            let message = ['Order of status update to ' + status, 'warning'];
+            order_status_ajax_request(order_id, status, customer_id, message, null);
         });
         
         $('#order_approve_btn').on('click',function(event){
@@ -31,8 +32,6 @@ jQuery(function ($) {
 
         $('#order_approved_form_submit_btn').on('click',function(event){
 
-            // Avoid form redirect on submit.
-            event.preventDefault();
             let order_id = $('#order_approved_form #order_id').val();
             let promissed_time =  $('#order_approved_form #promissed_time').val();
             let customer_id =  $('#order_approved_form #customer_id').val();
@@ -42,17 +41,39 @@ jQuery(function ($) {
             if (!order_id > 0 || !customer_id > 0) {
                 return;
             }
-            order_status_ajax_request(order_id, status, customer_id, promissed_time);
+            let message = ["سفارش توسط شما قبول شد.", 'success'];
+            order_status_ajax_request(order_id, status, customer_id, message, promissed_time);
             
         });
 
-        function order_status_ajax_request(order_id, status, customer_id, promissed_time = null) {
+        $('#order_reject_btn').on('click',function(event){
+            $('form#add_reject_reason #order_id').val($(this).attr('order_id'));
+            $('form#add_reject_reason #customer_id').val($(this).attr('customer_id'));
+        });
+
+        $('form#add_reject_reason .add_reject_reason_btn').on('click',function(event){
+ 
+            let message = $(this).attr('message');
+            let order_id =  $('form#add_reject_reason #order_id').val();
+            let customer_id =  $('form#add_reject_reason #customer_id').val();
+            let status =  'reject';
+            
+            // IF correct values are not provided.
+            if (!order_id > 0 || !customer_id > 0) {
+                return;
+            }
+            let msg = ['سفارش توسط شما رد شد.', 'danger'];
+            order_status_ajax_request(order_id, status, customer_id, msg, message);
+            
+        });
+
+        function order_status_ajax_request(order_id, status, customer_id, message, promissed_time = null) {
             $.ajax({
                 type: 'POST',
                 url:'/updateOrderStatus',
                 data: {order_id:order_id, status: status, customer_id:customer_id, promissed_time: promissed_time},
                 success: function (promissed_time) {
-                    show_message("سفارش توسط شما قبول شد، زمان تحویل دهی " + promissed_time);
+                    show_message(message);
                 },
                 error: function (e) {
                     alert("js error in order.js file.")

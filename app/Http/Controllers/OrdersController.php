@@ -139,17 +139,20 @@ class OrdersController extends Controller
         $userId = \auth()->user()->id;
         $field = '';
         $promissed_time = NULL;
+        $message = NULL;
+        $now = Carbon::now()->format('Y-m-d H:i:s');
 
         // TODO: we will add notificaiton for company as well.
         switch($status) {
             case 'processing' :
                 $field = 'processing_time';
                 $promissed_time = $request['promissed_time'];
-                send_notification([$customer_id], $userId, 'Your order has been Approved');
+                // send_notification([$customer_id], $userId, 'Your order has been Approved');
                 break;
             case 'reject' :
                 $field = 'rejected_time';
-                send_notification([$customer_id], $userId, 'Your order has been rejected');
+                $message = $request['promissed_time']; // promissed_time variable carries message here.
+                // send_notification([$customer_id], $userId, 'Your order has been rejected');
             break;
             case 'delivered' :
                 $field = 'delivery_time';
@@ -168,18 +171,25 @@ class OrdersController extends Controller
 
         // Update timing as well.
         $updateDeliveryTimeDetails = [
-            $field => Carbon::now()->format('Y-m-d H:i:s'),
+            $field => $now,
         ];
 
         if (!is_null($promissed_time)) {
             $updateDeliveryTimeDetails = [
-                $field => Carbon::now()->format('Y-m-d H:i:s'),
+                $field => $now,
                 'promissed_time' => Carbon::parse($promissed_time)->format('Y-m-d H:i:s')
             ];
         }
 
+        if (!is_null($message)) {
+            $updateDeliveryTimeDetails = [
+                $field => $now,
+                'reject_reason' => $message
+            ];
+        }
+
         OrderTimeDetails::where('order_id', $id)->update($updateDeliveryTimeDetails);
-        event(new \App\Events\UpdateEvent('Order Updated!', $id));
+        // event(new \App\Events\UpdateEvent('Order Updated!', $id));
 
     }
 

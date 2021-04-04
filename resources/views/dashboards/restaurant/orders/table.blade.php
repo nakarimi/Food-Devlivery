@@ -45,8 +45,8 @@
                         <span class="badge bg-inverse hover" status="{{$item->status}}">
                             {{translate_status($item->status)}}
                             <div class="tooltip status">
-                                <button type="button" id="order_approve_btn" order_id="{{ $item->id }}" customer_id="{{ $item->customer_id }}"  class="btn .btn-success order_confirm_processing_btn" value="processing" data-toggle="modal" data-target="#add_order_completion_time" >قبول</button>
-                                <button type="button" order_id="{{ $item->id }}" class="btn .btn-danger order_reject_btn" value="reject" data-toggle="modal" data-target="#add_order_reject_reason">رد</button>
+                                <button type="button" id="order_approve_btn" order_id="{{ $item->id }}" customer_id="{{ $item->customer_id }}" class="btn btn-success order_confirm_processing_btn" value="processing" data-toggle="modal" data-target="#add_order_completion_time" >قبول</button>
+                                <button type="button" id="order_reject_btn" order_id="{{ $item->id }}" customer_id="{{ $item->customer_id }}" class="btn btn-danger order_reject_btn" value="reject" data-toggle="modal" data-target="#add_order_reject_reason">رد</button>
                             </div>
                         
                         </span>
