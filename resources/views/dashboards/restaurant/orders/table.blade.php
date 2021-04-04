@@ -37,7 +37,7 @@
                 <td>{!! show_order_itmes($item->contents) !!}</td>
                 <td>
                  
-                    @if(($item->status == "canceld" || $item->status == "completed")) 
+                    @if(($item->status == "canceld" || $item->status == "completed" || $item->status == "reject")) 
                          <span class="badge bg-inverse hover" status="{{$item->status}}">
                             {{translate_status($item->status)}}
                         </span>

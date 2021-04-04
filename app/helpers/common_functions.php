@@ -273,10 +273,10 @@ if (!function_exists('get_orders')){
         $status = [];
         switch($type) {
             case 'history':
-                $status = ['completed', 'canceld'];
+                $status = ['completed', 'canceld', 'reject'];
             break;
             case 'active-orders':
-                $status = ['pending', 'reject', 'processing', 'delivered'];
+                $status = ['pending', 'processing', 'delivered'];
             break;
             default:
             $status = [];

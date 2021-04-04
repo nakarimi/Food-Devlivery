@@ -61,6 +61,13 @@
 
                            </td>
                            <td>
+
+                           @if(($item->status == "canceld" || $item->status == "completed" || $item->status == "reject")) 
+                              <span class="badge bg-inverse hover" status="{{$item->status}}">
+                                 {{$item->status}}
+                              </span>
+                           @else
+
                               <select class="custom-select mr-sm-2" order_id={{$item->id}} status="{{$item->status}}" name="order_status" id="order_status" required>
                                  <option value="pending" @if($item->status == 'pending') selected="selected" @endif >Pending</option>
                                  <option value="reject" @if($item->status == 'reject') selected="selected" @endif >Reject</option>
@@ -69,6 +76,9 @@
                                  <option value="completed" @if($item->status == 'completed') selected="selected" @endif >Complete</option>
                                  <option value="canceld" @if($item->status == 'canceld') selected="selected" @endif >Cancel</option>
                               </select>
+
+                           @endif
+
                            </td>
                            <td>
                               <a href="{{ url('/orders/' . $item->id) }}" title="View Order"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
