@@ -83,7 +83,7 @@
                            <td>{{$detail->notes}}</td>
                            <td>
                               @if ($detail->details_status == "pending" and Auth::user()->role->name == "restaurant")
-                             <button class="btn btn-sm btn-info" disabled="disabled" >معطل</button>
+                             <button class="btn btn-sm btn-warning" disabled="disabled" >معطل</button>
                               @elseif ($detail->details_status == "pending")
                                <form method="POST" action="{{ url('/approveItem') }}" accept-charset="UTF-8" style="display:inline">
                                  {{ csrf_field() }}

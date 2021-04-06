@@ -1,4 +1,4 @@
-<table class="table table-striped mb-0" id="example">
+<table class="table table-striped mb-0">
     <thead>
         <tr>
             <th>کد سفارش</th>
@@ -21,7 +21,7 @@
                         @if ($item->deliveryDetails->delivery_type == 'own')
                             <span class="badge bg-inverse-success hover">Own Delivery
                                 <div class="tooltip">
-                                    <button type="button" order_id="{{ $item->id }}" class="btn .btn-default " title="درخواست سرویس پیک برای این سفارش">درخواست پیک</button>
+                                    <button type="button" order_id="{{ $item->id }}" class="btn .btn-default request_delivery_btn" title="درخواست سرویس پیک برای این سفارش">درخواست پیک</button>
                                 </div>
                             </span>
                         @else
@@ -66,6 +66,9 @@
         @endforeach
     </tbody>
 </table>
+<div class="pagination-wrapper"> 
+    {!! $orders->appends(['search' => Request::get('search')])->render() !!} 
+</div>
 
 {{-- @Todo: This should be moved to order details. --}}
 <!-- Add reject reason Modal -->

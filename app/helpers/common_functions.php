@@ -72,10 +72,24 @@ if (!function_exists('get_item_details')) {
     }
 }
 
-// This function loads all items of the current user based on status.
-// Status can be an array so it will return multiple items of user.
+/**
+ * This function loads all items of the current user based on status.
+ * Status can be an array so it will return multiple items of user.
+ * 
+ * @param $status
+ * request contains the file object.
+ * @param $userId
+ * request contains the file object.
+ * @param $count
+ * request contains the file object.
+ * @param $all
+ * Load all items regardless of there status (available or N/A) for the list.
+ *
+ * @return a string which is name of the file with extension and address.
+ *
+ * */
 if (!function_exists('loadUserItemsData')) {
-    function loadUserItemsData($status, $userId = null, $count = false)
+    function loadUserItemsData($status, $userId = null, $count = false, $all = false)
     {
         if ($userId == null){
             $userId = auth()->user()->id;
@@ -88,7 +102,7 @@ if (!function_exists('loadUserItemsData')) {
         }
 
         // Get user Items.
-        $items =  getUserItemsBasedOnStatus($branchIds, $status, $count);
+        $items =  getUserItemsBasedOnStatus($branchIds, $status, $count, $all);
         return $items;
     }
 }
@@ -106,11 +120,15 @@ if (!function_exists('getUserBranches')){
 // This will return items based on status one or multiple status.
 if (!function_exists('getUserItemsBasedOnStatus')){
 
-    function getUserItemsBasedOnStatus ($branchIds, $status, $count){
+    function getUserItemsBasedOnStatus ($branchIds, $status, $count, $all = flase){
         $item = Item::whereHas(
             'itemFullDetails', function ($query) use ($status) {
             $query->whereIn('details_status', $status);
         })->whereIn('branch_id',$branchIds);
+
+        if (!$all) {
+            $item = $item->where('status', '1');
+        }
         if ($count){
             $item = $item->count();
         }
@@ -123,7 +141,7 @@ if (!function_exists('getUserItemsBasedOnStatus')){
 
 // This function get specific  user branches and returns user menus.
 if (!function_exists('loadUserMenuData')){
-    function loadUserMenuData($userId){
+    function loadUserMenuData($userId, $statusCheck = false){
         // Get user branch.
         $branches =  getUserBranches($userId);
         $branchIds = [];
@@ -132,15 +150,21 @@ if (!function_exists('loadUserMenuData')){
         }
 
         // Get user Items.
-        $menu =  getUserMenus($branchIds);
+        $menu =  getUserMenus($branchIds, $statusCheck);
         return $menu;
     }
 }
 
 // This will return menus based on branch ids.
 if (!function_exists('getUserMenus')){
-    function getUserMenus ($branchIds){
-        $menu = Menu::whereIn('branch_id',$branchIds)->where('status', '1')->latest()->paginate(10);
+    function getUserMenus ($branchIds, $statusCheck = false){
+        $menu = Menu::whereIn('branch_id',$branchIds);
+
+        if ($statusCheck) {
+            $menu = $menu->where('status', '1');
+        }
+
+        $menu = $menu->latest()->paginate(10);
         return $menu;
     }
 }
@@ -175,14 +199,22 @@ if (!function_exists('abortUrlFor')){
 
 // This will return orders based on branch ids of a user.
 if (!function_exists('loadUserAllOrders')){
-    function loadUserAllOrders ($userId, $status){
+    function loadUserAllOrders ($userId, $status, $perPage = NULL){
         // Get user branch.
         $branches =  getUserBranches($userId);
         $branchIds = [];
         foreach ($branches as $branch) {
             array_push($branchIds, $branch->id);
         }
-        $orders = \App\Models\Order::whereIn('branch_id', $branchIds)->whereIn('status', $status)->with('customer.blockedCustomer')->latest()->get();
+        $orders = \App\Models\Order::whereIn('branch_id', $branchIds)->whereIn('status', $status)->with('customer.blockedCustomer');
+
+        if ($perPage) {
+            $orders = $orders->latest()->paginate($perPage);
+        }
+        else {
+            $orders = $orders->latest()->get();
+        }
+
         return $orders;
     }
 }
@@ -283,6 +315,7 @@ if (!function_exists('get_orders')){
         };
 
         $drivers = Driver::all();
+        $perPage = 25;
 
         if ($type == 'waiting-orders') {
             $status = ['delivered'];
@@ -291,14 +324,12 @@ if (!function_exists('get_orders')){
         // If it is restaurant then user will have some restricted data.
         if (get_role() == "restaurant"){
             $userId = Auth::user()->id;
-            $orders = loadUserAllOrders($userId, $status);
+            $orders = loadUserAllOrders($userId, $status, $perPage);
             if ($realTime) {
                 return view('livewire.restaurant.active-orders', compact('orders', 'drivers'))->extends('dashboards.restaurant.layouts.master');
             }
             return view('dashboards.restaurant.orders.index', compact('orders'));
         }
-
-        $perPage = 10;
 
         // For real time data, datatable search is enogh.
         $keyword = ($request) ? $request->get('search') : $keyword;
@@ -503,4 +534,12 @@ if (!function_exists('is_order_late')){
         return (!in_array($status, $completed_status) && Carbon::parse($date)->isPast()) ? 'order_is_late' : '';
     }
 }
+
+// Update table column with boolean values.
+if (!function_exists('columnToggleUpdate')){
+    function columnToggleUpdate($table, $column, $record_id){
+        DB::statement("UPDATE $table SET $column = 1 - status WHERE id = $record_id");
+    }
+}
+        
 

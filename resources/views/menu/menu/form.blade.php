@@ -11,8 +11,8 @@
     <label for="status" class="control-label">{{ (get_role() == "restaurant") ? 'حالت' : 'Status' }}</label>
     {{-- <input class="form-control" name="status" type="number" id="status" value="{{ $menu->status ?? ''}}" required> --}}
     <select class="custom-select mr-sm-2" name="status" id="status" required>
-        <option value="1"  @if( (isset($menu->status)) && ($menu->status) == '1') selected="selected" @endif>Enable</option>
-        <option value="0"  @if( (isset($menu->status)) && ($menu->status) == '0') selected="selected" @endif>Disable</option>
+        <option value="1"  @if( (isset($menu->status)) && ($menu->status) == '1') selected="selected" @endif>{{ (get_role() == "restaurant") ? 'موجود' : 'Enable'}}</option>
+        <option value="0"  @if( (isset($menu->status)) && ($menu->status) == '0') selected="selected" @endif>{{ (get_role() == "restaurant") ? 'غیر فعال' : 'Disable'}}</option>
     </select>
     {!! $errors->first('status', '<p class="help-block">:message</p>') !!}
 </div>

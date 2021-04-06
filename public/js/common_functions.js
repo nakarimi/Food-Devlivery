@@ -80,3 +80,5 @@ $(document).on('click','.read-notification-button',function(event){
 $(document).on('click', 'div.dropdown-menu.notifications', function (e) {
     e.stopPropagation();
 });
+
+console.log("common file loaded");

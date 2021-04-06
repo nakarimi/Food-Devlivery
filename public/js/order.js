@@ -117,7 +117,7 @@ jQuery(function ($) {
                 data: {order_id:order_id},
                 success: function (data) {
                     $(this).closest('span').replaceWith('<span class="badge bg-inverse-primary">(Company Delivery) <br><span class="badge bg-inverse-danger">Pending</span></span>');
-                    show_message("Devlivery requested Successfully!")
+                    show_message(["درخواست شما برای پیک فرستاده شد.", 'success']);
                 },
                 error: function (e) {
                     alert("js error in order.js file.")

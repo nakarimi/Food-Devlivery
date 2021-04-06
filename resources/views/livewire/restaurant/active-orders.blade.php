@@ -11,6 +11,20 @@
                 </div>
             </div>
             <div class="card-body">
+                <form  accept-charset="UTF-8" class="form-inline my-2 my-lg-0 float-right" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="search" placeholder="Search..." wire:model="keyword">
+                        <span class="input-group-append">
+                            <button class="btn btn-secondary" type="submit">
+                            <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+                <br/>
+                <br/>
+                <br/>
+
                 <div class="table-responsive">
                     @include('dashboards.restaurant.orders.table')
                 </div>
@@ -112,27 +126,6 @@
         }
         
     });
-</script>
-<script>
-    // Since DOM is changing on each refresh we need to reinitilize
-    // data table.
-    document.addEventListener('reinitializaJSs', function () {
-        $('.datatable').dataTable({
-            'bPaginate': true,
-            'searching' : true,
-            'bDestroy': true,
-            'order': [[0, 'desc']]
-
-        });
-    });
-
-    $(document).ready(function() {
-        var table = $('#example').DataTable( {
-            rowReorder: true,
-            order: [[ 0, "desc" ]]
-        });
-    });
-
 </script>
 
 @endpush

@@ -220,4 +220,18 @@ class MenuController extends Controller
         }
         return $itemsArray;
     }
+
+    /**
+     * Update status of menu via ajax call.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     */
+    public function updateMenuStockStatus(Request $request) {
+
+        $record_id = $request['item_id'];
+        $table = 'menus';
+        $column = 'status';
+        columnToggleUpdate($table, $column, $record_id);
+    }    
 }
