@@ -28,7 +28,7 @@ class ItemController extends Controller
         Session::put('itemType', 'approved');
         // If it is restaurant then user will have some restricted data.
         if (get_role() == "restaurant"){
-            $item = loadUserItemsData(['pending', 'approved', 'rejected']);
+            $item = loadUserItemsData(['pending', 'approved', 'rejected'], null, false, true);
             return view('dashboards.restaurant.items.index', compact('item'));
         }
 
@@ -296,7 +296,7 @@ class ItemController extends Controller
         Session::put('itemType', 'pending');
         // If it is restaurant then user will have some restricted data.
         if (get_role() == "restaurant"){
-            $item = loadUserItemsData(['pending']);
+            $item = loadUserItemsData(['pending'], null, false, true);
             return view('dashboards.restaurant.items.index', compact('item'));
         }
         $item = $this->getItemsBasedOnStatus('pending');
@@ -308,7 +308,7 @@ class ItemController extends Controller
         Session::put('itemType', 'approved');
         // If it is restaurant then user will have some restricted data.
         if (get_role() == "restaurant"){
-            $item = loadUserItemsData(['approved']);
+            $item = loadUserItemsData(['pending', 'approved', 'rejected'], null, false, true);
             return view('dashboards.restaurant.items.index', compact('item'));
         }
 
@@ -372,4 +372,19 @@ class ItemController extends Controller
             $update->update(array('details_status' => "old"));
         }
     }
+
+    /**
+     * Update status of item via ajax call.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     */
+    public function updateItemStockStatus(Request $request) {
+
+        $record_id = $request['item_id'];
+        $table = 'items';
+        $column = 'status';
+        columnToggleUpdate($table, $column, $record_id);
+    }
+
 }

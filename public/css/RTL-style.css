@@ -679,7 +679,7 @@ table.dataTable thead > tr > td.sorting {
 .btn-danger:active,
 .open > .dropdown-toggle.btn-danger {
     background-color: #e6294b;
-    border: 1px solid #e6294b
+    
 }
 .btn-danger.active.focus,
 .btn-danger.active:focus,
@@ -691,7 +691,6 @@ table.dataTable thead > tr > td.sorting {
 .open > .dropdown-toggle.btn-danger:focus,
 .open > .dropdown-toggle.btn-danger:hover {
     background: #e9ab2e;
-    border: 1px solid #e9ab2e
 }
 .btn-danger.active:focus:not(:disabled):not(.disabled),
 .btn-danger:active:focus:not(:disabled):not(.disabled),

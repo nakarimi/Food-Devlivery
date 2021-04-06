@@ -31,8 +31,7 @@
     <!-- jQuery -->
     <script src="{{asset('js/jquery-3.2.1.min.js')}}"></script>
 
-    <script src="{{asset('js/commmon_functions.js')}}"></script>
-
+    @include('layouts.common_scripts')
 
 {{--    TODO: this should only push based on component--}}
     <link rel="stylesheet" href="{{asset('css/dataTables.bootstrap4.min.css')}}">

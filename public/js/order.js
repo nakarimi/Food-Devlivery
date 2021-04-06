@@ -24,47 +24,50 @@ jQuery(function ($) {
             let message = ['Order of status update to ' + status, 'warning'];
             order_status_ajax_request(order_id, status, customer_id, message, null);
         });
-        
-        $('#order_approve_btn').on('click',function(event){
-            $('#order_approved_form #order_id').val($(this).attr('order_id'));
-            $('#order_approved_form #customer_id').val($(this).attr('customer_id'));
+
+        $(document).on('click','.order_approve_btn',function(){
+            $('#order_approved_form #promissed_time').val('');
+            $('#order_approved_form input[name=order_id]').val($(this).attr('order_id'));
+            $('#order_approved_form input[name=customer_id]').val($(this).attr('customer_id'));
         });
 
-        $('#order_approved_form_submit_btn').on('click',function(event){
+        $(document).on('change','input#promissed_time',function(){
+            $('#order_approved_form_submit_btn').css("pointer-events", 'auto');
+        });
 
-            let order_id = $('#order_approved_form #order_id').val();
+        $(document).on('click','#order_approved_form_submit_btn',function(){
+            let order_id = $('#order_approved_form input[name=order_id]').val();
             let promissed_time =  $('#order_approved_form #promissed_time').val();
-            let customer_id =  $('#order_approved_form #customer_id').val();
+            let customer_id =  $('#order_approved_form input[name=customer_id]').val();
             let status =  'processing';
-            
+
             // IF correct values are not provided.
-            if (!order_id > 0 || !customer_id > 0) {
+            if (promissed_time.length < 1 || !order_id > 0 || !customer_id > 0) {
+                alert("صفحه را مججد لود کنید.");
                 return;
             }
             let message = ["سفارش توسط شما قبول شد.", 'success'];
             order_status_ajax_request(order_id, status, customer_id, message, promissed_time);
-            
         });
 
-        $('#order_reject_btn').on('click',function(event){
-            $('form#add_reject_reason #order_id').val($(this).attr('order_id'));
-            $('form#add_reject_reason #customer_id').val($(this).attr('customer_id'));
+        $(document).on('click','.order_reject_btn',function(){
+            $('form#add_reject_reason input[name=order_id]').val($(this).attr('order_id'));
+            $('form#add_reject_reason input[name=customer_id]').val($(this).attr('customer_id'));
         });
 
-        $('form#add_reject_reason .add_reject_reason_btn').on('click',function(event){
- 
+        $(document).on('click','form#add_reject_reason .add_reject_reason_btn',function(){
             let message = $(this).attr('message');
-            let order_id =  $('form#add_reject_reason #order_id').val();
-            let customer_id =  $('form#add_reject_reason #customer_id').val();
+            let order_id =  $('form#add_reject_reason input[name=order_id]').val();
+            let customer_id =  $('form#add_reject_reason input[name=customer_id]').val();
             let status =  'reject';
             
             // IF correct values are not provided.
             if (!order_id > 0 || !customer_id > 0) {
+                alert("صفحه را مججد لود کنید.");
                 return;
             }
             let msg = ['سفارش توسط شما رد شد.', 'danger'];
             order_status_ajax_request(order_id, status, customer_id, msg, message);
-            
         });
 
         function order_status_ajax_request(order_id, status, customer_id, message, promissed_time = null) {
@@ -72,7 +75,7 @@ jQuery(function ($) {
                 type: 'POST',
                 url:'/updateOrderStatus',
                 data: {order_id:order_id, status: status, customer_id:customer_id, promissed_time: promissed_time},
-                success: function (promissed_time) {
+                success: function () {
                     show_message(message);
                 },
                 error: function (e) {
@@ -106,7 +109,7 @@ jQuery(function ($) {
         });
 
         $(document).on('click','.request_delivery_btn',function(){
-            console.log("delivery requsted!");
+            console.log("delivery requsted2!");
             let order_id = $(this).attr('order_id');
             $.ajax({
                 type: 'POST',
@@ -114,7 +117,7 @@ jQuery(function ($) {
                 data: {order_id:order_id},
                 success: function (data) {
                     $(this).closest('span').replaceWith('<span class="badge bg-inverse-primary">(Company Delivery) <br><span class="badge bg-inverse-danger">Pending</span></span>');
-                    show_message("Devlivery requested Successfully!")
+                    show_message(["درخواست شما برای پیک فرستاده شد.", 'success']);
                 },
                 error: function (e) {
                     alert("js error in order.js file.")

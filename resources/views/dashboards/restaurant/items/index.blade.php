@@ -28,28 +28,34 @@
                            <th class="disable_sort">تصویر</th>
                            <th class="disable_sort">عنوان</th>
                            <th>قیمت</th>
-                           <th>حالت</th>
+                           <th>موجود</th>
                             <th class="disable_sort">تغیرات</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($item as $item)
+
+                            @php $itemDetails = get_item_details($item, Session::get('itemType')); @endphp
                                 <tr>
                                     <td>{{ $loop->iteration}}</td>
                                     <td>
                                         <h2 class="table-avatar">
-                                            <a href="#" class="avatar" style="width: 100px; height: 100px; background-color: transparent;"><img alt="" src="{{ url('storage/profile_images/' . get_item_details($item, Session::get('itemType'))->thumbnail) }}"></a>
+                                            <a href="#" class="avatar" style="width: 100px; height: 100px; background-color: transparent;"><img alt="" src="{{ url('storage/profile_images/' . $itemDetails->thumbnail) }}"></a>
                                         </h2>
                                     </td>
-                                    <td>{{ get_item_details($item, Session::get('itemType'))->title }}</td>
-                                    <td>{{ get_item_details($item, Session::get('itemType'))->price }}</td>
+                                    <td>{{ $itemDetails->title }}</td>
+                                    <td>{{ $itemDetails->price }}</td>
                                     <td>
-                                        @if(get_item_details($item, Session::get('itemType'))->details_status == "pending")
+
+                                        @php $checked = ''; $style = 'warning'; @endphp
+                                        @if($itemDetails->details_status == "pending")
                                             <span class="badge bg-inverse-warning">معطل</span>
-                                        @elseif (get_item_details($item, Session::get('itemType'))->detials_status == "rejected")
-                                            <span class="badge bg-inverse-danger">رد شده</span>
-                                            @else
-                                            <span class="badge bg-inverse-success">فعال</span>
+                                        @elseif ($item->status)
+                                              @php $checked = 'checked'; $style = 'success'; @endphp
+                                        @endif
+
+                                        @if($itemDetails->details_status != "pending")
+                                          <input type="checkbox" class="itemStockStatus" item_id="{{ $item->id }}" {{$checked}} data-toggle="toggle" data-on="بلی" data-off="خیر" data-onstyle="success" data-offstyle="danger">
                                         @endif
                                     </td>
                                     <td>
@@ -76,7 +82,6 @@
 @endsection
 
 @section('scripts')
-    <!-- Datatable JS -->
-    <script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('js/dataTables.bootstrap4.min.js')}}"></script>
+@include('dashboards.restaurant.orders.scripts')
+
 @stop

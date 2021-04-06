@@ -31,8 +31,7 @@
     <!-- jQuery -->
     <script src="{{asset('js/jquery-3.2.1.min.js')}}"></script>
 
-    <!-- Custom JS -->
-    <script src="{{asset('js/commmon_functions.js')}}"></script>
+    @include('common_scripts')
 
     {{--   Adding specific style of each page--}}
 

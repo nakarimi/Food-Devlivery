@@ -24,8 +24,8 @@
                             <tr>
                                 <th class="disable_sort">#</th>
                                 <th class="disable_sort">عنوان</th>
-                                <th>حالت</th>
                                 <th class="disable_sort">غذا ها</th>
+                                <th>موجود</th>
                                 <th class="disable_sort">تغیرات</th>
                             </tr>
                             </thead>
@@ -34,14 +34,15 @@
                                 <tr>
                                     <td>{{ $loop->iteration or $item->id }}</td>
                                     <td>{{ $item->title }}</td>
-                                    <td>
-                                        @if($item->status == 1)
-                                            <span class="badge bg-inverse-success">فعال</span>
-                                        @else
-                                            <span class="badge bg-inverse-danger">غیر فعال</span>
-                                        @endif
-                                    </td>
                                     <td>{!! show_menu_itmes($item->items) !!}</td>
+                                    <td>
+                                        @php $checked = ''; $style = 'warning'; @endphp
+                                        @if ($item->status)
+                                              @php $checked = 'checked'; $style = 'success'; @endphp
+                                        @endif
+                                        <span></span>
+                                        <input type="checkbox" class="menuStockStatus" item_id="{{ $item->id }}" {{$checked}} data-toggle="toggle" data-on="بلی" data-off="خیر" data-onstyle="success" data-offstyle="danger">
+                                    </td>
                                     <td>
                                         <a href="{{ url('/menu/' . $item->id) }}" title="View Menu"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
                                         <a href="{{ url('/menu/' . $item->id . '/edit') }}" title="Edit Menu"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
@@ -63,7 +64,6 @@
 @endsection
 
 @section('scripts')
-    <!-- Datatable JS -->
-    <script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('js/dataTables.bootstrap4.min.js')}}"></script>
+@include('dashboards.restaurant.orders.scripts')
+
 @stop

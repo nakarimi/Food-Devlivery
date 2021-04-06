@@ -11,6 +11,20 @@
                 </div>
             </div>
             <div class="card-body">
+                <form  accept-charset="UTF-8" class="form-inline my-2 my-lg-0 float-right" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="search" placeholder="Search..." wire:model="keyword">
+                        <span class="input-group-append">
+                            <button class="btn btn-secondary" type="submit">
+                            <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+                <br/>
+                <br/>
+                <br/>
+
                 <div class="table-responsive">
                     @include('dashboards.restaurant.orders.table')
                 </div>
@@ -35,13 +49,13 @@
                                 {!! csrf_field() !!}
                                 <div class="form-group">
                                     <input type="datetime-local" class="form-control" id="promissed_time" />
-                                    <input type="hidden" class="form-control" id="order_id" />
-                                    <input type="hidden" class="form-control" id="customer_id" />
+                                    <input type="hidden" class="form-control" name="order_id" />
+                                    <input type="hidden" class="form-control" name="customer_id" />
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-6">
-                                            <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-primary continue-btn"  id="order_approved_form_submit_btn">تائید</a>
+                                            <a href="javascript:void(0);" data-dismiss="modal" style="pointer-events: none;" class="btn btn-primary continue-btn"  id="order_approved_form_submit_btn">تائید</a>
                                         </div>
                                         <div class="col-6">
                                             <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-primary cancel-btn">لغو</a>
@@ -71,8 +85,8 @@
                                     <div class="row">
                                         {!! csrf_field() !!}
                                         <div class="col-12">
-                                            <input type="hidden" class="form-control" id="order_id" />
-                                            <input type="hidden" class="form-control" id="customer_id" />
+                                            <input type="hidden" class="form-control" name="order_id" />
+                                            <input type="hidden" class="form-control" name="customer_id" />
                                             <a href="javascript:void(0);" data-dismiss="modal" class="form-control btn btn-primary continue-btn add_reject_reason_btn" message="نبود بعضی محتویات سفارش" >نبود بعضی محتویات سفارش</a>
                                             <a href="javascript:void(0);" data-dismiss="modal" class="form-control btn btn-primary continue-btn add_reject_reason_btn" message="عدم امکان سرویس دهی، ازدحام">عدم امکان سرویس دهی، ازدحام</a>
                                             <a href="javascript:void(0);" data-dismiss="modal" class="form-control btn btn-primary continue-btn add_reject_reason_btn" message="خارج از ساحه">خارج از ساحه</a>
@@ -101,22 +115,16 @@
 
     var channel = pusher.subscribe('food-app');
     channel.bind('update-event', function(data) {
-
+        // console.log('evetn called!')
         if (userId == JSON.stringify(data['userId'])) {
+            if (JSON.stringify(data['message']) == '"New Order Recieved!"') {
+                show_message(['سفارش جدید اضافه شد.', 'success']);
+                // console.log("New order arrived!");
+                playSound();
+            }
             Livewire.emit('refreshActiveOrders');
         }
         
-    });
-</script>
-<script>
-    // Since DOM is changing on each refresh we need to reinitilize
-    // data table.
-    document.addEventListener('reinitializaJSs', function () {
-        $('.datatable').dataTable({
-            'bPaginate': true,
-            'searching' : true,
-            "bDestroy": true
-        });
     });
 </script>
 
