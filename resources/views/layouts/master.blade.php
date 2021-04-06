@@ -31,7 +31,7 @@
     <!-- jQuery -->
     <script src="{{asset('js/jquery-3.2.1.min.js')}}"></script>
 
-    @include('common_scripts')
+    @include('layouts.common_scripts')
 
     {{--   Adding specific style of each page--}}
 
