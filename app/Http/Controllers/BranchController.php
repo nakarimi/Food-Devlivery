@@ -88,7 +88,6 @@ class BranchController extends Controller
             'status' => $requestData['status']]
         );
 
-
         if ($id) {
             $details_id = DB::table('branche_main_info')->insertGetId(
                 ['business_id' => $id,
@@ -219,7 +218,7 @@ class BranchController extends Controller
             $this->changeStatusToOld($branch->id, $details_id, null, true);
         }
 
-        return redirect($returnUrl)->with('flash_message', );
+        return redirect($returnUrl)->with('flash_message', $message);
     }
 
     /**

@@ -18,7 +18,7 @@
 
     <!-- Header Title -->
     <div class="page-title-box">
-        <h3>Food Delivery App</h3>
+        <h3>آسان فود</h3>
     </div>
     <!-- /Header Title -->
 
@@ -38,12 +38,11 @@
                 <span>{{auth()->user()->name}}</span>
             </a>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="{{route('restaurant.profile')}}">My Profile</a>
-                <a class="dropdown-item" href="settings.html">Settings</a>
+                <a class="dropdown-item" href="{{route('restaurant.profile')}}">اطلاعات اصلی</a>
                 <a class="dropdown-item" href="{{ route('logout') }}"
                    onclick="event.preventDefault();
                                     document.getElementById('logout-form').submit();">
-                    {{ __('Logout') }}
+                    {{ __('خارج شدن') }}
                 </a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf
@@ -58,9 +57,15 @@
     <div class="dropdown mobile-user-menu">
         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
         <div class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item" href="profile.html">My Profile</a>
-            <a class="dropdown-item" href="settings.html">Settings</a>
-            <a class="dropdown-item" href="login.html">Logout</a>
+            <a class="dropdown-item" href="{{route('restaurant.profile')}}">اطلاعات اصلی</a>
+            <a class="dropdown-item" href="{{ route('logout') }}"
+                onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();">
+                {{ __('خارج شدن') }}
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
         </div>
     </div>
     <!-- /Mobile Menu -->

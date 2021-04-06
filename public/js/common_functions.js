@@ -14,11 +14,16 @@ function show_message(msg) {
         $('div.header').after('<div class="alertDiv">'+message+'</div>');
     }
 
-    $(".alertDiv").fadeTo(2000, 500).slideUp(500, function(){
-        $(".alertDiv").slideUp(2500);
-    });
+    hide_message();
 
 }
+
+// Hide the normal alert.
+function hide_message() {
+    $(".alertDiv").fadeTo(2000, 500).slideUp(500, function(){
+        $(".alertDiv").slideUp(2500, function() { $(this).remove(); });
+    });
+};
 
 function js_error_callback() {
     alert("js error in order.js file.")

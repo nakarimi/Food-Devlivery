@@ -1,6 +1,6 @@
 @extends('dashboards.restaurant.layouts.master')
 @section('title')
-    Edit ({{ $branch->branchDetails->title}})
+    تغیر اطلاعات اصلی ({{ $branch->branchDetails->title}})
 @stop
 
 @section('styles')
@@ -11,7 +11,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title mb-0">Edit Branch</h4>
+                    <h4 class="card-title mb-0">تغیر اطلاعات اصلی</h4>
                 </div>
                 <div class="card-body">
                     @if ($errors->any())
@@ -29,7 +29,7 @@
                         <div class="form-row">
                             <div class="col">
                                 <div class="form-group{{ $errors->has('title') ? 'has-error' : ''}}">
-                                    <label for="title" class="control-label">{{ 'Title' }}</label>
+                                    <label for="title" class="control-label">{{ 'نام' }}</label>
                                     <input class="form-control" name="title" type="text" id="title" value="{{ $branch->branchDetails->title}}" required>
                                     {!! $errors->first('title', '
                                     <p class="help-block">:message</p>
@@ -40,7 +40,7 @@
                         <div class="form-row">
                             <div class="col">
                                 <div class="form-group{{ $errors->has('contact') ? 'has-error' : ''}}">
-                                    <label for="contact" class="control-label">{{ 'Contact' }}</label>
+                                    <label for="contact" class="control-label">{{ 'تماس' }}</label>
                                     <input class="form-control" name="contact" type="text" id="contact" value="{{ $branch->branchDetails->contact ?? ''}}" >
                                     {!! $errors->first('contact', '
                                     <p class="help-block">:message</p>
@@ -49,7 +49,7 @@
                             </div>
                             <div class="col">
                                 <div class="form-group{{ $errors->has('location') ? 'has-error' : ''}}">
-                                    <label for="location" class="control-label">{{ 'Location' }}</label>
+                                    <label for="location" class="control-label">{{ 'موقعیت' }}</label>
                                     <input class="form-control" name="location" type="text" id="location" value="{{ $branch->branchDetails->location ?? ''}}" >
                                     {!! $errors->first('location', '
                                     <p class="help-block">:message</p>
@@ -60,7 +60,7 @@
                         <div class="form-row">
                             <div class="col">
                                 <div class="form-group{{ $errors->has('logo') ? 'has-error' : ''}}">
-                                    <label for="logo" class="control-label">{{ 'Logo' }}</label>
+                                    <label for="logo" class="control-label">{{ 'تصویر/ لوگو' }}</label>
                                     <input class="form-control-file" name="logo" type="file" id="logo" value="{{ $branch->branchDetails->logo ?? ''}}" accept="image/png, image/jpeg" >
                                     {!! $errors->first('logo', '
                                     <p class="help-block">:message</p>
@@ -72,14 +72,14 @@
                             </div>
                         </div>
                         <div class="form-group{{ $errors->has('description') ? 'has-error' : ''}}">
-                            <label for="description" class="control-label">{{ 'Description' }}</label>
+                            <label for="description" class="control-label">{{ 'جزئیات' }}</label>
                             <textarea class="form-control" name="description" id="description" rows="3">{{ $branch->branchDetails->description ?? ''}}</textarea>
                             {!! $errors->first('description', '
                             <p class="help-block">:message</p>
                             ') !!}
                         </div>
                         <div class="form-group">
-                            <input class="btn btn-primary" type="submit" value="Update">
+                            <input class="btn btn-primary" type="submit" value="تغیر">
                         </div>
 
 

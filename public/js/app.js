@@ -361,8 +361,8 @@ $(document).ready(function() {
             }
         }
 	}
-	// Hide the normal alert.
-	$(".alert").delay(6000).slideUp(1000)
+	
+	hide_message();
 
 });
 
