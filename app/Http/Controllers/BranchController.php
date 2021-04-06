@@ -156,6 +156,8 @@ class BranchController extends Controller
     public function update(Request $request, $id)
     {
         $role = get_role();
+        $message = 'Branch updated!';
+
         $requestArray = [
             'location' => 'required',
             'title' => 'required',
@@ -177,12 +179,13 @@ class BranchController extends Controller
         $branch = Branch::findOrFail($id);
         $branch->update($requestData);
 
-
         // Also update the details table.
         // Todo, if edit is done by admin the status shoudl be approved otherwise it should be pending.
         $status = 'approved';
+        
         $returnUrl = 'branch';
         if ($role == 'restaurant'){
+            $message = 'اطلاعت شما تغیر داده شد، لطفا تا تائید بخش پشتیبانی منتظر بمانید.';
             $status = 'pending';
             $returnUrl = '/profile';
         }
@@ -206,7 +209,7 @@ class BranchController extends Controller
         if (!$details_id) {
             return redirect($returnUrl)->with('flash_message', 'Sorry there is problem, storing branch data');
         }
-
+        
         if (get_role() == "restaurant"){
             $userId = \auth()->user()->id;
             send_notification([1], $userId, 'Updated its Branch Details');
@@ -216,7 +219,7 @@ class BranchController extends Controller
             $this->changeStatusToOld($branch->id, $details_id, null, true);
         }
 
-        return redirect($returnUrl)->with('flash_message', 'Branch updated!');
+        return redirect($returnUrl)->with('flash_message', );
     }
 
     /**
