@@ -48,9 +48,13 @@ class AppServiceProvider extends ServiceProvider
                 // Get user active orders.
                 $activeOrders = Order::whereIn('branch_id', $branchIds)->whereIn('status', $status)->count();
 
+                // Get user rejected items.
+                $rejectedItems = loadUserItemsData(['rejected'], $userId, true);
+
                 $view->with('sidebarData', [
                     'pendingItems' => $pendingItems,
-                    'activeOrders' => $activeOrders
+                    'activeOrders' => $activeOrders,
+                    'rejectedItems' => $rejectedItems
                 ]);
             }
             else {
@@ -66,6 +70,7 @@ class AppServiceProvider extends ServiceProvider
 
                 // Get all active orders.
                 $activeOrders = Order::whereIn('status', $status)->count();
+                
                 $pendingItems = Item::whereHas(
                     'itemFullDetails', function ($query) {
                     $query->where('details_status', '=', 'pending');
@@ -77,11 +82,17 @@ class AppServiceProvider extends ServiceProvider
                     $query->where('status', '=', 'pending');
                 })->count();
 
+                $rejectedItems = Item::whereHas(
+                    'itemFullDetails', function ($query) {
+                    $query->where('details_status', '=', 'rejected');
+                })->count();
+
                 $view->with('sidebarData', [
                     'waitingOrders' => $waitingOrders,
                     'activeOrders' => $activeOrders,
                     'pendingItems' => $pendingItems,
-                    'pendingBranches' => $pendingBranches
+                    'pendingBranches' => $pendingBranches, 
+                    'rejectedItems' => $rejectedItems
                 ]);
             }
         });

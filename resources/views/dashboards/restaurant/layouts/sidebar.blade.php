@@ -12,8 +12,9 @@
                     <a href="#"><i class="la la-list"></i><span> غذا ها</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         <li><a href="{{route('item.create')}}" @if (\Request::is('item/create*')) class="active" @endif>اضافه کردن غذا جدید</a></li>
-                        <li><a href="{{route('items.pending')}}" @if (\Request::is('pendingItems*')) class="active" @endif>غذا ها معطل @if($sidebarData['pendingItems'] != 0)<span class="badge badge-danger custom-badge">{{$sidebarData['pendingItems']}}</span>@endif </a></li>
-                        <li><a href="{{route('items.approved')}}" @if (\Request::is('approvedItems*')) class="active" @endif>غذا ها تایید شده</a></li>
+                        <li><a href="{{route('items.approved')}}" @if (\Request::is('approvedItems*')) class="active" @endif>غذا ها </a></li>
+                        <li><a href="{{route('items.pending')}}" @if (\Request::is('pendingItems*')) class="active" @endif>غذا های معطل @if($sidebarData['pendingItems'] != 0)<span class="badge badge-danger custom-badge">{{$sidebarData['pendingItems']}}</span>@endif </a></li>
+                        <li><a href="{{route('items.rejected')}}" @if (\Request::is('rejectedItems*')) class="active" @endif>غذا های رد شده @if($sidebarData['rejectedItems'] != 0)<span class="badge badge-danger custom-badge">{{$sidebarData['rejectedItems']}}</span>@endif </a></li>
                     </ul>
                 </li>
 

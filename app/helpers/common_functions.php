@@ -66,7 +66,16 @@ if (!function_exists('get_item_details')) {
      * */
     function get_item_details($item, $itemType = 'approved') {
         if($item) {
-            return ($itemType == 'approved') ? $item->approvedItemDetails : $item->pendingItemDetails;
+            switch($itemType) {
+                case 'pending':
+                    return $item->pendingItemDetails;
+                break;
+                case 'rejected':
+                    return $item->rejectedItemDetails;
+                break;
+                default:
+                    return $item->approvedItemDetails;
+            }
         }
         return;
     }
@@ -120,7 +129,7 @@ if (!function_exists('getUserBranches')){
 // This will return items based on status one or multiple status.
 if (!function_exists('getUserItemsBasedOnStatus')){
 
-    function getUserItemsBasedOnStatus ($branchIds, $status, $count, $all = flase){
+    function getUserItemsBasedOnStatus ($branchIds, $status, $count, $all = false){
         $item = Item::whereHas(
             'itemFullDetails', function ($query) use ($status) {
             $query->whereIn('details_status', $status);

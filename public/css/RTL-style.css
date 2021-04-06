@@ -8141,7 +8141,6 @@ ul.comment-list li ul.children {
 }
 .custom-badge {
     float: left; !important;
-    background-color: orange !important;
 }
 
 button.read-notification-button {

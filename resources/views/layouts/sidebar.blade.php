@@ -23,6 +23,8 @@
                     <ul style="display: none;">
                         <li><a href="{{route('items.pending')}}" @if (\Request::is('pendingItems*')) class="active" @endif>Pending Items</a>@if($sidebarData['pendingItems'] != 0)<span class="badge badge-danger">{{$sidebarData['pendingItems']}}</span>@endif</li>
                         <li><a href="{{route('items.approved')}}" @if (\Request::is('approvedItems*')) class="active" @endif>Approved Items</a></li>
+                        <li><a href="{{route('items.rejected')}}" @if (\Request::is('rejectedItems*')) class="active" @endif>Rejected Items @if($sidebarData['rejectedItems'] != 0)<span class="badge badge-danger custom-badge">{{$sidebarData['rejectedItems']}}</span>@endif </a></li>
+
                         <li><a  @if (\Request::is('category')) class="active" @endif href="{{ route('category.index') }}">Category</a></li>
                         {{-- <li><a  @if (\Request::is('menu')) class="active" @endif href="{{ route('menu.index') }}">Menus</a></li> --}}
                     </ul>
