@@ -232,7 +232,7 @@ class ItemController extends Controller
             if ($status == 'pending') {
                 $userId = \auth()->user()->id;
                 send_notification([1], $userId, 'Updated an Item');
-                return redirect('pendingItems')->with('flash_message', 'Item Updated!');
+                return redirect('pendingItems')->with('flash_message', 'تغیرات شما انجام شد، و برای تائید به بخش پشتبانی فرستاده شد.');
             }
             return redirect('approvedItems')->with('flash_message', 'Item Updated!');
         } 

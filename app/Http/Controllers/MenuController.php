@@ -144,7 +144,7 @@ class MenuController extends Controller
 
         $menu = Menu::findOrFail($id);
         $menu->update($requestData);
-        return redirect('menu')->with('flash_message', 'Menu updated!');
+        return redirect('menu')->with('flash_message', 'تغیرات شما انجام شدږ');
     }
 
     /**
