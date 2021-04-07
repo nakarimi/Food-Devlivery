@@ -48,7 +48,7 @@
                             <form id="order_approved_form" method="POST" style="width:100%;">
                                 {!! csrf_field() !!}
                                 <div class="form-group">
-                                    <input type="datetime-local" class="form-control" id="promissed_time" />
+                                    <input type="time" class="form-control" id="promissed_time" />
                                     <input type="hidden" class="form-control" name="order_id" />
                                     <input type="hidden" class="form-control" name="customer_id" />
                                 </div>
