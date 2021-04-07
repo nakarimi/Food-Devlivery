@@ -8159,3 +8159,7 @@ a.read-notification-button:hover{
 tr.order_is_late {
     background: #ff00002e !important;
 }
+
+.menu-title {
+    display: flex !important;
+  }

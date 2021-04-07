@@ -166,3 +166,8 @@ td.hasDriver select {
   margin-left: 50px;
   padding: .25em 0.6em;
 }
+
+.menu-title {
+  display: inline-block !important;
+  flex: 1;
+}
