@@ -8,8 +8,9 @@
                 <li @if (\Request::is('restaurant/dashboard*')) class="active" @endif>
                     <a href="{{url('/')}}"><i class="la la-dashboard"></i><span>داشبورد</span></a>
                 </li>
+                @php $itemChanges = (@$sidebarData['pendingItems'] + @$sidebarData['rejectedItems']) ?: 0; @endphp
                 <li class="submenu">
-                    <a href="#"><i class="la la-list"></i><span> غذا ها</span> <span class="menu-arrow"></span></a>
+                    <a href="#"><i class="la la-list"></i><span> غذا ها @if($itemChanges != 0) <span class="badge badge-danger">{{$itemChanges}}</span> @endif</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         <li><a href="{{route('item.create')}}" @if (\Request::is('item/create*')) class="active" @endif>اضافه کردن غذا جدید</a></li>
                         <li><a href="{{route('items.approved')}}" @if (\Request::is('approvedItems*')) class="active" @endif>غذا ها </a></li>

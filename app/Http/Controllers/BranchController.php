@@ -319,7 +319,7 @@ class BranchController extends Controller
             $query = DB::table('branche_main_info')->where('business_id', '=', $business_id);
             $update = $query->where('id', '!=', $detailId);
             if ($status != null){
-                $update = $query->where('status', '=', $status);
+                $update = $query->whereIn('status', [$status, 'rejected']);
             }
                $update->update(array('status' => "old"));
         }
