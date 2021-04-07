@@ -293,9 +293,12 @@ class BranchController extends Controller
 
     public function rejectBranch(Request $request)
     {
-        $detialId = $request->branch_detail_id;
+
+        $detialId = $request->detail_id;
+        $reason = $request->reason; 
         $branch = BranchDetails::findOrFail($detialId);
         $branch->status = "rejected";
+        $branch->note = $reason;
         $branch->save();
         $notifyUser = Branch::find($branch->business_id)->user_id;
         send_notification([$notifyUser], 1, 'تغیرات روی پروفایل تان توسط ادمین رد شد');

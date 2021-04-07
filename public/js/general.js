@@ -45,6 +45,38 @@ jQuery(function ($) {
         	else {
         		show_message(['مشکلی پیش آمده است.', 'danger']);
         	}
-	    }
+	    };
+
+        $(document).on('click','.reject_branch_update',function(){
+            $('#open_reject_form input[name=branch_detail_id]').val($(this).attr('branch_detail_id'));
+        });
+
+        $(document).on('click','#open_reject_form #sumit_branch_reject_btn',function(){
+            let detail_id =  $('#open_reject_form input[name=branch_detail_id]').val();
+            let reason =  $('#open_reject_form textarea[name=note]').val();
+            
+            // IF correct values are not provided.
+            if (!detail_id > 0) {
+                alert("صفحه را مججد لود کنید.");
+                return;
+            }
+            let msg = ['سفارش توسط شما رد شد.', 'danger'];
+
+            $.ajax({
+                type: 'POST',
+                url:'/rejectBranch',
+                data: {detail_id:detail_id, reason: reason},
+                success: function () {
+                    show_message(msg);
+                },
+                error: function (e) {
+                    alert("js error in order.js file.")
+                    
+                }
+            });
+        });
+
+        
+
     });
 });

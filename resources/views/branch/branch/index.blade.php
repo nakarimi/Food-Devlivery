@@ -60,12 +60,7 @@
                                        <input type="hidden" value="{{$item->id}}" name="branch_id">
                                        <button class="btn btn-sm btn-success" title="Approve" onclick="return confirm(&quot;Confirm approve?&quot;)"><i class="la la-check"></i></button>
                                    </form>
-                                   <form method="POST" action="{{ url('/rejectBranch') }}" accept-charset="UTF-8" style="display:inline">
-                                       {{ csrf_field() }}
-                                       <input type="hidden" value="{{get_branch_details($item, Session::get('branchType'))->id}}" name="branch_detail_id">
-                                       <input type="hidden" value="{{$item->id}}" name="branch_id">
-                                       <button class="btn btn-sm btn-danger" title="Reject" onclick="return confirm(&quot;Confirm Reject?&quot;)"><i class="la la-times"></i></button>
-                                   </form>
+                                   <button class="btn btn-sm btn-danger reject_branch_update" branch_detail_id="{{get_branch_details($item, Session::get('branchType'))->id}}" title="Reject" data-toggle="modal" data-target="#open_reject_form"><i class="la la-times"></i></button>
                                @endif
 
                               <a href="{{ url('/branch/' . $item->id) }}" title="View Branch"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
@@ -88,4 +83,33 @@
       </div>
    </div>
 </div>
+
+<!-- Add reject reason Modal -->
+<div id="open_reject_form" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Any Reject reason?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST">
+                    {!! csrf_field() !!}
+                    <input type="text" value="" name="branch_detail_id">
+                    <div class="form-group">
+                        <label>Note:</label>
+                        <textarea class="form-control" name="note" rows="4"></textarea>
+                    </div>
+                    <div class="submit-section">
+                        <button class="btn btn-primary submit-btn" id="sumit_branch_reject_btn">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Add reject reason Modal -->
+
 @endsection
