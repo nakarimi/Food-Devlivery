@@ -1421,9 +1421,9 @@ table.dataTable thead > tr > td.sorting {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.sidebar .sidebar-menu > ul > li > a span.badge {
+/* .sidebar .sidebar-menu > ul > li > a span.badge {
     margin-right: auto;
-}
+} */
 .sidebar-menu ul ul a {
     display: block;
     font-size: 14px;
@@ -8140,7 +8140,8 @@ ul.comment-list li ul.children {
     }
 }
 .custom-badge {
-    float: left; !important;
+    float: left !important;
+    padding: .25em 0.6em;
 }
 
 button.read-notification-button {

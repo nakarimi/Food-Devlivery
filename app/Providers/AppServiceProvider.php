@@ -35,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
 
        // Share data for sidebar badges for restaurant and admin.
        View::composer(['layouts.sidebar', 'dashboards.restaurant.layouts.sidebar'], function ($view) {
-            $status = ['pending', 'reject', 'processing', 'delivered'];
+            $status = ['pending', 'processing', 'delivered'];
             if (get_role() == "restaurant"){
                 $userId = auth()->user()->id;
                 $pendingItems = loadUserItemsData(['pending'], $userId, true);
@@ -60,13 +60,8 @@ class AppServiceProvider extends ServiceProvider
             else {
                 // Get orders from 10 minutes ago.
                 $timeOffSet = Carbon::now()->subMinutes(1)->toDateTimeString();
-                $waitingOrders = Order::where(function ($query) use ($timeOffSet) {
-                    $query->where('status', 'pending')->where('orders.created_at', '<', $timeOffSet);
-                })->orwhere(function ( $query ) {
-                    $query->whereHas('deliveryDetails', function ($subquery) {
-                        $subquery->where('delivery_type', 'company')->whereNull('driver_id');
-                    });
-                })->count();
+
+                $waitingOrders = get_waiting_orders("%", null, true);
 
                 // Get all active orders.
                 $activeOrders = Order::whereIn('status', $status)->count();

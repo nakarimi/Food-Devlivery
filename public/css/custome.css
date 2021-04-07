@@ -159,3 +159,10 @@
 td.hasDriver select {
     display: none;
 }
+.modal-open .modal{
+  z-index: 9999;
+}
+.custom-badge-en {
+  margin-left: 50px;
+  padding: .25em 0.6em;
+}
