@@ -48,6 +48,7 @@ Route::middleware(['admin'])->group(function () {
     Route::post('/rejectBranch', 'App\Http\Controllers\BranchController@rejectBranch');
     Route::resource('category', 'App\Http\Controllers\CategoryController');
     Route::get('/pendingBranches', 'App\Http\Controllers\BranchController@pendingBranches')->name('branches.pending');
+    Route::get('/rejectedBranches', 'App\Http\Controllers\BranchController@rejectedBranches')->name('branches.rejected');
     Route::get('/approvedBranches', 'App\Http\Controllers\BranchController@approvedBranches')->name('branches.approved');
     Route::get('/loadItemsBasedOnBranch', 'App\Http\Controllers\MenuController@loadItemsBasedOnBranch');
     Route::put('/deactiveUser/{id}', 'App\Http\Controllers\Admin\UsersController@deactiveUser');

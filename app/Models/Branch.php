@@ -69,12 +69,17 @@ class Branch extends Model
 
     // Relationship with details table with full data.
     public function branchFullDetails(){
-        return $this->hasMany(BranchDetails::class, 'business_id');
+        return $this->hasMany(BranchDetails::class, 'business_id')->orderBy('id', 'desc');;
     }
 
     // Relationship with details table.
     public function pendingBranchDetails(){
         return $this->hasOne(BranchDetails::class, 'business_id')->where('status', 'pending')->latest();
+    }
+
+    // Relationship with details table.
+    public function rejectedBranchDetails(){
+        return $this->hasOne(BranchDetails::class, 'business_id')->where('status', 'rejected')->latest();
     }
 
     // Relation ship Blocked Customers.

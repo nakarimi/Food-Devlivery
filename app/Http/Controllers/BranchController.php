@@ -263,6 +263,13 @@ class BranchController extends Controller
         return view('branch.branch.index', compact('branch'));
     }
 
+    public function rejectedBranches()
+    {
+        Session::put('branchType', 'rejected');
+        $branch = getBranchesBasedOnStatus("rejected");
+        return view('branch.branch.index', compact('branch'));
+    }
+
     public function approvedBranches()
     {
         Session::put('branchType', 'approved');

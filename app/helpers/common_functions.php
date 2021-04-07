@@ -233,7 +233,20 @@ if (!function_exists('get_branch_details')) {
      * Return a branch latest details.
      * */
     function get_branch_details($branch, $branchType = 'approved') {
-        return ($branchType == 'approved') ? $branch->branchDetails : $branch->pendingBranchDetails;
+
+        if($branch) {
+            switch($branchType) {
+                case 'pending':
+                    return $branch->pendingBranchDetails;
+                break;
+                case 'rejected':
+                    return $branch->rejectedBranchDetails;
+                break;
+                default:
+                    return $branch->branchDetails;
+            }
+        }
+        return;
     }
 }
 

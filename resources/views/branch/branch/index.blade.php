@@ -29,48 +29,42 @@
                      <thead>
                         <tr>
                            <th>#</th>
+                           <th>Thumbnail</th>
                            <th>Title</th>
                            <th>Business Type</th>
-                           <th>Commission</th>
-                            @if (\Request::is('pendingBranches'))
-                           <th>Thumbnail</th>
-                            @endif
+                           <th>Rejected Reason</th>
                            <th>Actions</th>
                         </tr>
                      </thead>
                      <tbody>
                         @foreach($branch as $item)
+                         <?php $itemDetails = get_branch_details($item, Session::get('branchType')); ?>
                         <tr>
                            <td>{{ $loop->iteration }}</td>
-                           <td>{{ get_branch_details($item, Session::get('branchType'))->title }}</td>
-                           <td>{{ $item->business_type }}</td>
-                           <td>{{ $item->mainCommission->title }} <br>{{ @$item->deliveryCommission->title }}</td>
-                            @if (\Request::is('pendingBranches'))
-                            <td>
+                           <td>
                                 <h2 class="table-avatar">
-                                    <a href="#" class="avatar" style="width: 100px; height: 100px; background-color: transparent;"><img alt="" src="{{ url('storage/profile_images/' .get_branch_details($item, Session::get('branchType'))->logo) }}"></a>
+                                    <a href="#" class="avatar" style="width: 100px; height: 100px; background-color: transparent;"><img alt="" src="{{ url('storage/profile_images/' .$itemDetails->logo) }}"></a>
                                 </h2>
                             </td>
-                            @endif
+                           <td>{{ $itemDetails->title }}</td>
+                           <td>{{ $item->business_type }}</td>
+                           <td>{{ $itemDetails->note }}</td>
                            <td>
                                @if (\Request::is('pendingBranches'))
                                    <form method="POST" action="{{ url('/approveBranch') }}" accept-charset="UTF-8" style="display:inline">
                                        {{ csrf_field() }}
-                                       <input type="hidden" value="{{get_branch_details($item, Session::get('branchType'))->id}}" name="branch_detail_id">
+                                       <input type="hidden" value="{{$itemDetails->id}}" name="branch_detail_id">
                                        <input type="hidden" value="{{$item->id}}" name="branch_id">
                                        <button class="btn btn-sm btn-success" title="Approve" onclick="return confirm(&quot;Confirm approve?&quot;)"><i class="la la-check"></i></button>
                                    </form>
-                                   <button class="btn btn-sm btn-danger reject_branch_update" branch_detail_id="{{get_branch_details($item, Session::get('branchType'))->id}}" title="Reject" data-toggle="modal" data-target="#open_reject_form"><i class="la la-times"></i></button>
+                                   <button class="btn btn-sm btn-danger reject_branch_update" branch_detail_id="{{$itemDetails->id}}" title="Reject" data-toggle="modal" data-target="#open_reject_form"><i class="la la-times"></i></button>
                                @endif
 
                               <a href="{{ url('/branch/' . $item->id) }}" title="View Branch"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
-                              <a href="{{ url('/branch/' . $item->id . '/edit') }}" title="Edit Branch"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
-{{--                              <form method="POST" action="{{ url('/branch' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">--}}
-{{--                                 {{ method_field('DELETE') }}--}}
-{{--                                 {{ csrf_field() }}--}}
-{{--                                 <button type="submit" class="btn btn-danger btn-xs" title="Delete Branch" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>--}}
-{{--                              </form>--}}
-{{--                               <button type="submit" class="btn btn-danger btn-xs" title="Deactive Branch" onclick="return confirm(&quot;Confirm Deactivate?&quot;)"><i class="fa fa-ban" aria-hidden="true"></i></button>--}}
+                              
+                              @if (Session::get('branchType') != "rejected")
+                                 <a href="{{ url('/branch/' . $item->id . '/edit') }}" title="Edit Branch"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
+                              @endif
                            </td>
                         </tr>
                         @endforeach

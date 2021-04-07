@@ -82,6 +82,11 @@ class AppServiceProvider extends ServiceProvider
                     $query->where('status', '=', 'pending');
                 })->count();
 
+                $rejectedBranches = Branch::whereHas(
+                    'branchFullDetails', function ($query) {
+                    $query->where('status', '=', 'rejected');
+                })->count();
+
                 $rejectedItems = Item::whereHas(
                     'itemFullDetails', function ($query) {
                     $query->where('details_status', '=', 'rejected');
@@ -91,7 +96,8 @@ class AppServiceProvider extends ServiceProvider
                     'waitingOrders' => $waitingOrders,
                     'activeOrders' => $activeOrders,
                     'pendingItems' => $pendingItems,
-                    'pendingBranches' => $pendingBranches, 
+                    'pendingBranches' => $pendingBranches,
+                    'rejectedBranches' => $rejectedBranches, 
                     'rejectedItems' => $rejectedItems
                 ]);
             }

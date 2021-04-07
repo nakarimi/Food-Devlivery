@@ -33,8 +33,9 @@
                 <li class="submenu">
                     <a href="#"><i class="la la-recycle"></i> <span class="menu-title">Branch</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
-                        <li><a @if (\Request::is('pendingBranches')) class="active" @endif href="{{route('branches.pending')}}">Pending Branches</a>@if($sidebarData['pendingBranches'] != 0)<span class="badge badge-danger">{{$sidebarData['pendingBranches']}}</span>@endif</li>
                         <li><a @if (\Request::is('approvedBranches')) class="active" @endif href="{{route('branches.approved')}}">Approved Branches</a></li>
+                        <li><a @if (\Request::is('pendingBranches')) class="active" @endif href="{{route('branches.pending')}}">Pending Branches</a>@if($sidebarData['pendingBranches'] != 0)<span class="badge badge-danger">{{$sidebarData['pendingBranches']}}</span>@endif</li>
+                        <li><a @if (\Request::is('rejectedBranches')) class="active" @endif href="{{route('branches.rejected')}}">Rejected Changes</a>@if($sidebarData['rejectedBranches'] != 0)<span class="badge badge-danger">{{$sidebarData['rejectedBranches']}}</span>@endif</li>
                     </ul>
                 </li>
 
