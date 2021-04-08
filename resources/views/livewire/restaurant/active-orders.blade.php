@@ -117,11 +117,6 @@
     channel.bind('update-event', function(data) {
         // console.log('evetn called!')
         if (userId == JSON.stringify(data['userId'])) {
-            if (JSON.stringify(data['message']) == '"New Order Recieved!"') {
-                show_message(['سفارش جدید اضافه شد.', 'success']);
-                // console.log("New order arrived!");
-                playSound();
-            }
             Livewire.emit('refreshActiveOrders');
         }
         

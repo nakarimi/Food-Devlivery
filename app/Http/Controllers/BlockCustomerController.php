@@ -39,53 +39,25 @@ class BlockCustomerController extends Controller
      */
     public function store(Request $request)
     {
-        $userId = Auth::user()->id;
-        $order_id = $request->order_id;
         $blockCustomer = new BlockCustomer();
-        $blockCustomer->user_id = $userId;
         $blockCustomer->customer_id = $request->customer_id;
         $blockCustomer->branch_id = $request->branch_id;
         $blockCustomer->notes = $request->note;
+        $blockCustomer->status = 'pending';
         $blockCustomer->save();
-        $this->changStatusToCancel($request->branch_id, $request->customer_id);
-        return redirect()->back()->with('flash_message', 'Customer Successfully Blocked!');
+        return redirect()->back()->with('flash_message', 'درخواست شما توسط بخش پشتیبانی تعقیب میشود.');
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\BlockCustomer  $blockCustomer
-     * @return \Illuminate\Http\Response
-     */
-    public function show(BlockCustomer $blockCustomer)
+    public function approveLock(BlockCustomer $blockCustomer, $id)
     {
-        //
-    }
+        $blockCustomer = BlockCustomer::findOrFail($id);
+        $blockCustomer->status = 'blocked';
+        $blockCustomer->save();
+        $this->changStatusToCancel($blockCustomer->branch_id, $blockCustomer->customer_id);
+        return redirect()->back()->with('flash_message', 'Customer blocked!');
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\BlockCustomer  $blockCustomer
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(BlockCustomer $blockCustomer)
-    {
-        //
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\BlockCustomer  $blockCustomer
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, BlockCustomer $blockCustomer)
-    {
-        //
-    }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -95,8 +67,9 @@ class BlockCustomerController extends Controller
     public function destroy(BlockCustomer $blockCustomer, $id)
     {
         $customer = BlockCustomer::findOrFail($id);
+        $message = ($customer->status == 'pending') ? 'Customer Block Request Rejected!' : 'Customer Unblocked!'; // Since this function has two usage, so separate messages will be shown.
         $customer->delete();
-        return redirect()->back()->with('flash_message', 'Customer Unblocked!');
+        return redirect()->back()->with('flash_message', $message);
     }
 
     public function changStatusToCancel($branch_id, $customer_id)

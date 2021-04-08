@@ -14,6 +14,12 @@ class CustomerRequests extends Controller
     {
         validateOrderInputs($request);
         $requestData = $request->all();
+
+        // Don't accept order from blocked customers.
+        if (get_customer_status($requestData['customer_id']) == 'blocked') {
+            return 'blocked customer';
+        }
+        
         $has_delivery = ($requestData['delivery_type'] != 'self') ? true : false;
 
         try {

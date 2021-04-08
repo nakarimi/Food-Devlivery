@@ -53,11 +53,12 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/loadItemsBasedOnBranch', 'App\Http\Controllers\MenuController@loadItemsBasedOnBranch');
     Route::put('/deactiveUser/{id}', 'App\Http\Controllers\Admin\UsersController@deactiveUser');
     Route::put('/activateUser/{id}', 'App\Http\Controllers\Admin\UsersController@activateUser');
+    Route::post('approveLock/{id}', 'App\Http\Controllers\BlockCustomerController@approveLock');
     Route::resource('blockedCustomer', 'App\Http\Controllers\BlockCustomerController');
     Route::post('/backup-create','App\Http\Controllers\BackupController@create')->name('get-backup');
     Route::get('/backups','App\Http\Controllers\BackupController@index')->name('backups');
     Route::delete('/delete-backup/{name}', 'App\Http\Controllers\BackupController@destroy')->name('backup.destroy');
-    Route::post('/download-backup/', 'App\Http\Controllers\BackupController@downloadBackup')->name('backup.download');
+    Route::post('/download-backup', 'App\Http\Controllers\BackupController@downloadBackup')->name('backup.download');
     Route::post('/approvePayment', 'App\Http\Controllers\PaymentController@approvePayment');
     Route::post('/rejectPayment', 'App\Http\Controllers\PaymentController@rejectPayment');
 

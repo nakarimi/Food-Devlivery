@@ -1,7 +1,13 @@
 
 <tr>
     <th> {{ (get_role() == "restaurant") ? 'نام مشتری' : 'Customer'}} </th>
-    <td> {{ $order->customer->name }} </td>
+    <td><a href="#" class="customer_detials" customer_email = "{{$order->customer->email}}"
+            customer_id = "{{$order->customer->id}}" branch_id ="{{$order->branch_id}}"
+            order_id="{{$order->id}}">
+            {{ $order->customer->name }}
+        </a>
+    </td>
+
 </tr>
 
 <tr>

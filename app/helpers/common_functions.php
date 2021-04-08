@@ -550,6 +550,17 @@ if (!function_exists('columnToggleUpdate')){
 }
 
 // Update table column with boolean values.
+if (!function_exists('get_customer_status')){
+    function get_customer_status($customer_id){
+        
+        $blockCustomerStatus = DB::table('block_customers')->where('customer_id', '=', $customer_id)->value('status');
+
+        return ($blockCustomerStatus) ?: 'Notblocked';
+        
+    }
+}
+
+// Update table column with boolean values.
 if (!function_exists('get_waiting_orders')){
     function get_waiting_orders($keyword, $perPage, $count = false){
         // Get orders from 10 minutes ago.

@@ -100,6 +100,11 @@
     var channel = pusher.subscribe('food-app-notification');
     channel.bind('notification-event', function(data) {
         if (data['message'] === "Notification") {
+            if (JSON.stringify(data['message']) == '"New Order Recieved!"') {
+                show_message(['سفارش جدید اضافه شد.', 'success']);
+                // console.log("New order arrived!");
+                playSound();
+            }
            Livewire.emit('refreshNotifications');
         }
     });
