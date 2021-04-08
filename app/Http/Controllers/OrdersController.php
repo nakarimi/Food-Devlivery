@@ -165,31 +165,43 @@ class OrdersController extends Controller
                 $field = 'caceled_time';
         }
 
-        $order = Order::findOrFail($id);
-        $order->status = $status;
-        $order->save();
+        try {
 
-        // Update timing as well.
-        $updateDeliveryTimeDetails = [
-            $field => $now,
-        ];
+            DB::beginTransaction();
 
-        if (!is_null($promissed_time)) {
-            $updateDeliveryTimeDetails = [
-                $field => $now,
-                'promissed_time' => Carbon::parse($promissed_time)->format('Y-m-d H:i:s')
-            ];
+            $order = Order::findOrFail($id);
+            $order->status = $status;
+            $order->save();
+
+            // Update timing as well.
+            $updateDeliveryTimeDetails = [];
+
+            if (!is_null($promissed_time)) {
+                $date = Carbon::now()->format('Y-m-d');
+                $promissed_time = Carbon::createFromFormat("Y-m-d H:i:s", $date .' '. $promissed_time.':00');
+
+                $updateDeliveryTimeDetails = [
+                    $field => $now,
+                    'promissed_time' => $promissed_time
+                ];
+            }
+
+            if (!is_null($message)) {
+                $updateDeliveryTimeDetails = [
+                    $field => $now,
+                    'reject_reason' => $message
+                ];
+            }
+
+            OrderTimeDetails::updateOrCreate(['order_id' => $id], $updateDeliveryTimeDetails);
+            event(new \App\Events\UpdateEvent('Order Updated!', $id));
+
+            DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return 'Order updated!';
         }
-
-        if (!is_null($message)) {
-            $updateDeliveryTimeDetails = [
-                $field => $now,
-                'reject_reason' => $message
-            ];
-        }
-
-        OrderTimeDetails::where('order_id', $id)->update($updateDeliveryTimeDetails);
-        event(new \App\Events\UpdateEvent('Order Updated!', $id));
 
     }
 

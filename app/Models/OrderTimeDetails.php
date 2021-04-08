@@ -10,4 +10,7 @@ class OrderTimeDetails extends Model
     use HasFactory;
 
     protected $table = 'order_timing';
+
+    protected $fillable = ['order_id', 'processing_time', 'rejected_time', 'promissed_time'];
+
 }

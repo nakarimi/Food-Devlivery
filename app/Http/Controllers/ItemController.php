@@ -348,6 +348,8 @@ class ItemController extends Controller
         $branchId = Item::find($item->item_id)->branch_id;
         $notifyUser = Branch::find($branchId)->user_id;
         send_notification([$notifyUser], 1, '('.$item->title.') توسط ادمین رد شد');
+
+        Session::put('itemType', 'rejected');
          return redirect()->back()->with('flash_message', 'Item Rejected!');
     }
 

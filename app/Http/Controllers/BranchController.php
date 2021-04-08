@@ -309,6 +309,8 @@ class BranchController extends Controller
         $branch->save();
         $notifyUser = Branch::find($branch->business_id)->user_id;
         send_notification([$notifyUser], 1, 'تغیرات روی پروفایل تان توسط ادمین رد شد');
+
+        Session::put('branchType', 'rejected');
         return redirect()->back()->with('flash_message', 'Branch Rejected!');
     }
 
@@ -319,7 +321,7 @@ class BranchController extends Controller
             $query = DB::table('branche_main_info')->where('business_id', '=', $business_id);
             $update = $query->where('id', '!=', $detailId);
             if ($status != null){
-                $update = $query->where('status', '=', $status);
+                $update = $query->whereIn('status', [$status, 'rejected']);
             }
                $update->update(array('status' => "old"));
         }

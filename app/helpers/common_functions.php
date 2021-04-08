@@ -363,22 +363,7 @@ if (!function_exists('get_orders')){
                 ->latest()->paginate($perPage);
         }
         elseif ($type == 'waiting-orders'){
-            // Get orders from 10 minutes ago.
-            $timeOffSet = Carbon::now()->subMinutes(1)->toDateTimeString();
-
-            $orders = Order::where(function ($query) use ($timeOffSet, $keyword) {
-                // Get orders that created 2 mins ago and still not responsed by restaurant.
-                $query->where('status', 'pending')->where('orders.created_at', '<', $timeOffSet)->whereHas('branchDetails', function ($sub) use ($keyword) {
-                        $sub->where('title','LIKE', "%".$keyword."%");
-                    });
-            })->orwhere(function ( $query ) use ($keyword) {
-                // Get orders that are assigned to company to delivery and yet have no driver assigned to them.
-                $query->whereHas('deliveryDetails', function ($subquery) {
-                $subquery->where('delivery_type', 'company')->whereNull('driver_id');
-            })->whereHas('branchDetails', function ($sub) use ($keyword) {
-                $sub->where('title','LIKE', "%".$keyword."%");
-            });
-            })->latest()->paginate($perPage);
+            $orders = get_waiting_orders($keyword, $perPage, false);
         }
         else {
             $orders = Order::whereIn('status', $status)->latest()->paginate($perPage);
@@ -561,6 +546,30 @@ if (!function_exists('is_order_late')){
 if (!function_exists('columnToggleUpdate')){
     function columnToggleUpdate($table, $column, $record_id){
         DB::statement("UPDATE $table SET $column = 1 - status WHERE id = $record_id");
+    }
+}
+
+// Update table column with boolean values.
+if (!function_exists('get_waiting_orders')){
+    function get_waiting_orders($keyword, $perPage, $count = false){
+        // Get orders from 10 minutes ago.
+        $timeOffSet = Carbon::now()->subMinutes(1)->toDateTimeString();
+
+        $orders = Order::where(function ($query) use ($timeOffSet, $keyword) {
+            // Get orders that created 2 mins ago and still not responsed by restaurant.
+            $query->where('status', 'pending')->where('orders.created_at', '<', $timeOffSet)->whereHas('branchDetails', function ($sub) use ($keyword) {
+                    $sub->where('title','LIKE', "%".$keyword."%");
+                });
+        })->orwhere(function ( $query ) use ($keyword) {
+            // Get orders that are assigned to company to delivery and yet have no driver assigned to them.
+            $query->whereHas('deliveryDetails', function ($subquery) {
+            $subquery->where('delivery_type', 'company')->whereNull('driver_id');
+        })->where('status', '<>' ,'reject')->whereHas('branchDetails', function ($sub) use ($keyword) {
+            $sub->where('title','LIKE', "%".$keyword."%");
+        });
+        })->latest();
+        
+        return ($count) ?  $orders->count() : $orders->paginate($perPage);
     }
 }
         
