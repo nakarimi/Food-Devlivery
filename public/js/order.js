@@ -125,5 +125,77 @@ jQuery(function ($) {
                 }
             });
         });
+
+        /**
+         * Before update order form submission.
+         * 
+         * This snippet goes through newly and old
+         * items in an order and update the final
+         * contents object and put the data in a hidden
+         * input and submits the form.
+         */
+        $('#web_order_update_form').on('submit', function(e){
+
+            // Old items in the order.
+            const old_items = $(this).data('contents').contents;
+
+            // Empty array for holding newly selected items.
+            let contents = new Array;
+
+            // Counter used to identify item_$counter for each item.
+            let counter = 0;
+
+            // Loop through all the items for this branch.
+            $('.items_in_order').each(function(){
+
+                // If item is quantity of more than 0.
+                if ($(this).val() > 0) {
+
+                    // Empty array for determining if selected item already exists in the old items.
+                    let already_exists = [];
+
+                    // Gettin the enity of this selected item from it's data attribute.
+                    const new_item = $(this).data('item');
+
+                    // Loop through old items.
+                    old_items.forEach(function(item, index){
+                        // Getting the appropriate key of the object.
+                        const key = Object.keys(item)[0];
+                        
+                        // Checking if currently selected item already exists in the old item.
+                        if (item[key].item_id == new_item.item_id) {
+
+                            // Push contents' object index and item's object index to the already_exists array.
+                            already_exists.push(index, key);
+                        }
+                    });
+
+                    // Attempting to save the selected item in an object.
+                    const adding_new_item = {
+                        ['item_' + [counter + 1]] : {
+
+                            // Get the quantity from form.
+                            'count': $(this).val(),
+                            // Getting the price from old item, if old item existed for this.
+                            // If not, we get the price for this newly selected item from it's entity.
+                            'price': already_exists.length > 0 ? old_items[already_exists[0]][already_exists[1]].price: new_item.price,
+                            'item_id' : new_item.item_id
+                        }
+                    }
+
+                    // Push object of the item to the contents array.
+                    contents.push(adding_new_item);
+                    counter++;
+                }
+            });
+
+            // Pushing the contents array in to the an object.
+            const new_contents = {
+                'contents' : contents
+            }
+
+            // Stringifying the final contents object and adding the related input as value in the form.
+            $('[name="contents"]').val(JSON.stringify(new_contents));
+        });
     });
 })

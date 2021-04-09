@@ -92,6 +92,9 @@
 <!-- Custom JS -->
 <script src="{{asset('js/app.js')}}"></script>
 
+{{-- For orders  --}}
+<script src="{{asset('js/order.js')}}"></script>
+
 <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 <script>
     // Enable pusher logging - don't include this in production

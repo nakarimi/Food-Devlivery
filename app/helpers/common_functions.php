@@ -388,52 +388,60 @@ if (!function_exists('send_notification')){
 // This will return menu items for views.
 if (!function_exists('update_order')){
     function update_order ($requestData, $id, $api = false) {
-        $deliver_update = false;
-        $requestData['has_delivery'] = 0;
 
-        if ($requestData['delivery_type'] != 'self') {
-            $requestData['has_delivery'] = 1;
-            $deliver_update = true;
-        }
-
-        $order = Order::findOrFail($id);
-
-            DB::beginTransaction();
-
-            $orderData = [
-                'branch_id' => $requestData['branch_id'],
-                'customer_id' => $requestData['customer_id'],
-                'has_delivery' => $requestData['has_delivery'],
-                'title' => $requestData['title'],
-                // 'commission_value' => $requestData['commission_value'],
-                'status' => $requestData['status'],
-                'note' => $requestData['note'],
-                'reciever_phone' => $requestData['reciever_phone'],
-                // 'contents' => $requestData['contents'],
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            ];
-
-            $order->update($orderData);
-
-            if ($deliver_update) {
-                $updateDeliveryDetails = [
-                    'order_id' => $id,
-                    'delivery_type' => $requestData['delivery_type'],
-                    'delivery_adress' => $requestData['delivery_adress'],
+        try {
+            DB::transaction(function () use ($requestData, $id){
+                $deliver_update = false;
+                $requestData['has_delivery'] = 0;
+        
+                if ($requestData['delivery_type'] != 'self') {
+                    $requestData['has_delivery'] = 1;
+                    $deliver_update = true;
+                }
+        
+                $order = Order::findOrFail($id);
+        
+        
+                $orderData = [
+                    'branch_id' => $requestData['branch_id'],
+                    'customer_id' => $requestData['customer_id'],
+                    'has_delivery' => $requestData['has_delivery'],
+                    'title' => $requestData['title'],
+                    // 'commission_value' => $requestData['commission_value'],
+                    'status' => $requestData['status'],
+                    'note' => $requestData['note'],
+                    'reciever_phone' => $requestData['reciever_phone'],
+                    'contents' => $requestData['contents'],
+                    'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 ];
-               
-                // Update delivery details.
-                $result = DeliveryDetails::updateOrCreate(['order_id' => $id], $updateDeliveryDetails);
-            }
+    
+                $order->update($orderData);
+    
+                if ($deliver_update) {
+                    $updateDeliveryDetails = [
+                        'order_id' => $id,
+                        'delivery_type' => $requestData['delivery_type'],
+                        'delivery_adress' => $requestData['delivery_adress'],
+                    ];
+                    
+                    // Update delivery details.
+                    $result = DeliveryDetails::updateOrCreate(['order_id' => $id], $updateDeliveryDetails);
+                }
+                
+            });
+        } catch (\Throwable $th) {
+            dd($th);
+        }
+        
 
-            DB::commit();
-            // die ("hey");
-            // event(new \App\Events\UpdateEvent('Order Updated!'));
-            if ($api) {
-            	return 'order updated';
-            }
-            // die($_SERVER['HTTP_REFERER']);
-            return redirect()->back()->with('flash_message', 'Order updated!');
+
+        // die ("hey");
+        // event(new \App\Events\UpdateEvent('Order Updated!'));
+        if ($api) {
+            return 'order updated';
+        }
+        // die($_SERVER['HTTP_REFERER']);
+        return redirect()->back()->with('flash_message', 'Order updated!');
             
     }
 }
