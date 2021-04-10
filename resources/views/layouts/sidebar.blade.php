@@ -10,7 +10,7 @@
                 </li>
                 @php $orderChanges = (@$sidebarData['waitingOrders'] + @$sidebarData['activeOrders']) ?: 0; @endphp
                 <li class="submenu">
-                    <a href="#"><i class="la la-legal"></i> <span class="menu-title">Orders @if($orderChanges != 0) <span class="badge badge-danger custom-badge-en">{{$orderChanges}}</span> @endif</span> <span class="menu-arrow"></span></a>
+                    <a href="#"><i class="la la-legal"></i> <span class="menu-title">Orders @if($orderChanges != 0) <span class="badge badge-danger custom-badge-en-parent">{{$orderChanges}}</span> @endif</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         {{--  <li><a  @if (\Request::is('orders/create*')) class="active" @endif href="{{ route('orders.create') }}">Add Order</a></li>--}}
                         <li><a  @if (\Request::is('waitingOrders')) class="active" @endif href="{{ url('waitingOrders') }}">Waiting Orders</a>@if($sidebarData['waitingOrders'] != 0) <span class="badge badge-danger custom-badge-en">{{$sidebarData['waitingOrders']}}</span>@endif</li>
@@ -20,7 +20,7 @@
                 </li>
                 @php $itemChanges = (@$sidebarData['pendingItems'] + @$sidebarData['rejectedItems']) ?: 0; @endphp
                 <li class="submenu">
-                    <a href="#"><i class="la la-list"></i><span class="menu-title">Item @if($itemChanges != 0) <span class="badge badge-danger custom-badge-en">{{$itemChanges}}</span> @endif</span> <span class="menu-arrow"></span></a>
+                    <a href="#"><i class="la la-list"></i><span class="menu-title">Item @if($itemChanges != 0) <span class="badge badge-danger custom-badge-en-parent">{{$itemChanges}}</span> @endif</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         <li><a href="{{route('items.pending')}}" @if (\Request::is('pendingItems*')) class="active" @endif>Pending Items</a>@if($sidebarData['pendingItems'] != 0)<span class="badge badge-danger custom-badge-en">{{$sidebarData['pendingItems']}}</span>@endif</li>
                         <li><a href="{{route('items.approved')}}" @if (\Request::is('approvedItems*')) class="active" @endif>Approved Items</a></li>
@@ -32,7 +32,7 @@
                 </li>
                 @php $branchChanges = (@$sidebarData['pendingBranches'] + @$sidebarData['rejectedBranches']) ?: 0; @endphp
                 <li class="submenu">
-                    <a href="#"><i class="la la-recycle"></i> <span class="menu-title">Branch @if($branchChanges != 0) <span class="badge badge-danger custom-badge-en">{{$branchChanges}}</span> @endif</span> <span class="menu-arrow"></span></a>
+                    <a href="#"><i class="la la-recycle"></i> <span class="menu-title">Branch @if($branchChanges != 0) <span class="badge badge-danger custom-badge-en-parent">{{$branchChanges}}</span> @endif</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         <li><a @if (\Request::is('approvedBranches')) class="active" @endif href="{{route('branches.approved')}}">Approved Branches</a></li>
                         <li><a @if (\Request::is('pendingBranches')) class="active" @endif href="{{route('branches.pending')}}">Pending Branches</a>@if($sidebarData['pendingBranches'] != 0)<span class="badge badge-danger custom-badge-en">{{$sidebarData['pendingBranches']}}</span>@endif</li>

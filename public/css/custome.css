@@ -162,11 +162,15 @@ td.hasDriver select {
 .modal-open .modal{
   z-index: 9999;
 }
-.custom-badge-en {
-  margin-left: 50px;
-  padding: .25em 0.6em;
+.custom-badge-en, .custom-badge-en-parent {
+  min-width: 20px;
 }
-
+.custom-badge-en-parent {
+  float: right;
+}
+.submenu a.subdrop .custom-badge-en-parent {
+  display: none;
+}
 .menu-title {
   display: inline-block !important;
   flex: 1;
