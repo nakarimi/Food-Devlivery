@@ -442,12 +442,7 @@ if (!function_exists('update_order')){
         
 
 
-        // die ("hey");
-        // event(new \App\Events\UpdateEvent('Order Updated!'));
-        if ($api) {
-            return 'order updated';
-        }
-        // die($_SERVER['HTTP_REFERER']);
+        event(new \App\Events\UpdateEvent('Order Updated!'));
         return redirect()->back()->with('flash_message', 'Order updated!');
             
     }
