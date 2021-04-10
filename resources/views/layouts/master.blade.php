@@ -38,10 +38,6 @@
     @yield('styles')
     @livewireStyles
 
-    <script>
-        let userId = @php echo auth()->user()->id; @endphp
-    </script>
-
 </head>
 <body>
 <div id="app">
@@ -106,7 +102,12 @@
 
     var channel = pusher.subscribe('food-app-notification');
     channel.bind('notification-event', function(data) {
-        if (data['message'] === "Notification" && userId == JSON.stringify(data['userId'])) {
+        if (data['message'] === "Notification") {
+            if (JSON.stringify(data['message']) == '"New Order Recieved!"') {
+                show_message(['سفارش جدید اضافه شد.', 'success']);
+                // console.log("New order arrived!");
+                playSound();
+            }
            Livewire.emit('refreshNotifications');
         }
     });

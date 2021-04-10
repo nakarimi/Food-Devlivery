@@ -32,9 +32,8 @@ function js_error_callback() {
 
 // New order sound
 function playSound() {
-    var audioElement = document.createElement('audio');
-    audioElement.setAttribute('src', '/audio/short_notification.mp3');
-    audioElement.play();
+    var audio = new Audio('/audio/short_notification.mp3');
+    audio.play()
 }
 
 $(document).on('change','#audio',function(){
@@ -55,7 +54,6 @@ $(document).on('change','#audio',function(){
         }
     });
 });
-
 
 $(document).on('click','.read-notification-button',function(event){
     var not_id =  $(this).attr('notification_id');

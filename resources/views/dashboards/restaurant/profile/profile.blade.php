@@ -21,7 +21,7 @@
                             <div class="row">
                                 <div class="col-md-5">
                                     <div class="profile-info-left">
-                                        <h3 class="user-name m-t-0 mb-0">{{auth()->user()->name}}</h3>
+                                        <h3 class="user-name m-t-0 mb-0">{{$branch->branchDetails->title}}</h3>
                                         <br>
                                         <div class="staff-id">نام : {{ $branch->branchDetails->title }}</div>
                                         <div class="small doj text-muted">تاریخ  ثبت: {{ date_format(date_create($branch->created_at), "jS F Y") }}</div>
@@ -64,6 +64,45 @@
             </div>
         </div>
     </div>
+
+    <br>
+        <div class="table-responsive">
+            <h1>همه تغیرات</h1>
+            <table class="table table-striped">
+                <thead>
+                    <th>شماره</th>
+                    <th>نام</th>
+                    <th>تماس</th>
+                    <th>موقعیت</th>
+                    <th>جزئیات</th>
+                    <th>وضعیت</th>
+                    <th>یادداشت</th>
+                </thead>
+                <tbody>
+                @foreach($branch->branchFullDetails as $detail)
+                    <tr>
+                        <td>{{$loop->iteration}}</td>
+                        <td>{{$detail->title}}</td>
+                        <td>{{$detail->contact}}</td>
+                        <td>{{$detail->location}}</td>
+                        <td>{{$detail->description}}</td>
+                        <td>
+                            @if ($detail->status == "old" )
+                                <span class="badge bg-inverse-default">قدیمی</span>
+                            @elseif ($detail->status == "pending" )
+                                <span class="badge bg-inverse-warning">معطل</span>
+                            @elseif ($detail->status == "rejected" )
+                                <span class="badge bg-inverse-danger">رد شده</span>
+                            @else
+                                <span class="badge bg-inverse-success">تائید شده</span>
+                            @endif
+                        </td>
+                        <td>{{$detail->note}}</td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
 @endsection
 
 @section('scripts')

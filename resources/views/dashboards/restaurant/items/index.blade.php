@@ -29,7 +29,7 @@
                            <th class="disable_sort">عنوان</th>
                            <th>قیمت</th>
                            <th>موجود</th>
-                            <th class="disable_sort">تغیرات</th>
+                           <th class="disable_sort">تغیرات</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -50,11 +50,16 @@
                                         @php $checked = ''; $style = 'warning'; @endphp
                                         @if($itemDetails->details_status == "pending")
                                             <span class="badge bg-inverse-warning">معطل</span>
+                                        
+                                        @elseif ($itemDetails->details_status == "rejected")
+                                              <span class="badge bg-inverse-warning">رد شده</span>
+                                              <p><b> {{$itemDetails->notes}} </b></p>
+
                                         @elseif ($item->status)
                                               @php $checked = 'checked'; $style = 'success'; @endphp
                                         @endif
 
-                                        @if($itemDetails->details_status != "pending")
+                                        @if($itemDetails->details_status != "pending" && $itemDetails->details_status != "rejected")
                                           <input type="checkbox" class="itemStockStatus" item_id="{{ $item->id }}" {{$checked}} data-toggle="toggle" data-on="بلی" data-off="خیر" data-onstyle="success" data-offstyle="danger">
                                         @endif
                                     </td>

@@ -25,28 +25,29 @@ class ItemController extends Controller
      */
     public function index(Request $request)
     {
-        Session::put('itemType', 'approved');
-        // If it is restaurant then user will have some restricted data.
-        if (get_role() == "restaurant"){
-            $item = loadUserItemsData(['pending', 'approved', 'rejected'], null, false, true);
-            return view('dashboards.restaurant.items.index', compact('item'));
-        }
+        return "this is index method of ItemController";
+        // Session::put('itemType', 'approved');
+        // // If it is restaurant then user will have some restricted data.
+        // if (get_role() == "restaurant"){
+        //     $item = loadUserItemsData(['pending', 'approved', 'rejected'], null, false, true);
+        //     return view('dashboards.restaurant.items.index', compact('item'));
+        // }
 
-        //Todo: Search should be configured for other roles.
-        $keyword = $request->get('search');
-        $perPage = 10;
+        // //Todo: Search should be configured for other roles.
+        // $keyword = $request->get('search');
+        // $perPage = 10;
 
-        if (!empty($keyword)) {
-            $item = Item::wherehas(
-                'itemDetails', function ($query) use ($keyword) {
-                $query->where('title','LIKE', "%$keyword%")
-                    ->orwhere('price','LIKE', "%$keyword%");
-            })->orWhere('status', 'LIKE', "%$keyword%")->latest()->paginate($perPage);
-        } else {
-            $item = Item::latest()->paginate($perPage);
-        }
+        // if (!empty($keyword)) {
+        //     $item = Item::wherehas(
+        //         'itemDetails', function ($query) use ($keyword) {
+        //         $query->where('title','LIKE', "%$keyword%")
+        //             ->orwhere('price','LIKE', "%$keyword%");
+        //     })->orWhere('status', 'LIKE', "%$keyword%")->latest()->paginate($perPage);
+        // } else {
+        //     $item = Item::latest()->paginate($perPage);
+        // }
 
-        return view('item.item.index', compact('item'));
+        // return view('item.item.index', compact('item'));
     }
 
     /**
@@ -224,7 +225,6 @@ class ItemController extends Controller
             // Update details.
             $details_id = DB::table('item_details')->insertGetId($update);
 
-            
             $this->changeStatusToOld($id, $details_id, $status, true);
 
             DB::commit();
@@ -308,7 +308,7 @@ class ItemController extends Controller
         Session::put('itemType', 'approved');
         // If it is restaurant then user will have some restricted data.
         if (get_role() == "restaurant"){
-            $item = loadUserItemsData(['pending', 'approved', 'rejected'], null, false, true);
+            $item = loadUserItemsData(['approved'], null, false, true);
             return view('dashboards.restaurant.items.index', compact('item'));
         }
 
@@ -348,6 +348,8 @@ class ItemController extends Controller
         $branchId = Item::find($item->item_id)->branch_id;
         $notifyUser = Branch::find($branchId)->user_id;
         send_notification([$notifyUser], 1, '('.$item->title.') توسط ادمین رد شد');
+
+        Session::put('itemType', 'rejected');
          return redirect()->back()->with('flash_message', 'Item Rejected!');
     }
 
@@ -365,9 +367,9 @@ class ItemController extends Controller
     {
         if ($run){
             $query = DB::table('item_details')->where('item_id', '=', $item_id);
-            $update= $query->where('id', '!=', $detailId);
+            $update = $query->where('id', '!=', $detailId);
             if ($status != null){
-                $update = $query->where('details_status', '=', $status);
+                $update = $query->whereIn('details_status', [$status, 'rejected']);
             }
             $update->update(array('details_status' => "old"));
         }
@@ -385,6 +387,19 @@ class ItemController extends Controller
         $table = 'items';
         $column = 'status';
         columnToggleUpdate($table, $column, $record_id);
+    }
+
+    public function rejectedItems(Request $request)
+    {
+        Session::put('itemType', 'rejected');
+        // If it is restaurant then user will have some restricted data.
+        if (get_role() == "restaurant"){
+            $item = loadUserItemsData(['rejected'], null, false, true);
+            return view('dashboards.restaurant.items.index', compact('item'));
+        }
+
+        $item = $this->getItemsBasedOnStatus('rejected');
+        return view('item.item.index', compact('item'));
     }
 
 }

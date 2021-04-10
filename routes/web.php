@@ -48,15 +48,17 @@ Route::middleware(['admin'])->group(function () {
     Route::post('/rejectBranch', 'App\Http\Controllers\BranchController@rejectBranch');
     Route::resource('category', 'App\Http\Controllers\CategoryController');
     Route::get('/pendingBranches', 'App\Http\Controllers\BranchController@pendingBranches')->name('branches.pending');
+    Route::get('/rejectedBranches', 'App\Http\Controllers\BranchController@rejectedBranches')->name('branches.rejected');
     Route::get('/approvedBranches', 'App\Http\Controllers\BranchController@approvedBranches')->name('branches.approved');
     Route::get('/loadItemsBasedOnBranch', 'App\Http\Controllers\MenuController@loadItemsBasedOnBranch');
     Route::put('/deactiveUser/{id}', 'App\Http\Controllers\Admin\UsersController@deactiveUser');
     Route::put('/activateUser/{id}', 'App\Http\Controllers\Admin\UsersController@activateUser');
+    Route::post('approveLock/{id}', 'App\Http\Controllers\BlockCustomerController@approveLock');
     Route::resource('blockedCustomer', 'App\Http\Controllers\BlockCustomerController');
     Route::post('/backup-create','App\Http\Controllers\BackupController@create')->name('get-backup');
     Route::get('/backups','App\Http\Controllers\BackupController@index')->name('backups');
     Route::delete('/delete-backup/{name}', 'App\Http\Controllers\BackupController@destroy')->name('backup.destroy');
-    Route::post('/download-backup/', 'App\Http\Controllers\BackupController@downloadBackup')->name('backup.download');
+    Route::post('/download-backup', 'App\Http\Controllers\BackupController@downloadBackup')->name('backup.download');
     Route::post('/approvePayment', 'App\Http\Controllers\PaymentController@approvePayment');
     Route::post('/rejectPayment', 'App\Http\Controllers\PaymentController@rejectPayment');
 
@@ -73,6 +75,7 @@ Route::middleware(['restaurant'])->group(function () {
 
     Route::get('/pendingItems', 'App\Http\Controllers\ItemController@pendingItems')->name('items.pending');
     Route::get('/approvedItems', 'App\Http\Controllers\ItemController@approvedItems')->name('items.approved');
+    Route::get('/rejectedItems', 'App\Http\Controllers\ItemController@rejectedItems')->name('items.rejected');
     Route::post('updateItemStockStatus', 'App\Http\Controllers\ItemController@updateItemStockStatus')->name('updateItemStockStatus');
     Route::get('paymentHistory', 'App\Http\Controllers\PaymentController@restaurantPayments')->name('paymentHistory');
     Route::get('paymentsCreate', 'App\Http\Controllers\PaymentController@restaurantPaymentsCreate');

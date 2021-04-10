@@ -35,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
 
        // Share data for sidebar badges for restaurant and admin.
        View::composer(['layouts.sidebar', 'dashboards.restaurant.layouts.sidebar'], function ($view) {
-            $status = ['pending', 'reject', 'processing', 'delivered'];
+            $status = ['pending', 'processing', 'delivered'];
             if (get_role() == "restaurant"){
                 $userId = auth()->user()->id;
                 $pendingItems = loadUserItemsData(['pending'], $userId, true);
@@ -48,24 +48,24 @@ class AppServiceProvider extends ServiceProvider
                 // Get user active orders.
                 $activeOrders = Order::whereIn('branch_id', $branchIds)->whereIn('status', $status)->count();
 
+                // Get user rejected items.
+                $rejectedItems = loadUserItemsData(['rejected'], $userId, true);
+
                 $view->with('sidebarData', [
                     'pendingItems' => $pendingItems,
-                    'activeOrders' => $activeOrders
+                    'activeOrders' => $activeOrders,
+                    'rejectedItems' => $rejectedItems
                 ]);
             }
             else {
                 // Get orders from 10 minutes ago.
                 $timeOffSet = Carbon::now()->subMinutes(1)->toDateTimeString();
-                $waitingOrders = Order::where(function ($query) use ($timeOffSet) {
-                    $query->where('status', 'pending')->where('orders.created_at', '<', $timeOffSet);
-                })->orwhere(function ( $query ) {
-                    $query->whereHas('deliveryDetails', function ($subquery) {
-                        $subquery->where('delivery_type', 'company')->whereNull('driver_id');
-                    });
-                })->count();
+
+                $waitingOrders = get_waiting_orders("%", null, true);
 
                 // Get all active orders.
                 $activeOrders = Order::whereIn('status', $status)->count();
+                
                 $pendingItems = Item::whereHas(
                     'itemFullDetails', function ($query) {
                     $query->where('details_status', '=', 'pending');
@@ -77,11 +77,23 @@ class AppServiceProvider extends ServiceProvider
                     $query->where('status', '=', 'pending');
                 })->count();
 
+                $rejectedBranches = Branch::whereHas(
+                    'branchFullDetails', function ($query) {
+                    $query->where('status', '=', 'rejected');
+                })->count();
+
+                $rejectedItems = Item::whereHas(
+                    'itemFullDetails', function ($query) {
+                    $query->where('details_status', '=', 'rejected');
+                })->count();
+
                 $view->with('sidebarData', [
                     'waitingOrders' => $waitingOrders,
                     'activeOrders' => $activeOrders,
                     'pendingItems' => $pendingItems,
-                    'pendingBranches' => $pendingBranches
+                    'pendingBranches' => $pendingBranches,
+                    'rejectedBranches' => $rejectedBranches, 
+                    'rejectedItems' => $rejectedItems
                 ]);
             }
         });

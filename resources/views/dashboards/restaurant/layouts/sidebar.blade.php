@@ -8,20 +8,23 @@
                 <li @if (\Request::is('restaurant/dashboard*')) class="active" @endif>
                     <a href="{{url('/')}}"><i class="la la-dashboard"></i><span>داشبورد</span></a>
                 </li>
+                @php $itemChanges = (@$sidebarData['pendingItems'] + @$sidebarData['rejectedItems']) ?: 0; @endphp
                 <li class="submenu">
-                    <a href="#"><i class="la la-list"></i><span> غذا ها</span> <span class="menu-arrow"></span></a>
+                    <a href="#"><i class="la la-list"></i><span class="menu-title"> غذا ها @if($itemChanges != 0) <span class="badge badge-danger custom-badge">{{$itemChanges}}</span> @endif</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         <li><a href="{{route('item.create')}}" @if (\Request::is('item/create*')) class="active" @endif>اضافه کردن غذا جدید</a></li>
-                        <li><a href="{{route('items.pending')}}" @if (\Request::is('pendingItems*')) class="active" @endif>غذا ها معطل @if($sidebarData['pendingItems'] != 0)<span class="badge badge-danger custom-badge">{{$sidebarData['pendingItems']}}</span>@endif </a></li>
-                        <li><a href="{{route('items.approved')}}" @if (\Request::is('approvedItems*')) class="active" @endif>غذا ها تایید شده</a></li>
+                        <li><a href="{{route('items.approved')}}" @if (\Request::is('approvedItems*')) class="active" @endif>غذا ها </a></li>
+                        <li><a href="{{route('items.pending')}}" @if (\Request::is('pendingItems*')) class="active" @endif>غذا های معطل @if($sidebarData['pendingItems'] != 0)<span class="badge badge-danger custom-badge">{{$sidebarData['pendingItems']}}</span>@endif </a></li>
+                        <li><a href="{{route('items.rejected')}}" @if (\Request::is('rejectedItems*')) class="active" @endif>غذا های رد شده @if($sidebarData['rejectedItems'] != 0)<span class="badge badge-danger custom-badge">{{$sidebarData['rejectedItems']}}</span>@endif </a></li>
                     </ul>
                 </li>
 
                 <li @if (\Request::is('menu*')) class="active" @endif>
                     <a href="{{route('menu.index')}}"><i class="la la-edit"></i><span>مینیو</span></a>
                 </li>
+                @php $orderChanges = (@$sidebarData['activeOrders']) ?: 0; @endphp
                 <li class="submenu">
-                    <a href="#"><i class="la la-legal"></i> <span>سفارشات</span> <span class="menu-arrow"></span></a>
+                    <a href="#"><i class="la la-legal"></i> <span class="menu-title">@if($orderChanges != 0) <span class="badge badge-danger custom-badge">{{$orderChanges}}</span> @endifسفارشات</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         {{--  <li><a  @if (\Request::is('orders/create*')) class="active" @endif href="{{ route('orders.create') }}">Add Order</a></li>--}}
                         {{-- <li><a  @if (\Request::is('orders')) class="active" @endif href="{{ route('orders.waitingOrders') }}">Waiting Orders</a></li> --}}

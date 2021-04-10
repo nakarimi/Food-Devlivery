@@ -40,20 +40,23 @@
                      </thead>
                      <tbody>
                         @foreach($item as $singleItem)
+
+                        <?php $itemDetails = get_item_details($singleItem, Session::get('itemType')); ?>
+                        
                         <tr>
                            <td>{{ $loop->iteration}}</td>
                            <td>
                             <h2 class="table-avatar">
-                                    <a href="#" class="avatar" style="width: 100px; height: 100px; background-color: transparent;"><img alt="" src="{{ url('storage/profile_images/' . get_item_details($singleItem, Session::get('itemType'))->thumbnail) }}"></a>
+                                    <a href="#" class="avatar" style="width: 100px; height: 100px; background-color: transparent;"><img alt="" src="{{ url('storage/profile_images/' . $itemDetails->thumbnail) }}"></a>
                                 </h2>
                             </td>
-                           <td>{{ get_item_details($singleItem, Session::get('itemType'))->title }}</td>
+                           <td>{{ $itemDetails->title }}</td>
                            <td>{{ @$singleItem->branch->branchDetails->title}}</td>
-                           <td>{{ get_item_details($singleItem, Session::get('itemType'))->price }}</td>
+                           <td>{{ $itemDetails->price }}</td>
                            <td>
-                               @if(get_item_details($singleItem, Session::get('itemType'))->details_status == "pending")
+                               @if($itemDetails->details_status == "pending")
                                    <span class="badge bg-inverse-warning">Pending</span>
-                               @elseif (get_item_details($singleItem, Session::get('itemType'))->detials_status == "rejected")
+                               @elseif ($itemDetails->detials_status == "rejected")
                                    <span class="badge bg-inverse-danger">Rejected</span>
                                @else
                                    <span class="badge bg-inverse-success">Active</span>

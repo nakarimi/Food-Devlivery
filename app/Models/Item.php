@@ -55,6 +55,11 @@ class Item extends Model
         return $this->hasOne(ItemDetails::class, 'item_id')->where('details_status', 'pending')->latest();
     }
 
+    // Relationship with details table.
+    public function rejectedItemDetails(){
+        return $this->hasOne(ItemDetails::class, 'item_id')->where('details_status', 'rejected')->latest();
+    }
+
     // Relationship with details table with full data.
     public function itemFullDetails(){
         return $this->hasMany(ItemDetails::class, 'item_id')->orderBy('id', 'desc');

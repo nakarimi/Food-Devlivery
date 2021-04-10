@@ -16,19 +16,14 @@ class CreateBlockCustomersTable extends Migration
         Schema::create('block_customers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customer_id');
-            $table->foreignId('user_id');
             $table->unsignedInteger('branch_id');
             $table->longtext('notes')->nullable();
+            $table->string('status');
 
             $table->foreign('customer_id')
                      ->references('id')
                      ->on('users')
                      ->onDelete('cascade');
-
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade');
 
             $table->foreign('branch_id')
                 ->references('id')

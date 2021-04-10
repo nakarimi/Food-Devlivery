@@ -48,7 +48,7 @@
                             <form id="order_approved_form" method="POST" style="width:100%;">
                                 {!! csrf_field() !!}
                                 <div class="form-group">
-                                    <input type="datetime-local" class="form-control" id="promissed_time" />
+                                    <input type="time" class="form-control" id="promissed_time" />
                                     <input type="hidden" class="form-control" name="order_id" />
                                     <input type="hidden" class="form-control" name="customer_id" />
                                 </div>
@@ -104,28 +104,4 @@
 <!-- Datatable JS -->
 @push('scripts')
 @include('dashboards.restaurant.orders.scripts')
-<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-<script>
-    // Enable pusher logging - don't include this in production
-    Pusher.logToConsole = true;
-
-    var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
-        cluster: '{{ env('PUSHER_APP_CLUSTER') }}'
-    });
-
-    var channel = pusher.subscribe('food-app');
-    channel.bind('update-event', function(data) {
-        // console.log('evetn called!')
-        if (userId == JSON.stringify(data['userId'])) {
-            if (JSON.stringify(data['message']) == '"New Order Recieved!"') {
-                show_message(['سفارش جدید اضافه شد.', 'success']);
-                // console.log("New order arrived!");
-                playSound();
-            }
-            Livewire.emit('refreshActiveOrders');
-        }
-        
-    });
-</script>
-
 @endpush

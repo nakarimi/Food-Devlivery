@@ -263,6 +263,13 @@ class BranchController extends Controller
         return view('branch.branch.index', compact('branch'));
     }
 
+    public function rejectedBranches()
+    {
+        Session::put('branchType', 'rejected');
+        $branch = getBranchesBasedOnStatus("rejected");
+        return view('branch.branch.index', compact('branch'));
+    }
+
     public function approvedBranches()
     {
         Session::put('branchType', 'approved');
@@ -293,12 +300,17 @@ class BranchController extends Controller
 
     public function rejectBranch(Request $request)
     {
-        $detialId = $request->branch_detail_id;
+
+        $detialId = $request->detail_id;
+        $reason = $request->reason; 
         $branch = BranchDetails::findOrFail($detialId);
         $branch->status = "rejected";
+        $branch->note = $reason;
         $branch->save();
         $notifyUser = Branch::find($branch->business_id)->user_id;
         send_notification([$notifyUser], 1, 'تغیرات روی پروفایل تان توسط ادمین رد شد');
+
+        Session::put('branchType', 'rejected');
         return redirect()->back()->with('flash_message', 'Branch Rejected!');
     }
 
@@ -309,7 +321,7 @@ class BranchController extends Controller
             $query = DB::table('branche_main_info')->where('business_id', '=', $business_id);
             $update = $query->where('id', '!=', $detailId);
             if ($status != null){
-                $update = $query->where('status', '=', $status);
+                $update = $query->whereIn('status', [$status, 'rejected']);
             }
                $update->update(array('status' => "old"));
         }
