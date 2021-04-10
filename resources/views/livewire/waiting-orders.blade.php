@@ -103,6 +103,16 @@
                                             {{ csrf_field() }}
                                             {{-- <button type="submit" class="btn btn-danger btn-xs" title="Delete Order" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i></button> --}}
                                         </form>
+
+                                        @if($item->tracking_by && $item->tracking_by->status == 0)
+                                            <a title="Following by {{$item->tracking_by->support->name}}">
+                                                <button class="btn btn-dark btn-xs followup" cancelId="{{$item->tracking_by->id}}">
+                                                    <i class="fa fa-spinner fa-spin" aria-hidden="true" ></i>
+                                                </button>
+                                            </a>
+                                        @else
+                                            <a title="Mark this as checking...."><button class="btn btn-success btn-xs followup" order_id={{$item->id}} support_id={{auth()->user()->id}}><i class="fa fa-spinner"  ></i></button></a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

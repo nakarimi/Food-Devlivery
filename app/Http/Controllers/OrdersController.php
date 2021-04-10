@@ -9,13 +9,13 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\Branch;
 use App\Models\User;
-use App\Models\Item;
 use App\Models\Driver;
 use App\Models\DeliveryDetails;
 use App\Models\OrderTimeDetails;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Models\OrderTracking;
 
 class OrdersController extends Controller
 {
@@ -59,7 +59,6 @@ class OrdersController extends Controller
     {
         abortUrlFor("restaurant");
         $data = $this->dropdown_data($id);
-        $data['restaurant_items'] = Item::where('branch_id', $data['order']->branch_id)->with('approvedItemDetails')->get();
         return view('order.orders.edit', $data);
     }
 
@@ -237,6 +236,24 @@ class OrdersController extends Controller
         $id = $request['order_id'];
         DeliveryDetails::where('order_id', $id)->update(['delivery_type' => 'company']);
         event(new \App\Events\UpdateEvent('Delivery requested!', $id));
+    }
+
+    /**
+     * Support followup the order.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     */
+    public function followupOrder(Request $request) {
+        if ($request['cancel_id'] > 0) {
+            OrderTracking::destroy($request['cancel_id']);
+        }
+        else {
+            $requestData = $request->all();
+            OrderTracking::create($requestData);
+        }
+        
+        event(new \App\Events\UpdateEvent('Order Updated!', $request['order_id']));
     }
 
     /**

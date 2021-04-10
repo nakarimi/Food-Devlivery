@@ -61,6 +61,8 @@ Route::middleware(['admin'])->group(function () {
     Route::post('/download-backup', 'App\Http\Controllers\BackupController@downloadBackup')->name('backup.download');
     Route::post('/approvePayment', 'App\Http\Controllers\PaymentController@approvePayment');
     Route::post('/rejectPayment', 'App\Http\Controllers\PaymentController@rejectPayment');
+    Route::post('followupOrder', 'App\Http\Controllers\OrdersController@followupOrder');
+    
 
 });
 
