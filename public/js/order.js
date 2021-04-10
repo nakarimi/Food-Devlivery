@@ -197,5 +197,37 @@ jQuery(function ($) {
             // Stringifying the final contents object and adding the related input as value in the form.
             $('[name="contents"]').val(JSON.stringify(new_contents));
         });
+
+        // Support pick orders for following up.
+        $(document).on('click','.followup',function(){
+
+            let order_id = $(this).attr('order_id');
+            let support_id =  $(this).attr('support_id');
+            let cancel_id =  $(this).attr('cancelId');
+            let message = ['Follow up canceled by you!', 'danger'];
+            
+            // IF process  was for canceling then just perform the request.
+            if (!cancel_id > 0) {
+                message = ['This order will be followed up by you!', 'success'];
+                // IF correct values are not provided.
+                if (!order_id > 0 || !support_id > 0) {
+                    alert("Sorry, Please reload the page.");
+                    return;
+                }
+            }
+
+            $.ajax({
+                type: 'POST',
+                url:'/followupOrder',
+                data: {order_id:order_id, support_id: support_id, cancel_id: cancel_id},
+                success: function () {
+                    show_message(message);
+                },
+                error: function (e) {
+                    alert("js error in order.js file.")
+                }
+            });
+
+        });
     });
 })
