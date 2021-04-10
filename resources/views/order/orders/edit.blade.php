@@ -23,7 +23,7 @@
                             </ul>
                         @endif
 
-                        <form method="POST" action="{{ url('/orders/' . $order->id) }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
+                        <form method="POST" action="{{ url('/orders/' . $order->id) }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data" id="web_order_update_form" data-contents="{{ $order->contents }}">
                             {{ method_field('PATCH') }}
                             {{ csrf_field() }}
 
@@ -36,4 +36,6 @@
             </div>
         </div>
     </div>
+<!-- Custom JS -->
+<script src="{{asset('js/order.js')}}"></script>
 @endsection

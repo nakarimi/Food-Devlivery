@@ -9,6 +9,7 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\Branch;
 use App\Models\User;
+use App\Models\Item;
 use App\Models\Driver;
 use App\Models\DeliveryDetails;
 use App\Models\OrderTimeDetails;
@@ -58,6 +59,7 @@ class OrdersController extends Controller
     {
         abortUrlFor("restaurant");
         $data = $this->dropdown_data($id);
+        $data['restaurant_items'] = Item::where('branch_id', $data['order']->branch_id)->with('approvedItemDetails')->get();
         return view('order.orders.edit', $data);
     }
 

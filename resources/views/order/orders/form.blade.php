@@ -121,12 +121,40 @@
       </div>
    </div>
 </div>
-<div class="form-group{{ $errors->has('contents') ? 'has-error' : ''}}">
+
+<input type="text" name="contents" class="d-none">
+<input type="text" name="order_id" class="d-none" value="{{ $order->id }}">
+{{-- <div class="form-group{{ $errors->has('contents') ? 'has-error' : ''}}">
    <label for="contents" class="control-label" style="display: flex;"><span>{{ 'Contents' }}</span> {!! show_order_itmes($order->contents) !!}</label>
    {!! $errors->first('contents', '
    <p class="help-block">:message</p>
    ') !!}
-</div>
+</div> --}}
+
+
+
+   @foreach ($restaurant_items as $item)
+      <div class="float-left col-sm-3 p-2">
+         <div class="d-flex justify-content-between bg-primary rounded p-2">
+            <label class="flex-grow-1">{{ $item->approvedItemDetails->title }}</label>
+         
+            <input type="number" class="form-control d-inline-block w-50 rounded-pill items_in_order"
+               @foreach ($order->contentsToArray()['contents'] as $content)
+                  @foreach ($content as $details)
+                        @if ($item->id == (int) $details['item_id'])
+                           @php
+                              echo ('value="' . $details['count'] . '"');
+                           @endphp
+                        @endif
+                  @endforeach
+               @endforeach
+               {{-- Default value --}}
+               value="0"
+               data-item="{{$item->approvedItemDetails}}"
+            >
+         </div>
+      </div>
+   @endforeach
 <div class="form-group">
    <input class="btn btn-primary" type="submit" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}">
 </div>
