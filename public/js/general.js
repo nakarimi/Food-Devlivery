@@ -75,7 +75,12 @@ jQuery(function ($) {
                 }
             });
         });
-
+        // Wait until user do some interaction. https://stackoverflow.com/a/51657751/7995302
+        setTimeout(() => {
+            // {{-- This silent audio is added here for this reason https://stackoverflow.com/a/52228983/7995302 --}}
+            document.getElementById('audio').play();
+        }, 5000)
+        
         
 
     });

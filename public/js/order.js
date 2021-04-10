@@ -126,11 +126,5 @@ jQuery(function ($) {
             });
         });
 
-
-        if (JSON.stringify(data['message']) == '"New Order Recieved!"') {
-            show_message(['سفارش جدید اضافه شد.', 'success']);
-            // console.log("New order arrived!");
-            playSound();
-        }
     });
 })

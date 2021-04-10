@@ -104,23 +104,4 @@
 <!-- Datatable JS -->
 @push('scripts')
 @include('dashboards.restaurant.orders.scripts')
-<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-<script>
-    // Enable pusher logging - don't include this in production
-    Pusher.logToConsole = true;
-
-    var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
-        cluster: '{{ env('PUSHER_APP_CLUSTER') }}'
-    });
-
-    var channel = pusher.subscribe('food-app');
-    channel.bind('update-event', function(data) {
-        // console.log('evetn called!')
-        if (userId == JSON.stringify(data['userId'])) {
-            Livewire.emit('refreshActiveOrders');
-        }
-        
-    });
-</script>
-
 @endpush

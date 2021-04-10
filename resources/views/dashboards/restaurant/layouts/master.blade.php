@@ -43,6 +43,10 @@
     @stack('styles')
 </head>
 <body>
+
+{{-- This silent audio is added here for this reason https://stackoverflow.com/a/52228983/7995302 --}}
+<audio id="audio" src="{{asset('audio/silence_64kb.mp3')}}"  muted style="display:none;" ></audio>
+
 <div id="app">
 
     <!-- Get current user id and stor for later uses. -->
@@ -71,7 +75,6 @@
                 <!-- Page Header -->
             {{--                @include('layouts.page-header')--}}
             <!-- /Page Header -->
-
 
                 @yield('content')
                 {{$slot ?? ''}}
@@ -111,6 +114,21 @@
         if (data['message'] === "Notification" && userId == data.userId.id) {
             Livewire.emit('refreshNotifications');
         }
+    });
+
+    var channel = pusher.subscribe('food-app');
+    channel.bind('update-event', function(data) {
+        // Here we check if notification from pusher is about a new order, and is related to this user. Show message if it was, 
+        if (JSON.stringify(data['message']) == '"New Order Recieved!"' && (userId == JSON.stringify(data['userId']))) {
+            show_message(['سفارش جدید اضافه شد.', 'success']);
+            playSound();
+            
+            // The message above is displayed, when user is on any page, but update of active orders should happened only when user is on the active orders page.
+            if (window.location.pathname == '/activeOrders') {
+                Livewire.emit('refreshActiveOrders');
+            }
+        }
+        
     });
 </script>
 
