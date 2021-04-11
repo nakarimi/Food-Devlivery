@@ -42,6 +42,20 @@ class CustomerRequests extends Controller
 
             // This loop here is for speed test issues and will be removed.
             for ($k=0; $k < 1; $k++) {
+
+                // $newOrder = [
+                //     'branch_id' => $requestData['branch_id'],
+                //     'customer_id' => $requestData['customer_id'],
+                //     'has_delivery' => ($has_delivery) ? '1' : '0',
+                //     'total' => $requestData['total'],
+                //     'commission_value' => $requestData['commission_value'],
+                //     'status' => 'pending',
+                //     'note' => $requestData['note'],
+                //     'reciever_phone' => $requestData['reciever_phone'],
+                //     'contents' => $requestData['contents'],
+                //     'created_at' => Carbon::today()->subDays(rand(0, 55)),  // Carbon::now()->format('Y-m-d H:i:s')
+                // ];
+
             	// Add order to table.
 	            $order_id = DB::table('orders')->insertGetId($newOrder);
 	    

@@ -79,8 +79,10 @@ Route::middleware(['restaurant'])->group(function () {
     Route::get('/approvedItems', 'App\Http\Controllers\ItemController@approvedItems')->name('items.approved');
     Route::get('/rejectedItems', 'App\Http\Controllers\ItemController@rejectedItems')->name('items.rejected');
     Route::post('updateItemStockStatus', 'App\Http\Controllers\ItemController@updateItemStockStatus')->name('updateItemStockStatus');
-    Route::get('paymentHistory', 'App\Http\Controllers\PaymentController@restaurantPayments')->name('paymentHistory');
-    Route::get('paymentsCreate', 'App\Http\Controllers\PaymentController@restaurantPaymentsCreate');
+    Route::get('paymentHistory', 'App\Http\Controllers\PaymentController@paymentHistory')->name('paymentHistory');
+    Route::get('activePayments', 'App\Http\Controllers\PaymentController@activePayments')->name('activePayments');
+
+    // Route::get('paymentsCreate', 'App\Http\Controllers\PaymentController@restaurantPaymentsCreate');
     Route::post('saveRestaurantPayment', 'App\Http\Controllers\PaymentController@SaveRestaurantPayments');
     Route::resource('item', 'App\Http\Controllers\ItemController');
     Route::resource('menu', 'App\Http\Controllers\MenuController');
@@ -93,7 +95,6 @@ Route::middleware(['restaurant'])->group(function () {
 
     // Livewire Route for active orders.
     Route::get('/activeOrders', \App\Http\Livewire\ActiveOrder::class);
-
     Route::get('/waitingOrders', \App\Http\Livewire\WaitingOrder::class);
 
     Route::get('/order-history', 'App\Http\Controllers\OrdersController@orderHistory')->name('order.history');

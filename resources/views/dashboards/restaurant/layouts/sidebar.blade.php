@@ -36,10 +36,13 @@
                     <a href="#"><i class="la la-money"></i> <span>پرداخت ها</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         <li>
-                            <a  @if (\Request::is('paymentsCreate')) class="active" @endif href="{{ url('paymentsCreate') }}"><span>اضافه کردن پرداخت جدید</span></a>
+                            {{-- <a  @if (\Request::is('paymentsCreate')) class="active" @endif href="{{ url('paymentsCreate') }}"><span>اضافه کردن پرداخت جدید</span></a> --}}
                         </li>
                         <li>
-                            <a  @if (\Request::is('paymentHistory')) class="active" @endif href="{{ route('paymentHistory') }}"><span> لست پرداخت ها</span></a>
+                            <a  @if (\Request::is('activePayments')) class="active" @endif href="{{ route('activePayments') }}"><span>  پرداخت های فعال</span></a>
+                        </li>
+                        <li>
+                            <a  @if (\Request::is('paymentHistory')) class="active" @endif href="{{ route('paymentHistory') }}"><span>  پرداخت های قبلی</span></a>
                         </li>
 
                     </ul>

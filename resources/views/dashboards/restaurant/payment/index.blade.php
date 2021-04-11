@@ -4,6 +4,33 @@
 @stop
 @section('content')
 <div class="container">
+   {{-- <div class="row">
+      <div class="col-md-3">
+         <div class="stats-info">
+            <h6>همه سفارشات</h6>
+            <h4>12 <span>This Month</span></h4>
+         </div>
+      </div>
+      <div class="col-md-3">
+         <div class="stats-info">
+            <h6>همه ارسال ها</h6>
+            <h4>3 <span>This Month</span></h4>
+         </div>
+      </div>
+      <div class="col-md-3">
+         <div class="stats-info">
+            <h6>Renewal</h6>
+            <h4>0 <span>Next Month</span></h4>
+         </div>
+      </div>
+      <div class="col-md-3">
+         <div class="stats-info">
+            <h6>Total Companies</h6>
+            <h4>312</h4>
+         </div>
+      </div>
+   </div> --}}
+
    <div class="row">
       <div class="col-md-12">
          <div class="card">
@@ -11,39 +38,34 @@
             <div class="card-body">
                <br/>
                <div class="table-responsive">
-                  <table class="table table-striped mb-0 datatable ">
+                  <table class="table table-striped mb-0 ">
                      <thead>
                         <tr>
+                           <th>تاریخ</th>
+                           <th>تعداد سفارش</th>
+                           <th>مجموع قیمت</th>
+                           <th>کمیشن عمومی</th>
+                           <th>کمیشن پیک </th>
+                           <th>مجموع تحویلی</th>
                            <th>#</th>
-                           <th class="disable_sort">Payer</th>
-                           <th class="disable_sort">Receiver</th>
-                           <th>Paid Amount</th>
-                            <th>Date</th>
-                            <th>Status</th>
                         </tr>
                      </thead>
                      <tbody>
-                        @foreach($payment as $item)
+                        @foreach($payments as $item)
                         <tr>
-                           <td>{{ $loop->iteration}}</td>
-                           <td>{{ $item->branchDetails->title }}</td>
-                           <td>{{ $item->user->name }}</td>
-                           <td>{{ $item->paid_amount }}</td>
-                           <td>{{ $item->date_and_time }}</td>
+                           <td>{{ $item->range_from .' الی ' . $item->range_to }}</td>
+                           <td>{{ $item->totalOrders }}</td>
+                           <td>{{ $item->totalOrdersPrice }}</td>
+                           <td>{{ $item->totalGeneralCommission }}</td>
+                           <td>{{ $item->totalDeliveryCommission }}</td>
+                           <td>{{ $item->totalDeliveryCommission + $item->totalGeneralCommission }}</td>
                             <td>
-                                @if ($item->status == "pending")
-                                    <span class="badge badge-warning">{{$item->status}}</span>
-                                @elseif ($item->status == "approved")
-                                    <span class="badge badge-success">{{$item->status}}</span>
-                                @else
-                                    <span class="badge badge-danger">{{$item->status}}</span>
-                                @endif
+                               
                             </td>
                         </tr>
                         @endforeach
                      </tbody>
                   </table>
-                  <div class="pagination-wrapper"> {!! $payment->appends(['search' => Request::get('search')])->render() !!} </div>
                </div>
             </div>
          </div>
@@ -53,7 +75,4 @@
 @endsection
 
 @section('scripts')
-    <!-- Datatable JS -->
-    <script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('js/dataTables.bootstrap4.min.js')}}"></script>
 @stop

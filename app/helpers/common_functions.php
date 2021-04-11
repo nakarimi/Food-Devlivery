@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\Driver;
 use Carbon\Carbon;
 use App\Models\DeliveryDetails;
+use App\Models\Setting;
 
 if (!function_exists('save_file')) {
      /**
@@ -215,7 +216,7 @@ if (!function_exists('loadUserAllOrders')){
         foreach ($branches as $branch) {
             array_push($branchIds, $branch->id);
         }
-        $orders = \App\Models\Order::whereIn('branch_id', $branchIds)->whereIn('status', $status)->with('customer.blockedCustomer');
+        $orders = Order::whereIn('branch_id', $branchIds)->whereIn('status', $status)->with('customer.blockedCustomer');
 
         if ($perPage) {
             $orders = $orders->latest()->paginate($perPage);
@@ -587,4 +588,18 @@ if (!function_exists('get_waiting_orders')){
     }
 }
         
+// Update table column with boolean values.
+if (!function_exists('get_current_branch_info')){
+    function get_current_branch_info(){
+        $userId = Auth::user()->id;
+        return Branch::where('user_id', $userId)->first();
+    }
+}
+
+// get setting from configurations.
+if (!function_exists('setting_config')){
+    function setting_config($key){
+        return Setting::where('key', $key)->pluck('value')->toArray();
+    }
+}
 
