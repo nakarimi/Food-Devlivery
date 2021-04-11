@@ -63,6 +63,10 @@ class LoginController extends Controller
             case 'customer':
                 return redirect(route('customer.dashboard'));
                 break;
+            
+            case 'finance_officer':
+                return redirect(route('finance-office.dashboard'));
+                break;
             default:
                 return '/notfound';
                 break;
