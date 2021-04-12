@@ -1,4 +1,4 @@
-@extends('dashboards.finance_officer.layouts.master')
+@extends('dashboards.support.layouts.master')
 @section('title')
     داشبورد
 @stop
