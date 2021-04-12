@@ -159,6 +159,29 @@ class PaymentController extends Controller
     // }
 
     /**
+     * Pending Payment.
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function pendingPayments(Request $request)
+    {
+        $payments = [];
+
+        $payment_range_in_days = setting_config('payment_range_in_days')[0];
+
+        $lastPayment = new Carbon('first day of last month');
+        $today = Carbon::now()->format('Y-m-d');
+
+        while($lastPayment->lt($today)) {     
+            $from = $lastPayment->format('Y-m-d');                        
+            $to = $lastPayment->addDays($payment_range_in_days)->format('Y-m-d');
+            $payments[] = $this->calculate_orders_commission($from, $to, false);
+        }
+        
+        return view('dashboards.finance_officer.payment.index', compact('payments'));
+    }
+
+    /**
      * Active Payment.
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
@@ -190,7 +213,13 @@ class PaymentController extends Controller
     {
 
         // Get all orders.
-        $orders = Order::where('branch_id', $branchID)->whereBetween('created_at', [$from, $to])->get();
+        $orders = Order::whereBetween('created_at', [$from, $to])->get();
+
+        if (!is_null($branchID)) {
+            $orders =  $orders->where('branch_id', $branchID);
+        }
+
+        $orders = $orders->get();
 
         $totalOrders = $totalOrdersPrice = $totalGeneralCommission = $totalDeliveryCommission = 0;
 
