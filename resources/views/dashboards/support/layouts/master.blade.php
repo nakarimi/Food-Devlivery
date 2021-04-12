@@ -51,7 +51,7 @@
     @include('layouts.alert')
 
     <!-- Sidebar -->
-    @include('layouts.sidebar')
+    @extends('dashboards.support.layouts.sidebar')
     <!-- /Sidebar -->
 
         <!-- Page Wrapper -->
