@@ -592,7 +592,7 @@ if (!function_exists('get_waiting_orders')){
 if (!function_exists('get_current_branch_info')){
     function get_current_branch_info(){
         $userId = Auth::user()->id;
-        return Branch::where('user_id', $userId)->first();
+        return Branch::where('user_id', $userId)->first() ?: NULL;
     }
 }
 

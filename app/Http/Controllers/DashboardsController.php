@@ -43,6 +43,11 @@ class DashboardsController extends Controller
         return view('dashboards.customer.dashboard');
     }
 
+    public function financeOfficerDashboard()
+    {
+        return view('dashboards.finance_officer.dashboard');
+    }
+
     public function getOrderDetails($userId = null, $count = false, $date = null, $forAdmin = false)
     {
         $branchIds = [];

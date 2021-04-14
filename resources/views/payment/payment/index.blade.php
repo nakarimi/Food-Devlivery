@@ -28,54 +28,32 @@
                   <table class="table">
                      <thead>
                         <tr>
-                           <th>#</th>
-                           <th>Payer</th>
-                           <th>Receiver</th>
-                           <th>Paid Amount</th>
-                            <th>Date</th>
-                            <th>Status</th>
+                           <th>Range</th>
+                           <th>Total Orders</th>
+                           <th>Total Income</th>
+                            <th>Total General Commission</th>
+                            <th>Total Delivery Commission</th>
+                            <th>Total Payable</th>
                            <th>Actions</th>
                         </tr>
                      </thead>
-                     <tbody>
-                        @foreach($payment as $item)
+                    <tbody>
+                        @foreach($payments as $item)
                         <tr>
-                           <td>{{ $loop->iteration}}</td>
-                           <td>{{ $item->branchDetails->title }}</td>
-                           <td>{{ $item->user->name }}</td>
-                           <td>{{ $item->paid_amount }}</td>
-                           <td>{{ $item->date_and_time }}</td>
+                           <td>{{ $item->range_from .' To ' . $item->range_to }}</td>
+                           <td>{{ $item->totalOrders }}</td>
+                           <td>{{ $item->totalOrdersPrice }}</td>
+                           <td>{{ $item->totalGeneralCommission }}</td>
+                           <td>{{ $item->totalDeliveryCommission }}</td>
+                           <td>{{ $item->totalDeliveryCommission + $item->totalGeneralCommission }}</td>
                             <td>
-                                @if ($item->status == "pending")
-                                    <span class="badge badge-warning">{{$item->status}}</span>
-                                @elseif ($item->status == "approved")
-                                    <span class="badge badge-success">{{$item->status}}</span>
-                                @else
-                                    <span class="badge badge-danger">{{$item->status}}</span>
-                                @endif
+                               
                             </td>
-                           <td>
-                               @if ($item ->status == "pending")
-                                   <form method="POST" action="{{ url('/approvePayment') }}" accept-charset="UTF-8" style="display:inline">
-                                       {{ csrf_field() }}
-                                       <input type="hidden" value="{{$item->id}}" name="payment_id">
-                                       <button class="btn btn-sm btn-success" title="Approve" onclick="return confirm(&quot;Confirm approve?&quot;)"><i class="la la-check"></i></button>
-                                   </form>
-                                   <form method="POST" action="{{ url('/rejectPayment') }}" accept-charset="UTF-8" style="display:inline">
-                                       {{ csrf_field() }}
-                                       <input type="hidden" value="{{$item->id}}" name="payment_id">
-                                       <button class="btn btn-sm btn-danger" title="Reject" onclick="return confirm(&quot;Confirm Rejcect?&quot;)"><i class="la la-times"></i></button>
-                                   </form>
-
-                               @endif
-                              <a href="{{ url('/payment/' . $item->id) }}" title="View Payment"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
-                              <a href="{{ url('/payment/' . $item->id . '/edit') }}" title="Edit Payment"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
-                           </td>
                         </tr>
                         @endforeach
                      </tbody>
                   </table>
-                  <div class="pagination-wrapper"> {!! $payment->appends(['search' => Request::get('search')])->render() !!} </div>
+                  <div class="pagination-wrapper"> {!! $payments->appends(['search' => Request::get('search')])->render() !!} </div>
                </div>
             </div>
          </div>

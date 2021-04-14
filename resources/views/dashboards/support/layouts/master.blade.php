@@ -10,11 +10,11 @@
     <title>@yield('title')</title>
 
 
-    <!-- Favicon -->
+<!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="{{asset('img/favicon.png')}}">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{{asset('plugins/bootstrap-rtl/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
 
     <!-- Fontawesome CSS -->
     <link rel="stylesheet" href="{{asset('css/font-awesome.min.css')}}">
@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="{{asset('css/line-awesome.min.css')}}">
 
     <!-- Main CSS -->
-    <link rel="stylesheet" href="{{asset('css/RTL-style.css')}}">
+    <link rel="stylesheet" href="{{asset('css/style.css')}}">
 
     <!-- Custome CSS -->
     <link rel="stylesheet" href="{{asset('css/custome.css')}}">
@@ -33,38 +33,25 @@
 
     @include('layouts.common_scripts')
 
-{{--    TODO: this should only push based on component--}}
-    <link rel="stylesheet" href="{{asset('css/dataTables.bootstrap4.min.css')}}">
-
     {{--   Adding specific style of each page--}}
 
     @yield('styles')
     @livewireStyles
-    @stack('styles')
+
 </head>
 <body>
-
-{{-- This silent audio is added here for this reason https://stackoverflow.com/a/52228983/7995302 --}}
-<audio id="audio" src="{{asset('audio/silence_64kb.mp3')}}"  muted style="display:none;" ></audio>
-
 <div id="app">
-
-    <!-- Get current user id and stor for later uses. -->
-    <script>
-        let userId = @php echo auth()->user()->id; @endphp
-    </script>
-
     <!-- Main Wrapper -->
     <div class="main-wrapper">
 
         <!-- Header -->
-    @include('dashboards.restaurant.layouts.top-header')
+    @include('layouts.top-header')
     <!-- /Header -->
 
     @include('layouts.alert')
 
     <!-- Sidebar -->
-    @include('dashboards.restaurant.layouts.sidebar')
+    @extends('dashboards.support.layouts.sidebar')
     <!-- /Sidebar -->
 
         <!-- Page Wrapper -->
@@ -72,9 +59,10 @@
 
             <!-- Page Content -->
             <div class="content container-fluid">
-                <!-- Page Header -->
-            {{--                @include('layouts.page-header')--}}
+            <!-- Page Header -->
+{{--                @include('layouts.page-header')--}}
             <!-- /Page Header -->
+
 
                 @yield('content')
                 {{$slot ?? ''}}
@@ -92,7 +80,7 @@
 
 <!-- Bootstrap Core JS -->
 <script src="{{asset('js/popper.min.js')}}"></script>
-<script src="{{asset('plugins/bootstrap-rtl/js/bootstrap.min.js')}}"></script>
+<script src="{{asset('js/bootstrap.min.js')}}"></script>
 
 <!-- Slimscroll JS -->
 <script src="{{asset('js/jquery.slimscroll.min.js')}}"></script>
@@ -111,30 +99,20 @@
 
     var channel = pusher.subscribe('food-app-notification');
     channel.bind('notification-event', function(data) {
-        if (data['message'] === "Notification" && userId == data.userId.id) {
-            Livewire.emit('refreshNotifications');
-        }
-    });
-
-    var channel = pusher.subscribe('food-app');
-    channel.bind('update-event', function(data) {
-        // Here we check if notification from pusher is about a new order, and is related to this user. Show message if it was, 
-        if (JSON.stringify(data['message']) == '"New Order Recieved!"' && (userId == JSON.stringify(data['userId']))) {
-            show_message(['سفارش جدید اضافه شد.', 'success']);
-            playSound();
-            
-            // The message above is displayed, when user is on any page, but update of active orders should happened only when user is on the active orders page.
-            if (window.location.pathname == '/activeOrders') {
-                Livewire.emit('refreshActiveOrders');
+        if (data['message'] === "Notification") {
+            if (JSON.stringify(data['message']) == '"New Order Recieved!"') {
+                show_message(['سفارش جدید اضافه شد.', 'success']);
+                // console.log("New order arrived!");
+                playSound();
             }
+           Livewire.emit('refreshNotifications');
         }
-        
     });
 </script>
 
 <!-- Specific js of pages -->
 @yield('scripts')
 @livewireScripts
-@stack('scripts')
+
 </body>
 </html>

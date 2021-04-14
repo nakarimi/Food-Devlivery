@@ -159,6 +159,29 @@ class PaymentController extends Controller
     // }
 
     /**
+     * Pending Payment.
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function pendingPayments(Request $request)
+    {
+        $payments = [];
+
+        $payment_range_in_days = setting_config('payment_range_in_days')[0];
+
+        $lastPayment = new Carbon('first day of last month');
+        $today = Carbon::now()->format('Y-m-d');
+
+        while($lastPayment->lt($today)) {     
+            $from = $lastPayment->format('Y-m-d');                        
+            $to = $lastPayment->addDays($payment_range_in_days)->format('Y-m-d');
+            $payments[] = $this->calculate_orders_commission($from, $to, false);
+        }
+        
+        return view('dashboards.finance_officer.payment.index', compact('payments'));
+    }
+
+    /**
      * Active Payment.
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
@@ -180,7 +203,7 @@ class PaymentController extends Controller
         
         return view('dashboards.restaurant.payment.index', compact('payments'));
     }
-
+    
     /**
      * This helper get the params, and calculate orders based on those params.
      *
@@ -190,7 +213,13 @@ class PaymentController extends Controller
     {
 
         // Get all orders.
-        $orders = Order::where('branch_id', $branchID)->whereBetween('created_at', [$from, $to])->get();
+        $orders = Order::whereBetween('created_at', [$from, $to])->get();
+
+        if (!is_null($branchID)) {
+            $orders =  $orders->where('branch_id', $branchID);
+        }
+
+        $orders = $orders->get();
 
         $totalOrders = $totalOrdersPrice = $totalGeneralCommission = $totalDeliveryCommission = 0;
 
@@ -223,9 +252,15 @@ class PaymentController extends Controller
     {
         $perPage = 10;
         $branchID = get_current_branch_info();
-        $payment = Payment::where('branch_id', $branchID->id)->latest()->paginate($perPage);
+        if(!is_null($branchID)) {
+            $payments = Payment::where('branch_id', $branchID->id)->latest()->paginate($perPage);
+            return view('dashboards.restaurant.payment.index', compact('payments'));
+            
+        }
 
-        return view('dashboards.restaurant.payment.index', compact('payment'));
+        $payments = Payment::latest()->paginate($perPage);
+        // return view('payment.payment.index', compact('payments'));
+        return view('dashboards.finance_officer.payment.index', compact('payments'));
     }
 
     // public function restaurantPaymentsCreate()
