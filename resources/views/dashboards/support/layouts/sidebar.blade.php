@@ -14,7 +14,7 @@
                         {{--  <li><a  @if (\Request::is('orders/create*')) class="active" @endif href="{{ route('orders.create') }}">Add Order</a></li>--}}
                         <li><a  @if (\Request::is('pendingPayments')) class="active" @endif href="{{ url('pendingPayments') }}">Pending Payments</a></li>
                         <li><a  @if (\Request::is('activePayments')) class="active" @endif href="{{url('activePayments')}}">Active Payments</a></li>
-                        <li><a  @if (\Request::is('paymentHistory')) class="active" @endif href="{{ route('paymentHistory') }}">Payments History</a></li>
+                        <li><a  @if (\Request::is('paymentHistory')) class="active" @endif href="{{ url('paymentHistory') }}">Payments History</a></li>
                     </ul>
                 </li>
             </ul>

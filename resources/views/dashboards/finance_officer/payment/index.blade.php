@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('dashboards.support.layouts.master')
 @section('title')
    Payments
 @stop
