@@ -203,7 +203,7 @@ class PaymentController extends Controller
         
         return view('dashboards.restaurant.payment.index', compact('payments'));
     }
-
+    
     /**
      * This helper get the params, and calculate orders based on those params.
      *
@@ -252,9 +252,15 @@ class PaymentController extends Controller
     {
         $perPage = 10;
         $branchID = get_current_branch_info();
-        $payment = Payment::where('branch_id', $branchID->id)->latest()->paginate($perPage);
+        if(!is_null($branchID)) {
+            $payments = Payment::where('branch_id', $branchID->id)->latest()->paginate($perPage);
+            return view('dashboards.restaurant.payment.index', compact('payments'));
+            
+        }
 
-        return view('dashboards.restaurant.payment.index', compact('payment'));
+        $payments = Payment::latest()->paginate($perPage);
+        // return view('payment.payment.index', compact('payments'));
+        return view('dashboards.finance_officer.payment.index', compact('payments'));
     }
 
     // public function restaurantPaymentsCreate()

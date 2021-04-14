@@ -141,10 +141,9 @@ Route::middleware(['customer'])->group(function () {
 */
 Route::middleware(['finance_officer'])->group(function () {
     Route::get('finance_officer/dashboard', 'App\Http\Controllers\DashboardsController@financeOfficerDashboard')->name('finance_officer.dashboard');
-
-    Route::get('paymentsHistory', 'App\Http\Controllers\PaymentController@pendingPayments')->name('payments.pending');
-    Route::get('pendingPayments', 'App\Http\Controllers\PaymentController@activePayments')->name('payments.active');
-    Route::get('activePayments', 'App\Http\Controllers\PaymentController@paymentHistory')->name('payments.history');
+    Route::get('pendingPayments', 'App\Http\Controllers\PaymentController@pendingPayments')->name('payments.pending');
+    Route::get('activePayments', 'App\Http\Controllers\PaymentController@activePayments')->name('payments.active');
+    Route::get('paymentHistory', 'App\Http\Controllers\PaymentController@paymentHistory')->name('payments.history');
 
 });
 

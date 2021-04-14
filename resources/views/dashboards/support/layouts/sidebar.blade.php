@@ -12,9 +12,9 @@
                     <a href="#"><i class="la la-legal"></i> <span class="menu-title">Payments</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         {{--  <li><a  @if (\Request::is('orders/create*')) class="active" @endif href="{{ route('orders.create') }}">Add Order</a></li>--}}
-                        <li><a  @if (\Request::is('pendingPayments')) class="active" @endif href="{{ url('payments.pending') }}">Pending Payments</a></li>
-                        <li><a  @if (\Request::is('activePayments')) class="active" @endif href="{{url('payments.active')}}">Active Payments</a></li>
-                        <li><a  @if (\Request::is('paymentsHistory')) class="active" @endif href="{{ route('payments.history') }}">Payments History</a></li>
+                        <li><a  @if (\Request::is('pendingPayments')) class="active" @endif href="{{ url('pendingPayments') }}">Pending Payments</a></li>
+                        <li><a  @if (\Request::is('activePayments')) class="active" @endif href="{{url('activePayments')}}">Active Payments</a></li>
+                        <li><a  @if (\Request::is('paymentHistory')) class="active" @endif href="{{ route('paymentHistory') }}">Payments History</a></li>
                     </ul>
                 </li>
             </ul>

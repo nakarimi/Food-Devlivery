@@ -53,7 +53,7 @@
                         @endforeach
                      </tbody>
                   </table>
-                  <div class="pagination-wrapper"> {!! $payment->appends(['search' => Request::get('search')])->render() !!} </div>
+                  <div class="pagination-wrapper"> {!! $payments->appends(['search' => Request::get('search')])->render() !!} </div>
                </div>
             </div>
          </div>
