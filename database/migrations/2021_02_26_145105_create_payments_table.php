@@ -18,10 +18,11 @@ class CreatePaymentsTable extends Migration
             $table->integer('branch_id')->nullable();
             $table->integer('reciever_id')->nullable();
             $table->integer('total_order');
+            $table->double('total_order_income');
             $table->double('total_general_commission');
             $table->double('total_delivery_commission');
-            $table->date('start_date');
-            $table->date('end_date');
+            $table->date('range_from');
+            $table->date('range_to');
             $table->string('note')->nullable();
             $table->string('status')->default('pending');
             });

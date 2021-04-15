@@ -165,20 +165,42 @@ class PaymentController extends Controller
      */
     public function pendingPayments(Request $request)
     {
-        $payments = [];
 
+        // Get payment range to divide orders payment based on this.
         $payment_range_in_days = setting_config('payment_range_in_days')[0];
 
+        // The last date that a restaurant paid. @Todo, this shoudl change to actual month.
         $lastPayment = new Carbon('first day of last month');
-        $today = Carbon::now()->format('Y-m-d');
 
-        while($lastPayment->lt($today)) {     
-            $from = $lastPayment->format('Y-m-d');                        
-            $to = $lastPayment->addDays($payment_range_in_days)->format('Y-m-d');
-            $payments[] = $this->calculate_orders_commission($from, $to, false);
+        // The order payment shoudl calculate till the other day.
+        $ToDate = Carbon::now();
+
+        // Pass active branches for Dropdown select.
+        $activeBranches = get_active_branches($lastPayment->format('Y-m-d'), $ToDate->format('Y-m-d'));
+        
+        // 
+        $payments = [];
+
+        if ($request['branch_id']) {
+
+            // Loop until reach the specified date.
+            while($lastPayment->lt($ToDate)) {     
+                $from = $lastPayment->format('Y-m-d');                        
+                $to = $lastPayment->addDays($payment_range_in_days);
+                
+                // Since we are adding range to the "to" variable, sometime it go beyond the yesterday, it comes to today and may go to future. we need to controll this.
+                if ($to->gt($ToDate)) {
+                   $to = $ToDate;
+                }
+                // Get order calculation.
+                $payments[] = $this->calculate_orders_commission($from, $to->format('Y-m-d'), $request['branch_id']);
+            }
         }
         
-        return view('dashboards.finance_officer.payment.index', compact('payments'));
+        // Remove empty indexes.
+        $payments = array_filter($payments);
+        
+        return view('dashboards.finance_officer.payment.index', compact('payments', 'activeBranches'));
     }
 
     /**
@@ -188,20 +210,23 @@ class PaymentController extends Controller
      */
     public function activePayments(Request $request)
     {
-        $payments = [];
-        $branchID = get_current_branch_info()->id;
-        $payment_range_in_days = setting_config('payment_range_in_days')[0];
-
-        $lastPayment = new Carbon('first day of last month');
-        $today = Carbon::now()->format('Y-m-d');
-
-        while($lastPayment->lt($today)) {     
-            $from = $lastPayment->format('Y-m-d');                        
-            $to = $lastPayment->addDays($payment_range_in_days)->format('Y-m-d');
-            $payments[] = $this->calculate_orders_commission($from, $to, $branchID);
+        $perPage = 10;
+        $branchID = get_current_branch_info();
+        if(!is_null($branchID)) {
+            $payments = Payment::where('branch_id', $branchID->id)->where('status', 'activated')->latest()->paginate($perPage);
+            return view('dashboards.restaurant.payment.index', compact('payments'));
+            
         }
-        
-        return view('dashboards.restaurant.payment.index', compact('payments'));
+
+        $payments = Payment::where('status', 'activated')->latest()->paginate($perPage);
+
+        foreach($payments as $payment) {
+            $active_branches[] = $payment->branch_id;
+        }
+
+        $activeBranches = Branch::whereIN('id', $active_branches)->get();
+
+        return view('dashboards.finance_officer.payment.index', compact('payments', 'activeBranches'));
     }
     
     /**
@@ -213,18 +238,15 @@ class PaymentController extends Controller
     {
 
         // Get all orders.
-        $orders = Order::whereBetween('created_at', [$from, $to])->get();
+        $orders = Order::whereBetween('created_at', [$from, $to])->where('branch_id', $branchID)->get();
 
-        if (!is_null($branchID)) {
-            $orders =  $orders->where('branch_id', $branchID);
-        }
-
-        $orders = $orders->get();
-
+        // Initialize variable for later assignment.
         $totalOrders = $totalOrdersPrice = $totalGeneralCommission = $totalDeliveryCommission = 0;
 
+        // Base payment object to collect all calculations and pass to view.
         $payment = new \stdClass;
 
+        // Go through every branch orders and sum up the needed values.
         foreach ($orders as $order) {
             $totalOrders ++;
             $totalOrdersPrice += $order->total;
@@ -232,14 +254,19 @@ class PaymentController extends Controller
             $totalDeliveryCommission += (is_object($order->deliveryDetails)) ? $order->deliveryDetails->delivery_commission : 0;
         }
 
+        // Assing a new row to payment object.
+        $payment->from = Carbon::parse($from)->format('Y-m-d');
+        $payment->to = Carbon::parse($to)->format('Y-m-d');
         $payment->range_from = Carbon::parse($from)->format('M-d');
-        $payment->range_to = Carbon::parse($to)->format('M-d');
-        $payment->totalOrders = $totalOrders;
-        $payment->totalOrdersPrice = $totalOrdersPrice;
-        $payment->totalGeneralCommission = $totalGeneralCommission;
-        $payment->totalDeliveryCommission = $totalDeliveryCommission;
+        $payment->range_to = Carbon::parse($to)->subDays(1)->format('M-d');
+        $payment->total_order = $totalOrders;
+        $payment->branchTitle = Branch::findOrFail($branchID)->branchDetails->title;
+        $payment->total_order_income = $totalOrdersPrice;
+        $payment->total_general_commission = $totalGeneralCommission;
+        $payment->total_delivery_commission = $totalDeliveryCommission;
 
-        return $payment;
+        // Return orders if not empty.
+        return ($totalOrders > 0) ? $payment : [];
         
     }
 
@@ -284,18 +311,62 @@ class PaymentController extends Controller
     //     return redirect('paymentHistory')->with('flash_message', 'Payment Added!');
     // }
 
-    public function rejectPayment(Request $request)
+    // public function rejectPayment(Request $request)
+    // {
+    //     $branch_id = $request->branch_id;
+    //     $reciever_id = $request->reciever_id;
+    //     $total_order = $request->total_order;
+    //     $total_general_commission = $request->total_general_commission;
+    //     $total_delivery_commission = $request->total_delivery_commission;
+    //     $start_date = $request->start_date;
+    //     $end_date = $request->end_date;
+    //     $status = ;
+        
+
+    //     $this->changePaymentStatus($paymentId,'rejected');
+    //     return redirect()->back()->with('flash_message', 'Payment Rejected!');
+
+    // }
+
+    public function activate_payment(Request $request)
+    {
+        
+        $data['branch_id'] = $request->branch_id;
+        $data['reciever_id'] = $request->reciever_id;
+        $data['total_order'] = $request->total_order;
+        $data['total_order_income'] = $request->total_order_income;
+        $data['total_general_commission'] = $request->total_general_commission;
+        $data['total_delivery_commission'] = $request->total_delivery_commission;
+        $data['range_from'] = $request->range_from;
+        $data['range_to'] = $request->range_to;
+        $data['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        $data['status'] = 'activated';
+
+        $inserted = DB::table('payments')->insertOrIgnore($data);
+
+        if ($inserted) {
+            return redirect()->back()->with('flash_message', 'Payment Activated!');
+        }
+        else {
+            return redirect()->back()->with('flash_message', 'Payment Activation Failed!');
+        }
+        
+
+    }
+
+    
+    public function recievePayment(Request $request)
     {
         $paymentId = $request->payment_id;
-        $this->changePaymentStatus($paymentId,'rejected');
-        return redirect()->back()->with('flash_message', 'Payment Rejected!');
+        $this->changePaymentStatus($paymentId,'recieved');
+        return redirect()->back()->with('flash_message', 'Payment Recieved!');
 
     }
 
     public function approvePayment(Request $request)
     {
         $paymentId = $request->payment_id;
-       $this->changePaymentStatus($paymentId,'approved');
+        $this->changePaymentStatus($paymentId,'approved');
         return redirect()->back()->with('flash_message', 'Payment Approved!');
 
     }
