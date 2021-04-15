@@ -24,7 +24,7 @@
                     <ul style="display: none;">
                         <li><a href="{{route('items.pending')}}" @if (\Request::is('pendingItems*')) class="active" @endif>Pending Items</a>@if($sidebarData['pendingItems'] != 0)<span class="badge badge-danger custom-badge-en">{{$sidebarData['pendingItems']}}</span>@endif</li>
                         <li><a href="{{route('items.approved')}}" @if (\Request::is('approvedItems*')) class="active" @endif>Approved Items</a></li>
-                        <li><a href="{{route('items.rejected')}}" @if (\Request::is('rejectedItems*')) class="active" @endif>Rejected Items @if($sidebarData['rejectedItems'] != 0)<span class="badge badge-danger custom-badge-en custom-badge-en">{{$sidebarData['rejectedItems']}}</span>@endif </a></li>
+                    
 
                         <li><a  @if (\Request::is('category')) class="active" @endif href="{{ route('category.index') }}">Category</a></li>
                         {{-- <li><a  @if (\Request::is('menu')) class="active" @endif href="{{ route('menu.index') }}">Menus</a></li> --}}
@@ -36,8 +36,7 @@
                     <ul style="display: none;">
                         <li><a @if (\Request::is('approvedBranches')) class="active" @endif href="{{route('branches.approved')}}">Approved Branches</a></li>
                         <li><a @if (\Request::is('pendingBranches')) class="active" @endif href="{{route('branches.pending')}}">Pending Branches</a>@if($sidebarData['pendingBranches'] != 0)<span class="badge badge-danger custom-badge-en">{{$sidebarData['pendingBranches']}}</span>@endif</li>
-                        <li><a @if (\Request::is('rejectedBranches')) class="active" @endif href="{{route('branches.rejected')}}">Rejected Changes</a>@if($sidebarData['rejectedBranches'] != 0)<span class="badge badge-danger custom-badge-en">{{$sidebarData['rejectedBranches']}}</span>@endif</li>
-                    </ul>
+<!--  -->                    </ul>
                 </li>
 
                 <li>

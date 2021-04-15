@@ -603,3 +603,24 @@ if (!function_exists('setting_config')){
     }
 }
 
+// get branches that have had orders between the given range of dates.
+if (!function_exists('get_active_branches')){
+    function get_active_branches($from, $to){
+
+        $orders = DB::table('orders')
+        ->select(DB::raw('branch_id'))
+        ->whereBetween('created_at', [$from, $to])
+        ->groupBy('branch_id')
+        ->get()->toArray();
+        
+        $active_branches = [];
+        foreach($orders as $order) {
+            $active_branches[] = $order->branch_id;
+        }
+
+        return Branch::whereIN('id', $active_branches)->get();
+    }
+}
+
+
+

@@ -9,19 +9,17 @@
          <div class="card">
             <div class="card-header">Payment</div>
             <div class="card-body">
-               <a href="{{ url('/payment/create') }}" class="btn btn-success btn-sm" title="Add New Payment">
-               <i class="fa fa-plus" aria-hidden="true"></i> Add New
-               </a>
-               <form method="GET" action="{{ url('/payment') }}" accept-charset="UTF-8" class="form-inline my-2 my-lg-0 float-right" role="search">
+               <form method="GET" action="{{ url('/pendingPayments') }}" accept-charset="UTF-8" class="form-inline my-2 my-lg-0 float-right" role="search">
                   <div class="input-group">
-                     <input type="text" class="form-control" name="search" placeholder="Search..." value="{{ request('search') }}">
-                     <span class="input-group-append">
-                     <button class="btn btn-secondary" type="submit">
-                     <i class="fa fa-search"></i>
-                     </button>
-                     </span>
+                     <select class="custom-select mr-sm-2" name="branch_id" id="branch_id" onchange="this.form.submit()" >
+                     <option value="">Select a brach</option>
+                        @foreach($activeBranches as $branch)
+                           <option value="{{ $branch->id }}" @if( isset($_GET['branch_id']) && $branch->id == $_GET['branch_id']) selected="selected" @endif >{{ $branch->branchDetails->title }}</option>
+                        @endforeach
+                  </select>
                   </div>
                </form>
+               <br/>
                <br/>
                <br/>
                <div class="table-responsive">
@@ -38,9 +36,9 @@
                         </tr>
                      </thead>
                     <tbody>
-                        @foreach($payments as $item)
+                        @forelse ($payments as $item)
                         <tr>
-                           <td>{{ $item->range_from .' To ' . $item->range_to }}</td>
+                           <td>{{ $item->range_from }} <b> To </b>{{ $item->range_to }}</td>
                            <td>{{ $item->totalOrders }}</td>
                            <td>{{ $item->totalOrdersPrice }}</td>
                            <td>{{ $item->totalGeneralCommission }}</td>
@@ -50,10 +48,12 @@
                                
                             </td>
                         </tr>
-                        @endforeach
+
+                        @empty
+                           <p class="alert alert-warning">Select a branch</p>
+                        @endforelse
                      </tbody>
                   </table>
-                  <div class="pagination-wrapper"> {!! $payments->appends(['search' => Request::get('search')])->render() !!} </div>
                </div>
             </div>
          </div>
