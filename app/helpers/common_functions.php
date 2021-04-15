@@ -603,3 +603,23 @@ if (!function_exists('setting_config')){
     }
 }
 
+// List of drivers who have orders money with them
+if (!function_exists('drivers_list_have_money')){
+    function drivers_list_have_money($request){
+        $keyword = $request->get('search');
+        $perPage = 10;
+
+        if (!empty($keyword)) {
+            $driver = Driver::with('delivered.order')->where('title', 'LIKE', "%$keyword%")
+                ->orWhere('contact', 'LIKE', "%$keyword%")
+                ->orWhere('status', 'LIKE', "%$keyword%")
+                ->orWhere('token', 'LIKE', "%$keyword%")
+                ->latest()->paginate($perPage);
+        } else {
+            $driver = Driver::with('delivered.order')->latest()->paginate($perPage);
+        }
+        // dd($driver);
+        return $driver;
+    }
+}
+

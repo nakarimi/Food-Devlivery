@@ -47,10 +47,11 @@ class DashboardsController extends Controller
     {
         return view('dashboards.finance_officer.dashboard');
     }
-
-    public function financeManagerDashboard()
+    
+    public function financeManagerDashboard(Request $request)
     {
-        return view('dashboards.finance_manager.dashboard');
+        $drivers = drivers_list_have_money($request);
+        return view('dashboards.finance_manager.dashboard', compact('drivers'));
     }
 
     public function getOrderDetails($userId = null, $count = false, $date = null, $forAdmin = false)
