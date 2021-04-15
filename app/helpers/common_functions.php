@@ -610,7 +610,6 @@ if (!function_exists('get_active_branches')){
         $orders = DB::table('orders')
         ->select(DB::raw('branch_id'))
         ->whereBetween('created_at', [$from, $to])
-        ->groupBy('branch_id')
         ->get()->toArray();
         
         $active_branches = [];

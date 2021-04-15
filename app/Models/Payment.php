@@ -56,4 +56,8 @@ class Payment extends Model
         return $this->hasOne(BranchDetails::class, 'business_id', 'branch_id')->where('status', 'approved')->latest();
     }
 
+    public function branch(){
+        return $this->belongsTo(Branch::class);
+    }
+
 }

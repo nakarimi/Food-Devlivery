@@ -43,7 +43,7 @@ Route::group([
 ], function ($router) {
     Route::post('/subit-new-order', [CustomerRequests::class, 'submit_new_order']);
     Route::post('/update-order', [CustomerRequests::class, 'update_order']);
-    Route::post('/branch-list', [CustomerRequests::class, 'branch_list']);
+    Route::get('/branch-list', [CustomerRequests::class, 'branch_list']);
     
 });
 

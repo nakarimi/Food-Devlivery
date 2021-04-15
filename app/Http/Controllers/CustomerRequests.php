@@ -96,10 +96,16 @@ class CustomerRequests extends Controller
 
     public function branch_list() {
 
-        $branches = DB::table('branches')
-            ->join('branche_main_info', 'branches.id', '=', 'branche_main_info.business_id')
-            ->where('branche_main_info.status', 'approved')
-            ->select('branches.id', 'branche_main_info.title', 'branche_main_info.description', 'branche_main_info.logo')
+            $branches['latest'] = DB::table('branches')
+                ->join('branche_main_info', 'branches.id', '=', 'branche_main_info.business_id')
+                ->where('branche_main_info.status', 'approved')
+                ->select('branches.id', 'branche_main_info.title', 'branche_main_info.description', 'branche_main_info.logo')
+            ->get();
+
+            $branches['favorite '] = DB::table('branches')
+                ->join('branche_main_info', 'branches.id', '=', 'branche_main_info.business_id')
+                ->where('branche_main_info.status', 'approved')
+                ->select('branches.id', 'branche_main_info.title', 'branche_main_info.description', 'branche_main_info.logo')
             ->get();
 
         return $branches;
