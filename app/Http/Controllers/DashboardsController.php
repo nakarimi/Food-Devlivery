@@ -48,7 +48,15 @@ class DashboardsController extends Controller
     {
         return view('dashboards.finance_officer.dashboard');
     }
-    
+
+    /**
+     * Load all drivers who have orders payment.
+     *
+     * @param \Illuminate\Http\Response $request
+     *
+     * @return a object which is list of the drivers with delivery details and orders.
+     *
+     * */
     public function financeManagerDashboard(Request $request)
     {
         $keyword = $request->get('search');

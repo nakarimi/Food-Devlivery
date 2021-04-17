@@ -555,13 +555,14 @@ if (!function_exists('get_promissed_date')) {
 }
 
 // Format promissed date to a farsi readable date.
-if (!function_exists('get_farsi_date')){
-    function get_farsi_date($date){
-        if ($date){
-            Carbon::setLocale('fa');             
+if (!function_exists('get_farsi_date')) {
+    function get_farsi_date($date)
+    {
+        if ($date) {
+            Carbon::setLocale('fa');
             return Carbon::parse($date)->format('M-d');
         }
-        
+
         return '';
     }
 }
@@ -621,8 +622,9 @@ if (!function_exists('get_waiting_orders')) {
 }
 
 // Update table column with boolean values.
-if (!function_exists('get_current_branch_id')){
-    function get_current_branch_id(){
+if (!function_exists('get_current_branch_id')) {
+    function get_current_branch_id()
+    {
         $userId = Auth::user()->id;
         $branch = Branch::where('user_id', $userId)->first();
         $branchID = (is_object($branch)) ? $branch->id : NULL;
@@ -639,17 +641,18 @@ if (!function_exists('setting_config')) {
 }
 
 // Get branches that have had orders between the given range of dates.
-if (!function_exists('get_active_branches')){
-    function get_active_branches(){
-        
+if (!function_exists('get_active_branches')) {
+    function get_active_branches()
+    {
+
         // Select all orders that paid columns is 0.
         $orders = DB::table('orders')
-        ->select(DB::raw('branch_id'))
-        ->where('paid', 0)
-        ->get()->toArray();
-        
+            ->select(DB::raw('branch_id'))
+            ->where('paid', 0)
+            ->get()->toArray();
+
         $active_branches = [];
-        foreach($orders as $order) {
+        foreach ($orders as $order) {
             $active_branches[] = $order->branch_id;
         }
 
@@ -658,8 +661,9 @@ if (!function_exists('get_active_branches')){
 }
 
 // Get the branch last payment.
-if (!function_exists('get_this_branch_last_paid_date')){
-    function get_this_branch_last_paid_date($branch_id){
+if (!function_exists('get_this_branch_last_paid_date')) {
+    function get_this_branch_last_paid_date($branch_id)
+    {
 
         $payment = Payment::where('branch_id', $branch_id)->latest('range_to')->first();
 
@@ -669,15 +673,10 @@ if (!function_exists('get_this_branch_last_paid_date')){
         // If the last date paid was not available, then select first day of last month. 
         if (is_null($last_paid)) {
             $last_paid = new Carbon('first day of last month');
-        }
-        else {
+        } else {
             $last_paid = Carbon::parse($last_paid);
         }
 
         return $last_paid;
     }
 }
-
-
-
-

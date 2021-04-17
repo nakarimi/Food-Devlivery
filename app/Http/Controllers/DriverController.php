@@ -143,6 +143,14 @@ class DriverController extends Controller
 
         return $data;
     }
+
+    /**
+     * Create payment received for the driver.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function driverPaymentRecived(Request $request)
     {
         DB::table('recieved_driver_payments')->insert([
