@@ -538,6 +538,18 @@ if (!function_exists('get_promissed_date')){
     }
 }
 
+// Format promissed date to a farsi readable date.
+if (!function_exists('get_farsi_date')){
+    function get_farsi_date($date){
+        if ($date){
+            Carbon::setLocale('fa');             
+            return Carbon::parse($date)->format('M-d');
+        }
+        
+        return '';
+    }
+}
+
 // Check if an order is late, add a class for css style applying.
 if (!function_exists('is_order_late')){
     function is_order_late($date, $status){

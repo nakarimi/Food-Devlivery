@@ -57,10 +57,10 @@
                                        
                                        <input type="hidden" value="{{ Request::get('branch_id') }}" name="branch_id">
                                        <input type="hidden" value="{{auth()->user()->id}}" name="reciever_id">
-                                       <input type="hidden" value="{{ $item->total_delivery_commission + $item->total_general_commission }}" name="total_order">
+                                       <input type="hidden" value="{{ $item->total_order }}" name="total_order">
                                        <input type="hidden" value="{{ $item->total_general_commission }}" name="total_general_commission">
                                        <input type="hidden" value="{{ $item->total_delivery_commission }}" name="total_delivery_commission">
-                                       <input type="hidden" value="{{ $item->total_order_income }}" name="total_order_income">
+                                       <input type="hidden" value="{{ $item->total_delivery_commission + $item->total_general_commission }}" name="total_order_income">
                                        <input type="hidden" value="{{ $item->from }}" name="range_from">
                                        <input type="hidden" value="{{ $item->to }}" name="range_to">
 
@@ -77,8 +77,10 @@
                                  <form method="POST" action="{{ url('/recieve_payment') }}" accept-charset="UTF-8" style="display:inline">
                                     {{ csrf_field() }}
                                     <input type="hidden" value="{{ $item->id }}" name="payment_id">
-                                    <button type="submit" class="btn btn-default btn-sm" title="This means you recieved money from restaurant." onclick="return confirm(&quot;Confirm approve?&quot;)">Pending</button>
+                                    <button type="submit" class="btn btn-warning btn-sm" title="This means you recieved money from restaurant." onclick="return confirm(&quot;Confirm approve?&quot;)">Pending</button>
                                  </form>
+                              @else
+                                 <span class="badge badge-success" title="This means restaurant not paid yet.">Paid</span>
                               @endif
                               
                               </td>
@@ -86,9 +88,9 @@
 
                         @empty
                            @if (\Request::is('pendingPayments'))
-                              <p class="alert alert-warning">Select a branch</p>
+                              <p class="alert alert-warning">Select a branch / different branch </p>
                            @else
-                              <p class="alert alert-warning">No active payment processed yet.</p>
+                              <p class="alert alert-warning">No payment record yet.</p>
                            @endif
                         @endforelse
                      </tbody>

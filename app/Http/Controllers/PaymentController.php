@@ -16,150 +16,9 @@ use Carbon\Carbon;
 
 class PaymentController extends Controller
 {
+  
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function index(Request $request)
-    {
-
-        $keyword = $request->get('search');
-        $perPage = 10;
-
-        if (!empty($keyword)) {
-            $payment = Payment::wherehas(
-                'branchDetails',  function ($query) use ($keyword) {
-                $query->where('title', 'LIKE', "%$keyword%");
-            })->orWhere('paid_amount', 'LIKE', "%$keyword%")
-                ->orWhere('date_and_time', 'LIKE', "%$keyword%")
-                ->orWhere('note', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
-        } else {
-            $payment = Payment::latest()->paginate($perPage);
-        }
-
-        return view('payment.payment.index', compact('payment'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function create()
-    {
-        // $data = $this->dropdown_data();
-        // foreach($data['branches'] as $branch) {
-        //     print_r($branch);
-        // }
-        // print_r();die;
-        return view('payment.payment.create', $data);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function store(Request $request)
-    {
-        $this->validate($request, [
-			'branch_id' => 'required',
-			'reciever_id' => 'required',
-			'paid_amount' => 'required',
-			'date_and_time' => 'required'
-		]);
-        if (get_role() == "admin" || get_role() == "support"){
-            $request->request->add( ['status' => 'approved']);
-        }
-        $requestData = $request->all();
-
-        Payment::create($requestData);
-
-        return redirect('payment')->with('flash_message', 'Payment added!');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\View\View
-     */
-    public function show($id)
-    {
-        $payment = Payment::findOrFail($id);
-
-        return view('payment.payment.show', compact('payment'));
-    }
-
-    // /**
-    //  * Show the form for editing the specified resource.
-    //  *
-    //  * @param  int  $id
-    //  *
-    //  * @return \Illuminate\View\View
-    //  */
-    // public function edit($id)
-    // {
-    //     // $data = $this->dropdown_data($id);
-    //     $data['payment'] = Payment::findOrFail($id);
-    //     return view('payment.payment.edit', $data);
-    // }
-
-    // /**
-    //  * Update the specified resource in storage.
-    //  *
-    //  * @param \Illuminate\Http\Request $request
-    //  * @param  int  $id
-    //  *
-    //  * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-    //  */
-    // public function update(Request $request, $id)
-    // {
-    //     $this->validate($request, [
-	// 		'branch_id' => 'required',
-	// 		'reciever_id' => 'required',
-	// 		'paid_amount' => 'required',
-	// 		'date_and_time' => 'required'
-	// 	]);
-    //     $requestData = $request->all();
-
-    //     $payment = Payment::findOrFail($id);
-    //     $payment->update($requestData);
-
-    //     return redirect('payment')->with('flash_message', 'Payment updated!');
-    // }
-
-    // /**
-    //  * Remove the specified resource from storage.
-    //  *
-    //  * @param  int  $id
-    //  *
-    //  * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-    //  */
-    // public function destroy($id)
-    // {
-    //     Payment::destroy($id);
-
-    //     return redirect('payment')->with('flash_message', 'Payment deleted!');
-    // }
-
-    // public function dropdown_data($id = false) {
-
-    //     // Pass Branches for dropdown list form.
-    //     $data['branches'] = DB::table("branches")->select('branche_main_info.title', 'branches.id')->where('branche_main_info.status', 'approved')->join('branche_main_info', 'branche_main_info.business_id', '=', 'branches.id')->latest('branche_main_info.created_at')->get();
-    //     // Pass Users for dropdown list form.
-    //     $data['users'] = User::all();
-
-    //     return $data;
-    // }
-
-    /**
-     * Pending Payment.
+     * Pending Payment, this list all payment portion for finance officer to activate them for restaurants.
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
@@ -205,43 +64,96 @@ class PaymentController extends Controller
     }
 
     /**
-     * Active Payment.
+     * Active Payment, load all payment wiht status of activated and paid.
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function activePayments(Request $request)
     {
-        $perPage = 10;
-        $branchPayments = NULL;
-        $branchID = isset($request->branch_id) ? $request->branch_id : get_current_branch_id();
-
-        if(!is_null($branchID)) {
-            $branchPayments = Payment::where('branch_id', $branchID)->where('status', 'activated')->latest()->paginate($perPage);
-            
-            // If current user is restaurant then laod this view.
-            if (get_current_branch_id()) {
-                $payments =  $branchPayments;
-                return view('dashboards.restaurant.payment.index', compact('payments'));
-            }
-        }
-
-        // For finance officer if payment was already filtered by branch, so not load all.
-        $payments = Payment::where('status', 'activated')->latest()->paginate($perPage);
-        
-        $active_branches = [];
-        foreach($payments as $payment) {
-            $active_branches[] = $payment->branch_id;
-        }
-
-        $activeBranches = Branch::whereIN('id', $active_branches)->get();
-
-        $payments = (isset($request->branch_id)) ? $branchPayments : $payments;
-        return view('dashboards.finance_officer.payment.index', compact('payments', 'activeBranches'));
+        return $this->get_payments($request, '!=', 'done');
     }
-    
+
+    /**
+     * Finance officer activate payment, to allow restaurnats pay. Technically we store payment with default status of activated in the table.
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function activate_payment(Request $request)
+    {
+        
+        $data['branch_id'] = $request->branch_id;
+        $data['reciever_id'] = $request->reciever_id;
+        $data['total_order'] = $request->total_order;
+        $data['total_order_income'] = $request->total_order_income;
+        $data['total_general_commission'] = $request->total_general_commission;
+        $data['total_delivery_commission'] = $request->total_delivery_commission;
+        $data['range_from'] = $request->range_from;
+        $data['range_to'] = $request->range_to;
+        $data['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        $data['status'] = 'activated';
+
+        $inserted = DB::table('payments')->insertOrIgnore($data);
+
+        if ($inserted) {
+            return redirect()->back()->with('flash_message', 'Payment Activated!');
+        }
+        else {
+            return redirect()->back()->with('flash_message', 'Payment Activation Failed!');
+        }
+        
+
+    }
+
+    /**
+     * Restaurant pay the dedicated money. and payment is marked as "paid"
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function pay(Request $request)
+    {   
+        $this->changePaymentStatus($request->payment_id, 'paid');
+        return redirect()->back()->with('flash_message', 'پرداخت انجام شد، و برای تائید فرستاده شد.');
+    }
+
+    /**
+     * Finance officer confirm the payment by restaurant.
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function recievePayment(Request $request)
+    {
+        $paymentId = $request->payment_id;
+        $this->changePaymentStatus($paymentId,'done');
+        return redirect()->back()->with('flash_message', 'Payment Recieved!');
+
+    }
+
+     /**
+     * Payment history, laod all payments with done status.
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function paymentHistory(Request $request)
+    {
+        return $this->get_payments($request, '=', 'done');
+    }
+
+    public function changePaymentStatus($paymentId, $status)
+    {
+        $payment = Payment::findOrFail($paymentId);
+        $payment->status = $status;
+        $payment->save();
+    }
+
     /**
      * This helper get the params, and calculate orders based on those params.
-     *
+     * @param  obj  $from
+     *  Start date.
+     * @param  obj  $to
+     *  End date.
+     * @param  int  $branchID
+     *  Restaurant ID.
+     * 
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function calculate_orders_commission($from, $to, $branchID)
@@ -281,111 +193,44 @@ class PaymentController extends Controller
     }
 
     /**
-     * Payment history.
+     * This helper get the payments based on the params given.
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @param  \Illuminate\Http\Request  $request
+     *  This carries branch_id, if any exist.
+     * @param  string  $condition
+     *  This is simple a = or != sign.
+     * @param  string  $status
+     *  This is status of payment, like paid, activated or so.
      */
-    public function paymentHistory(Request $request)
-    {
+    public function get_payments($request, $condition, $status) {
+        
         $perPage = 10;
-        $branchID = get_current_branch_id();
-        
+        $branchPayments = NULL;
+        $branchID = isset($request->branch_id) ? $request->branch_id : get_current_branch_id();
+
         if(!is_null($branchID)) {
-            $payments = Payment::where('branch_id', $branchID)->latest()->paginate($perPage);
-            return view('dashboards.restaurant.payment.index', compact('payments'));  
+            
+            // If current user is restaurant then laod this view.
+            if (get_current_branch_id()) {
+                // Since we need correct order, so we need to load them separatly.
+                $payments =  Payment::where('branch_id', $branchID)->where('status', $condition , $status)->paginate($perPage);
+                return view('dashboards.restaurant.payment.index', compact('payments'));
+            }
+            $branchPayments = Payment::where('branch_id', $branchID)->where('status', $condition , $status)->latest()->paginate($perPage);
         }
 
-        $payments = Payment::latest()->paginate($perPage);
-        // return view('payment.payment.index', compact('payments'));
-        return view('dashboards.finance_officer.payment.index', compact('payments'));
-    }
-
-    // public function restaurantPaymentsCreate()
-    // {
-    //     if (get_role() == "restaurant"){
-    //         return view('dashboards.restaurant.payment.create');
-    //     }
-    // }
-
-    // public function SaveRestaurantPayments(Request $request)
-    // {
-    //     $userId = Auth::user()->id;
-    //     $branchID = Branch::where('user_id', $userId)->first()->id;
-    //     $this->validate($request, [
-    //         'paid_amount' => 'required',
-    //         'date_and_time' => 'required'
-    //     ]);
-    //     $request->request->add( ['branch_id' => $branchID, 'reciever_id' => 1]);
-    //     $requestData = $request->all();
-    //     Payment::create($requestData );
-    //     return redirect('paymentHistory')->with('flash_message', 'Payment Added!');
-    // }
-
-    // public function rejectPayment(Request $request)
-    // {
-    //     $branch_id = $request->branch_id;
-    //     $reciever_id = $request->reciever_id;
-    //     $total_order = $request->total_order;
-    //     $total_general_commission = $request->total_general_commission;
-    //     $total_delivery_commission = $request->total_delivery_commission;
-    //     $start_date = $request->start_date;
-    //     $end_date = $request->end_date;
-    //     $status = ;
+        // For finance officer if payment was already filtered by branch, so not load all.
+        $payments = Payment::where('status', $condition , $status)->latest()->paginate($perPage);
         
-
-    //     $this->changePaymentStatus($paymentId,'rejected');
-    //     return redirect()->back()->with('flash_message', 'Payment Rejected!');
-
-    // }
-
-    public function activate_payment(Request $request)
-    {
-        
-        $data['branch_id'] = $request->branch_id;
-        $data['reciever_id'] = $request->reciever_id;
-        $data['total_order'] = $request->total_order;
-        $data['total_order_income'] = $request->total_order_income;
-        $data['total_general_commission'] = $request->total_general_commission;
-        $data['total_delivery_commission'] = $request->total_delivery_commission;
-        $data['range_from'] = $request->range_from;
-        $data['range_to'] = $request->range_to;
-        $data['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
-        $data['status'] = 'activated';
-
-        $inserted = DB::table('payments')->insertOrIgnore($data);
-
-        if ($inserted) {
-            return redirect()->back()->with('flash_message', 'Payment Activated!');
+        $active_branches = [];
+        foreach($payments as $payment) {
+            $active_branches[] = $payment->branch_id;
         }
-        else {
-            return redirect()->back()->with('flash_message', 'Payment Activation Failed!');
-        }
-        
 
-    }
+        $activeBranches = Branch::whereIN('id', $active_branches)->get();
 
-    
-    public function recievePayment(Request $request)
-    {
-        $paymentId = $request->payment_id;
-        $this->changePaymentStatus($paymentId,'recieved');
-        return redirect()->back()->with('flash_message', 'Payment Recieved!');
-
-    }
-
-    public function approvePayment(Request $request)
-    {
-        $paymentId = $request->payment_id;
-        $this->changePaymentStatus($paymentId,'approved');
-        return redirect()->back()->with('flash_message', 'Payment Approved!');
-
-    }
-
-    public function changePaymentStatus($paymentId, $status)
-    {
-        $payment = Payment::findOrFail($paymentId);
-        $payment->status = $status;
-        $payment->save();
+        $payments = (isset($request->branch_id)) ? $branchPayments : $payments;
+        return view('dashboards.finance_officer.payment.index', compact('payments', 'activeBranches'));
     }
 
 }
