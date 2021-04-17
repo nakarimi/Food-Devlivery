@@ -161,5 +161,8 @@ Route::middleware(['finance_officer'])->group(function () {
 Route::middleware(['finance_manager'])->group(function () {
     Route::get('finance_manager/dashboard', [DashboardsController::class, 'financeManagerDashboard'])->name('finance_manager.dashboard');
     Route::post('driver_payment_recived/{driver}/{orders}/{total}', [DriverController::class, 'driverPaymentRecived'])->name('driver.payments', );
+    Route::resource('driver', 'App\Http\Controllers\DriverController');
+    // Route::get('drivers', [DriverController::class, 'allDrivers'])->name('drivers');
+    Route::get('driver_payment_history/{driver}', [DriverController::class, 'driverPaymentHistory'])->name('driverHistory', );
 });
 

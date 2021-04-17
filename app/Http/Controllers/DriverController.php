@@ -161,4 +161,13 @@ class DriverController extends Controller
         ]);
         return Redirect::back()->with('flash_message', 'Payment received!');
     }
+    public function driverPaymentHistory(Request $request, $id){
+        $driverPayments = DB::table('recieved_driver_payments as rdp')
+        ->where('driver_id', $id)
+        ->join('users', 'users.id', '=', 'rdp.finance_manager_id')
+        ->get();
+        $driver = Driver::find($id);
+        return view('dashboards.finance_manager.payment.index', compact('driverPayments', 'driver'));
+
+    }
 }
