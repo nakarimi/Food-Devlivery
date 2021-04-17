@@ -82,6 +82,7 @@ Route::middleware(['restaurant'])->group(function () {
     Route::post('updateItemStockStatus', 'App\Http\Controllers\ItemController@updateItemStockStatus')->name('updateItemStockStatus');
     Route::get('/payment-history', 'App\Http\Controllers\PaymentController@paymentHistory')->name('payment.history');
     Route::get('/active-payments', 'App\Http\Controllers\PaymentController@activePayments')->name('active.payments');
+    Route::post('/pay', 'App\Http\Controllers\PaymentController@pay');
 
     // Route::get('paymentsCreate', 'App\Http\Controllers\PaymentController@restaurantPaymentsCreate');
     Route::post('saveRestaurantPayment', 'App\Http\Controllers\PaymentController@SaveRestaurantPayments');
