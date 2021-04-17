@@ -11,6 +11,7 @@ use App\Models\Driver;
 use Carbon\Carbon;
 use App\Models\DeliveryDetails;
 use App\Models\Setting;
+use App\Models\Payment;
 
 if (!function_exists('save_file')) {
      /**
@@ -560,7 +561,6 @@ if (!function_exists('get_customer_status')){
         $blockCustomerStatus = DB::table('block_customers')->where('customer_id', '=', $customer_id)->value('status');
 
         return ($blockCustomerStatus) ?: 'Notblocked';
-        
     }
 }
 
@@ -589,10 +589,12 @@ if (!function_exists('get_waiting_orders')){
 }
         
 // Update table column with boolean values.
-if (!function_exists('get_current_branch_info')){
-    function get_current_branch_info(){
+if (!function_exists('get_current_branch_id')){
+    function get_current_branch_id(){
         $userId = Auth::user()->id;
-        return Branch::where('user_id', $userId)->first() ?: NULL;
+        $branch = Branch::where('user_id', $userId)->first();
+        $branchID = (is_object($branch)) ? $branch->id : NULL;
+        return $branchID;
     }
 }
 
@@ -603,13 +605,14 @@ if (!function_exists('setting_config')){
     }
 }
 
-// get branches that have had orders between the given range of dates.
+// Get branches that have had orders between the given range of dates.
 if (!function_exists('get_active_branches')){
-    function get_active_branches($from, $to){
-
+    function get_active_branches(){
+        
+        // Select all orders that paid columns is 0.
         $orders = DB::table('orders')
         ->select(DB::raw('branch_id'))
-        ->whereBetween('created_at', [$from, $to])
+        ->where('paid', 0)
         ->get()->toArray();
         
         $active_branches = [];
@@ -620,6 +623,28 @@ if (!function_exists('get_active_branches')){
         return Branch::whereIN('id', $active_branches)->get();
     }
 }
+
+// Get the branch last payment.
+if (!function_exists('get_this_branch_last_paid_date')){
+    function get_this_branch_last_paid_date($branch_id){
+
+        $payment = Payment::where('branch_id', $branch_id)->latest('range_to')->first();
+
+        // Get last paid field.
+        $last_paid = (is_object($payment)) ? $payment->range_to : NULL;
+
+        // If the last date paid was not available, then select first day of last month. 
+        if (is_null($last_paid)) {
+            $last_paid = new Carbon('first day of last month');
+        }
+        else {
+            $last_paid = Carbon::parse($last_paid);
+        }
+
+        return $last_paid;
+    }
+}
+
 
 
 

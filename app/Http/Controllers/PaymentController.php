@@ -169,22 +169,22 @@ class PaymentController extends Controller
         // Get payment range to divide orders payment based on this.
         $payment_range_in_days = setting_config('payment_range_in_days')[0];
 
-        // The last date that a restaurant paid. @Todo, this shoudl change to actual month.
-        $lastPayment = new Carbon('first day of last month');
-
-        // The order payment shoudl calculate till the other day.
-        $ToDate = Carbon::now();
-
         // Pass active branches for Dropdown select.
-        $activeBranches = get_active_branches($lastPayment->format('Y-m-d'), $ToDate->format('Y-m-d'));
+        $activeBranches = get_active_branches();
         
-        // 
+        // General placeholder for all payments
         $payments = [];
 
         if ($request['branch_id']) {
 
+            // The last date that a restaurant paid. @Todo, this shoudl change to actual month.
+            $lastPayment = get_this_branch_last_paid_date($request['branch_id']);
+
+             // The order payment shoudl calculate till the other day.
+            $ToDate = Carbon::now();
+
             // Loop until reach the specified date.
-            while($lastPayment->lt($ToDate)) {     
+            while($lastPayment->lt($ToDate)) {
                 $from = $lastPayment->format('Y-m-d');                        
                 $to = $lastPayment->addDays($payment_range_in_days);
                 
@@ -192,6 +192,7 @@ class PaymentController extends Controller
                 if ($to->gt($ToDate)) {
                    $to = $ToDate;
                 }
+
                 // Get order calculation.
                 $payments[] = $this->calculate_orders_commission($from, $to->format('Y-m-d'), $request['branch_id']);
             }
@@ -211,21 +212,30 @@ class PaymentController extends Controller
     public function activePayments(Request $request)
     {
         $perPage = 10;
-        $branchID = get_current_branch_info();
+        $branchPayments = NULL;
+        $branchID = isset($request->branch_id) ? $request->branch_id : get_current_branch_id();
+
         if(!is_null($branchID)) {
-            $payments = Payment::where('branch_id', $branchID->id)->where('status', 'activated')->latest()->paginate($perPage);
-            return view('dashboards.restaurant.payment.index', compact('payments'));
+            $branchPayments = Payment::where('branch_id', $branchID)->where('status', 'activated')->latest()->paginate($perPage);
             
+            // If current user is restaurant then laod this view.
+            if (get_current_branch_id()) {
+                $payments =  $branchPayments;
+                return view('dashboards.restaurant.payment.index', compact('payments'));
+            }
         }
 
+        // For finance officer if payment was already filtered by branch, so not load all.
         $payments = Payment::where('status', 'activated')->latest()->paginate($perPage);
-
+        
+        $active_branches = [];
         foreach($payments as $payment) {
             $active_branches[] = $payment->branch_id;
         }
 
         $activeBranches = Branch::whereIN('id', $active_branches)->get();
 
+        $payments = (isset($request->branch_id)) ? $branchPayments : $payments;
         return view('dashboards.finance_officer.payment.index', compact('payments', 'activeBranches'));
     }
     
@@ -278,11 +288,11 @@ class PaymentController extends Controller
     public function paymentHistory(Request $request)
     {
         $perPage = 10;
-        $branchID = get_current_branch_info();
+        $branchID = get_current_branch_id();
+        
         if(!is_null($branchID)) {
-            $payments = Payment::where('branch_id', $branchID->id)->latest()->paginate($perPage);
-            return view('dashboards.restaurant.payment.index', compact('payments'));
-            
+            $payments = Payment::where('branch_id', $branchID)->latest()->paginate($perPage);
+            return view('dashboards.restaurant.payment.index', compact('payments'));  
         }
 
         $payments = Payment::latest()->paginate($perPage);

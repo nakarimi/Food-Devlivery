@@ -26,6 +26,7 @@ class CreateOrdersTable extends Migration
             $table->string('note')->nullable();
             $table->string('reciever_phone')->nullable();
             $table->json('contents')->nullable();
+            $table->tinyInteger('paid')->default(0);  // This column will change to 1 when restaurant do the payment and calculation for this be done by finance manager.
             });
     }
 
