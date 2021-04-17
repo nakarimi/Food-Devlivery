@@ -9,7 +9,7 @@
                     <a href="{{url('/admin/dashboard')}}"><i class="la la-dashboard"></i> <span>Dashboard </span></a>
                 </li>
                 <li class="submenu">
-                    <a href="#"><i class="la la-legal"></i> <span class="menu-title">Payments</span> <span class="menu-arrow"></span></a>
+                    <a href="#"><i class="la la-money"></i> <span class="menu-title">Payments</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         {{--  <li><a  @if (\Request::is('orders/create*')) class="active" @endif href="{{ route('orders.create') }}">Add Order</a></li>--}}
                         <li><a  @if (\Request::is('pendingPayments')) class="active" @endif href="{{ url('pendingPayments') }}">Pending Payments</a></li>
