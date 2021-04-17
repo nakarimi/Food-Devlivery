@@ -65,7 +65,7 @@ class LoginController extends Controller
                 break;
             
             case 'finance_officer':
-                return redirect(route('finance-office.dashboard'));
+                return redirect(route('finance_officer.dashboard'));
                 break;
             default:
                 return '/notfound';

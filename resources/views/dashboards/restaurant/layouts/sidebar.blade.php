@@ -39,10 +39,10 @@
                             {{-- <a  @if (\Request::is('paymentsCreate')) class="active" @endif href="{{ url('paymentsCreate') }}"><span>اضافه کردن پرداخت جدید</span></a> --}}
                         </li>
                         <li>
-                            <a  @if (\Request::is('activePayments')) class="active" @endif href="{{ route('activePayments') }}"><span>  پرداخت های فعال</span></a>
+                            <a  @if (\Request::is('active-payments')) class="active" @endif href="{{ route('active.payments') }}"><span>  پرداخت های فعال</span></a>
                         </li>
                         <li>
-                            <a  @if (\Request::is('paymentHistory')) class="active" @endif href="{{ route('paymentHistory') }}"><span>  پرداخت های قبلی</span></a>
+                            <a  @if (\Request::is('payment-history')) class="active" @endif href="{{ route('payment.history') }}"><span>  پرداخت های قبلی</span></a>
                         </li>
 
                     </ul>

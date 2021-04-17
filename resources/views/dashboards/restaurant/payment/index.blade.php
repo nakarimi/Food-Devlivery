@@ -53,15 +53,25 @@
                      <tbody>
                         @foreach($payments as $item)
                         <tr>
-                           <td>{{ $item->range_from .' الی ' . $item->range_to }}</td>
-                           <td>{{ $item->totalOrders }}</td>
-                           <td>{{ $item->totalOrdersPrice }}</td>
-                           <td>{{ $item->totalGeneralCommission }}</td>
-                           <td>{{ $item->totalDeliveryCommission }}</td>
-                           <td>{{ $item->totalDeliveryCommission + $item->totalGeneralCommission }}</td>
-                            <td>
-                               
-                            </td>
+                           <td>{{ get_farsi_date($item->range_from) .' الی ' . get_farsi_date($item->range_to) }}</td>
+                           <td>{{ $item->total_order }}</td>
+                           <td>{{ $item->total_order_income }}</td>
+                           <td>{{ $item->total_general_commission }}</td>
+                           <td>{{ $item->total_delivery_commission }}</td>
+                           <td>{{ $item->total_delivery_commission + $item->total_general_commission }}</td>
+                           <td>
+                              @if($item->status == 'activated')
+                                 <form method="POST" action="{{ url('/pay') }}" accept-charset="UTF-8" style="display:inline">
+                                    {{ csrf_field() }}
+                                    <input type="hidden" value="{{ $item->id }}" name="payment_id">
+                                    <button type="submit" class="btn btn-success btn-sm" title="پرداخت." onclick="return confirm(&quot;Confirm approve?&quot;)">پرداخت</button>
+                                 </form>
+                              @elseif($item->status == 'paid')
+                                 <span class="badge badge-warning" >انتظار</span>
+                              @else 
+                                 <span class="badge badge-success" >پرداخت تائید شده.</span>
+                              @endif
+                           </td>
                         </tr>
                         @endforeach
                      </tbody>

@@ -44,6 +44,7 @@ Route::middleware(['admin'])->group(function () {
     Route::resource('payment', 'App\Http\Controllers\PaymentController');
     Route::post('/approveItem', 'App\Http\Controllers\ItemController@approveItem');
     Route::post('/rejectItem', 'App\Http\Controllers\ItemController@rejectItem');
+    Route::get('/rejectedItems', 'App\Http\Controllers\ItemController@rejectedItems')->name('items.rejected');
     Route::post('/approveBranch', 'App\Http\Controllers\BranchController@approveBranch');
     Route::post('/rejectBranch', 'App\Http\Controllers\BranchController@rejectBranch');
     Route::resource('category', 'App\Http\Controllers\CategoryController');
@@ -79,8 +80,9 @@ Route::middleware(['restaurant'])->group(function () {
     Route::get('/approvedItems', 'App\Http\Controllers\ItemController@approvedItems')->name('items.approved');
     Route::get('/rejectedItems', 'App\Http\Controllers\ItemController@rejectedItems')->name('items.rejected');
     Route::post('updateItemStockStatus', 'App\Http\Controllers\ItemController@updateItemStockStatus')->name('updateItemStockStatus');
-    Route::get('paymentHistory', 'App\Http\Controllers\PaymentController@paymentHistory')->name('paymentHistory');
-    Route::get('activePayments', 'App\Http\Controllers\PaymentController@activePayments')->name('activePayments');
+    Route::get('/payment-history', 'App\Http\Controllers\PaymentController@paymentHistory')->name('payment.history');
+    Route::get('/active-payments', 'App\Http\Controllers\PaymentController@activePayments')->name('active.payments');
+    Route::post('/pay', 'App\Http\Controllers\PaymentController@pay');
 
     // Route::get('paymentsCreate', 'App\Http\Controllers\PaymentController@restaurantPaymentsCreate');
     Route::post('saveRestaurantPayment', 'App\Http\Controllers\PaymentController@SaveRestaurantPayments');
@@ -127,9 +129,25 @@ Route::middleware(['support'])->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| All routes in this part can access by (Admin, Customer)
+| All routes in this part can access by (Customer)
 |--------------------------------------------------------------------------
 */
 Route::middleware(['customer'])->group(function () {
     Route::get('customer/dashboard', 'App\Http\Controllers\DashboardsController@customerDashboard')->name('customer.dashboard');
 });
+
+/*
+|--------------------------------------------------------------------------
+| All routes in this part can access by (finance officer)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['finance_officer'])->group(function () {
+    Route::get('finance_officer/dashboard', 'App\Http\Controllers\DashboardsController@financeOfficerDashboard')->name('finance_officer.dashboard');
+    Route::get('pendingPayments', 'App\Http\Controllers\PaymentController@pendingPayments')->name('payments.pending');
+    Route::post('/activate_payment', 'App\Http\Controllers\PaymentController@activate_payment');
+    Route::post('/recieve_payment', 'App\Http\Controllers\PaymentController@recievePayment');
+    Route::get('activePayments', 'App\Http\Controllers\PaymentController@activePayments')->name('payments.active');
+    Route::get('paymentHistory', 'App\Http\Controllers\PaymentController@paymentHistory')->name('payments.history');
+
+});
+
