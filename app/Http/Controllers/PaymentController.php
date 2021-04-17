@@ -117,7 +117,7 @@ class PaymentController extends Controller
         
         // Send Notification to restaurant.
         $payment = Payment::find($request->payment_id);
-        send_notification([$payment->reciever_id], $payment->branch_id, 'Restaurant paid the payment');
+        send_notification([$payment->reciever_id], null, 'Restaurant paid the payment');
 
         return redirect()->back()->with('flash_message', 'پرداخت انجام شد، و برای تائید فرستاده شد.');
     }
@@ -134,7 +134,8 @@ class PaymentController extends Controller
 
         // Send Notification to restaurant.
         $payment = Payment::find($paymentId);
-        send_notification([$payment->branch_id], $payment->reciever_id, 'پرداخت تائید شد');
+        $notifyUser = Branch::find($payment->branch_id)->user_id;
+        send_notification([$notifyUser], $payment->reciever_id, 'پرداخت تائید شد');
         
         return redirect()->back()->with('flash_message', 'Payment Recieved!');
 
