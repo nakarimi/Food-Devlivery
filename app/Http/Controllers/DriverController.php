@@ -161,13 +161,28 @@ class DriverController extends Controller
         ]);
         return Redirect::back()->with('flash_message', 'Payment received!');
     }
-    public function driverPaymentHistory(Request $request, $id){
-        $driverPayments = DB::table('recieved_driver_payments as rdp')
-        ->where('driver_id', $id)
-        ->join('users', 'users.id', '=', 'rdp.finance_manager_id')
-        ->get();
+    public function driverPaymentHistory(Request $request, $id)
+    {
+        $keyword = $request->get('search');
+        $perPage = 10;
+        if (!empty($keyword)) {
+            $driverPayments = DB::table('recieved_driver_payments as rdp')
+            ->join('users', 'users.id', '=', 'rdp.finance_manager_id')
+            ->select('rdp.*', 'users.name')
+            ->where('rdp.total_money_received', 'LIKE', "%$keyword%")
+            ->orWhere('users.name', 'LIKE', "%$keyword%")
+            ->where('driver_id', $id)
+            ->latest()->paginate($perPage);
+        } else {
+            $driverPayments = DB::table('recieved_driver_payments as rdp')
+                ->where('driver_id', $id)
+                ->join('users', 'users.id', '=', 'rdp.finance_manager_id')
+                ->select('rdp.*', 'users.name')
+                ->latest()
+                ->paginate($perPage);
+        }
+
         $driver = Driver::find($id);
         return view('dashboards.finance_manager.payment.index', compact('driverPayments', 'driver'));
-
     }
 }

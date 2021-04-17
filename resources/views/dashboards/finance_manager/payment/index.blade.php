@@ -9,10 +9,10 @@ Driver Payments History
          <div class="card">
             <div class="card-header">Payment history for <strong>{{ $driver->title }}</strong></div>
             <div class="card-body">
-               <a href="{{ url('/payment/create') }}" class="btn btn-success btn-sm" title="Add New Payment">
+               <a href="{{ route('finance_manager.dashboard')}}?search=Paik+Motor1" class="btn btn-success btn-sm" title="Add New Payment">
                   <i class="fa fa-plus" aria-hidden="true"></i> Add New
                </a>
-               <form method="GET" action="{{ url('/payment') }}" accept-charset="UTF-8"
+               <form method="GET" action="{{ route('driverHistory', ['driver'=> $driver->id]) }}" accept-charset="UTF-8"
                   class="form-inline my-2 my-lg-0 float-right" role="search">
                   <div class="input-group">
                      <input type="text" class="form-control" name="search" placeholder="Search..."

@@ -19,7 +19,7 @@
             </div>
             <div class="card-body">
                 <form method="GET" action="{{ route('finance_manager.dashboard') }}" accept-charset="UTF-8"
-                    class="form-inline my-2 my-lg-0 float-right" role="search">
+                    class="form-inline my-2 mb-4 mt-lg-0 float-right" role="search">
                     <div class="input-group">
                         <input type="text" class="form-control" name="search" placeholder="Search..."
                             value="{{ request('search') }}">
@@ -30,9 +30,8 @@
                         </span>
                     </div>
                 </form>
-                <br />
-                <br />
-
+                
+                <br /><br />
                 @if (count($drivers))
 
                 <div class="table-responsive">
