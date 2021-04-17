@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Http\Requests;
 
 use App\Models\Driver;
 use Illuminate\Http\Request;
-use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redirect;
 
 class DriverController extends Controller
 {
@@ -55,10 +57,10 @@ class DriverController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-			'title' => 'required',
-			'user_id' => 'required',
-			'status' => 'required'
-		]);
+            'title' => 'required',
+            'user_id' => 'required',
+            'status' => 'required'
+        ]);
         $requestData = $request->all();
 
         Driver::create($requestData);
@@ -105,10 +107,10 @@ class DriverController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-			'title' => 'required',
-			'user_id' => 'required',
-			'status' => 'required'
-		]);
+            'title' => 'required',
+            'user_id' => 'required',
+            'status' => 'required'
+        ]);
         $requestData = $request->all();
 
         $driver = Driver::findOrFail($id);
@@ -130,7 +132,8 @@ class DriverController extends Controller
         return redirect('driver')->with('flash_message', 'Driver Inactivated!');
     }
 
-    public function dropdown_data($id = false) {
+    public function dropdown_data($id = false)
+    {
 
         // Pass Users for dropdown list form.
         $data['users'] = User::all();
@@ -139,5 +142,15 @@ class DriverController extends Controller
         $data['driver'] = ($id) ? Driver::findOrFail($id) : [];
 
         return $data;
+    }
+    public function driverPaymentRecived(Request $request)
+    {
+        DB::table('recieved_driver_payments')->insert([
+            'orders_id' => $request->orders,
+            'total_money_received' => $request->total,
+            'driver_id' => $request->driver,
+            'finance_manager_id' => $request->user()->id,
+        ]);
+        return Redirect::back()->with('flash_message', 'Payment received!');
     }
 }

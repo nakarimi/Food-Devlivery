@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Item;
-use App\Models\Order;
-use App\Models\User;
 use Carbon\Carbon;
+use App\Models\Item;
+use App\Models\User;
+use App\Models\Order;
+use App\Models\Driver;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardsController extends Controller
 {
@@ -50,7 +51,20 @@ class DashboardsController extends Controller
     
     public function financeManagerDashboard(Request $request)
     {
-        $drivers = drivers_list_have_money($request);
+        $keyword = $request->get('search');
+        $perPage = 10;
+        if (!empty($keyword)) {
+            $drivers = Driver::whereHas('delivered.order')
+                ->where('title', 'LIKE', "%$keyword%")
+                ->orWhere('contact', 'LIKE', "%$keyword%")
+                ->orWhere('status', 'LIKE', "%$keyword%")
+                ->orWhere('token', 'LIKE', "%$keyword%")
+                ->latest()->paginate($perPage);
+        } else {
+            $drivers = Driver::whereHas('delivered.order')
+            ->latest()->paginate($perPage);
+        }
+
         return view('dashboards.finance_manager.dashboard', compact('drivers'));
     }
 
