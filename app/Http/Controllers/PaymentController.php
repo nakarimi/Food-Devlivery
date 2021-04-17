@@ -134,7 +134,7 @@ class PaymentController extends Controller
 
         // Send Notification to restaurant.
         $payment = Payment::find($paymentId);
-        send_notification([$payment->branch_id], $payment->reciever_id, 'پرداخت فعال شد');
+        send_notification([$payment->branch_id], $payment->reciever_id, 'پرداخت تائید شد');
         
         return redirect()->back()->with('flash_message', 'Payment Recieved!');
 
