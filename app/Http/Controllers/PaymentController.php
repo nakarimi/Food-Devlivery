@@ -94,14 +94,16 @@ class PaymentController extends Controller
 
         $inserted = DB::table('payments')->insertOrIgnore($data);
 
+        // Send Notification to restaurant.
+        $notifyUser = Branch::find($request->branch_id)->user_id;
+        send_notification([$notifyUser], $request->reciever_id, 'پرداخت فعال شد');
+
         if ($inserted) {
             return redirect()->back()->with('flash_message', 'Payment Activated!');
         }
         else {
             return redirect()->back()->with('flash_message', 'Payment Activation Failed!');
         }
-        
-
     }
 
     /**
@@ -112,6 +114,11 @@ class PaymentController extends Controller
     public function pay(Request $request)
     {   
         $this->changePaymentStatus($request->payment_id, 'paid');
+        
+        // Send Notification to restaurant.
+        $payment = Payment::find($request->payment_id);
+        send_notification([$payment->reciever_id], $payment->branch_id, 'Restaurant paid the payment');
+
         return redirect()->back()->with('flash_message', 'پرداخت انجام شد، و برای تائید فرستاده شد.');
     }
 
@@ -124,6 +131,11 @@ class PaymentController extends Controller
     {
         $paymentId = $request->payment_id;
         $this->changePaymentStatus($paymentId,'done');
+
+        // Send Notification to restaurant.
+        $payment = Payment::find($paymentId);
+        send_notification([$payment->branch_id], $payment->reciever_id, 'پرداخت فعال شد');
+        
         return redirect()->back()->with('flash_message', 'Payment Recieved!');
 
     }

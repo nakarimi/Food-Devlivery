@@ -61,15 +61,11 @@
                            <td>{{ $item->total_delivery_commission + $item->total_general_commission }}</td>
                            <td>
                               @if($item->status == 'activated')
-                                 @if($loop->iteration == 1)
-                                    <form method="POST" action="{{ url('/pay') }}" accept-charset="UTF-8" style="display:inline">
-                                       {{ csrf_field() }}
-                                       <input type="hidden" value="{{ $item->id }}" name="payment_id">
-                                       <button type="submit" class="btn btn-success btn-sm" title="پرداخت." onclick="return confirm(&quot;Confirm approve?&quot;)">پرداخت</button>
-                                    </form>
-                                 @else 
-                                       <button type="submit" class="btn btn-secondary btn-sm" title="محاسبات قبلی را باید بپردازید." onclick="return alert(&quot;محاسبات قبلی را باید بپردازید.&quot;)">پرداخت</button>
-                                 @endif
+                                 <form method="POST" action="{{ url('/pay') }}" accept-charset="UTF-8" style="display:inline">
+                                    {{ csrf_field() }}
+                                    <input type="hidden" value="{{ $item->id }}" name="payment_id">
+                                    <button type="submit" class="btn btn-success btn-sm" title="پرداخت." onclick="return confirm(&quot;Confirm approve?&quot;)">پرداخت</button>
+                                 </form>
                               @elseif($item->status == 'paid')
                                  <span class="badge badge-warning" >انتظار</span>
                               @else 

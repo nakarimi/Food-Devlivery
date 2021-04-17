@@ -51,8 +51,7 @@
 
                               @if (\Request::is('pendingPayments'))
                                  {{-- Only first payment be available for activation, so that order be consecutive. --}}
-                                 @if($loop->iteration == 1)
-                                    <form method="POST" action="{{ url('/activate_payment') }}" accept-charset="UTF-8" style="display:inline">
+                                 <form method="POST" action="{{ url('/activate_payment') }}" accept-charset="UTF-8" style="display:inline">
                                        {{ csrf_field() }}
                                        
                                        <input type="hidden" value="{{ Request::get('branch_id') }}" name="branch_id">
@@ -66,9 +65,6 @@
 
                                        <button type="submit" class="btn btn-primary btn-sm" title="Once you activate, restaurants will be able to do the payments." onclick="return confirm(&quot;Confirm approve?&quot;)">Acativate Payment</button>
                                     </form>
-                                 @else 
-                                       <button type="submit" class="btn btn-secondary btn-sm" title="Older dates need to be actived." onclick="return alert(&quot;Older dates need to be actived.&quot;)">Acativate Payment</button>
-                                 @endif
 
                               @elseif($item->status == "activated")
                                  <span class="badge badge-danger" title="This means restaurant not paid yet.">Activated</span>
