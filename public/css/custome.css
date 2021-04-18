@@ -175,3 +175,6 @@ td.hasDriver select {
   display: inline-block !important;
   flex: 1;
 }
+.pendingPayments .dataTables_wrapper > div.row:first-child {
+  display: none;
+}
