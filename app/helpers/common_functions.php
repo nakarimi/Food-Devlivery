@@ -1,20 +1,18 @@
 <?php
 
-use App\Models\Branch;
-use App\Models\Item;
-use \App\Models\Menu;
-use App\Models\User;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
-use App\Models\Order;
-use App\Models\Driver;
 use Carbon\Carbon;
-use App\Models\DeliveryDetails;
-use App\Models\Setting;
+use App\Models\Item;
+use App\Models\User;
+use \App\Models\Menu;
+use App\Models\Order;
+use App\Models\Branch;
+use App\Models\Driver;
 use App\Models\Payment;
+use App\Models\Setting;
+use Illuminate\Support\Facades\DB;
 
 if (!function_exists('save_file')) {
-     /**
+    /**
      * Store the image and return it's address.
      *
      * @param \Illuminate\Http\Response $request
@@ -23,9 +21,10 @@ if (!function_exists('save_file')) {
      * @return a string which is name of the file with extension and address.
      *
      * */
-    function save_file(Request $request) {
+    function save_file(Request $request)
+    {
         // Handle File Upload
-        if($request->file('logo')) {
+        if ($request->file('logo')) {
 
             // Get filename with extension
             $filenameWithExt = $request->file('logo')->getClientOriginalName();
@@ -37,13 +36,11 @@ if (!function_exists('save_file')) {
             $extension = $request->file('logo')->getClientOriginalExtension();
 
             //Filename to store
-            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $fileNameToStore = $filename . '_' . time() . '.' . $extension;
 
             // Upload Image
             $path = $request->file('logo')->storeAs('/public/profile_images', $fileNameToStore);
-
-        }
-        else {
+        } else {
             $fileNameToStore = 'noimage.jpg';
         }
 
@@ -52,12 +49,13 @@ if (!function_exists('save_file')) {
 }
 
 if (!function_exists('get_role')) {
-     /**
+    /**
      * Return user role name.
      * */
-    function get_role() {
+    function get_role()
+    {
         // Handle File Upload
-       $role =  auth()->user()->role->name;
+        $role =  auth()->user()->role->name;
         return $role;
     }
 }
@@ -66,15 +64,16 @@ if (!function_exists('get_item_details')) {
     /**
      * Return an item latest details.
      * */
-    function get_item_details($item, $itemType = 'approved') {
-        if($item) {
-            switch($itemType) {
+    function get_item_details($item, $itemType = 'approved')
+    {
+        if ($item) {
+            switch ($itemType) {
                 case 'pending':
                     return $item->pendingItemDetails;
-                break;
+                    break;
                 case 'rejected':
                     return $item->rejectedItemDetails;
-                break;
+                    break;
                 default:
                     return $item->approvedItemDetails;
             }
@@ -102,7 +101,7 @@ if (!function_exists('get_item_details')) {
 if (!function_exists('loadUserItemsData')) {
     function loadUserItemsData($status, $userId = null, $count = false, $all = false)
     {
-        if ($userId == null){
+        if ($userId == null) {
             $userId = auth()->user()->id;
         }
         // Get user branch.
@@ -119,7 +118,7 @@ if (!function_exists('loadUserItemsData')) {
 }
 
 // This will return user branches based on user id.
-if (!function_exists('getUserBranches')){
+if (!function_exists('getUserBranches')) {
 
     function getUserBranches($id)
     {
@@ -129,21 +128,23 @@ if (!function_exists('getUserBranches')){
 }
 
 // This will return items based on status one or multiple status.
-if (!function_exists('getUserItemsBasedOnStatus')){
+if (!function_exists('getUserItemsBasedOnStatus')) {
 
-    function getUserItemsBasedOnStatus ($branchIds, $status, $count, $all = false){
+    function getUserItemsBasedOnStatus($branchIds, $status, $count, $all = false)
+    {
         $item = Item::whereHas(
-            'itemFullDetails', function ($query) use ($status) {
-            $query->whereIn('details_status', $status);
-        })->whereIn('branch_id',$branchIds);
+            'itemFullDetails',
+            function ($query) use ($status) {
+                $query->whereIn('details_status', $status);
+            }
+        )->whereIn('branch_id', $branchIds);
 
         if (!$all) {
             $item = $item->where('status', '1');
         }
-        if ($count){
+        if ($count) {
             $item = $item->count();
-        }
-        else {
+        } else {
             $item = $item->get();
         }
         return $item;
@@ -151,8 +152,9 @@ if (!function_exists('getUserItemsBasedOnStatus')){
 }
 
 // This function get specific  user branches and returns user menus.
-if (!function_exists('loadUserMenuData')){
-    function loadUserMenuData($userId, $statusCheck = false){
+if (!function_exists('loadUserMenuData')) {
+    function loadUserMenuData($userId, $statusCheck = false)
+    {
         // Get user branch.
         $branches =  getUserBranches($userId);
         $branchIds = [];
@@ -167,9 +169,10 @@ if (!function_exists('loadUserMenuData')){
 }
 
 // This will return menus based on branch ids.
-if (!function_exists('getUserMenus')){
-    function getUserMenus ($branchIds, $statusCheck = false){
-        $menu = Menu::whereIn('branch_id',$branchIds);
+if (!function_exists('getUserMenus')) {
+    function getUserMenus($branchIds, $statusCheck = false)
+    {
+        $menu = Menu::whereIn('branch_id', $branchIds);
 
         if ($statusCheck) {
             $menu = $menu->where('status', '1');
@@ -182,26 +185,29 @@ if (!function_exists('getUserMenus')){
 
 
 // This will return menus based on branch ids.
-if (!function_exists('getBranchesBasedOnStatus')){
-    function getBranchesBasedOnStatus ($status){
+if (!function_exists('getBranchesBasedOnStatus')) {
+    function getBranchesBasedOnStatus($status)
+    {
         $branches = Branch::whereHas(
-            'branchFullDetails', function ($query) use ($status) {
-            $query->where('status', '=', $status);
-        })->latest()->paginate(10);
+            'branchFullDetails',
+            function ($query) use ($status) {
+                $query->where('status', '=', $status);
+            }
+        )->latest()->paginate(10);
         return $branches;
     }
 }
 
 // This function abort the process for the role we pass.
-if (!function_exists('abortUrlFor')){
-    function abortUrlFor ($role = null, $userId = null, $branchId = null){
-        if ($role != null){
-            if (get_role() == $role){
+if (!function_exists('abortUrlFor')) {
+    function abortUrlFor($role = null, $userId = null, $branchId = null)
+    {
+        if ($role != null) {
+            if (get_role() == $role) {
                 abort(404);
             }
-        }
-        elseif($userId != null && $branchId != null){
-            if ($userId != $branchId){
+        } elseif ($userId != null && $branchId != null) {
+            if ($userId != $branchId) {
                 abort(404);
             }
         }
@@ -209,8 +215,9 @@ if (!function_exists('abortUrlFor')){
 }
 
 // This will return orders based on branch ids of a user.
-if (!function_exists('loadUserAllOrders')){
-    function loadUserAllOrders ($userId, $status, $perPage = NULL){
+if (!function_exists('loadUserAllOrders')) {
+    function loadUserAllOrders($userId, $status, $perPage = NULL)
+    {
         // Get user branch.
         $branches =  getUserBranches($userId);
         $branchIds = [];
@@ -221,8 +228,7 @@ if (!function_exists('loadUserAllOrders')){
 
         if ($perPage) {
             $orders = $orders->latest()->paginate($perPage);
-        }
-        else {
+        } else {
             $orders = $orders->latest()->get();
         }
 
@@ -234,16 +240,17 @@ if (!function_exists('get_branch_details')) {
     /**
      * Return a branch latest details.
      * */
-    function get_branch_details($branch, $branchType = 'approved') {
+    function get_branch_details($branch, $branchType = 'approved')
+    {
 
-        if($branch) {
-            switch($branchType) {
+        if ($branch) {
+            switch ($branchType) {
                 case 'pending':
                     return $branch->pendingBranchDetails;
-                break;
+                    break;
                 case 'rejected':
                     return $branch->rejectedBranchDetails;
-                break;
+                    break;
                 default:
                     return $branch->branchDetails;
             }
@@ -253,8 +260,9 @@ if (!function_exists('get_branch_details')) {
 }
 
 // This will return order items for views.
-if (!function_exists('show_order_itmes')){
-    function show_order_itmes ($items){
+if (!function_exists('show_order_itmes')) {
+    function show_order_itmes($items)
+    {
 
         // Open html warapper for list of items.
         $output = "<span class='order_content_list'><ul>";
@@ -263,10 +271,10 @@ if (!function_exists('show_order_itmes')){
 
         $items = $items->contents;
 
-        for ($k=0; $k < count($items); $k++) {
+        for ($k = 0; $k < count($items); $k++) {
 
             // Create the correct format of key.
-            $key = 'item_'.($k + 1);
+            $key = 'item_' . ($k + 1);
 
             // Get each item as single item.
             $item = $items[$k]->$key;
@@ -292,9 +300,10 @@ if (!function_exists('show_order_itmes')){
 }
 
 // This will check if item is assigned for menu.
-if (!function_exists('select_item_logic')){
+if (!function_exists('select_item_logic')) {
 
-    function select_item_logic($menu_items, $id){
+    function select_item_logic($menu_items, $id)
+    {
 
         $item_ids = (array) json_decode($menu_items);
 
@@ -305,15 +314,16 @@ if (!function_exists('select_item_logic')){
 }
 
 // This will return menu items for views.
-if (!function_exists('show_menu_itmes')){
-    function show_menu_itmes ($items){
+if (!function_exists('show_menu_itmes')) {
+    function show_menu_itmes($items)
+    {
 
         $itemIDs = json_decode($items);
         $items = Item::whereIn('id', $itemIDs)->get();
 
         $allItems = [];
-        foreach($items as $item) {
-            $allItems[] = '<a href="/item/'.$item->id.'">'.$item->approvedItemDetails->title.'</a>';
+        foreach ($items as $item) {
+            $allItems[] = '<a href="/item/' . $item->id . '">' . $item->approvedItemDetails->title . '</a>';
         }
         $allItems = implode(", ", $allItems);
 
@@ -323,19 +333,20 @@ if (!function_exists('show_menu_itmes')){
 
 
 // General function to get orders, based on the provided params.
-if (!function_exists('get_orders')){
-    function get_orders($type, $request, $realTime = false, $keyword = null) {
+if (!function_exists('get_orders')) {
+    function get_orders($type, $request, $realTime = false, $keyword = null)
+    {
         // Order lists based on different status. active([Pending, Accept, Processing, Delivery]) and history ([completed, Canceled])
         $status = [];
-        switch($type) {
+        switch ($type) {
             case 'history':
                 $status = ['completed', 'canceld', 'reject'];
-            break;
+                break;
             case 'active-orders':
                 $status = ['pending', 'processing', 'delivered'];
-            break;
+                break;
             default:
-            $status = [];
+                $status = [];
         };
 
         $drivers = Driver::all();
@@ -346,7 +357,7 @@ if (!function_exists('get_orders')){
         }
 
         // If it is restaurant then user will have some restricted data.
-        if (get_role() == "restaurant"){
+        if (get_role() == "restaurant") {
             $userId = Auth::user()->id;
             $orders = loadUserAllOrders($userId, $status, $perPage);
             if ($realTime) {
@@ -359,15 +370,15 @@ if (!function_exists('get_orders')){
         $keyword = ($request) ? $request->get('search') : $keyword;
         if ($type != 'waiting-orders' && !empty($keyword)) {
             $orders = Order::whereIn('status', $status)->wherehas(
-                'branchDetails', function ($query) use ($keyword) {
-                $query->where('title','LIKE', "%$keyword%");
-            })->orwhere('title', 'LIKE', "%$keyword%")->whereIn('status',$status)
+                'branchDetails',
+                function ($query) use ($keyword) {
+                    $query->where('title', 'LIKE', "%$keyword%");
+                }
+            )->orwhere('title', 'LIKE', "%$keyword%")->whereIn('status', $status)
                 ->latest()->paginate($perPage);
-        }
-        elseif ($type == 'waiting-orders'){
+        } elseif ($type == 'waiting-orders') {
             $orders = get_waiting_orders($keyword, $perPage, false);
-        }
-        else {
+        } else {
             $orders = Order::whereIn('status', $status)->latest()->paginate($perPage);
         }
 
@@ -382,35 +393,37 @@ if (!function_exists('get_orders')){
 }
 
 // Send notification based on user Ids and message we provide.
-if (!function_exists('send_notification')){
-    function send_notification(array $notifyUsers, $userId, $message) {
+if (!function_exists('send_notification')) {
+    function send_notification(array $notifyUsers, $userId, $message)
+    {
         $notifyUsers = User::whereIn('id', $notifyUsers)->get();
 
-        for ($i=0; $i < sizeof($notifyUsers) ; $i++) { 
+        for ($i = 0; $i < sizeof($notifyUsers); $i++) {
             event(new \App\Events\NotificationEvent('Notification', $notifyUsers[$i]));
         }
-        
+
         \Illuminate\Support\Facades\Notification::send($notifyUsers, new \App\Notifications\UpdateNotification($message, $userId));
     }
 }
 
 // This will return menu items for views.
-if (!function_exists('update_order')){
-    function update_order ($requestData, $id, $api = false) {
+if (!function_exists('update_order')) {
+    function update_order($requestData, $id, $api = false)
+    {
 
         try {
-            DB::transaction(function () use ($requestData, $id){
+            DB::transaction(function () use ($requestData, $id) {
                 $deliver_update = false;
                 $requestData['has_delivery'] = 0;
-        
+
                 if ($requestData['delivery_type'] != 'self') {
                     $requestData['has_delivery'] = 1;
                     $deliver_update = true;
                 }
-        
+
                 $order = Order::findOrFail($id);
-        
-        
+
+
                 $orderData = [
                     'branch_id' => $requestData['branch_id'],
                     'customer_id' => $requestData['customer_id'],
@@ -423,41 +436,41 @@ if (!function_exists('update_order')){
                     'contents' => $requestData['contents'],
                     'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 ];
-    
+
                 $order->update($orderData);
-    
+
                 if ($deliver_update) {
                     $updateDeliveryDetails = [
                         'order_id' => $id,
                         'delivery_type' => $requestData['delivery_type'],
                         'delivery_adress' => $requestData['delivery_adress'],
                     ];
-                    
+
                     // Update delivery details.
                     $result = DeliveryDetails::updateOrCreate(['order_id' => $id], $updateDeliveryDetails);
                 }
-                
             });
         } catch (\Throwable $th) {
             dd($th);
         }
-        
+
 
 
         event(new \App\Events\UpdateEvent('Order Updated!'));
         return redirect()->back()->with('flash_message', 'Order updated!');
-            
     }
 }
 
- /**
+/**
  * Validate request inputs.
  *
  * @param object $request
  */
-if (!function_exists('validateOrderInputs')){
-    function validateOrderInputs($request) {
-        $validator = Validator::make($request->all(),
+if (!function_exists('validateOrderInputs')) {
+    function validateOrderInputs($request)
+    {
+        $validator = Validator::make(
+            $request->all(),
             [
                 'branch_id' => 'required|integer',
                 'customer_id' => 'required|integer',
@@ -471,14 +484,15 @@ if (!function_exists('validateOrderInputs')){
         );
 
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
+            return response()->json(['error' => $validator->errors()], 401);
         }
     }
 }
 
 // Calculate the percentage between two numbers.
-if (!function_exists('calculate_percentage')){
-    function calculate_percentage($oldValue, $newValue){
+if (!function_exists('calculate_percentage')) {
+    function calculate_percentage($oldValue, $newValue)
+    {
         if ($oldValue == 0) {
             $oldValue++;
             $newValue++;
@@ -489,12 +503,12 @@ if (!function_exists('calculate_percentage')){
 }
 
 // Format a percentage number to show on blade.
-if (!function_exists('format_percentage')){
-    function format_percentage($percentage){
-        if ($percentage >= 1){
-            $percentage = ['+'.$percentage, 'text-success'];
-        }
-        else {
+if (!function_exists('format_percentage')) {
+    function format_percentage($percentage)
+    {
+        if ($percentage >= 1) {
+            $percentage = ['+' . $percentage, 'text-success'];
+        } else {
             $percentage = [$percentage, 'text-danger'];
         }
         return $percentage;
@@ -502,57 +516,61 @@ if (!function_exists('format_percentage')){
 }
 
 // Format a percentage number to show on blade.
-if (!function_exists('translate_status')){
-    function translate_status($status){
-        switch($status) {
+if (!function_exists('translate_status')) {
+    function translate_status($status)
+    {
+        switch ($status) {
             case 'pending':
                 return 'انتظار';
-            break;
+                break;
             case 'processing':
                 return 'آماده شدن';
-            break;
+                break;
             case 'reject':
                 return 'رد شده';
-            break;
+                break;
             case 'delivered':
                 return 'ارسال شده';
-            break;
+                break;
             case 'completed':
                 return 'تکمیل شده';
-            break;
+                break;
             default:
-            return 'لغو شده';
+                return 'لغو شده';
         }
     }
 }
 
 // Format promissed date to a farsi readable date.
-if (!function_exists('get_promissed_date')){
-    function get_promissed_date($date){
-        if ($date){
-            Carbon::setLocale('fa');             
+if (!function_exists('get_promissed_date')) {
+    function get_promissed_date($date)
+    {
+        if ($date) {
+            Carbon::setLocale('fa');
             return Carbon::parse($date)->diffForHumans();
         }
-        
+
         return '';
     }
 }
 
 // Format promissed date to a farsi readable date.
-if (!function_exists('get_farsi_date')){
-    function get_farsi_date($date){
-        if ($date){
-            Carbon::setLocale('fa');             
+if (!function_exists('get_farsi_date')) {
+    function get_farsi_date($date)
+    {
+        if ($date) {
+            Carbon::setLocale('fa');
             return Carbon::parse($date)->format('M-d');
         }
-        
+
         return '';
     }
 }
 
 // Check if an order is late, add a class for css style applying.
-if (!function_exists('is_order_late')){
-    function is_order_late($date, $status){
+if (!function_exists('is_order_late')) {
+    function is_order_late($date, $status)
+    {
         $completed_status = ['reject', 'canceld', 'completed'];
 
         return (!in_array($status, $completed_status) && Carbon::parse($date)->isPast()) ? 'order_is_late' : '';
@@ -560,16 +578,18 @@ if (!function_exists('is_order_late')){
 }
 
 // Update table column with boolean values.
-if (!function_exists('columnToggleUpdate')){
-    function columnToggleUpdate($table, $column, $record_id){
+if (!function_exists('columnToggleUpdate')) {
+    function columnToggleUpdate($table, $column, $record_id)
+    {
         DB::statement("UPDATE $table SET $column = 1 - status WHERE id = $record_id");
     }
 }
 
 // Update table column with boolean values.
-if (!function_exists('get_customer_status')){
-    function get_customer_status($customer_id){
-        
+if (!function_exists('get_customer_status')) {
+    function get_customer_status($customer_id)
+    {
+
         $blockCustomerStatus = DB::table('block_customers')->where('customer_id', '=', $customer_id)->value('status');
 
         return ($blockCustomerStatus) ?: 'Notblocked';
@@ -577,32 +597,34 @@ if (!function_exists('get_customer_status')){
 }
 
 // Update table column with boolean values.
-if (!function_exists('get_waiting_orders')){
-    function get_waiting_orders($keyword, $perPage, $count = false){
+if (!function_exists('get_waiting_orders')) {
+    function get_waiting_orders($keyword, $perPage, $count = false)
+    {
         // Get orders from 10 minutes ago.
         $timeOffSet = Carbon::now()->subMinutes(1)->toDateTimeString();
 
         $orders = Order::where(function ($query) use ($timeOffSet, $keyword) {
             // Get orders that created 2 mins ago and still not responsed by restaurant.
             $query->where('status', 'pending')->where('orders.created_at', '<', $timeOffSet)->whereHas('branchDetails', function ($sub) use ($keyword) {
-                    $sub->where('title','LIKE', "%".$keyword."%");
-                });
-        })->orwhere(function ( $query ) use ($keyword) {
+                $sub->where('title', 'LIKE', "%" . $keyword . "%");
+            });
+        })->orwhere(function ($query) use ($keyword) {
             // Get orders that are assigned to company to delivery and yet have no driver assigned to them.
             $query->whereHas('deliveryDetails', function ($subquery) {
-            $subquery->where('delivery_type', 'company')->whereNull('driver_id');
-        })->where('status', '<>' ,'reject')->whereHas('branchDetails', function ($sub) use ($keyword) {
-            $sub->where('title','LIKE', "%".$keyword."%");
-        });
+                $subquery->where('delivery_type', 'company')->whereNull('driver_id');
+            })->where('status', '<>', 'reject')->whereHas('branchDetails', function ($sub) use ($keyword) {
+                $sub->where('title', 'LIKE', "%" . $keyword . "%");
+            });
         })->latest();
-        
+
         return ($count) ?  $orders->count() : $orders->paginate($perPage);
     }
 }
-        
+
 // Update table column with boolean values.
-if (!function_exists('get_current_branch_id')){
-    function get_current_branch_id(){
+if (!function_exists('get_current_branch_id')) {
+    function get_current_branch_id()
+    {
         $userId = Auth::user()->id;
         $branch = Branch::where('user_id', $userId)->first();
         $branchID = (is_object($branch)) ? $branch->id : NULL;
@@ -611,24 +633,26 @@ if (!function_exists('get_current_branch_id')){
 }
 
 // get setting from configurations.
-if (!function_exists('setting_config')){
-    function setting_config($key){
+if (!function_exists('setting_config')) {
+    function setting_config($key)
+    {
         return Setting::where('key', $key)->pluck('value')->toArray();
     }
 }
 
 // Get branches that have had orders between the given range of dates.
-if (!function_exists('get_active_branches')){
-    function get_active_branches(){
-        
+if (!function_exists('get_active_branches')) {
+    function get_active_branches()
+    {
+
         // Select all orders that paid columns is 0.
         $orders = DB::table('orders')
-        ->select(DB::raw('branch_id'))
-        ->where('paid', 0)
-        ->get()->toArray();
-        
+            ->select(DB::raw('branch_id'))
+            ->where('paid', 0)
+            ->get()->toArray();
+
         $active_branches = [];
-        foreach($orders as $order) {
+        foreach ($orders as $order) {
             $active_branches[] = $order->branch_id;
         }
 
@@ -637,8 +661,9 @@ if (!function_exists('get_active_branches')){
 }
 
 // Get the branch last payment.
-if (!function_exists('get_this_branch_last_paid_date')){
-    function get_this_branch_last_paid_date($branch_id){
+if (!function_exists('get_this_branch_last_paid_date')) {
+    function get_this_branch_last_paid_date($branch_id)
+    {
 
         $payment = Payment::where('branch_id', $branch_id)->latest('range_to')->first();
 
@@ -648,15 +673,10 @@ if (!function_exists('get_this_branch_last_paid_date')){
         // If the last date paid was not available, then select first day of last month. 
         if (is_null($last_paid)) {
             $last_paid = new Carbon('first day of last month');
-        }
-        else {
+        } else {
             $last_paid = Carbon::parse($last_paid);
         }
 
         return $last_paid;
     }
 }
-
-
-
-

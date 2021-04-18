@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DriverController;
+use App\Http\Controllers\DashboardsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -149,5 +151,18 @@ Route::middleware(['finance_officer'])->group(function () {
     Route::get('activePayments', 'App\Http\Controllers\PaymentController@activePayments')->name('payments.active');
     Route::get('paymentHistory', 'App\Http\Controllers\PaymentController@paymentHistory')->name('payments.history');
 
+});
+
+/*
+|--------------------------------------------------------------------------
+| All routes in this part can access by (Finance Manager)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['finance_manager'])->group(function () {
+    Route::get('finance_manager/dashboard', [DashboardsController::class, 'financeManagerDashboard'])->name('finance_manager.dashboard');
+    Route::post('driver_payment_recived/{driver}/{orders}/{total}', [DriverController::class, 'driverPaymentRecived'])->name('driver.payments', );
+    Route::resource('driver', 'App\Http\Controllers\DriverController');
+    // Route::get('drivers', [DriverController::class, 'allDrivers'])->name('drivers');
+    Route::get('driver_payment_history/{driver}', [DriverController::class, 'driverPaymentHistory'])->name('driverHistory', );
 });
 

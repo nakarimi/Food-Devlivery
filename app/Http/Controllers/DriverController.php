@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Http\Requests;
 
 use App\Models\Driver;
 use Illuminate\Http\Request;
-use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redirect;
 
 class DriverController extends Controller
 {
@@ -55,10 +57,10 @@ class DriverController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-			'title' => 'required',
-			'user_id' => 'required',
-			'status' => 'required'
-		]);
+            'title' => 'required',
+            'user_id' => 'required',
+            'status' => 'required'
+        ]);
         $requestData = $request->all();
 
         Driver::create($requestData);
@@ -105,10 +107,10 @@ class DriverController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-			'title' => 'required',
-			'user_id' => 'required',
-			'status' => 'required'
-		]);
+            'title' => 'required',
+            'user_id' => 'required',
+            'status' => 'required'
+        ]);
         $requestData = $request->all();
 
         $driver = Driver::findOrFail($id);
@@ -130,7 +132,8 @@ class DriverController extends Controller
         return redirect('driver')->with('flash_message', 'Driver Inactivated!');
     }
 
-    public function dropdown_data($id = false) {
+    public function dropdown_data($id = false)
+    {
 
         // Pass Users for dropdown list form.
         $data['users'] = User::all();
@@ -139,5 +142,47 @@ class DriverController extends Controller
         $data['driver'] = ($id) ? Driver::findOrFail($id) : [];
 
         return $data;
+    }
+
+    /**
+     * Create payment received for the driver.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function driverPaymentRecived(Request $request)
+    {
+        DB::table('recieved_driver_payments')->insert([
+            'orders_id' => $request->orders,
+            'total_money_received' => $request->total,
+            'driver_id' => $request->driver,
+            'finance_manager_id' => $request->user()->id,
+        ]);
+        return Redirect::back()->with('flash_message', 'Payment received!');
+    }
+    public function driverPaymentHistory(Request $request, $id)
+    {
+        $keyword = $request->get('search');
+        $perPage = 10;
+        if (!empty($keyword)) {
+            $driverPayments = DB::table('recieved_driver_payments as rdp')
+            ->join('users', 'users.id', '=', 'rdp.finance_manager_id')
+            ->select('rdp.*', 'users.name')
+            ->where('rdp.total_money_received', 'LIKE', "%$keyword%")
+            ->orWhere('users.name', 'LIKE', "%$keyword%")
+            ->where('driver_id', $id)
+            ->latest()->paginate($perPage);
+        } else {
+            $driverPayments = DB::table('recieved_driver_payments as rdp')
+                ->where('driver_id', $id)
+                ->join('users', 'users.id', '=', 'rdp.finance_manager_id')
+                ->select('rdp.*', 'users.name')
+                ->latest()
+                ->paginate($perPage);
+        }
+
+        $driver = Driver::find($id);
+        return view('dashboards.finance_manager.payment.index', compact('driverPayments', 'driver'));
     }
 }
