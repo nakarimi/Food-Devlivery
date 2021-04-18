@@ -161,28 +161,65 @@ class DriverController extends Controller
         ]);
         return Redirect::back()->with('flash_message', 'Payment received!');
     }
-    public function driverPaymentHistory(Request $request, $id)
+    public function driverPaymentHistory(Request $request)
+    {
+        $keyword['driver'] = $request->get('driver_id');
+        if($request->get('date-range') && $request->get('date-range') != 'Choose Date'){
+            $keyword['date'] = explode(" - ", $request->get('date-range'));
+            $keyword['date'][0] = date('Y-m-d', strtotime($keyword['date'][0]));
+            $keyword['date'][1] = date('Y-m-d', strtotime($keyword['date'][1]));
+        }
+        $perPage = 10;
+        $query = DB::table('recieved_driver_payments as rdp')
+            ->join('users', 'users.id', '=', 'rdp.finance_manager_id')
+            ->join('drivers', 'drivers.id', '=', 'rdp.driver_id')
+            ->select('rdp.*', 'users.name', 'drivers.title');
+        if (!empty($keyword['date']) && !empty($keyword['driver'])) {
+            $driverPayments = $query
+                ->where('driver_id', $keyword['driver'])
+                ->whereBetween('rdp.created_at', $keyword['date'])
+                ->latest()->paginate($perPage);
+        } elseif (!empty($keyword['driver'])) {
+            $driverPayments = $query
+                ->where('driver_id', $keyword['driver'])
+                ->latest()->paginate($perPage);
+        } elseif (!empty($keyword['date'])) {
+            $driverPayments = $query
+                ->whereBetween('rdp.created_at', $keyword['date'])
+                ->latest()->paginate($perPage);
+        } else {
+            $driverPayments = $query
+                ->latest()
+                ->paginate($perPage);
+        }
+        
+        $drivers = Driver::get();
+        return view('dashboards.finance_manager.payment.index', compact('driverPayments', 'drivers', 'keyword'));
+    }
+    /**
+     * Load all drivers who have orders payment.
+     *
+     * @param \Illuminate\Http\Response $request
+     *
+     * @return a object which is list of the drivers with delivery details and orders.
+     *
+     * */
+    public function activePayments(Request $request)
     {
         $keyword = $request->get('search');
         $perPage = 10;
         if (!empty($keyword)) {
-            $driverPayments = DB::table('recieved_driver_payments as rdp')
-            ->join('users', 'users.id', '=', 'rdp.finance_manager_id')
-            ->select('rdp.*', 'users.name')
-            ->where('rdp.total_money_received', 'LIKE', "%$keyword%")
-            ->orWhere('users.name', 'LIKE', "%$keyword%")
-            ->where('driver_id', $id)
-            ->latest()->paginate($perPage);
+            $drivers = Driver::whereHas('delivered.order')
+                ->where('title', 'LIKE', "%$keyword%")
+                ->orWhere('contact', 'LIKE', "%$keyword%")
+                ->orWhere('status', 'LIKE', "%$keyword%")
+                ->orWhere('token', 'LIKE', "%$keyword%")
+                ->latest()->paginate($perPage);
         } else {
-            $driverPayments = DB::table('recieved_driver_payments as rdp')
-                ->where('driver_id', $id)
-                ->join('users', 'users.id', '=', 'rdp.finance_manager_id')
-                ->select('rdp.*', 'users.name')
-                ->latest()
-                ->paginate($perPage);
+            $drivers = Driver::whereHas('delivered.order')
+                ->latest()->paginate($perPage);
         }
 
-        $driver = Driver::find($id);
-        return view('dashboards.finance_manager.payment.index', compact('driverPayments', 'driver'));
+        return view('dashboards.finance_manager.payment.active_payments', compact('drivers'));
     }
 }

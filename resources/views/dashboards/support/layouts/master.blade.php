@@ -32,6 +32,11 @@
     <!-- jQuery -->
     <script src="{{asset('js/jquery-3.2.1.min.js')}}"></script>
 
+    {{-- Range Date Picker --}}
+    <script type="text/javascript" src="{{asset('js/moment.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('js/daterangepicker.min.js')}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}" />
+
     @include('layouts.common_scripts')
 
     {{--   Adding specific style of each page--}}
@@ -110,8 +115,15 @@
            Livewire.emit('refreshNotifications');
         }
     });
-    </script>
 
+    // Make datepickerrage activated.
+    $(function() {
+      $('input.daterange').daterangepicker({
+        opens: 'left',
+        autoApply: true,
+        }).val('Choose Date');   
+    });
+    </script>
     <!-- Specific js of pages -->
     @yield('scripts')
     @livewireScripts

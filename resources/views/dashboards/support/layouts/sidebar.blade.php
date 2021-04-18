@@ -17,6 +17,14 @@
                         <li><a  @if (\Request::is('paymentHistory')) class="active" @endif href="{{ url('paymentHistory') }}">Payments History</a></li>
                     </ul>
                 </li>
+                <li class="submenu">
+                    <a href="#"><i class="la la-money"></i> <span class="menu-title">Drivers payment</span> <span class="menu-arrow"></span></a>
+                    <ul style="display: none;">
+                        {{--  <li><a  @if (\Request::is('orders/create*')) class="active" @endif href="{{ route('orders.create') }}">Add Order</a></li>--}}
+                        <li><a  @if (\Request::is('driver.active_payments')) class="active" @endif href="{{ route('driver.active_payments') }}">Active payments</a></li>
+                        <li><a  @if (\Request::is('driverPaymentHistory')) class="active" @endif href="{{ route('driverPaymentHistory') }}">History of Payments</a></li>
+                    </ul>
+                </li>
             </ul>
 
         </div>
