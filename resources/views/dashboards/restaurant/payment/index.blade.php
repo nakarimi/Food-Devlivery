@@ -64,7 +64,7 @@
                                  <form method="POST" action="{{ url('/pay') }}" accept-charset="UTF-8" style="display:inline">
                                     {{ csrf_field() }}
                                     <input type="hidden" value="{{ $item->id }}" name="payment_id">
-                                    <button type="submit" class="btn btn-success btn-sm" title="پرداخت." onclick="return confirm(&quot;Confirm approve?&quot;)">پرداخت</button>
+                                    <button type="submit" class="btn btn-success btn-sm" title="پرداخت." onclick="return confirm(&quot;پرداخت را تائید میکنید؟&quot;)">پرداخت</button>
                                  </form>
                               @elseif($item->status == 'paid')
                                  <span class="badge badge-warning" >انتظار</span>

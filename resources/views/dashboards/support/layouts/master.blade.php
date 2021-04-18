@@ -115,18 +115,22 @@
            Livewire.emit('refreshNotifications');
         }
     });
-
-    // Make datepickerrage activated.
-    $(function() {
+        // Make datepickerrage activated.
+        $(function() {
       $('input.daterange').daterangepicker({
         opens: 'left',
         autoApply: true,
         }).val('Choose Date');   
     });
+
     </script>
+
     <!-- Specific js of pages -->
     @yield('scripts')
     @livewireScripts
+
+    <script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
+    <script src="{{asset('js/dataTables.bootstrap4.min.js')}}"></script>
 
 </body>
 

@@ -244,6 +244,7 @@ class PaymentController extends Controller
         $activeBranches = Branch::whereIN('id', $active_branches)->get();
 
         $payments = (isset($request->branch_id)) ? $branchPayments : $payments;
+        
         return view('dashboards.finance_officer.payment.index', compact('payments', 'activeBranches'));
     }
 
