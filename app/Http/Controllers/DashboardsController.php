@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
 use App\Models\Item;
-use App\Models\User;
 use App\Models\Order;
-use App\Models\Driver;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Models\Payment;
 
 class DashboardsController extends Controller
 {
@@ -44,11 +44,6 @@ class DashboardsController extends Controller
         return view('dashboards.customer.dashboard');
     }
 
-    public function financeOfficerDashboard()
-    {
-        return view('dashboards.finance_officer.dashboard');
-    }
-
     /**
      * Load all drivers who have orders payment.
      *
@@ -74,6 +69,13 @@ class DashboardsController extends Controller
         }
 
         return view('dashboards.finance_manager.dashboard', compact('drivers'));
+    }
+
+    public function financeOfficerDashboard()
+    {
+        
+        $paymentData = $this->getPaymentData();
+        return view('dashboards.finance_officer.dashboard', compact('paymentData'));
     }
 
     public function getOrderDetails($userId = null, $count = false, $date = null, $forAdmin = false)
@@ -176,6 +178,22 @@ class DashboardsController extends Controller
             'thisYearOrders' => $this->getOrderDetails(null, true,'This Year', true),
             'lastYearOrders' => $this->getOrderDetails(null, true,'Last Year', true),
         ];
+        return $data;
+    }
+
+    public function getPaymentData() {
+
+        $data['totalPaidRestaurants'] = DB::table('payments')->distinct('branch_id')->count('branch_id');
+        $data['totalPendingPayments'] = Payment::where('status', 'paid')->count();
+        $data['totalActiveRestaurants'] = get_active_branches(true); // True is to take count.
+        $data['totalActivePayments'] = Payment::where('status', 'activated')->count();
+
+        $data['financial_summary']['total_order'] = Payment::sum('total_order');
+        $data['financial_summary']['total_order_income'] = Payment::sum('total_order_income');
+        $data['financial_summary']['total_paid'] = Payment::where('status', 'paid')->sum('total_order_income');
+        $data['financial_summary']['total_recieved'] = Payment::where('status', 'done')->sum('total_order_income');
+        
+
         return $data;
     }
 }

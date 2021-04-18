@@ -642,7 +642,7 @@ if (!function_exists('setting_config')) {
 
 // Get branches that have had orders between the given range of dates.
 if (!function_exists('get_active_branches')) {
-    function get_active_branches()
+    function get_active_branches($count = false)
     {
 
         // Select all orders that paid columns is 0.
@@ -656,7 +656,7 @@ if (!function_exists('get_active_branches')) {
             $active_branches[] = $order->branch_id;
         }
 
-        return Branch::whereIN('id', $active_branches)->get();
+        return ($count) ? Branch::whereIN('id', $active_branches)->count() : Branch::whereIN('id', $active_branches)->get();
     }
 }
 
