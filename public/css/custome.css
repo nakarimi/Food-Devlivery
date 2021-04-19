@@ -178,3 +178,16 @@ td.hasDriver select {
 .pendingPayments .dataTables_wrapper > div.row:first-child {
   display: none;
 }
+
+.payment_pending_btn:hover span {
+  display:none
+}
+
+.payment_pending_btn:hover {
+  background-color: #55ce63;
+  color: #fff;
+}
+
+.payment_pending_btn:hover:before {
+  content:"Approve!";
+}
