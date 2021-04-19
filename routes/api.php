@@ -41,10 +41,10 @@ Route::group([
     'prefix' => 'customer'
 
 ], function ($router) {
-    Route::post('/subit-new-order', [CustomerRequests::class, 'submit_new_order']);
-    Route::post('/update-order', [CustomerRequests::class, 'update_order']);
-    Route::get('/branch-list', [CustomerRequests::class, 'branch_list']);
-    Route::get('/restaurnt-food-list-signle-category/{restaurantID}/{categoryID}', [CustomerRequests::class, 'get_list_restaurant_food_of_single_category']);
+    Route::post('/subit-new-order', [CustomerPostRequests::class, 'submit_new_order']);
+    Route::post('/update-order', [CustomerPostRequests::class, 'update_order']);
+    Route::get('/branch-list', [CustomerGetRequests::class, 'branch_list']);
+    Route::get('/restaurnt-food-list-signle-category', [CustomerGetRequests::class, 'get_list_restaurant_food_of_single_category']);
     
 });
 
