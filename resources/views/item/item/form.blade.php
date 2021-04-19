@@ -42,7 +42,7 @@
    
    <div class="col">
       <div class="form-group{{ $errors->has('code') ? 'has-error' : ''}}">
-         <label for="category_id" class="control-label">{{ (get_role() == "restaurant") ? 'کتگوری' : 'Category' }}</label>
+         <label for="category_id" class="control-label">{{ (get_role() == "restaurant") ? 'کتگوری اصلی' : 'Main Category' }}</label>
          <select class="custom-select mr-sm-2" name="main_category_id" id="main_category_id" required>
             <option value="" >.....</option>
             @foreach($categories as $category)

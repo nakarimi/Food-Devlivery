@@ -143,6 +143,6 @@ class CategoryController extends Controller
     }
 
     public function loadCategory (Request $request) {
-        return  Category::select('id', 'title')->where('type', $request['type'])->get();
+        return  Category::where('type', $request['type'])->get();
     }
 }
