@@ -47,6 +47,7 @@
                            <th>کمیشن عمومی</th>
                            <th>کمیشن پیک </th>
                            <th>مجموع تحویلی</th>
+                           <th>تحویل گیرنده</th>
                            <th>#</th>
                         </tr>
                      </thead>
@@ -59,6 +60,7 @@
                            <td>{{ $item->total_general_commission }}</td>
                            <td>{{ $item->total_delivery_commission }}</td>
                            <td>{{ $item->total_delivery_commission + $item->total_general_commission }}</td>
+                           <td> {{ $item->user->name }} </td>
                            <td>
                               @if($item->status == 'activated')
                                  <form method="POST" action="{{ url('/pay') }}" accept-charset="UTF-8" style="display:inline">
