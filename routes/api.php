@@ -45,6 +45,17 @@ Route::group([
     Route::post('/update-order', [CustomerPostRequests::class, 'update_order']);
     Route::get('/branch-list', [CustomerGetRequests::class, 'branch_list']);
     Route::get('/restaurnt-food-list-signle-category', [CustomerGetRequests::class, 'get_list_restaurant_food_of_single_category']);
+    Route::get('/get-list-of-desserts', [CustomerGetRequests::class, 'get_list_of_desserts']);
+    Route::get('/get-list-of-main-foods', [CustomerGetRequests::class, 'get_list_of_main_foods']);
+    Route::get('/get-list-newest-restaurants', [CustomerGetRequests::class, 'get_list_of_newest_restaurants']);
+    Route::get('/get-single-restaurant-profile', [CustomerGetRequests::class, 'get_single_restaurant_profile']);
+
+    
+
+    
+
+    
+    
     
 });
 

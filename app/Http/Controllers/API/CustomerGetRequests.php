@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Item;
+use App\Models\Category;
 
 class CustomerGetRequests extends Controller
 {
@@ -30,18 +31,23 @@ class CustomerGetRequests extends Controller
     }
 
     public function get_list_restaurant_food_of_single_category(Request $request) {
-        
         $foods = Item::select('id')->with('approvedItemDetails:item_id,title,description,thumbnail')->where('items.branch_id', $request['restaurantID'])->where('items.category_id', $request['categoryID'])->get();
+        return $foods;
+    }
 
-        // Original query.
-        // DB::table('items')
-        //     ->join('item_details', 'items.id', '=', 'item_details.item_id')
-        //     ->where('item_details.details_status', 'approved')
-        //     ->where('items.branch_id', $restaurantID)
-        //     ->where('items.category_id', $categoryID)
-        //     ->select('items.id', 'item_details.title', 'item_details.description', 'item_details.thumbnail')
-        // ->get();        
+    public function get_list_of_desserts() {
+        return Category::where('type', 'dessert')->get();
+    }
 
-    return $foods;
-}
+    public function get_list_of_main_foods() {
+        return Category::where('type', 'main_food')->get();
+    }
+
+    public function get_list_of_newest_restaurants() {
+        return Branch::select('id')->with('branchDetails:business_id,title,description,logo')->orderBy('created_at', 'desc')->get();
+    }
+
+    public function get_single_restaurant_profile(Request $request) {
+        return Branch::with('branchDetails')->where('id', $request['restaurantID'])->get();
+    }
 }
