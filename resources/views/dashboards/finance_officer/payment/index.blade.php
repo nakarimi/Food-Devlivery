@@ -28,7 +28,8 @@ Payments
                <br />
                <br />
                <br />
-               @if(isset($_GET['branch_id']) && $_GET['branch_id'] > 0)
+               {{-- If there was no data for the page. --}}
+               @if( (count($payments) > 0) || (isset($_GET['branch_id']) && $_GET['branch_id'] > 0))
                   <div class="table-responsive @if (\Request::is('pendingPayments')) pendingPayments @endif">
                      <table class="table @if (\Request::is('pendingPayments')) datatable @endif">
                         <thead>
@@ -112,7 +113,7 @@ Payments
                   </div>
 
                @else 
-                  <p class="alert alert-warning col-md-8">Select a branch / Different branch </p>
+                  <p class="alert alert-warning col-md-12 text-center">Select a branch / Different branch </p>
                @endif
             </div>
          </div>
