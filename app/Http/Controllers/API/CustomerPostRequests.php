@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\Models\Branch;
 use Validator;
@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-class CustomerRequests extends Controller
+class CustomerPostRequests extends Controller
 {
     public function submit_new_order(Request $request)
     {
@@ -94,20 +94,4 @@ class CustomerRequests extends Controller
         update_order($requestData, $requestData['order_id'], true);
     }
 
-    public function branch_list() {
-
-            $branches['latest'] = DB::table('branches')
-                ->join('branche_main_info', 'branches.id', '=', 'branche_main_info.business_id')
-                ->where('branche_main_info.status', 'approved')
-                ->select('branches.id', 'branche_main_info.title', 'branche_main_info.description', 'branche_main_info.logo')
-            ->get();
-
-            $branches['favorite '] = DB::table('branches')
-                ->join('branche_main_info', 'branches.id', '=', 'branche_main_info.business_id')
-                ->where('branche_main_info.status', 'approved')
-                ->select('branches.id', 'branche_main_info.title', 'branche_main_info.description', 'branche_main_info.logo')
-            ->get();
-
-        return $branches;
-    }
-}
+   }

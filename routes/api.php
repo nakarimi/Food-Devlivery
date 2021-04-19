@@ -3,10 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\JwtAuthController;
-use App\Http\Controllers\CustomerRequests;
-use App\Http\Controllers\DriverRequests;
-use App\Http\Controllers\BranchRequests;
-
+use App\Http\Controllers\API\CustomerGetRequests;
+use App\Http\Controllers\API\CustomerPostRequests;
+use App\Http\Controllers\API\DriverRequests;
+use App\Http\Controllers\API\BranchRequests;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +44,7 @@ Route::group([
     Route::post('/subit-new-order', [CustomerRequests::class, 'submit_new_order']);
     Route::post('/update-order', [CustomerRequests::class, 'update_order']);
     Route::get('/branch-list', [CustomerRequests::class, 'branch_list']);
+    Route::get('/restaurnt-food-list-signle-category/{restaurantID}/{categoryID}', [CustomerRequests::class, 'get_list_restaurant_food_of_single_category']);
     
 });
 
