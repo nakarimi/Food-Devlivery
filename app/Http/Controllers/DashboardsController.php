@@ -22,11 +22,11 @@ class DashboardsController extends Controller
     public function restaurantDashboard()
     {
         $userId = Auth::user()->id;
-        $todayOrders = $this->getOrderDetails($userId, true,'Today');
-        $lastSevenDaysOrders = $this->getOrderDetails($userId, true,'Last 7 Days');
-        $thisMonthOrders = $this->getOrderDetails($userId, true,'This Month');
-        $lastMonthOrders = $this->getOrderDetails($userId, true,'Last Month');
-        return view('dashboards.restaurant.dashboard', compact('todayOrders', 'lastSevenDaysOrders', 'thisMonthOrders','lastMonthOrders'));
+        $todayOrders = $this->getOrderDetails($userId, true, 'Today');
+        $lastSevenDaysOrders = $this->getOrderDetails($userId, true, 'Last 7 Days');
+        $thisMonthOrders = $this->getOrderDetails($userId, true, 'This Month');
+        $lastMonthOrders = $this->getOrderDetails($userId, true, 'Last Month');
+        return view('dashboards.restaurant.dashboard', compact('todayOrders', 'lastSevenDaysOrders', 'thisMonthOrders', 'lastMonthOrders'));
     }
 
     public function driverDashboard()
@@ -54,21 +54,7 @@ class DashboardsController extends Controller
      * */
     public function financeManagerDashboard(Request $request)
     {
-        $keyword = $request->get('search');
-        $perPage = 10;
-        if (!empty($keyword)) {
-            $drivers = Driver::whereHas('delivered.order')
-                ->where('title', 'LIKE', "%$keyword%")
-                ->orWhere('contact', 'LIKE', "%$keyword%")
-                ->orWhere('status', 'LIKE', "%$keyword%")
-                ->orWhere('token', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
-        } else {
-            $drivers = Driver::whereHas('delivered.order')
-            ->latest()->paginate($perPage);
-        }
-
-        return view('dashboards.finance_manager.dashboard', compact('drivers'));
+        return view('dashboards.finance_manager.dashboard');
     }
 
     public function financeOfficerDashboard()
@@ -93,39 +79,30 @@ class DashboardsController extends Controller
             $query = $query->WhereIn('branch_id', $branchIds);
         }
 
-        if ($date == "Today"){
+        if ($date == "Today") {
             $query->whereDate('created_at', Carbon::today());
-        }
-        elseif ($date == "Last 7 Days"){
-            $query->whereDate('created_at', '>',Carbon::now()->subDays(7));
-        }
-        elseif ($date == "This Month"){
+        } elseif ($date == "Last 7 Days") {
+            $query->whereDate('created_at', '>', Carbon::now()->subDays(7));
+        } elseif ($date == "This Month") {
             $query->whereMonth('created_at', Carbon::now()->month);
             $query->whereYear('created_at', date('Y'));
-
-        }
-        elseif ($date == "Last Month"){
+        } elseif ($date == "Last Month") {
             $query->whereMonth('created_at', Carbon::now()->subMonth()->month);
             $query->whereYear('created_at', date('Y'));
-        }
-        elseif ($date == "Yesterday"){
+        } elseif ($date == "Yesterday") {
             $query->whereDate('created_at', Carbon::yesterday());
-        }
-        elseif ($date == "Last Week"){
-            $query->whereDate('created_at', '<',Carbon::now()->subDays(7));
-            $query->whereDate('created_at', '>',Carbon::now()->subDays(14));
-        }
-        elseif ($date == "This Year"){
+        } elseif ($date == "Last Week") {
+            $query->whereDate('created_at', '<', Carbon::now()->subDays(7));
+            $query->whereDate('created_at', '>', Carbon::now()->subDays(14));
+        } elseif ($date == "This Year") {
             $query->whereYear('created_at', date('Y'));
-        }
-        elseif ($date == "Last Year"){
+        } elseif ($date == "Last Year") {
             $query->whereYear('created_at', now()->subYear(1));
         }
 
-        if ($count){
+        if ($count) {
             $orders = $query->count();
-        }
-        else {
+        } else {
             $orders = $query->get();
         }
         return $orders;
@@ -134,16 +111,18 @@ class DashboardsController extends Controller
     public function get_orders_by_status()
     {
         $chartData = [];
-        $statuses = ['pending' => '#f27d09' , 'completed' => '#00BCD4', 'reject' => '#E91E63',
-            'processing'=> '#4CAF50', 'delivered' => '#CDDC39', 'canceld' => '#f23409'];
+        $statuses = [
+            'pending' => '#f27d09', 'completed' => '#00BCD4', 'reject' => '#E91E63',
+            'processing' => '#4CAF50', 'delivered' => '#CDDC39', 'canceld' => '#f23409'
+        ];
         $userId = Auth::user()->id;
         $branches =  getUserBranches($userId);
         $branchIds = [];
         foreach ($branches as $branch) {
             array_push($branchIds, $branch->id);
         }
-        foreach ($statuses as $key => $status){
-           array_push($chartData,  $this->CreateOrdersChart($key, $status, $key, $branchIds, (get_role() == "admin") ? true : false));
+        foreach ($statuses as $key => $status) {
+            array_push($chartData,  $this->CreateOrdersChart($key, $status, $key, $branchIds, (get_role() == "admin") ? true : false));
         }
         return response()->json($chartData);
     }
@@ -151,15 +130,16 @@ class DashboardsController extends Controller
     public function CreateOrdersChart($status, $color, $title, $branchIds, $forAdmin = false)
     {
         $query = Order::where('status', $status);
-        if (!$forAdmin){
+        if (!$forAdmin) {
             $query = $query->WhereIn('branch_id', $branchIds);
         }
         $query = $query->count();
-         $status = [
-             ucfirst($title),
-             $query,
-             $color ];
-         return $status;
+        $status = [
+            ucfirst($title),
+            $query,
+            $color
+        ];
+        return $status;
     }
 
     public function adminDashboardData()
@@ -169,14 +149,14 @@ class DashboardsController extends Controller
             'totalDrivers' => User::where('role_id', 3)->count(),
             'totalItems' => Item::count(),
             'totalOrders' => Order::count(),
-            'todayOrders' => $this->getOrderDetails(null, true,'Today', true),
-            'yesterdayOrders' => $this->getOrderDetails(null, true,'Yesterday', true),
-            'thisMonthOrders' => $this->getOrderDetails(null, true,'This Month', true),
-            'lastMonthOrders' => $this->getOrderDetails(null, true,'Last Month', true),
-            'thisWeekOrders' => $this->getOrderDetails(null, true,'Last 7 Days', true),
-            'lastWeekOrders' => $this->getOrderDetails(null, true,'Last Week', true),
-            'thisYearOrders' => $this->getOrderDetails(null, true,'This Year', true),
-            'lastYearOrders' => $this->getOrderDetails(null, true,'Last Year', true),
+            'todayOrders' => $this->getOrderDetails(null, true, 'Today', true),
+            'yesterdayOrders' => $this->getOrderDetails(null, true, 'Yesterday', true),
+            'thisMonthOrders' => $this->getOrderDetails(null, true, 'This Month', true),
+            'lastMonthOrders' => $this->getOrderDetails(null, true, 'Last Month', true),
+            'thisWeekOrders' => $this->getOrderDetails(null, true, 'Last 7 Days', true),
+            'lastWeekOrders' => $this->getOrderDetails(null, true, 'Last Week', true),
+            'thisYearOrders' => $this->getOrderDetails(null, true, 'This Year', true),
+            'lastYearOrders' => $this->getOrderDetails(null, true, 'Last Year', true),
         ];
         return $data;
     }
