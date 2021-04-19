@@ -39,11 +39,11 @@
                  
                     @if(($item->status == "canceld" || $item->status == "completed" || $item->status == "reject")) 
                          <span class="badge bg-inverse hover" status="{{$item->status}}">
-                            {{translate_status($item->status)}}
+                            {{translate_term($item->status)}}
                         </span>
                     @elseif($item->status == "pending")
                         <span class="badge bg-inverse hover" status="{{$item->status}}">
-                            {{translate_status($item->status)}}
+                            {{translate_term($item->status)}}
                             <div class="tooltip status">
                                 <button type="button" order_id="{{ $item->id }}" customer_id="{{ $item->customer_id }}" class="btn btn-success order_confirm_processing_btn order_approve_btn" value="processing" data-toggle="modal" data-target="#add_order_completion_time" >قبول</button>
 
@@ -54,7 +54,7 @@
                     @else
 
                         <span class="badge bg-inverse hover" status="{{$item->status}}">
-                            {{translate_status($item->status)}}
+                            {{translate_term($item->status)}}
                         </span>
 
                     @endif

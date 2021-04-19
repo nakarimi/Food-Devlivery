@@ -267,7 +267,7 @@ class ItemController extends Controller
      */
     public function dropdown_data($id = false, $userId = null) {
         // Pass categories for dropdown list form.
-        $data['categories'] = Category::all();
+        $data['categories'] = Category::select('type')->distinct()->get();
 
         // Pass branches for dropdown list form.
         if ($userId != null){

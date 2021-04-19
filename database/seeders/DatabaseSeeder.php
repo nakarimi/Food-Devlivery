@@ -170,18 +170,18 @@ class DatabaseSeeder extends Seeder
             array('id' => '5','created_at' => NULL,'updated_at' => '2021-03-25 12:15:55','business_id' => '2','title' => 'Herat Super Market','description' => 'Any you need, we have.','logo' => 'grocery-store_1616657916.jpg','contact' => '+937303030','location' => 'Herat-Chawk Shahre Now','status' => 'approved')
           ));
 
-        DB::table('items')->insert(array(
-            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1','status' => '1'),
-            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1','status' => '1'),
-            array('id' => '3','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '2','status' => '1'),
-            array('id' => '4','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '2','status' => '1'),
-            array('id' => '5','created_at' => NULL,'updated_at' => NULL,'branch_id' => '3','category_id' => '2','status' => '1'),
-            array('id' => '6','created_at' => NULL,'updated_at' => NULL,'branch_id' => '3','category_id' => '2','status' => '1'),
-            array('id' => '7','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1','status' => '1'),
-            array('id' => '8','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1','status' => '1'),
-            array('id' => '9','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '1','status' => '1'),
-            array('id' => '10','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '1','status' => '1'),
-            array('id' => '11','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '1','status' => '1')
+          DB::table('items')->insert(array(
+            array('id' => '1','branch_id' => '1','category_id' => '1','status' => '1'),
+            array('id' => '2','branch_id' => '1','category_id' => '1','status' => '1'),
+            array('id' => '3','branch_id' => '2','category_id' => '2','status' => '1'),
+            array('id' => '4','branch_id' => '2','category_id' => '2','status' => '1'),
+            array('id' => '5','branch_id' => '3','category_id' => '2','status' => '1'),
+            array('id' => '6','branch_id' => '3','category_id' => '2','status' => '1'),
+            array('id' => '7','branch_id' => '1','category_id' => '1','status' => '1'),
+            array('id' => '8','branch_id' => '1','category_id' => '1','status' => '1'),
+            array('id' => '9','branch_id' => '2','category_id' => '1','status' => '1'),
+            array('id' => '10','branch_id' => '2','category_id' => '1','status' => '1'),
+            array('id' => '11','branch_id' => '2','category_id' => '1','status' => '1')
 
           ));
 
@@ -211,8 +211,8 @@ class DatabaseSeeder extends Seeder
 ));
 
         DB::table('categories')->insert(array(
-            array('id' => '1','created_at' => '2021-03-01 10:40:55','updated_at' => '2021-03-01 10:40:55','title' => 'پیتزا','description' => NULL,'thumbnail' => 'noimage.jpg','status' => '1'),
-            array('id' => '2','created_at' => '2021-03-01 10:41:06','updated_at' => '2021-03-01 10:41:06','title' => 'عمومی','description' => NULL,'thumbnail' => 'noimage.jpg','status' => '1')
+            array('id' => '1','created_at' => '2021-03-01 10:40:55','updated_at' => '2021-03-01 10:40:55','title' => 'پیتزا', 'type' => 'main_food','description' => NULL,'thumbnail' => 'noimage.jpg','status' => '1'),
+            array('id' => '2','created_at' => '2021-03-01 10:41:06','updated_at' => '2021-03-01 10:41:06','title' => 'عمومی', 'type' => 'dessert','description' => NULL,'thumbnail' => 'noimage.jpg','status' => '1')
           ));
 
         DB::table('menus')->insert(array(
