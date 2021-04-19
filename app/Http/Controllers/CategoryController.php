@@ -54,7 +54,8 @@ class CategoryController extends Controller
     {
         $this->validate($request, [
             'title' => 'required',
-            'status' => 'required'
+            'status' => 'required',
+            'type' => 'required'
 		]);
         $requestData = $request->all();
         Category::create($requestData);
@@ -103,7 +104,8 @@ class CategoryController extends Controller
     {
         $this->validate($request, [
 			'status' => 'required',
-			'title' => 'required'
+            'title' => 'required',
+            'type' => 'required'
         ]);
 
         $category = Category::findOrFail($id);
@@ -112,6 +114,7 @@ class CategoryController extends Controller
             'title' => $request['title'],
             'description' => $request['description'],
             'status' => $request['status'],
+            'type' => $request['type'],
         ];
 
         if ($request->file('logo')) {
@@ -119,7 +122,6 @@ class CategoryController extends Controller
         } else {
             $update['thumbnail'] =  $category->thumbnail;
         }
-
 
         $category->update($update);
 
@@ -138,5 +140,9 @@ class CategoryController extends Controller
         Category::destroy($id);
 
         return redirect('category')->with('flash_message', 'Category deleted!');
+    }
+
+    public function loadCategory (Request $request) {
+        return  Category::select('id', 'title')->where('type', $request['type'])->get();
     }
 }

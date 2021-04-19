@@ -30,7 +30,7 @@ class Category extends Model
      *
      * @var array
      */
-    protected $fillable = ['title', 'description', 'thumbnail', 'status'];
+    protected $fillable = ['title', 'type', 'description', 'thumbnail', 'status'];
 
     /**
      * Change activity log event description

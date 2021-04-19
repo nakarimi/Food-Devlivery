@@ -34,7 +34,7 @@
 <tr>
     <th> {{ (get_role() == "restaurant") ? 'حالت' : 'Satus'}} </th>
     <td>         
-       <b>{{translate_status($order->status)}}</b>
+       <b>{{translate_term($order->status)}}</b>
     </td>
 </tr>
 

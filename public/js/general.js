@@ -18,7 +18,30 @@ jQuery(function ($) {
         	let url = '/updateItemStockStatus';
         	let message = 'موجودیت غذا تغیر داده شد.';
         	item_status_update_ajax_request(item_id, url, message);        	
-	    });
+        });
+        
+        // Item stock toggle for available or N/A.
+        $('#main_category_id').change(function() {
+            let type = $(this).val();
+            
+            $.ajax({
+                type: 'GET',
+                url:'/loadCategory',
+                data: {type:type},
+                success: function (res) {
+                    console.log('Cateogries are loaded2');
+                    console.log(res);
+                },
+                error: function (e) {
+                    alert("js error in order.js file.")
+                    
+                }
+            });
+
+        	 	
+        });
+
+        
 
 	    // Item stock toggle for available or N/A.
         $('.menuStockStatus').change(function() {
