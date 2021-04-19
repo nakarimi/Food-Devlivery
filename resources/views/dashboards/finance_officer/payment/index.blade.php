@@ -113,7 +113,7 @@ Payments
                   </div>
 
                @else 
-                  <p class="alert alert-warning col-md-12 text-center">Select a branch / Different branch </p>
+                  <p class="alert alert-warning col-md-12 text-center">Select a branch / Different branch / No Record Found. </p>
                @endif
             </div>
          </div>
