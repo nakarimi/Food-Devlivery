@@ -516,8 +516,8 @@ if (!function_exists('format_percentage')) {
 }
 
 // Format a percentage number to show on blade.
-if (!function_exists('translate_status')) {
-    function translate_status($status)
+if (!function_exists('translate_term')) {
+    function translate_term($status)
     {
         switch ($status) {
             case 'pending':
@@ -534,6 +534,12 @@ if (!function_exists('translate_status')) {
                 break;
             case 'completed':
                 return 'تکمیل شده';
+                break;
+            case 'main_food':
+                return 'غذای اصلی';
+                break;
+            case 'dessert':
+                return 'دسر';
                 break;
             default:
                 return 'لغو شده';

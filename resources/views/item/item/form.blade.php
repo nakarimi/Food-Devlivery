@@ -1,5 +1,5 @@
 <div class="form-row">
-   <div class="col">
+   <div class="col {{ (get_role() == "restaurant") ? 'd-none' : ''}}">
       <div class="form-group{{ $errors->has('branch_id') ? 'has-error' : ''}}">
          <label for="branch_id" class="control-label">{{ (get_role() == "restaurant") ? 'رستورانت' : 'Branch'}}</label>
          {{-- <input class="form-control" name="branch_id" type="number" id="branch_id" value="{{ $item->branch_id ?? ''}}" required> --}}
@@ -13,6 +13,17 @@
          ') !!}
       </div>
    </div>
+
+   <div class="col">
+      <div class="form-group{{ $errors->has('title') ? 'has-error' : ''}}">
+         <label for="title" class="control-label">{{ (get_role() == "restaurant") ? 'عنوان' : 'Title'}}</label>
+         <input class="form-control" name="title" type="text" id="title" value="{{ get_item_details($item, Session::get('itemType'))->title ?? ''}}" required>
+         {!! $errors->first('title', '
+         <p class="help-block">:message</p>
+         ') !!}
+      </div>
+   </div>
+
    <div class="col">
       <div class="form-group{{ $errors->has('status') ? 'has-error' : ''}}">
          <label for="status" class="control-label">{{ (get_role() == "restaurant") ? 'حالت' : 'Status'}}</label>
@@ -28,21 +39,14 @@
    </div>
 </div>
 <div class="form-row">
-   <div class="col">
-      <div class="form-group{{ $errors->has('title') ? 'has-error' : ''}}">
-         <label for="title" class="control-label">{{ (get_role() == "restaurant") ? 'عنوان' : 'Title'}}</label>
-         <input class="form-control" name="title" type="text" id="title" value="{{ get_item_details($item, Session::get('itemType'))->title ?? ''}}" required>
-         {!! $errors->first('title', '
-         <p class="help-block">:message</p>
-         ') !!}
-      </div>
-   </div>
+   
    <div class="col">
       <div class="form-group{{ $errors->has('code') ? 'has-error' : ''}}">
-         <label for="category_id" class="control-label">{{ (get_role() == "restaurant") ? 'کتگوری' : 'Category' }}</label>
-         <select class="custom-select mr-sm-2" name="category_id" id="category_id" required>
+         <label for="category_id" class="control-label">{{ (get_role() == "restaurant") ? 'کتگوری اصلی' : 'Main Category' }}</label>
+         <select class="custom-select mr-sm-2" name="main_category_id" id="main_category_id" required>
+            <option value="" >.....</option>
             @foreach($categories as $category)
-                <option value="{{ $category->id }}" @if( isset($item->category_id) && $category->id == $item->category_id) selected="selected" @endif >{{ $category->title }}</option>
+                <option value="{{ $category->type }}" @if( isset($item->type) && $category->type == $item->type) selected="selected" @endif >{{ translate_term($category->type) }}</option>
             @endforeach
          </select>
          {!! $errors->first('code', '
@@ -50,6 +54,19 @@
          ') !!}
       </div>
    </div>
+
+   <div class="col">
+      <div class="form-group{{ $errors->has('code') ? 'has-error' : ''}}">
+         <label for="category_id" class="control-label">{{ (get_role() == "restaurant") ? 'کتگوری' : 'Category' }}</label>
+         <select class="custom-select mr-sm-2" name="category_id" id="category_id" required>
+            <option value="" >کتگوری اصلی را انتخاب کنید</option>
+         </select>
+         {!! $errors->first('code', '
+         <p class="help-block">:message</p>
+         ') !!}
+      </div>
+   </div>
+   
 </div>
 <div class="form-row">
    <div class="col">

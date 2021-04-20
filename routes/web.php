@@ -82,6 +82,7 @@ Route::middleware(['restaurant'])->group(function () {
     Route::get('/pendingItems', 'App\Http\Controllers\ItemController@pendingItems')->name('items.pending');
     Route::get('/approvedItems', 'App\Http\Controllers\ItemController@approvedItems')->name('items.approved');
     Route::get('/rejectedItems', 'App\Http\Controllers\ItemController@rejectedItems')->name('items.rejected');
+    Route::get('/loadCategory', 'App\Http\Controllers\CategoryController@loadCategory');
     Route::post('updateItemStockStatus', 'App\Http\Controllers\ItemController@updateItemStockStatus')->name('updateItemStockStatus');
     Route::get('/payment-history', 'App\Http\Controllers\PaymentController@paymentHistory')->name('payment.history');
     Route::get('/active-payments', 'App\Http\Controllers\PaymentController@activePayments')->name('active.payments');
@@ -110,6 +111,8 @@ Route::middleware(['restaurant'])->group(function () {
     Route::post('blockCustomer', 'App\Http\Controllers\BlockCustomerController@store')->name('blockCustomer');
     Route::get('get_orders_by_status', 'App\Http\Controllers\DashboardsController@get_orders_by_status');
     Route::put('mark_read_notifications', [App\Http\Controllers\HomeController::class, 'markNotificationAsRead']);
+    Route::get('favorited-by', 'App\Http\Controllers\BranchController@favorited_by');
+    
 });
 
 /*

@@ -267,7 +267,7 @@ class ItemController extends Controller
      */
     public function dropdown_data($id = false, $userId = null) {
         // Pass categories for dropdown list form.
-        $data['categories'] = Category::all();
+        $data['categories'] = Category::select('type')->distinct()->get();
 
         // Pass branches for dropdown list form.
         if ($userId != null){
@@ -302,7 +302,10 @@ class ItemController extends Controller
         $item = $this->getItemsBasedOnStatus('pending');
         return view('item.item.index', compact('item'));
     }
-
+    
+    /**
+     * Load list of approved items.
+     */
     public function approvedItems()
     {
         Session::put('itemType', 'approved');
@@ -316,6 +319,9 @@ class ItemController extends Controller
         return view('item.item.index', compact('item'));
     }
 
+    /**
+     * The function approve changes of item
+     */
     public function approveItem(Request $request)
     {
         $detialId = $request->item_detail_id;

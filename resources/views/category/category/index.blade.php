@@ -31,6 +31,7 @@
                            <th>#</th>
                            <th>Thumbnail</th>
                            <th>Title</th>
+                           <th>Type</th>
                            <th>Description</th>
                            <th>Status</th>
                            <th>Actions</th>
@@ -46,6 +47,7 @@
                                 </h2>
                             </td>
                            <td>{{ $item->title }}</td>
+                           <td>{{ $item->type }}</td>
                            <td>{{ $item->description }}</td>
                            <td>
                             @if($item->status == 1)

@@ -13,7 +13,7 @@
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
                         <div class="card-header">
-                            <h4 class="card-title mb-0">سفارش  <b>[{{$order->id}} - {{ translate_status($order->status) }}]</b></h4>
+                            <h4 class="card-title mb-0">سفارش  <b>[{{$order->id}} - {{ translate_term($order->status) }}]</b></h4>
                         </div>
                         <a class="btn btn-warning" href="{{url('activeOrders')}}"><i class="la la-arrow-left"></i>Back</a>
                     </div>

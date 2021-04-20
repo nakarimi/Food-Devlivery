@@ -147,6 +147,14 @@ class DatabaseSeeder extends Seeder
                 'role_id' => 7,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+             ),
+             array (
+                'name'     => 'Customer2',
+                'email'    => 'customer2@pomtech.com',
+                'password' => bcrypt('customer2'),
+                'role_id' => 5,
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             )
 
         ]);
@@ -170,7 +178,7 @@ class DatabaseSeeder extends Seeder
             array('id' => '5','created_at' => NULL,'updated_at' => '2021-03-25 12:15:55','business_id' => '2','title' => 'Herat Super Market','description' => 'Any you need, we have.','logo' => 'grocery-store_1616657916.jpg','contact' => '+937303030','location' => 'Herat-Chawk Shahre Now','status' => 'approved')
           ));
 
-        DB::table('items')->insert(array(
+          DB::table('items')->insert(array(
             array('id' => '1','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1','status' => '1'),
             array('id' => '2','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1','status' => '1'),
             array('id' => '3','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '2','status' => '1'),
@@ -182,8 +190,8 @@ class DatabaseSeeder extends Seeder
             array('id' => '9','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '1','status' => '1'),
             array('id' => '10','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '1','status' => '1'),
             array('id' => '11','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '1','status' => '1')
-
           ));
+
 
         DB::table('item_details')->insert(array(
             array('id' => '1','created_at' => NULL,'updated_at' => NULL,'item_id' => '1','title' => 'Pizza','description' => 'پیتزا مخصوص با سوس','thumbnail' => 'noimage.jpg','price' => '50','package_price' => '0','unit' => 'piece','notes' => NULL,'details_status' => 'old'),
@@ -211,8 +219,8 @@ class DatabaseSeeder extends Seeder
 ));
 
         DB::table('categories')->insert(array(
-            array('id' => '1','created_at' => '2021-03-01 10:40:55','updated_at' => '2021-03-01 10:40:55','title' => 'پیتزا','description' => NULL,'thumbnail' => 'noimage.jpg','status' => '1'),
-            array('id' => '2','created_at' => '2021-03-01 10:41:06','updated_at' => '2021-03-01 10:41:06','title' => 'عمومی','description' => NULL,'thumbnail' => 'noimage.jpg','status' => '1')
+            array('id' => '1','created_at' => '2021-03-01 10:40:55','updated_at' => '2021-03-01 10:40:55','title' => 'پیتزا', 'type' => 'main_food','description' => NULL,'thumbnail' => 'noimage.jpg','status' => '1'),
+            array('id' => '2','created_at' => '2021-03-01 10:41:06','updated_at' => '2021-03-01 10:41:06','title' => 'عمومی', 'type' => 'dessert','description' => NULL,'thumbnail' => 'noimage.jpg','status' => '1')
           ));
 
         DB::table('menus')->insert(array(
