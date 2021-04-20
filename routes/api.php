@@ -33,7 +33,7 @@ Route::group([
     Route::post('/login', [JwtAuthController::class, 'login']);
     Route::post('/register', [JwtAuthController::class, 'register']);
     Route::post('/logout', [JwtAuthController::class, 'logout']);
-    Route::post('/refresh', [JwtAuthController::class, 'refresh']);    
+    // Route::post('/refresh', [JwtAuthController::class, 'refresh']);    
 });
 
 Route::group([
@@ -41,6 +41,7 @@ Route::group([
     'prefix' => 'customer'
 
 ], function ($router) {
+    // All the bellow routes need token authentication.
     Route::post('/subit-new-order', [CustomerPostRequests::class, 'submit_new_order']);
     Route::post('/update-order', [CustomerPostRequests::class, 'update_order']);
     Route::get('/branch-list', [CustomerGetRequests::class, 'branch_list']);
