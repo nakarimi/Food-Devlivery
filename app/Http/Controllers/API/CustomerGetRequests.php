@@ -10,17 +10,20 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Item;
 use App\Models\Category;
+use JWTAuth;
 
 class CustomerGetRequests extends Controller
 {
+
 	public function branch_list(Request $request) {
+        
         $type = $request['branch_type'];
         $all = $latest = $favorited = $customerID = false;
 
         switch ($type) {
             case 'favorited':
                 $favorited = true;
-                $customerID = $request['customer_id'];
+                $customerID = JWTAuth::user()->id; // Get current customer id from JWT Authentication.
                 break;
             case 'latest':
                 $latest = true;
@@ -32,6 +35,7 @@ class CustomerGetRequests extends Controller
     }
 
     public function get_list_restaurant_food_of_single_category(Request $request) {
+        
         $foods = Item::select('id')->with('approvedItemDetails:item_id,title,description,thumbnail')->where('items.branch_id', $request['restaurantID'])->where('items.category_id', $request['categoryID'])->get();
         return $foods;
     }
