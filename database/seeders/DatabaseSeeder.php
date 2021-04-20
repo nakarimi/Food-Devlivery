@@ -179,19 +179,19 @@ class DatabaseSeeder extends Seeder
           ));
 
           DB::table('items')->insert(array(
-            array('id' => '1','branch_id' => '1','category_id' => '1','status' => '1'),
-            array('id' => '2','branch_id' => '1','category_id' => '1','status' => '1'),
-            array('id' => '3','branch_id' => '2','category_id' => '2','status' => '1'),
-            array('id' => '4','branch_id' => '2','category_id' => '2','status' => '1'),
-            array('id' => '5','branch_id' => '3','category_id' => '2','status' => '1'),
-            array('id' => '6','branch_id' => '3','category_id' => '2','status' => '1'),
-            array('id' => '7','branch_id' => '1','category_id' => '1','status' => '1'),
-            array('id' => '8','branch_id' => '1','category_id' => '1','status' => '1'),
-            array('id' => '9','branch_id' => '2','category_id' => '1','status' => '1'),
-            array('id' => '10','branch_id' => '2','category_id' => '1','status' => '1'),
-            array('id' => '11','branch_id' => '2','category_id' => '1','status' => '1')
-
+            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1','status' => '1'),
+            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1','status' => '1'),
+            array('id' => '3','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '2','status' => '1'),
+            array('id' => '4','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '2','status' => '1'),
+            array('id' => '5','created_at' => NULL,'updated_at' => NULL,'branch_id' => '3','category_id' => '2','status' => '1'),
+            array('id' => '6','created_at' => NULL,'updated_at' => NULL,'branch_id' => '3','category_id' => '2','status' => '1'),
+            array('id' => '7','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1','status' => '1'),
+            array('id' => '8','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1','status' => '1'),
+            array('id' => '9','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '1','status' => '1'),
+            array('id' => '10','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '1','status' => '1'),
+            array('id' => '11','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '1','status' => '1')
           ));
+
 
         DB::table('item_details')->insert(array(
             array('id' => '1','created_at' => NULL,'updated_at' => NULL,'item_id' => '1','title' => 'Pizza','description' => 'پیتزا مخصوص با سوس','thumbnail' => 'noimage.jpg','price' => '50','package_price' => '0','unit' => 'piece','notes' => NULL,'details_status' => 'old'),
