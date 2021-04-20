@@ -49,13 +49,6 @@ Route::group([
     Route::get('/get-list-of-main-foods', [CustomerGetRequests::class, 'get_list_of_main_foods']);
     Route::get('/get-list-newest-restaurants', [CustomerGetRequests::class, 'get_list_of_newest_restaurants']);
     Route::get('/get-single-restaurant-profile', [CustomerGetRequests::class, 'get_single_restaurant_profile']);
-
-    
-
-    
-
-    
-    
     
 });
 

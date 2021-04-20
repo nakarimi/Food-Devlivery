@@ -147,6 +147,14 @@ class DatabaseSeeder extends Seeder
                 'role_id' => 7,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+             ),
+             array (
+                'name'     => 'Customer2',
+                'email'    => 'customer2@pomtech.com',
+                'password' => bcrypt('customer2'),
+                'role_id' => 5,
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             )
 
         ]);
