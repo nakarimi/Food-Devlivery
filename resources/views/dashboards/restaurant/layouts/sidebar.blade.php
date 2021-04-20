@@ -48,7 +48,7 @@
                     </ul>
                 </li>
                 <li @if (\Request::is('favorited-by')) class="active" @endif>
-                    <a href="{{url('/favorited-by')}}"><i class="la la-love"></i><span>مشتریان علاقمند</span></a>
+                    <a href="{{url('/favorited-by')}}"><i class="la la-heart"></i><span>مشتریان علاقمند</span></a>
                 </li>
 
 

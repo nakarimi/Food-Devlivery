@@ -15,11 +15,12 @@ class CustomerGetRequests extends Controller
 {
 	public function branch_list(Request $request) {
         $type = $request['branch_type'];
-        $all = $latest = $favorited = false;
+        $all = $latest = $favorited = $customerID = false;
 
         switch ($type) {
             case 'favorited':
                 $favorited = true;
+                $customerID = $request['customer_id'];
                 break;
             case 'latest':
                 $latest = true;
@@ -27,7 +28,7 @@ class CustomerGetRequests extends Controller
             default:
                 $all = true;
         }
-        return $this->get_list_restaurants($all, $latest, $favorited);
+        return $this->get_list_restaurants($all, $latest, $favorited, $customerID);
     }
 
     public function get_list_restaurant_food_of_single_category(Request $request) {
@@ -51,14 +52,14 @@ class CustomerGetRequests extends Controller
         return Branch::with('branchDetails')->where('id', $request['restaurantID'])->get();
     }
 
-    public function get_list_restaurants($all = false, $latest = false, $favorited = false) {
+    public function get_list_restaurants($all = false, $latest = false, $favorited = false, $customerID = false) {
         
         $branches = DB::table('branches')
         ->join('branche_main_info', 'branches.id', '=', 'branche_main_info.business_id')
         ->where('branche_main_info.status', 'approved');
 
         if ($favorited) {
-            $branches = $branches->join('favorited_restaurants', 'branches.id', '=', 'favorited_restaurants.branch_id');
+            $branches = $branches->join('favorited_restaurants', 'branches.id', '=', 'favorited_restaurants.branch_id')->where('favorited_restaurants.customer_id', $customerID);
         }
 
         $branches = $branches->select('branches.id', 'branche_main_info.title', 'branche_main_info.description', 'branche_main_info.logo')->get();

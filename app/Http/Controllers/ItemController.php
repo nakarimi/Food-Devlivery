@@ -402,19 +402,4 @@ class ItemController extends Controller
         return view('item.item.index', compact('item'));
     }
 
-    public function favorited_by () {
-        $branchID = get_current_branch_id();
-        $favorite_list = DB::table('favorited_restaurants')->where('branch_id', $branchID)->get();
-    
-        $list = [];
-        foreach($favorite_list as $favorite) {
-            $row = new \stdClass;
-            $row->id = $favorite->id;
-            $row->customer = User::where('id', $favorite->customer_id)->first()->name;
-            $list[] = $row;
-        }
-
-        return view('dashboards.restaurant.favorited_by.index', compact('list'));
-    }
-
 }
