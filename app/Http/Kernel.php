@@ -70,5 +70,6 @@ class Kernel extends HttpKernel
         'finance_officer' => \App\Http\Middleware\FinanceOfficer::class,
         'finance_manager' => \App\Http\Middleware\FinanceManager::class,
         'auth.jwt' => Tymon\JWTAuth\Middleware\GetUserFromToken::class,
+        'jwt.verify' => \App\Http\Middleware\JwtMiddleware::class,
     ];
 }

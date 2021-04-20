@@ -33,11 +33,11 @@ Route::group([
     Route::post('/login', [JwtAuthController::class, 'login']);
     Route::post('/register', [JwtAuthController::class, 'register']);
     Route::post('/logout', [JwtAuthController::class, 'logout']);
-    Route::post('/refresh', [JwtAuthController::class, 'refresh']);
+    Route::post('/refresh', [JwtAuthController::class, 'refresh']);    
 });
 
 Route::group([
-    'middleware' => 'api',
+    'middleware' => 'jwt.verify',
     'prefix' => 'customer'
 
 ], function ($router) {
@@ -67,3 +67,4 @@ Route::group([
 ], function ($router) {
     Route::get('/check', [BranchRequests::class, 'check']);    
 });
+

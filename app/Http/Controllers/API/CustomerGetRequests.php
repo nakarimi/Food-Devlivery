@@ -13,7 +13,9 @@ use App\Models\Category;
 
 class CustomerGetRequests extends Controller
 {
+
 	public function branch_list(Request $request) {
+
         $type = $request['branch_type'];
         $all = $latest = $favorited = $customerID = false;
 
