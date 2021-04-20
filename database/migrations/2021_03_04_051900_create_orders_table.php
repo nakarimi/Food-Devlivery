@@ -19,6 +19,7 @@ class CreateOrdersTable extends Migration
             $table->string('title')->nullable();
             $table->integer('branch_id')->nullable();
             $table->integer('customer_id')->nullable();
+            $table->integer('payment_id')->nullable();
             $table->tinyInteger('has_delivery')->nullable();
             $table->string('total')->nullable();
             $table->double('commission_value')->nullable();

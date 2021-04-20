@@ -65,6 +65,7 @@ Payments
                                        <input type="hidden" value="{{ Request::get('branch_id') }}" name="branch_id">
                                        <input type="hidden" value="{{auth()->user()->id}}" name="reciever_id">
                                        <input type="hidden" value="{{ $item->total_order }}" name="total_order">
+                                       <input type="hidden" value="{{ $item->orders }}" name="orders">
                                        <input type="hidden" value="{{ $item->total_general_commission }}"
                                           name="total_general_commission">
                                        <input type="hidden" value="{{ $item->total_delivery_commission }}"
@@ -77,7 +78,7 @@ Payments
 
                                        <button type="submit" class="btn btn-primary btn-sm"
                                           title="Once you activate, restaurants will be able to do the payments."
-                                          onclick="return confirm(&quot;Confirm approve?&quot;)">Acativate Payment</button>
+                                          onclick="return confirm(&quot;Confirm approve?&quot;)">Activate Payment</button>
                                     </form>
 
                                     @elseif($item->status == "activated")
@@ -94,7 +95,7 @@ Payments
                                           onclick="return confirm(&quot;Confirm approve?&quot;)"><span>Pending</span></button>
                                     </form>
                                     @else
-                                    <span class="badge badge-success" title="This means restaurant not paid yet.">Paid</span>
+                                       <span class="badge badge-{{ $item->status == 'approved' ? 'success': 'warning'}}" title="{{ $item->status == 'approved' ? 'Payment approved by Finance Manager' : 'Payment paid by resaurant to the Finance Officer' }}">{{ $item->status == 'approved' ? 'Approved' : 'Recieved' }}</span>
                                     @endif
 
                                  </td>
