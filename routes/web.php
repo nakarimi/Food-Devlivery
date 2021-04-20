@@ -110,6 +110,8 @@ Route::middleware(['restaurant'])->group(function () {
     Route::post('blockCustomer', 'App\Http\Controllers\BlockCustomerController@store')->name('blockCustomer');
     Route::get('get_orders_by_status', 'App\Http\Controllers\DashboardsController@get_orders_by_status');
     Route::put('mark_read_notifications', [App\Http\Controllers\HomeController::class, 'markNotificationAsRead']);
+    Route::get('favorited-by', 'App\Http\Controllers\ItemController@favorited_by');
+    
 });
 
 /*

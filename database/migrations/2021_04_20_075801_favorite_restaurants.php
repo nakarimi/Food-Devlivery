@@ -13,7 +13,7 @@ class FavoriteRestaurants extends Migration
      */
     public function up()
     {
-        Schema::create('favorited_restaurant', function (Blueprint $table) {
+        Schema::create('favorited_restaurants', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
             $table->integer('customer_id');
