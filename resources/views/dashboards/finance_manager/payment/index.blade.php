@@ -12,24 +12,18 @@ Drivers Payments History
                <a href="{{ route('driver.active_payments')}}" class="btn btn-success btn-sm" title="Add New Payment">
                   <i class="fa fa-plus" aria-hidden="true"></i> Add New
                </a>
-               <form method="GET" action="{{ route('driverPaymentHistory') }}" accept-charset="UTF-8"
-                  class="form-inline my-2 my-lg-0 float-right" role="search">
-                  <select class="custom-select form-control mr-sm-2" name="driver_id" id="driver_id">
-                     <option value="" >Choose Driver</option>
-                     @foreach ($drivers as $driver)
-                        <option value="{{ $driver->id }}" >{{ $driver->title }}</option>
-                     @endforeach
-                 </select>
 
-                  <div class="input-group">
-                     <input type="text" value="" name="date-range" class="daterange form-control">
-                  </div>
-                  <button class="btn btn-secondary" type="submit">
-                     <i class="fa fa-search"></i>
-                  </button>
-               </form>
-               <br />
-               <br />
+               {{-- Table filter --}}
+               @include('dashboards.shared.filter', [
+                  'route_name' => 'driverPaymentHistory',
+                  'select' => [
+                     'title' => 'Choose Driver',
+                     'field_name' => 'driver_id',
+                     'data' => $drivers,
+                     'label_name' => 'title',
+                  ]
+               ])
+
                <div class="table-responsive">
                   <table class="table">
                      <thead>

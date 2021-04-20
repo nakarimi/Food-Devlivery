@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+use App\Http\Middleware\Restaurant;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use App\Models\Branch;
@@ -55,7 +55,7 @@ class PaymentController extends Controller
                 $payments[] = $this->calculate_orders_commission($from, $to->format('Y-m-d'), $request['branch_id']);
             }
         }
-        
+
         // Remove empty indexes.
         $payments = array_filter($payments);
         // return $payments;
@@ -221,7 +221,7 @@ class PaymentController extends Controller
      * @param  string  $status
      *  This is status of payment, like paid, activated or so.
      */
-    public function get_payments($request, $condition, $status, $view = null)
+    public function get_payments($request, $condition, $status, $view = null, $viewData = null)
     {
 
         $perPage = 10;
@@ -233,17 +233,16 @@ class PaymentController extends Controller
             // If current user is restaurant then laod this view.
             if (get_current_branch_id()) {
                 // Since we need correct order, so we need to load them separatly.
-                $payments =  Payment::where('branch_id', $branchID)->where('status', $condition, $status)->paginate($perPage);
+                $payments = Payment::where('branch_id', $branchID)->where('status', $condition, $status)->paginate($perPage);
                 return view('dashboards.restaurant.payment.index', compact('payments'));
             }
             $branchPayments = Payment::where('branch_id', $branchID)->where('status', $condition, $status)->latest()->paginate($perPage);
         }
 
         // For finance officer if payment was already filtered by branch, so not load all.
-        if($condition == 'IN'){
+        if ($condition == 'IN') {
             $payments = Payment::whereIn('status', $status)->latest()->paginate($perPage);
-
-        }else{
+        } else {
             $payments = Payment::where('status', $condition, $status)->latest()->paginate($perPage);
         }
 
@@ -258,7 +257,8 @@ class PaymentController extends Controller
 
         // Use different view for different users.
         if ($view) {
-            return view($view, compact('payments', 'activeBranches'));
+            // return $viewData['restaurants'];
+            return view($view, compact('payments', 'activeBranches', 'viewData'));
         }
         return view('dashboards.finance_officer.payment.index', compact('payments', 'activeBranches'));
     }
@@ -266,7 +266,8 @@ class PaymentController extends Controller
     public function restaurantPendingPayments(Request $request)
     {
         $view = 'dashboards.finance_manager.payment.restaurant.pending_payments';
-        return $this->get_payments($request, '=', 'done', $view);
+        $viewData['restaurants'] = DB::table('users')->whereIn('id', DB::table('branches')->get()->pluck('user_id'))->get();
+        return $this->get_payments($request, '=', 'done', $view, $viewData);
     }
 
     /**
@@ -289,6 +290,7 @@ class PaymentController extends Controller
     public function restaurantsPaymentHistory(Request $request)
     {
         $view = 'dashboards.finance_manager.payment.restaurant.pending_payments';
-        return $this->get_payments($request, '=', 'approved', $view);
+        $viewData['restaurants'] = DB::table('users')->whereIn('id', DB::table('branches')->get()->pluck('user_id'))->get()->toArray();
+        return $this->get_payments($request, '=', 'approved', $view, $viewData);
     }
 }
