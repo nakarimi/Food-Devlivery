@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\DashboardsController;
 
 /*
@@ -22,7 +23,9 @@ Auth::routes([
 
 // For Logged in users.
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', function () { return redirect('/login');});
+    Route::get('/', function () {
+        return redirect('/login');
+    });
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 });
 
@@ -58,15 +61,13 @@ Route::middleware(['admin'])->group(function () {
     Route::put('/activateUser/{id}', 'App\Http\Controllers\Admin\UsersController@activateUser');
     Route::post('approveLock/{id}', 'App\Http\Controllers\BlockCustomerController@approveLock');
     Route::resource('blockedCustomer', 'App\Http\Controllers\BlockCustomerController');
-    Route::post('/backup-create','App\Http\Controllers\BackupController@create')->name('get-backup');
-    Route::get('/backups','App\Http\Controllers\BackupController@index')->name('backups');
+    Route::post('/backup-create', 'App\Http\Controllers\BackupController@create')->name('get-backup');
+    Route::get('/backups', 'App\Http\Controllers\BackupController@index')->name('backups');
     Route::delete('/delete-backup/{name}', 'App\Http\Controllers\BackupController@destroy')->name('backup.destroy');
     Route::post('/download-backup', 'App\Http\Controllers\BackupController@downloadBackup')->name('backup.download');
     Route::post('/approvePayment', 'App\Http\Controllers\PaymentController@approvePayment');
     Route::post('/rejectPayment', 'App\Http\Controllers\PaymentController@rejectPayment');
     Route::post('followupOrder', 'App\Http\Controllers\OrdersController@followupOrder');
-    
-
 });
 
 /*
@@ -151,9 +152,8 @@ Route::middleware(['finance_officer'])->group(function () {
     Route::get('pendingPayments', 'App\Http\Controllers\PaymentController@pendingPayments')->name('payments.pending');
     Route::post('/activate_payment', 'App\Http\Controllers\PaymentController@activate_payment');
     Route::post('/recieve_payment', 'App\Http\Controllers\PaymentController@recievePayment');
-    Route::get('activePayments', 'App\Http\Controllers\PaymentController@activePayments')->name('payments.active');
+    Route::get('activePayments', 'App\Http\Controllers\PaymentController@paidPayments')->name('payments.active');
     Route::get('paymentHistory', 'App\Http\Controllers\PaymentController@paymentHistory')->name('payments.history');
-
 });
 
 /*
@@ -163,10 +163,12 @@ Route::middleware(['finance_officer'])->group(function () {
 */
 Route::middleware(['finance_manager'])->group(function () {
     Route::get('finance_manager/dashboard', [DashboardsController::class, 'financeManagerDashboard'])->name('finance_manager.dashboard');
-    Route::get('active_payments', [DriverController::class, 'activePayments'])->name('driver.active_payments');
-    Route::post('driver_payment_recived/{driver}/{orders}/{total}', [DriverController::class, 'driverPaymentRecived'])->name('driver.payments', );
+    Route::post('driver_payment_recived/{driver}/{orders}/{total}', [DriverController::class, 'driverPaymentRecived'])->name('driver.payments',);
     Route::resource('driver', 'App\Http\Controllers\DriverController');
-    // Route::get('drivers', [DriverController::class, 'allDrivers'])->name('drivers');
-    Route::get('drivers_payment_history', [DriverController::class, 'driverPaymentHistory'])->name('driverPaymentHistory', );
-});
+    Route::get('active_payments', [DriverController::class, 'activePayments'])->name('driver.active_payments');
+    Route::get('drivers_payment_history', [DriverController::class, 'driverPaymentHistory'])->name('driverPaymentHistory',);
 
+    Route::get('restaurants_pending_payments', [PaymentController::class, 'restaurantPendingPayments'])->name('restaurantPendingPayments');
+    Route::get('restaurants_payment_history', [PaymentController::class, 'restaurantsPaymentHistory'])->name('restaurantPaymentHistory');
+    Route::post('approve_payment', [PaymentController::class, 'finalApprovePayment'])->name('approvePayment');
+});
