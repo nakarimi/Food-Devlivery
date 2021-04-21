@@ -55,28 +55,24 @@
                                                     </span>
 
                                                 @else
-                                                <select class="custom-select mr-sm-2" order_id={{$item->id}} name="driver_id" id="driver_id" customer_id="{{ $item->customer_id }}" required>
+                                                <select class="custom-select mr-sm-2 driver_select" order_id={{$item->id}} name="driver_id" id="driver_id" customer_id="{{ $item->customer_id }}" required>
+                                                    
+                                                    @if(count($drivers) > 0)
+                                                        <option value="" disabled selected >Selece Driver</option>
+                                                    @endif
 
-                                                    @php $noFreeDriver = true; $isFirstFree = true; @endphp
-
-                                                    @foreach($drivers as $driver)
-
+                                                    @forelse($drivers as $driver)
+                                                         
                                                         @if($driver->status == 'free')
-
-                                                            @if($isFirstFree)  <option value="" disabled selected >Selece Driver</option> @endif
-
-                                                            @php $noFreeDriver = false; $isFirstFree = false; @endphp
-
-                                                            <option value="{{ $driver->id }}" >{{ $driver->title }}</option>
-
-
+                                                            <option value="{{ $driver->id }}" status="free">{{ $driver->title }} </option>
+                                                        @elseif($driver->status == 'busy')
+                                                            <option value="{{ $driver->id }}" status="busy">{{ $driver->title }} </option>
                                                         @endif
 
-                                                    @endforeach
-
-                                                    @if($noFreeDriver)
+                                                    @empty
                                                         <option value="" disabled selected >Driver N/A</option>
-                                                    @endif
+                                                    @endforelse
+
                                                 </select>
                                                 @endif
                                             @endif

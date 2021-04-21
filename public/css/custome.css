@@ -191,3 +191,20 @@ td.hasDriver select {
 .payment_pending_btn:hover:before {
   content:"Approve!";
 }
+
+.driver_select option[status="free"] {
+  background-color: #55ce63;
+  border: 1px solid #55ce63;
+  color: #fff;
+}
+
+.driver_select option[status="busy"] {
+  background: #ffbc34;
+  border: 1px solid #ffbc34;
+}
+
+/*.driver_select option[value="1"] {
+  background-color: #55ce63;
+  border: 1px solid #55ce63;
+  color: #fff;
+}*/

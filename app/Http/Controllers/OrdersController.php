@@ -160,7 +160,7 @@ class OrdersController extends Controller
             break;
             case 'completed' :
                 $field = 'completed_time';
-                $this->update_driver_status($id, 'free');
+                $this->update_driver_status($id, 'free'); 
             break;
             default:
                 $field = 'caceled_time';
@@ -219,7 +219,7 @@ class OrdersController extends Controller
         $customer_id = $request['customer_id'];
         $userId = \auth()->user()->id;
         DeliveryDetails::where('order_id', $id)->update(['driver_id' => $driver_id]);
-        Driver::where('id', $driver_id)->update(['status' => 'busy']);
+        $this->update_driver_status($id, 'busy');
         event(new \App\Events\UpdateEvent('Driver assigned!', $id));
         send_notification([$driver_id], $userId, 'New Order has been assigned to you');
 
@@ -268,6 +268,7 @@ class OrdersController extends Controller
         if ($order->has_delivery != 0 && isset($order->deliveryDetails->driver)) {
             $driver_id = $order->deliveryDetails->driver->id;
             // Update status of driver.
+            // @TODO, here we need to check if driver has any other order which is not completed yet, since every driver is handling multi order, so only by completing one order it does not mean he is free.
             $driver = Driver::findOrFail($driver_id);
             $driver->status = $status;
             $driver->save();
