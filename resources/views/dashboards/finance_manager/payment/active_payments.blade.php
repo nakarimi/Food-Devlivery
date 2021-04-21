@@ -80,6 +80,7 @@
               <div class="pagination-wrapper"> {!! $drivers->appends(['search' => Request::get('search')])->render() !!} </div>
             </div>
           @else
+            <br>
             <div class="alert alert-warning" role="alert">
               Driver with payment not found!
             </div>
