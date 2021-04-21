@@ -88,27 +88,7 @@
 <!-- Custom JS -->
 <script src="{{asset('js/app.js')}}"></script>
 
-<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-<script>
-    // Enable pusher logging - don't include this in production
-    Pusher.logToConsole = true;
-
-    var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
-        cluster: '{{ env('PUSHER_APP_CLUSTER') }}'
-    });
-
-    var channel = pusher.subscribe('food-app-notification');
-    channel.bind('notification-event', function(data) {
-        if (data['message'] === "Notification") {
-            if (JSON.stringify(data['message']) == '"New Order Recieved!"') {
-                show_message(['سفارش جدید اضافه شد.', 'success']);
-                // console.log("New order arrived!");
-                playSound();
-            }
-           Livewire.emit('refreshNotifications');
-        }
-    });
-</script>
+@include('layouts.pusher_script')
 
 <!-- Specific js of pages -->
 @yield('scripts')
