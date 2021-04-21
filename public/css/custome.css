@@ -179,6 +179,12 @@ td.hasDriver select {
   display: none;
 }
 
+.pendingPayments table tr:not(:first-child) form button[type="submit"] {
+  pointer-events: none;
+  background-color: gray;
+  border: 1px solid gray;
+} 
+
 .payment_pending_btn:hover span {
   display:none
 }
