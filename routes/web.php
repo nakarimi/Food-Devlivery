@@ -152,7 +152,7 @@ Route::middleware(['finance_officer'])->group(function () {
     Route::get('pendingPayments', 'App\Http\Controllers\PaymentController@pendingPayments')->name('payments.pending');
     Route::post('/activate_payment', 'App\Http\Controllers\PaymentController@activate_payment');
     Route::post('/recieve_payment', 'App\Http\Controllers\PaymentController@recievePayment');
-    Route::get('activePayments', 'App\Http\Controllers\PaymentController@paidPayments')->name('payments.active');
+    Route::get('activePayments', 'App\Http\Controllers\PaymentController@activePayments')->name('payments.active');
     Route::get('paymentHistory', 'App\Http\Controllers\PaymentController@paymentHistory')->name('payments.history');
 });
 
