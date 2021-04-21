@@ -241,10 +241,21 @@ class PaymentController extends Controller
 
         // For finance officer if payment was already filtered by branch, so not load all.
         if ($condition == 'IN') {
-            $payments = Payment::whereIn('status', $status)->latest()->paginate($perPage);
+            $payments = Payment::whereIn('status', $status);
         } else {
-            $payments = Payment::where('status', $condition, $status)->latest()->paginate($perPage);
+            $payments = Payment::where('status', $condition, $status);
         }
+
+        // Apply filter on the query of payment if filter data exist
+        if ($viewData['filter']) {
+            if (isset($viewData['filter']['restaurant_id'])) {
+                $payments->where('branch_id', DB::table('branches')->where('user_id', $viewData['filter']['restaurant_id'])->first()->id);
+            }
+            if (isset($viewData['filter']['date'])) {
+                $payments->whereBetween('created_at', $viewData['filter']['date']);
+            }
+        }
+        $payments = $payments->latest()->paginate($perPage);
 
         $active_branches = [];
         foreach ($payments as $payment) {
@@ -266,7 +277,8 @@ class PaymentController extends Controller
     public function restaurantPendingPayments(Request $request)
     {
         $view = 'dashboards.finance_manager.payment.restaurant.pending_payments';
-        $viewData['restaurants'] = DB::table('users')->whereIn('id', DB::table('branches')->get()->pluck('user_id'))->get();
+        $viewData = $this->resturantFilter($request);
+        $viewData['history'] = false;
         return $this->get_payments($request, '=', 'done', $view, $viewData);
     }
 
@@ -282,7 +294,7 @@ class PaymentController extends Controller
 
         // Send Notification to restaurant.
         $payment = Payment::find($paymentId);
-        $notifyUser = Branch::find($payment->branch_id)->user_id;
+        $notifyUser = $payment->reciever_id;
         send_notification([$notifyUser], $payment->reciever_id, 'پرداخت تائید شد');
 
         return redirect()->back()->with('flash_message', 'Payment Approved!');
@@ -290,7 +302,20 @@ class PaymentController extends Controller
     public function restaurantsPaymentHistory(Request $request)
     {
         $view = 'dashboards.finance_manager.payment.restaurant.pending_payments';
-        $viewData['restaurants'] = DB::table('users')->whereIn('id', DB::table('branches')->get()->pluck('user_id'))->get()->toArray();
+        $viewData = $this->resturantFilter($request);
+        $viewData['history'] = true;
         return $this->get_payments($request, '=', 'approved', $view, $viewData);
+    }
+
+    public function resturantFilter($request){
+        $viewData['restaurants'] = DB::table('users')->whereIn('id', DB::table('branches')->get()->pluck('user_id'))->get()->toArray();
+        $viewData['filter'] = ['restaurant_id' => $request->restaurant_id];
+        if ($request->get('date-range') && $request->get('date-range') != 'Choose Date') {
+            $dates = explode(" - ", $request->get('date-range'));
+            $dates[0] = date('Y-m-d', strtotime($dates[0]));
+            $dates[1] = date('Y-m-d', strtotime($dates[1]));
+            $viewData['filter']['date'] = $dates;
+        }
+        return $viewData;
     }
 }

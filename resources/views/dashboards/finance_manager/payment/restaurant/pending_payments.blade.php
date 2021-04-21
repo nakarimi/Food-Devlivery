@@ -13,7 +13,7 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          @if (count($payments) > 0 && $payments[0]->status == 'approved')
+          @if ($viewData['history'])
             Restaurants Payment History
           @else
             Restaurants Pending Payments
@@ -22,9 +22,9 @@
         <div class="card-body">
           {{-- Table filter --}}
           @include('dashboards.shared.filter', [
-            'route_name' => 'restaurantPaymentHistory',
+            'route_name' => ($viewData['history']) ? 'restaurantPaymentHistory' : 'restaurantPendingPayments',
             'select' => [
-                'title' => 'Choose Restaurant',
+                'title' => 'All Restaurants',
                 'field_name' => 'restaurant_id',
                 'data' => $viewData['restaurants'],
                 'label_name' => 'name',
