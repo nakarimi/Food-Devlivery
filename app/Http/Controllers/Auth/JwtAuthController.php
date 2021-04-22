@@ -42,7 +42,6 @@ class JwtAuthController extends Controller
  
             }   
  
- 
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
@@ -64,7 +63,7 @@ class JwtAuthController extends Controller
         $input = $request->only('email', 'password');
         $jwt_token = null;
   
-        if (!$jwt_token = JWTAuth::attempt($input, ['exp' => Carbon::now()->addDays(1)->timestamp])) {
+        if (!$jwt_token = JWTAuth::attempt($input)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid Email or Password',
