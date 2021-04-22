@@ -131,8 +131,6 @@
    ') !!}
 </div> --}}
 
-
-
    @foreach ($restaurant_items as $item)
       <div class="float-left col-sm-3 p-2">
          <div class="d-flex justify-content-between bg-primary rounded p-2">
