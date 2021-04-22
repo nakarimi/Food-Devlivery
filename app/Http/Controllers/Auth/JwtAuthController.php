@@ -97,5 +97,18 @@ class JwtAuthController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+     /**
+     * Refresh a token.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function refresh()
+    {
+        return response()->json([
+            'success_token_referesh' => true,
+            'token' => auth()->refresh(),
+        ]);
+    }
     
 }
