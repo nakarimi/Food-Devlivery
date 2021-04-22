@@ -58,7 +58,6 @@ class PaymentController extends Controller
 
         // Remove empty indexes.
         $payments = array_filter($payments);
-        // return $payments;
 
         return view('dashboards.finance_officer.payment.index', compact('payments', 'activeBranches'));
     }
@@ -70,12 +69,12 @@ class PaymentController extends Controller
      */
     public function activePayments(Request $request)
     {
-        return $this->get_payments($request, '!=', 'done');
+        return $this->get_payments($request, 'IN', ['paid', 'activated']);
     }
-    // public function paidPayments(Request $request)
-    // {
-    //     return $this->get_payments($request, '=', 'paid');
-    // }
+    public function paidPayments(Request $request)
+    {
+        return $this->get_payments($request, '=', 'paid');
+    }
 
     /**
      * Finance officer activate payment, to allow restaurnats pay. Technically we store payment with default status of activated in the table.
@@ -228,34 +227,32 @@ class PaymentController extends Controller
         $branchPayments = NULL;
         $branchID = isset($request->branch_id) ? $request->branch_id : get_current_branch_id();
 
+        // For finance officer if payment was already filtered by branch, so not load all.
+        if ($condition == 'IN') {
+            $payment_query = Payment::whereIn('status', $status);
+        } else {
+            $payment_query = Payment::where('status', $condition, $status);
+        }
         if (!is_null($branchID)) {
-
             // If current user is restaurant then laod this view.
             if (get_current_branch_id()) {
                 // Since we need correct order, so we need to load them separatly.
-                $payments = Payment::where('branch_id', $branchID)->where('status', $condition, $status)->paginate($perPage);
+                $payments = $payment_query->where('branch_id', $branchID)->paginate($perPage);
                 return view('dashboards.restaurant.payment.index', compact('payments'));
             }
-            $branchPayments = Payment::where('branch_id', $branchID)->where('status', $condition, $status)->latest()->paginate($perPage);
-        }
-
-        // For finance officer if payment was already filtered by branch, so not load all.
-        if ($condition == 'IN') {
-            $payments = Payment::whereIn('status', $status);
-        } else {
-            $payments = Payment::where('status', $condition, $status);
+            $branchPayments = $payment_query->where('branch_id', $branchID)->latest()->paginate($perPage);
         }
 
         // Apply filter on the query of payment if filter data exist
-        if ($viewData['filter']) {
+        if (isset($viewData) && $viewData['filter']) {
             if (isset($viewData['filter']['restaurant_id'])) {
-                $payments->where('branch_id', DB::table('branches')->where('user_id', $viewData['filter']['restaurant_id'])->first()->id);
+                $payment_query->where('branch_id', DB::table('branches')->where('user_id', $viewData['filter']['restaurant_id'])->first()->id);
             }
             if (isset($viewData['filter']['date'])) {
-                $payments->whereBetween('created_at', $viewData['filter']['date']);
+                $payment_query->whereBetween('created_at', $viewData['filter']['date']);
             }
         }
-        $payments = $payments->latest()->paginate($perPage);
+        $payments = $payment_query->latest()->paginate($perPage);
 
         $active_branches = [];
         foreach ($payments as $payment) {
@@ -307,7 +304,8 @@ class PaymentController extends Controller
         return $this->get_payments($request, '=', 'approved', $view, $viewData);
     }
 
-    public function resturantFilter($request){
+    public function resturantFilter($request)
+    {
         $viewData['restaurants'] = DB::table('users')->whereIn('id', DB::table('branches')->get()->pluck('user_id'))->get()->toArray();
         $viewData['filter'] = ['restaurant_id' => $request->restaurant_id];
         if ($request->get('date-range') && $request->get('date-range') != 'Choose Date') {
