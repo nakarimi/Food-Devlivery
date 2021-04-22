@@ -9,6 +9,7 @@ use App\Models\Branch;
 use App\Models\Driver;
 use App\Models\Payment;
 use App\Models\Setting;
+use App\Models\DeliveryDetails;
 use Illuminate\Support\Facades\DB;
 
 if (!function_exists('save_file')) {
@@ -423,20 +424,27 @@ if (!function_exists('update_order')) {
 
                 $order = Order::findOrFail($id);
 
-
+                // Calculate the total price of items for this order.
+                $total_price = 0;
+                $items = json_decode($requestData['contents']);
+                foreach ($items->contents as $key => $item) {
+                    $item = reset($item); // this will return object contains just count, price, item_id
+                    $total_price += $item->count * $item->price;
+                }
+                
                 $orderData = [
                     'branch_id' => $requestData['branch_id'],
                     'customer_id' => $requestData['customer_id'],
                     'has_delivery' => $requestData['has_delivery'],
                     'title' => $requestData['title'],
                     // 'commission_value' => $requestData['commission_value'],
+                    'total' => $total_price,
                     'status' => $requestData['status'],
                     'note' => $requestData['note'],
                     'reciever_phone' => $requestData['reciever_phone'],
                     'contents' => $requestData['contents'],
                     'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 ];
-
                 $order->update($orderData);
 
                 if ($deliver_update) {
@@ -454,9 +462,7 @@ if (!function_exists('update_order')) {
             dd($th);
         }
 
-
-
-        event(new \App\Events\UpdateEvent('Order Updated!'));
+        event(new \App\Events\UpdateEvent('Order Updated!', $id));
         return redirect()->back()->with('flash_message', 'Order updated!');
     }
 }
