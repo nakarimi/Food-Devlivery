@@ -71,10 +71,6 @@ class PaymentController extends Controller
     {
         return $this->get_payments($request, 'IN', ['paid', 'activated']);
     }
-    public function paidPayments(Request $request)
-    {
-        return $this->get_payments($request, '=', 'paid');
-    }
 
     /**
      * Finance officer activate payment, to allow restaurnats pay. Technically we store payment with default status of activated in the table.
