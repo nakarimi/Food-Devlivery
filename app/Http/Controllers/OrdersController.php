@@ -59,8 +59,10 @@ class OrdersController extends Controller
     {
         abortUrlFor("restaurant");
         $data = $this->dropdown_data($id);
+        $data['restaurant_items'] = Item::where('branch_id', $data['order']->branch_id)->with('approvedItemDetails')->get();
         return view('order.orders.edit', $data);
     }
+
 
     /**
      * Update the specified resource in storage.
