@@ -52,13 +52,27 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+
         $this->validate($request, [
             'title' => 'required',
             'status' => 'required',
             'type' => 'required'
-		]);
+        ]);
+        
         $requestData = $request->all();
-        Category::create($requestData);
+
+        $data = [
+            'title' => $requestData['title'],
+            'description' => $requestData['description'],
+            'status' => $requestData['status'],
+            'type' => $requestData['type'],
+        ];
+
+        if ($requestData->file('logo')) {
+            $update['thumbnail'] = save_file($request);
+        } 
+
+        Category::create($data);
 
         return redirect('category')->with('flash_message', 'Category added!');
     }
@@ -117,7 +131,7 @@ class CategoryController extends Controller
             'type' => $request['type'],
         ];
 
-        if ($request->file('logo')) {
+        if ($request->file('logo')) {            
             $update['thumbnail'] = save_file($request);
         } else {
             $update['thumbnail'] =  $category->thumbnail;
