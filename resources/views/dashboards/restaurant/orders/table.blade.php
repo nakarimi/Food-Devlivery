@@ -60,7 +60,7 @@
                     @endif
                 </td>
                 <td><a href="{{ url('/orders/' . $item->id) }}" title="View Order"><button
-                            class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
+                            class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
                 </td>
             </tr>
         @endforeach

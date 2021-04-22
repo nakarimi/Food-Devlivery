@@ -335,7 +335,7 @@ if (!function_exists('show_menu_itmes')) {
 
 // General function to get orders, based on the provided params.
 if (!function_exists('get_orders')) {
-    function get_orders($type, $request, $realTime = false, $keyword = null)
+    function get_orders($type, $request, $realTime = false, $keyword = null, $code = null)
     {
         // Order lists based on different status. active([Pending, Accept, Processing, Delivery]) and history ([completed, Canceled])
         $status = [];
@@ -369,18 +369,26 @@ if (!function_exists('get_orders')) {
 
         // For real time data, datatable search is enogh.
         $keyword = ($request) ? $request->get('search') : $keyword;
+        $keyword = (!$keyword && isset($_GET['search'])) ? $_GET['search'] : $keyword;
+        $code = (isset($_GET['code'])) ? $_GET['code'] : $code;
+
+        $order_query = Order::whereIn('status', $status);
+        if ($code) {
+            $order_query = $order_query->where('id', $code);
+        }
         if ($type != 'waiting-orders' && !empty($keyword)) {
-            $orders = Order::whereIn('status', $status)->wherehas(
+            $orders = $order_query->wherehas(
                 'branchDetails',
                 function ($query) use ($keyword) {
                     $query->where('title', 'LIKE', "%$keyword%");
                 }
-            )->orwhere('title', 'LIKE', "%$keyword%")->whereIn('status', $status)
+            )->orwhere('title', 'LIKE', "%$keyword%")
+                // ->whereIn('status', $status)
                 ->latest()->paginate($perPage);
         } elseif ($type == 'waiting-orders') {
-            $orders = get_waiting_orders($keyword, $perPage, false);
+            $orders = get_waiting_orders($keyword, $perPage, false, $code);
         } else {
-            $orders = Order::whereIn('status', $status)->latest()->paginate($perPage);
+            $orders = $order_query->latest()->paginate($perPage);
         }
 
         // Real time template are in livewire dir.
@@ -431,7 +439,7 @@ if (!function_exists('update_order')) {
                     $item = reset($item); // this will return object contains just count, price, item_id
                     $total_price += $item->count * $item->price;
                 }
-                
+
                 $orderData = [
                     'branch_id' => $requestData['branch_id'],
                     'customer_id' => $requestData['customer_id'],
@@ -610,26 +618,31 @@ if (!function_exists('get_customer_status')) {
 
 // Update table column with boolean values.
 if (!function_exists('get_waiting_orders')) {
-    function get_waiting_orders($keyword, $perPage, $count = false)
+    function get_waiting_orders($keyword, $perPage, $count = false, $code = null)
     {
         // Get orders from 10 minutes ago.
         $timeOffSet = Carbon::now()->subMinutes(1)->toDateTimeString();
-
-        $orders = Order::where(function ($query) use ($timeOffSet, $keyword) {
+        $order_query = Order::latest();
+        if ($code) {
+            $order_query = $order_query->where('id', $code);
+        }
+        $order_query->where(function ($query) use ($timeOffSet, $keyword) {
             // Get orders that created 2 mins ago and still not responsed by restaurant.
             $query->where('status', 'pending')->where('orders.created_at', '<', $timeOffSet)->whereHas('branchDetails', function ($sub) use ($keyword) {
                 $sub->where('title', 'LIKE', "%" . $keyword . "%");
             });
-        })->orwhere(function ($query) use ($keyword) {
-            // Get orders that are assigned to company to delivery and yet have no driver assigned to them.
-            $query->whereHas('deliveryDetails', function ($subquery) {
-                $subquery->where('delivery_type', 'company')->whereNull('driver_id');
-            })->where('status', '<>', 'reject')->whereHas('branchDetails', function ($sub) use ($keyword) {
-                $sub->where('title', 'LIKE', "%" . $keyword . "%");
+        });
+        if (!$code) {
+            $order_query->orwhere(function ($query) use ($keyword) {
+                // Get orders that are assigned to company to delivery and yet have no driver assigned to them.
+                $query->whereHas('deliveryDetails', function ($subquery) {
+                    $subquery->where('delivery_type', 'company')->whereNull('driver_id');
+                })->where('status', '<>', 'reject')->whereHas('branchDetails', function ($sub) use ($keyword) {
+                    $sub->where('title', 'LIKE', "%" . $keyword . "%");
+                });
             });
-        })->latest();
-
-        return ($count) ?  $orders->count() : $orders->paginate($perPage);
+        }
+        return ($count) ?  $order_query->count() : $order_query->paginate($perPage);
     }
 }
 

@@ -15,11 +15,11 @@ class WaitingOrder extends Component
 
     public $listeners = ['refreshWaitingOrder'];
     public $keyword;
+    public $code;
 
     public function render()
     {
-        // Get all wating orders, true (means realTime);
-        return get_orders('waiting-orders', NULL, true, $this->keyword);
+        return get_orders('waiting-orders', NULL, true, $this->keyword, $this->code);
     }
 
     // this name should be same as listener name
