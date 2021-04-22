@@ -66,6 +66,11 @@ class Order extends Model
         return $this->hasOne(User::class, 'id', 'customer_id');
     }
 
+    // Casting field 'contents' to an array.
+    function contentsToArray() {
+        return json_decode($this->contents, true);
+    }
+
     public function tracking_by(){
         return $this->hasOne(OrderTracking::class, 'order_id', 'id');
     }
