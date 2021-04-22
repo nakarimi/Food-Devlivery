@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\OrderTracking;
+use App\Models\Item;
 
 class OrdersController extends Controller
 {
@@ -59,8 +60,10 @@ class OrdersController extends Controller
     {
         abortUrlFor("restaurant");
         $data = $this->dropdown_data($id);
+        $data['restaurant_items'] = Item::where('branch_id', $data['order']->branch_id)->with('approvedItemDetails')->get();
         return view('order.orders.edit', $data);
     }
+
 
     /**
      * Update the specified resource in storage.

@@ -33,7 +33,7 @@ Route::group([
     Route::post('/login', [JwtAuthController::class, 'login']);
     Route::post('/register', [JwtAuthController::class, 'register']);
     Route::post('/logout', [JwtAuthController::class, 'logout']);
-    // Route::post('/refresh', [JwtAuthController::class, 'refresh']);    
+    Route::post('/refresh', [JwtAuthController::class, 'refresh']);    
 });
 
 Route::group([
@@ -44,12 +44,12 @@ Route::group([
     // All the bellow routes need token authentication.
     Route::post('/subit-new-order', [CustomerPostRequests::class, 'submit_new_order']);
     Route::post('/update-order', [CustomerPostRequests::class, 'update_order']);
-    Route::get('/branch-list', [CustomerGetRequests::class, 'branch_list']);
+    Route::get('/home-page-data', [CustomerGetRequests::class, 'home_page_data']);
     Route::get('/restaurnt-food-list-signle-category', [CustomerGetRequests::class, 'get_list_restaurant_food_of_single_category']);
-    Route::get('/get-list-of-desserts', [CustomerGetRequests::class, 'get_list_of_desserts']);
-    Route::get('/get-list-of-main-foods', [CustomerGetRequests::class, 'get_list_of_main_foods']);
-    Route::get('/get-list-newest-restaurants', [CustomerGetRequests::class, 'get_list_of_newest_restaurants']);
     Route::get('/get-single-restaurant-profile', [CustomerGetRequests::class, 'get_single_restaurant_profile']);
+    Route::get('/search-foods-in-retaurant', [CustomerGetRequests::class, 'search_foods_in_retaurant']);
+
+    
     
 });
 

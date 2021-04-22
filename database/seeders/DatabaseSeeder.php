@@ -127,7 +127,7 @@ class DatabaseSeeder extends Seeder
             array (
                 'name'     => 'Ghulam Bargar',
                 'email'    => 'g.long@bargar.com',
-                'password' => bcrypt('asdfasdf'),
+                'password' => bcrypt('g.long'),
                 'role_id' => 4,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
@@ -219,8 +219,14 @@ class DatabaseSeeder extends Seeder
 ));
 
         DB::table('categories')->insert(array(
-            array('id' => '1','created_at' => '2021-03-01 10:40:55','updated_at' => '2021-03-01 10:40:55','title' => 'پیتزا', 'type' => 'main_food','description' => NULL,'thumbnail' => 'noimage.jpg','status' => '1'),
-            array('id' => '2','created_at' => '2021-03-01 10:41:06','updated_at' => '2021-03-01 10:41:06','title' => 'عمومی', 'type' => 'dessert','description' => NULL,'thumbnail' => 'noimage.jpg','status' => '1')
+              array('id' => '1','created_at' => '2021-03-01 10:40:55','updated_at' => '2021-04-22 10:46:55','title' => 'پیتزا','type' => 'main_food','description' => 'داغ و گرم','thumbnail' => 'images_1619072215.jpg','status' => '1'),
+  array('id' => '2','created_at' => '2021-03-01 10:41:06','updated_at' => '2021-04-22 10:47:05','title' => 'آیسکریم','type' => 'dessert','description' => 'یخ و خوشمزه','thumbnail' => 'Example01_1619072157.png','status' => '1'),
+  array('id' => '3','created_at' => '2021-03-01 10:40:55','updated_at' => '2021-04-22 10:46:55','title' => 'برنج','type' => 'main_food','description' => 'داغ و گرم','thumbnail' => 'rice.jpg','status' => '1'),
+  array('id' => '4','created_at' => '2021-03-01 10:41:06','updated_at' => '2021-04-22 10:47:05','title' => 'بستنی','type' => 'dessert','description' => 'یخ و خوشمزه','thumbnail' => 'Example03.png','status' => '1'),
+  array('id' => '5','created_at' => '2021-03-01 10:40:55','updated_at' => '2021-04-22 10:46:55','title' => 'گوشت','type' => 'main_food','description' => 'داغ و گرم','thumbnail' => 'photo-1432139555190-58524dae6a55.jpg','status' => '1'),
+  array('id' => '6','created_at' => '2021-03-01 10:41:06','updated_at' => '2021-04-22 10:47:05','title' => 'آجیل','type' => 'dessert','description' => 'یخ و خوشمزه','thumbnail' => 'Example04.png','status' => '1'),
+  array('id' => '7','created_at' => '2021-03-01 10:40:55','updated_at' => '2021-04-22 10:46:55','title' => 'ایرانی','type' => 'main_food','description' => 'داغ و گرم','thumbnail' => 'photo-1455619452474-d2be8b1e70cd.jpg','status' => '1'),
+  array('id' => '8','created_at' => '2021-03-01 10:41:06','updated_at' => '2021-04-22 10:47:05','title' => 'قهوه','type' => 'dessert','description' => 'یخ و خوشمزه','thumbnail' => 'Example02.png','status' => '1')
           ));
 
         DB::table('menus')->insert(array(
@@ -272,6 +278,12 @@ class DatabaseSeeder extends Seeder
         DB::table('settings')->insert(array(
             array('id' => '1','key' => 'payment_range_in_days','value' => '3')
         ));
+
+        DB::table('favorited_restaurants')->insert(array(
+            array('id' => '1','created_at' => '2021-04-22 11:19:34','updated_at' => '2021-04-22 11:19:34','customer_id' => '7','branch_id' => '1'),
+            array('id' => '2','created_at' => '2021-04-22 11:19:34','updated_at' => '2021-04-22 11:19:34','customer_id' => '7','branch_id' => '2')
+        ));
+
         // \App\Models\User::factory(10)->create();
     }
 }

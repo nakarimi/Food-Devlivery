@@ -15,47 +15,41 @@ use JWTAuth;
 class CustomerGetRequests extends Controller
 {
 
-	public function branch_list(Request $request) {
+    public function home_page_data() {
+        $data['desserts'] = Category::where('type', 'dessert')->get();
+        $data['main_food'] = Category::where('type', 'main_food')->get();
+        $data['latest_restaurants'] = $this->get_list_restaurants($all = false, $latest = true, $favorited = false, $customerID = false);
+        $data['favorite_restaurants'] = $this->get_list_restaurants($all = false, $latest = false, $favorited = true, $customerID = JWTAuth::user()->id);
         
-        $type = $request['branch_type'];
-        $all = $latest = $favorited = $customerID = false;
-
-        switch ($type) {
-            case 'favorited':
-                $favorited = true;
-                $customerID = JWTAuth::user()->id; // Get current customer id from JWT Authentication.
-                break;
-            case 'latest':
-                $latest = true;
-                break;
-            default:
-                $all = true;
-        }
-        return $this->get_list_restaurants($all, $latest, $favorited, $customerID);
+        return $data;
     }
 
     public function get_list_restaurant_food_of_single_category(Request $request) {
-        
-        $foods = Item::select('id')->with('approvedItemDetails:item_id,title,description,thumbnail')->where('items.branch_id', $request['restaurantID'])->where('items.category_id', $request['categoryID'])->get();
-        return $foods;
-    }
-
-    public function get_list_of_desserts() {
-        return Category::where('type', 'dessert')->get();
-    }
-
-    public function get_list_of_main_foods() {
-        return Category::where('type', 'main_food')->get();
-    }
-
-    public function get_list_of_newest_restaurants() {
-        return Branch::select('id')->with('branchDetails:business_id,title,description,logo')->orderBy('created_at', 'desc')->get();
+        return $this->get_items($request['categoryID'] , $request['restaurantID'], $keyword = false);
     }
 
     public function get_single_restaurant_profile(Request $request) {
-        return Branch::with('branchDetails')->where('id', $request['restaurantID'])->get();
+        
+        $data['profile'] = Branch::select('id', 'business_type')->with('branchDetails:business_id,title,description,logo,contact,location')->where('id', $request['restaurantID'])->get();
+
+        // Check if this restaurant is from customer's favorite.
+        $count = DB::table('favorited_restaurants')->where('branch_id', $request['restaurantID'])->count();
+
+        // add is_favorite to result.
+        $data['profile'][0]->is_favorite = ($count > 0); 
+
+        // List of all item categories indexed by main type. (title, id)
+        $data['tabs'] = Category::get(['id', 'type', 'title'])->groupBy('type')->toArray(); 
+        
+        return $data;
     }
 
+    public function search_foods_in_retaurant(Request $request) {
+            
+        return $this->get_items($category = false, $request['restaurantID'], $request['keyword']);
+    }
+
+    // Get list of restaurants based on the provided filters.
     public function get_list_restaurants($all = false, $latest = false, $favorited = false, $customerID = false) {
         
         $branches = DB::table('branches')
@@ -65,9 +59,33 @@ class CustomerGetRequests extends Controller
         if ($favorited) {
             $branches = $branches->join('favorited_restaurants', 'branches.id', '=', 'favorited_restaurants.branch_id')->where('favorited_restaurants.customer_id', $customerID);
         }
+        else if ($latest) {
+            $branches = $branches->orderBy('branches.created_at', 'desc');
+        }
 
-        $branches = $branches->select('branches.id', 'branche_main_info.title', 'branche_main_info.description', 'branche_main_info.logo')->get();
+        return $branches->select('branches.id', 'branche_main_info.title', 'branche_main_info.description', 'branche_main_info.logo')->get();
+    }
 
-        return $branches;
+    // Get items of a restaurant based on the provided filters.
+    public function get_items($category = false, $branch = false, $keyword = false) {
+        
+        $items = Item::select('id')->with('approvedItemDetails:item_id,title,description,thumbnail');
+
+        if ($keyword) {
+            $items = $items->wherehas(
+                'approvedItemDetails', function ($query) use ($keyword) {
+                $query->where('title','LIKE', "%$keyword%");
+            });
+        }
+
+        if ($branch) {
+            $items = $items->where('branch_id', $branch);
+        }
+
+        if ($category) {
+            $items = $items->where('items.category_id', $category);
+        }
+
+        return $items->latest()->get();
     }
 }

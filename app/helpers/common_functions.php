@@ -21,7 +21,7 @@ if (!function_exists('save_file')) {
      * @return a string which is name of the file with extension and address.
      *
      * */
-    function save_file(Request $request)
+    function save_file($request)
     {
         // Handle File Upload
         if ($request->file('logo')) {

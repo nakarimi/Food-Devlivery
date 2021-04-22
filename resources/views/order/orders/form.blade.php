@@ -160,30 +160,28 @@
    ') !!}
 </div> --}}
 
-
-@if ($restaurant_items)
-
-  @foreach ($restaurant_items as $item)
-    <div class="float-left col-sm-3 p-2">
-      <div class="d-flex justify-content-between bg-primary rounded p-2">
-        <label class="flex-grow-1">{{ $item->approvedItemDetails->title }}</label>
-
-        <input type="number" class="form-control d-inline-block w-50 rounded-pill items_in_order" @foreach ($order->contentsToArray()['contents'] as $content)  @foreach ($content as $details)
-        @if ($item->id == (int) $details['item_id'])
-          @php
-            echo 'value="' . $details['count'] . '"';
-          @endphp @endif
-        @endforeach
-  @endforeach
-  {{-- Default value --}}
-  value="0"
-  data-item="{{ $item->approvedItemDetails }}"
-  >
-  </div>
-  </div>
-@endforeach
-@endif
-
+   @foreach ($restaurant_items as $item)
+      <div class="float-left col-sm-3 p-2">
+         <div class="d-flex justify-content-between bg-primary rounded p-2">
+            <label class="flex-grow-1">{{ $item->approvedItemDetails->title }}</label>
+         
+            <input type="number" class="form-control d-inline-block w-50 rounded-pill items_in_order"
+               @foreach ($order->contentsToArray()['contents'] as $content)
+                  @foreach ($content as $details)
+                        @if ($item->id == (int) $details['item_id'])
+                           @php
+                              echo ('value="' . $details['count'] . '"');
+                           @endphp
+                        @endif
+                  @endforeach
+               @endforeach
+               {{-- Default value --}}
+               value="0"
+               data-item="{{$item->approvedItemDetails}}"
+            >
+         </div>
+      </div>
+   @endforeach
 <div class="form-group">
   <input class="btn btn-primary" type="submit" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}">
 </div>
