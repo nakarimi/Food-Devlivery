@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Controllers\Controller; 
+use Carbon\Carbon;
  
 class JwtAuthController extends Controller
 {
@@ -63,7 +64,7 @@ class JwtAuthController extends Controller
         $input = $request->only('email', 'password');
         $jwt_token = null;
   
-        if (!$jwt_token = JWTAuth::attempt($input)) {
+        if (!$jwt_token = JWTAuth::attempt($input, ['exp' => Carbon::now()->addDays(1)->timestamp])) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid Email or Password',

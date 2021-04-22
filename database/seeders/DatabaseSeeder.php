@@ -127,7 +127,7 @@ class DatabaseSeeder extends Seeder
             array (
                 'name'     => 'Ghulam Bargar',
                 'email'    => 'g.long@bargar.com',
-                'password' => bcrypt('asdfasdf'),
+                'password' => bcrypt('g.long'),
                 'role_id' => 4,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
