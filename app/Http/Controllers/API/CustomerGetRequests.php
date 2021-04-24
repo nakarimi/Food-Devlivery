@@ -69,7 +69,7 @@ class CustomerGetRequests extends Controller
     // Get items of a restaurant based on the provided filters.
     public function get_items($category = false, $branch = false, $keyword = false) {
         
-        $items = Item::select('id')->with('approvedItemDetails:item_id,title,description,thumbnail');
+        $items = Item::select('id')->with('approvedItemDetails:item_id,title,description,thumbnail,price');
 
         if ($keyword) {
             $items = $items->wherehas(

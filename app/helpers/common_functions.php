@@ -344,7 +344,7 @@ if (!function_exists('get_orders')) {
                 $status = ['completed', 'canceld', 'reject'];
                 break;
             case 'active-orders':
-                $status = ['pending', 'processing', 'delivered'];
+                $status = ['processing', 'delivered'];
                 break;
             default:
                 $status = [];
@@ -432,6 +432,8 @@ if (!function_exists('update_order')) {
 
                 $order = Order::findOrFail($id);
 
+                // @TODO: Here craete a function that takes the request as param, calculate total price and return (I mean move the bellow calculation to a function, since we need it when order creation)
+
                 // Calculate the total price of items for this order.
                 $total_price = 0;
                 $items = json_decode($requestData['contents']);
@@ -453,6 +455,9 @@ if (!function_exists('update_order')) {
                     'contents' => $requestData['contents'],
                     'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 ];
+
+                // @TODO: Here create another function that accept two params $orderData array as reference, and second param is total price of order, this (function) will calculate the commissions (general commssion and delivery commission, and at the end attached the calculated values to the array.
+
                 $order->update($orderData);
 
                 if ($deliver_update) {

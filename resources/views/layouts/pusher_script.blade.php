@@ -16,15 +16,18 @@
 
     var channel = pusher.subscribe('food-app');
     channel.bind('update-event', function(data) {
+
+        // console.log('update-event called');
         // Here we check if notification from pusher is about a new order, and is related to this user. Show message if it was, 
         if (JSON.stringify(data['message']) == '"New Order Recieved!"' && (userId == JSON.stringify(data['userId']))) {
             show_message(['سفارش جدید اضافه شد.', 'success']);
             playSound();
-            
-            // The message above is displayed, when user is on any page, but update of active orders should happened only when user is on the active orders page.
-            if (window.location.pathname == '/activeOrders') {
-                Livewire.emit('refreshActiveOrders');
-            }
+        }
+        
+        // The message above is displayed, when user is on any page, but update of active orders should happened only when user is on the active orders page.
+        if (window.location.pathname == '/activeOrders') {
+            // console.log('update-event called');
+            Livewire.emit('refreshActiveOrders');
         }
         
     });
