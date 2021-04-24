@@ -78,6 +78,7 @@ class OrdersController extends Controller
         validateOrderInputs($request);
         $requestData = $request->all();
         update_order($requestData, $id);
+        return redirect()->back()->with('flash_message', 'Order updated!');
     }
 
     /**

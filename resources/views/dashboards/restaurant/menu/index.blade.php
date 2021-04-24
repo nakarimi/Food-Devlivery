@@ -44,12 +44,12 @@
                                         <input type="checkbox" class="menuStockStatus" item_id="{{ $item->id }}" {{$checked}} data-toggle="toggle" data-on="بلی" data-off="خیر" data-onstyle="success" data-offstyle="danger">
                                     </td>
                                     <td>
-                                        <a href="{{ url('/menu/' . $item->id) }}" title="View Menu"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
-                                        <a href="{{ url('/menu/' . $item->id . '/edit') }}" title="Edit Menu"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
+                                        <a href="{{ url('/menu/' . $item->id) }}" title="View Menu"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
+                                        <a href="{{ url('/menu/' . $item->id . '/edit') }}" title="Edit Menu"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
 {{--                                        <form method="POST" action="{{ url('/menu' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">--}}
 {{--                                            {{ method_field('DELETE') }}--}}
 {{--                                            {{ csrf_field() }}--}}
-{{--                                            <button type="submit" class="btn btn-danger btn-xs" title="Delete Menu" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>--}}
+{{--                                            <button type="submit" class="btn btn-danger btn-sm" title="Delete Menu" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>--}}
 {{--                                        </form>--}}
                                     </td>
                                 </tr>

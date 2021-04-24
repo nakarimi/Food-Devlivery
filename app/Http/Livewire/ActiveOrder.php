@@ -15,11 +15,12 @@ class ActiveOrder extends Component
      
     public $listeners = ['refreshActiveOrders'];
     public $keyword;
+    public $code;
     
     public function render()
     {
        // Get all wating orders, true (means realTime);
-       return get_orders('active-orders', NULL, true, $this->keyword);
+       return get_orders('active-orders', NULL, true, $this->keyword, $this->code);
     }
 
     // this name should be same as listener name
