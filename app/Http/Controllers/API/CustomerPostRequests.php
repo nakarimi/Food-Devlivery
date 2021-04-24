@@ -28,53 +28,52 @@ class CustomerPostRequests extends Controller
             // Since we deal with multiple tables, so we use transactions for handling conflicts and other issues.
             DB::beginTransaction();
 
-            // $newOrder = [
-            //     'branch_id' => $requestData['branch_id'],
-            //     'customer_id' => $requestData['customer_id'],
-            //     'has_delivery' => ($has_delivery) ? '1' : '0',
-            //     'total' => $requestData['total'],
-            //     'commission_value' => $requestData['commission_value'],
-            //     'status' => 'pending',
-            //     'note' => $requestData['note'],
-            //     'reciever_phone' => $requestData['reciever_phone'],
-            //     'contents' => $requestData['contents'],
-            //     'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            // ];
+            $newOrder = [
+                'branch_id' => $requestData['branch_id'],
+                'customer_id' => $requestData['customer_id'],
+                'has_delivery' => 1, //($has_delivery) ? '1' : '0', for now delivery is required.
+                'total' => $requestData['total'],
+                'commission_value' => $requestData['commission_value'],
+                'status' => 'pending',
+                'note' => $requestData['note'],
+                'reciever_phone' => $requestData['reciever_phone'],
+                'contents' => $requestData['contents'],
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            ];
 
             // This loop here is for speed test issues and will be removed.
-            for ($k=0; $k < 10; $k++) {
+            for ($k=0; $k < 1; $k++) {
 
-                $newOrder = [
-                    'branch_id' => $requestData['branch_id'],
-                    'customer_id' => $requestData['customer_id'],
-                    'has_delivery' => ($has_delivery) ? '1' : '0',
-                    'total' => $requestData['total'],
-                    'commission_value' => $requestData['commission_value'],
-                    'status' => 'pending',
-                    'note' => $requestData['note'],
-                    'reciever_phone' => $requestData['reciever_phone'],
-                    'contents' => $requestData['contents'],
-                    'created_at' => Carbon::today()->subDays(rand(14, 24)),  // Carbon::now()->format('Y-m-d H:i:s')
-                ];
+                // $newOrder = [
+                //     'branch_id' => $requestData['branch_id'],
+                //     'customer_id' => $requestData['customer_id'],
+                //     'has_delivery' => ($has_delivery) ? '1' : '0',
+                //     'total' => $requestData['total'],
+                //     'commission_value' => $requestData['commission_value'],
+                //     'status' => 'pending',
+                //     'note' => $requestData['note'],
+                //     'reciever_phone' => $requestData['reciever_phone'],
+                //     'contents' => $requestData['contents'],
+                //     'created_at' => Carbon::today()->subDays(rand(14, 24)),  // Carbon::now()->format('Y-m-d H:i:s')
+                // ];
 
             	// Add order to table.
 	            $order_id = DB::table('orders')->insertGetId($newOrder);
-	    
-	            if ($has_delivery) {
-	                $updateDeliveryDetails = [
-	                    'order_id' => $order_id,
-	                    'delivery_type' => $requestData['delivery_type'],
-	                    'delivery_adress' => $requestData['delivery_adress'],
-	                    'driver_id' => NULL,
-	                ];
-	                // Insert delivery details.
-	                DB::table('order_delivery')->insertGetId($updateDeliveryDetails);
-	            }
+	               
+	            $updateDeliveryDetails = [
+                    'order_id' => $order_id,
+                    'delivery_type' => $requestData['delivery_type'],
+                    'delivery_adress' => $requestData['delivery_adress'],
+                    'driver_id' => NULL,
+                ];
+
+                // Insert delivery details.
+                DB::table('order_delivery')->insertGetId($updateDeliveryDetails);
 	            
 	            event(new \App\Events\UpdateEvent('New Order Recieved!', $order_id));
-	            if (($k % 5) == 0) {
-	            	sleep(0.25);
-	            }
+	            // if (($k % 5) == 0) {
+	            // 	sleep(0.25);
+	            // }
             }
     
             DB::commit();
