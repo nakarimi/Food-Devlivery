@@ -50,7 +50,7 @@ class CustomerGetRequests extends Controller
     }
 
     // Get list of restaurants based on the provided filters.
-    public function get_list_restaurants($all = false, $latest = false, $favorited = false, $customerID = false) {
+    public function get_list_restaurants($all = false, $latest = false, $favorited = false, $customerID = false, $keyword = false) {
         
         $branches = DB::table('branches')
         ->join('branche_main_info', 'branches.id', '=', 'branche_main_info.business_id')
@@ -61,6 +61,10 @@ class CustomerGetRequests extends Controller
         }
         else if ($latest) {
             $branches = $branches->orderBy('branches.created_at', 'desc');
+        }
+
+        if ($keyword) {
+            $branches = $branches->where('branche_main_info.title','LIKE', "%$keyword%");
         }
 
         return $branches->select('branches.id', 'branche_main_info.title', 'branche_main_info.description', 'branche_main_info.logo')->get();
@@ -87,5 +91,15 @@ class CustomerGetRequests extends Controller
         }
 
         return $items->latest()->get();
+    }
+
+    // This helper search for available items and restuarant and generate array with tow sections based on provided keyword.
+    public function home_page_general_search(Request $request) {
+        
+        $data['items'] = $this->get_items($category = false, $branch = false, $request['keyword']);
+
+        $data['branches'] = $this->get_list_restaurants($all = false, $latest = false, $favorited = false, $customerID = false, $request['keyword']);
+
+        return $data;
     }
 }
