@@ -70,7 +70,7 @@ class PaymentController extends Controller
      */
     public function activePayments(Request $request)
     {
-        return $this->get_payments($request, '!=', 'done');
+        return $this->get_payments($request, 'NOT IN', ['done', 'approved']);
     }
     // public function paidPayments(Request $request)
     // {
@@ -233,26 +233,41 @@ class PaymentController extends Controller
             // If current user is restaurant then laod this view.
             if (get_current_branch_id()) {
                 // Since we need correct order, so we need to load them separatly.
-                $payments = Payment::where('branch_id', $branchID)->where('status', $condition, $status)->paginate($perPage);
+                $payments = Payment::where('branch_id', $branchID);
+
+                if ($condition == 'IN') {
+                    $payments = $payments->whereIn('status', $status); 
+                }
+                else {
+                    $payments = $payments->where('status', $condition, $status);
+                }
+
+                $payments = $payments->paginate($perPage);
+
                 return view('dashboards.restaurant.payment.index', compact('payments'));
             }
             $branchPayments = Payment::where('branch_id', $branchID)->where('status', $condition, $status)->latest()->paginate($perPage);
         }
 
         // For finance officer if payment was already filtered by branch, so not load all.
-        if ($condition == 'IN') {
-            $payments = Payment::whereIn('status', $status)->latest()->paginate($perPage);
-        } else {
-            $payments = Payment::where('status', $condition, $status)->latest()->paginate($perPage);
-        }
+        $payments = Payment::where('status', $condition, $status);
 
+        if ($condition == 'IN') {
+            $payments = Payment::whereIn('status', $status);
+        } 
+
+        $payments = $payments->latest()->paginate($perPage);
+
+        // Collect all branches that are considered active.
         $active_branches = [];
         foreach ($payments as $payment) {
             $active_branches[] = $payment->branch_id;
         }
 
+        // This is for filter dropdown. @TODO we need to create a function for this.
         $activeBranches = Branch::whereIN('id', $active_branches)->get();
 
+        // Pass the main payment records, if filtered, so return the filtered branch.
         $payments = (isset($request->branch_id)) ? $branchPayments : $payments;
 
         // Use different view for different users.

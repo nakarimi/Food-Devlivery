@@ -25,15 +25,31 @@ class CustomerGetRequests extends Controller
     }
 
     public function get_list_restaurant_food_of_single_category(Request $request) {
-        
-        $foods = Item::select('id')->with('approvedItemDetails:item_id,title,description,thumbnail')->where('items.branch_id', $request['restaurantID'])->where('items.category_id', $request['categoryID'])->get();
-        return $foods;
+        return $this->get_items($request['categoryID'] , $request['restaurantID'], $keyword = false);
     }
 
     public function get_single_restaurant_profile(Request $request) {
-        return Branch::with('branchDetails')->where('id', $request['restaurantID'])->get();
+        
+        $data['profile'] = Branch::select('id', 'business_type')->with('branchDetails:business_id,title,description,logo,contact,location')->where('id', $request['restaurantID'])->get();
+
+        // Check if this restaurant is from customer's favorite.
+        $count = DB::table('favorited_restaurants')->where('branch_id', $request['restaurantID'])->count();
+
+        // add is_favorite to result.
+        $data['profile'][0]->is_favorite = ($count > 0); 
+
+        // List of all item categories indexed by main type. (title, id)
+        $data['tabs'] = Category::get(['id', 'type', 'title'])->groupBy('type')->toArray(); 
+        
+        return $data;
     }
 
+    public function search_foods_in_retaurant(Request $request) {
+            
+        return $this->get_items($category = false, $request['restaurantID'], $request['keyword']);
+    }
+
+    // Get list of restaurants based on the provided filters.
     public function get_list_restaurants($all = false, $latest = false, $favorited = false, $customerID = false) {
         
         $branches = DB::table('branches')
@@ -48,5 +64,28 @@ class CustomerGetRequests extends Controller
         }
 
         return $branches->select('branches.id', 'branche_main_info.title', 'branche_main_info.description', 'branche_main_info.logo')->get();
+    }
+
+    // Get items of a restaurant based on the provided filters.
+    public function get_items($category = false, $branch = false, $keyword = false) {
+        
+        $items = Item::select('id')->with('approvedItemDetails:item_id,title,description,thumbnail');
+
+        if ($keyword) {
+            $items = $items->wherehas(
+                'approvedItemDetails', function ($query) use ($keyword) {
+                $query->where('title','LIKE', "%$keyword%");
+            });
+        }
+
+        if ($branch) {
+            $items = $items->where('branch_id', $branch);
+        }
+
+        if ($category) {
+            $items = $items->where('items.category_id', $category);
+        }
+
+        return $items->latest()->get();
     }
 }
