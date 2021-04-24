@@ -9,6 +9,16 @@
 
 @section('content')
 <div class="content container-fluid">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="row">
+                    <div class="col-sm-12">
+                       <h5 class="page-title">Welcome <b>{{auth()->user()->name}}</h5>
+                    </div>
+                </div>
+            </div>
+            <!-- /Page Header -->
+    
 </div>
 
 @endsection
