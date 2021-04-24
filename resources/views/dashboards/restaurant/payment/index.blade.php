@@ -70,8 +70,10 @@
                                  </form>
                               @elseif($item->status == 'paid')
                                  <span class="badge badge-warning" >انتظار</span>
+                              @elseif($item->status == 'approved')
+                                 <span class="badge badge-info" title="پرداخت تائید نهایی شده توسط فایننس منیجر.">پرداخت تائید نهایی شده.</span>
                               @else 
-                                 <span class="badge badge-success" >پرداخت تائید شده.</span>
+                                 <span class="badge badge-success" title="پرداخت نیاز به تائید توسط فایننس منیجر دارد.">پرداخت تائید شده</span>
                               @endif
                            </td>
                         </tr>

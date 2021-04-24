@@ -10,9 +10,10 @@
                 <div class="card-body">
                     <form  accept-charset="UTF-8" class="form-inline my-2 my-lg-0 float-right" role="search">
                         <div class="input-group">
+                            <input type="text" class="form-control mx-1" name="code" placeholder="Code" wire:model="code">
                             <input type="text" class="form-control" name="search" placeholder="Search..." wire:model="keyword">
                             <span class="input-group-append">
-                                <button class="btn btn-secondary" type="submit">
+                                <button class="btn btn-secondary form-control" type="submit">
                                 <i class="fa fa-search"></i>
                                 </button>
                             </span>
@@ -92,22 +93,22 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <a href="{{ url('/orders/' . $item->id) }}" title="View Order"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
-                                        <a href="{{ url('/orders/' . $item->id . '/edit') }}" title="Edit Order"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
+                                        <a href="{{ url('/orders/' . $item->id) }}" title="View Order"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
+                                        <a href="{{ url('/orders/' . $item->id . '/edit') }}" title="Edit Order"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
                                         <form method="POST" action="{{ url('/orders' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
                                             {{ method_field('DELETE') }}
                                             {{ csrf_field() }}
-                                            {{-- <button type="submit" class="btn btn-danger btn-xs" title="Delete Order" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i></button> --}}
+                                            {{-- <button type="submit" class="btn btn-danger btn-sm" title="Delete Order" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i></button> --}}
                                         </form>
 
                                         @if($item->tracking_by && $item->tracking_by->status == 0)
                                             <a title="Following by {{$item->tracking_by->support->name}}">
-                                                <button class="btn btn-dark btn-xs followup" cancelId="{{$item->tracking_by->id}}">
+                                                <button class="btn btn-dark btn-sm followup" cancelId="{{$item->tracking_by->id}}">
                                                     <i class="fa fa-spinner fa-spin" aria-hidden="true" ></i>
                                                 </button>
                                             </a>
                                         @else
-                                            <a title="Mark this as checking...."><button class="btn btn-success btn-xs followup" order_id={{$item->id}} support_id={{auth()->user()->id}}><i class="fa fa-spinner"  ></i></button></a>
+                                            <a title="Mark this as checking...."><button class="btn btn-success btn-sm followup" order_id={{$item->id}} support_id={{auth()->user()->id}}><i class="fa fa-spinner"  ></i></button></a>
                                         @endif
                                     </td>
                                 </tr>

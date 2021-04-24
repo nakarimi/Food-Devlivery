@@ -6,7 +6,7 @@
       <option value="">{{ $select['title'] }}</option>
       @foreach ($select['data'] as $op)
         @if (gettype($op) == 'object')
-          <option value="{{ $op->id }}" @if ($_GET && $op->id == $_GET[$select['field_name']]) selected="selected" @endif>{{ (isset($op->title)) ? $op->title : $op->name }}</option>
+          <option value="{{ $op->id }}" @if ($_GET && $op->id == $_GET[$select['field_name']]) selected="selected" @endif>{{ isset($op->title) ? $op->title : $op->name }}</option>
         @else
           <option value="{{ $op['id'] }}" @if ($op['id'] == $_GET[$select['field_name']]) selected="selected" @endif>{{ $op[$select['label_name']] }}</option>
         @endif
@@ -37,19 +37,20 @@
     var start = (SelectedStart == null ? moment().startOf('month') : moment(SelectedStart));
     var end = (SelectedEnd == null ? moment().endOf('month') : moment(SelectedEnd));
     $('input.daterange').daterangepicker({
-      //   ranges: {
-      //     'Today': [moment(), moment()],
-      //     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-      //     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-      //     'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-      //     'This Month': [moment().startOf('month'), moment().endOf('month')],
-      //     'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf(
-      //       'month')]
-      //   },
-      //   opens: 'left',
+      ranges: {
+        'Today': [moment(), moment()],
+        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+        'This Month': [moment().startOf('month'), moment().endOf('month')],
+        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf(
+          'month')]
+      },
+      opens: 'left',
       autoApply: true,
       startDate: start,
       endDate: end,
+      alwaysShowCalendars: true
     }, function(start, end, label) {
       sessionStorage.setItem('selectedStart', start);
       sessionStorage.setItem('selectedEnd', end);

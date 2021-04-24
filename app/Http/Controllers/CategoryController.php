@@ -58,7 +58,7 @@ class CategoryController extends Controller
             'status' => 'required',
             'type' => 'required'
         ]);
-        
+
         $requestData = $request->all();
 
         $data = [
@@ -67,11 +67,9 @@ class CategoryController extends Controller
             'status' => $requestData['status'],
             'type' => $requestData['type'],
         ];
-
-        if ($requestData->file('logo')) {
-            $update['thumbnail'] = save_file($request);
-        } 
-
+        if ($_FILES['logo']) {
+            $data['thumbnail'] = save_file($request);
+        }
         Category::create($data);
 
         return redirect('category')->with('flash_message', 'Category added!');
@@ -117,26 +115,26 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-			'status' => 'required',
+            'status' => 'required',
             'title' => 'required',
             'type' => 'required'
         ]);
-
+        // dd(storage_path() . '/' . 'app' . '/');
         $category = Category::findOrFail($id);
-
+        
         $update = [
             'title' => $request['title'],
             'description' => $request['description'],
             'status' => $request['status'],
             'type' => $request['type'],
         ];
-
+        
         if ($request->file('logo')) {            
             $update['thumbnail'] = save_file($request);
         } else {
             $update['thumbnail'] =  $category->thumbnail;
         }
-
+        
         $category->update($update);
 
         return redirect('category')->with('flash_message', 'Category updated!');
@@ -156,7 +154,8 @@ class CategoryController extends Controller
         return redirect('category')->with('flash_message', 'Category deleted!');
     }
 
-    public function loadCategory (Request $request) {
+    public function loadCategory(Request $request)
+    {
         return  Category::where('type', $request['type'])->get();
     }
 }

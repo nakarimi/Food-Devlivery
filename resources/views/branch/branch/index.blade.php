@@ -60,10 +60,10 @@
                                    <button class="btn btn-sm btn-danger reject_branch_update" branch_detail_id="{{$itemDetails->id}}" title="Reject" data-toggle="modal" data-target="#open_reject_form"><i class="la la-times"></i></button>
                                @endif
 
-                              <a href="{{ url('/branch/' . $item->id) }}" title="View Branch"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
+                              <a href="{{ url('/branch/' . $item->id) }}" title="View Branch"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
                               
                               @if (Session::get('branchType') != "rejected")
-                                 <a href="{{ url('/branch/' . $item->id . '/edit') }}" title="Edit Branch"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
+                                 <a href="{{ url('/branch/' . $item->id . '/edit') }}" title="Edit Branch"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
                               @endif
                            </td>
                         </tr>
