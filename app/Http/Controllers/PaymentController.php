@@ -174,7 +174,7 @@ class PaymentController extends Controller
     {
 
         // Get all orders.
-        $orders = Order::whereBetween('created_at', [$from, $to])->where('branch_id', $branchID)->get();
+        $orders = Order::where('status', 'completed')->whereBetween('created_at', [$from, $to])->where('branch_id', $branchID)->get();
 
         // Initialize variable for later assignment.
         $totalOrders = $totalOrdersPrice = $totalGeneralCommission = $totalDeliveryCommission = 0;
