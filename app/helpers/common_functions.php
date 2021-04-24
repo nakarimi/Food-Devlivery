@@ -11,6 +11,7 @@ use App\Models\Payment;
 use App\Models\Setting;
 use App\Models\DeliveryDetails;
 use Illuminate\Support\Facades\DB;
+use \Illuminate\Support\Facades\Notification;
 
 if (!function_exists('save_file')) {
     /**
@@ -411,7 +412,7 @@ if (!function_exists('send_notification')) {
             event(new \App\Events\NotificationEvent('Notification', $notifyUsers[$i]));
         }
 
-        \Illuminate\Support\Facades\Notification::send($notifyUsers, new \App\Notifications\UpdateNotification($message, $userId));
+        Notification::send($notifyUsers, new \App\Notifications\UpdateNotification($message, $userId));
     }
 }
 

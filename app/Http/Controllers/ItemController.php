@@ -266,8 +266,6 @@ class ItemController extends Controller
      * @return array $data
      */
     public function dropdown_data($id = false, $userId = null) {
-        // Pass categories for dropdown list form.
-        $data['categories'] = Category::select('type')->distinct()->get();
 
         // Pass branches for dropdown list form.
         if ($userId != null){
@@ -288,6 +286,13 @@ class ItemController extends Controller
             $branch = Branch::findOrFail($data['item']->branch_id);
             abortUrlFor(null, $userId, $branch->user_id);
         }
+
+        // Pass category types for dropdown list form.
+        $data['category_types'] = Category::select('type')->distinct()->get();
+
+        // Pass category list based on types.
+        $data['categories'] = ($id) ? Category::where('type', $data['item']->category->type)->get() : [];
+
         return $data;
     }
 
