@@ -106,7 +106,7 @@ class ItemController extends Controller
                 ['item_id' => $id,
                 'title' => $requestData['title'],
                 'description' => $requestData['description'],
-                'thumbnail' => save_file($request),
+                'thumbnail' => save_file($request->file('logo'), 'food_no_image.jpg'),
                 'price' => $requestData['price'],
                 'package_price' => $requestData['package_price'],
                 'unit' => $requestData['unit'],
@@ -217,7 +217,7 @@ class ItemController extends Controller
 
             // If there was a new image, use it otherwise get old image name.
            if ($request->file('logo')) {
-               $update['thumbnail'] = save_file($request);
+               $update['thumbnail'] = save_file($request->file('logo'), 'food_no_image.jpg');
            } else {
               $update['thumbnail'] =  get_item_details($item, Session::get('itemType'))->thumbnail;
            }
@@ -266,8 +266,6 @@ class ItemController extends Controller
      * @return array $data
      */
     public function dropdown_data($id = false, $userId = null) {
-        // Pass categories for dropdown list form.
-        $data['categories'] = Category::select('type')->distinct()->get();
 
         // Pass branches for dropdown list form.
         if ($userId != null){
@@ -288,6 +286,13 @@ class ItemController extends Controller
             $branch = Branch::findOrFail($data['item']->branch_id);
             abortUrlFor(null, $userId, $branch->user_id);
         }
+
+        // Pass category types for dropdown list form.
+        $data['category_types'] = Category::select('type')->distinct()->get();
+
+        // Pass category list based on types.
+        $data['categories'] = ($id) ? Category::where('type', $data['item']->category->type)->get() : [];
+
         return $data;
     }
 

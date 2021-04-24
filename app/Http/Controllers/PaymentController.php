@@ -174,7 +174,7 @@ class PaymentController extends Controller
     {
 
         // Get all orders.
-        $orders = Order::whereBetween('created_at', [$from, $to])->where('branch_id', $branchID)->get();
+        $orders = Order::where('status', 'completed')->whereBetween('created_at', [$from, $to])->where('branch_id', $branchID)->get();
 
         // Initialize variable for later assignment.
         $totalOrders = $totalOrdersPrice = $totalGeneralCommission = $totalDeliveryCommission = 0;
@@ -250,13 +250,16 @@ class PaymentController extends Controller
         }
         $payments = $payment_query->latest()->paginate($perPage);
 
+        // Collect all branches that are considered active.
         $active_branches = [];
         foreach ($payments as $payment) {
             $active_branches[] = $payment->branch_id;
         }
 
+        // This is for filter dropdown. @TODO we need to create a function for this.
         $activeBranches = Branch::whereIN('id', $active_branches)->get();
 
+        // Pass the main payment records, if filtered, so return the filtered branch.
         $payments = (isset($request->branch_id)) ? $branchPayments : $payments;
 
         // Use different view for different users.

@@ -31,7 +31,7 @@ class CustomerPostRequests extends Controller
             $newOrder = [
                 'branch_id' => $requestData['branch_id'],
                 'customer_id' => $requestData['customer_id'],
-                'has_delivery' => ($has_delivery) ? '1' : '0',
+                'has_delivery' => 1, //($has_delivery) ? '1' : '0', for now delivery is required.
                 'total' => $requestData['total'],
                 'commission_value' => $requestData['commission_value'],
                 'status' => 'pending',
@@ -54,27 +54,26 @@ class CustomerPostRequests extends Controller
                 //     'note' => $requestData['note'],
                 //     'reciever_phone' => $requestData['reciever_phone'],
                 //     'contents' => $requestData['contents'],
-                //     'created_at' => Carbon::today()->subDays(rand(0, 55)),  // Carbon::now()->format('Y-m-d H:i:s')
+                //     'created_at' => Carbon::today()->subDays(rand(14, 24)),  // Carbon::now()->format('Y-m-d H:i:s')
                 // ];
 
             	// Add order to table.
 	            $order_id = DB::table('orders')->insertGetId($newOrder);
-	    
-	            if ($has_delivery) {
-	                $updateDeliveryDetails = [
-	                    'order_id' => $order_id,
-	                    'delivery_type' => $requestData['delivery_type'],
-	                    'delivery_adress' => $requestData['delivery_adress'],
-	                    'driver_id' => NULL,
-	                ];
-	                // Insert delivery details.
-	                DB::table('order_delivery')->insertGetId($updateDeliveryDetails);
-	            }
+	               
+	            $updateDeliveryDetails = [
+                    'order_id' => $order_id,
+                    'delivery_type' => $requestData['delivery_type'],
+                    'delivery_adress' => $requestData['delivery_adress'],
+                    'driver_id' => NULL,
+                ];
+
+                // Insert delivery details.
+                DB::table('order_delivery')->insertGetId($updateDeliveryDetails);
 	            
 	            event(new \App\Events\UpdateEvent('New Order Recieved!', $order_id));
-	            if (($k % 5) == 0) {
-	            	sleep(0.25);
-	            }
+	            // if (($k % 5) == 0) {
+	            // 	sleep(0.25);
+	            // }
             }
     
             DB::commit();

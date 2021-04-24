@@ -82,6 +82,17 @@
    </div>
 </div>
 <div class="form-row">
+
+   <div class="col">
+      <div class="form-group{{ $errors->has('banner') ? 'has-error' : ''}}">
+         <label for="logo" class="control-label">{{ 'Banner' }}</label>
+         <input class="form-control-file" name="banner" type="file" id="banner" value="{{ $branch->branchDetails->banner ?? ''}}" accept="image/png, image/jpeg" >
+         {!! $errors->first('banner', '
+         <p class="help-block">:message</p>
+         ') !!}
+      </div>
+   </div>
+
    <div class="col">
       <div class="form-group{{ $errors->has('logo') ? 'has-error' : ''}}">
          <label for="logo" class="control-label">{{ 'Logo' }}</label>
@@ -90,9 +101,6 @@
          <p class="help-block">:message</p>
          ') !!}
       </div>
-   </div>
-   <div class="col">
-
    </div>
 </div>
 <div class="form-row">

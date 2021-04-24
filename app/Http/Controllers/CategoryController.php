@@ -68,7 +68,7 @@ class CategoryController extends Controller
             'type' => $requestData['type'],
         ];
         if ($_FILES['logo']) {
-            $data['thumbnail'] = save_file($request);
+            $data['thumbnail'] = save_file($request->file('logo'), 'category_no_image.jpg');
         }
         Category::create($data);
 
@@ -130,7 +130,7 @@ class CategoryController extends Controller
         ];
         
         if ($request->file('logo')) {            
-            $update['thumbnail'] = save_file($request);
+            $update['thumbnail'] = save_file($request->file('logo'), 'category_no_image.jpg');
         } else {
             $update['thumbnail'] =  $category->thumbnail;
         }

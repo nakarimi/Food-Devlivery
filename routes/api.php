@@ -48,6 +48,7 @@ Route::group([
     Route::get('/restaurnt-food-list-signle-category', [CustomerGetRequests::class, 'get_list_restaurant_food_of_single_category']);
     Route::get('/get-single-restaurant-profile', [CustomerGetRequests::class, 'get_single_restaurant_profile']);
     Route::get('/search-foods-in-retaurant', [CustomerGetRequests::class, 'search_foods_in_retaurant']);
+    Route::get('/home-page-general-search', [CustomerGetRequests::class, 'home_page_general_search']);
 
     
     

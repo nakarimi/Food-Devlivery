@@ -42,9 +42,9 @@
                         <tr>
                            <td>{{ $loop->iteration }}</td>
                            <td>
-                                <h2 class="table-avatar">
-                                    <a href="#" class="avatar" style="width: 100px; height: 100px; background-color: transparent;"><img alt="" src="{{ url('storage/profile_images/' .$itemDetails->logo) }}"></a>
-                                </h2>
+                              <h2 class="table-avatar">
+                                    <a href="{{ url('/branch/' . $item->id) }}" class="avatar" style="width: 100px; height: 100px; background-color: transparent;"><img alt="" src="{{ url('storage/profile_images/' .$itemDetails->logo) }}"></a>
+                              </h2>
                             </td>
                            <td>{{ $itemDetails->title }}</td>
                            <td>{{ $item->business_type }}</td>

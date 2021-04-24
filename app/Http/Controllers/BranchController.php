@@ -32,17 +32,7 @@ class BranchController extends Controller
             $branch = Branch::wherehas(
                 'branchDetails' , function ($query) use ($keyword) {
                 $query->where('title', 'LIKE', "%$keyword%");
-            })
-                // ->orWhere('business_type', 'LIKE', "%$keyword%")
-                // ->orWhere('main_commission_id', 'LIKE', "%$keyword%")
-                // ->orWhere('deliver_commission_id', 'LIKE', "%$keyword%")
-                // ->orWhere('status', 'LIKE', "%$keyword%")
-                // ->orWhere('title', 'LIKE', "%$keyword%")
-                // ->orWhere('description', 'LIKE', "%$keyword%")
-                // ->orWhere('logo', 'LIKE', "%$keyword%")
-                // ->orWhere('contact', 'LIKE', "%$keyword%")
-                // ->orWhere('location', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
+            })->latest()->paginate($perPage);
         } else {
             $branch = Branch::latest()->paginate($perPage);
         }
@@ -93,7 +83,8 @@ class BranchController extends Controller
                 ['business_id' => $id,
                 'title' => $requestData['title'],
                 'description' => $requestData['description'],
-                'logo' => save_file($request),
+                'logo' => save_file($request->file('logo'), 'deafult_logo.jpg'),
+                'banner' => save_file($request->file('banner'), 'deafult_banner.jpg'),
                 'contact' => $requestData['contact'],
                 'location' => $requestData['location'],
                 'status' => 'approved']
@@ -197,9 +188,16 @@ class BranchController extends Controller
 
         // If there was a new image, use it otherwise get old image name.
         if ($request->file('logo')) {
-            $update['logo'] = save_file($request);
+            $update['logo'] = save_file($request->file('logo'), 'deafult_logo.jpg');
         } else {
             $update['logo'] =  $branch->branchDetails->logo;
+        }
+
+        // If there was a new image for banner, use it otherwise get old image name.
+        if ($request->file('banner')) {
+            $update['banner'] = save_file($request->file('banner'), 'deafult_banner.jpg');
+        } else {
+            $update['banner'] =  $branch->branchDetails->banner;
         }
 
         // Update details.

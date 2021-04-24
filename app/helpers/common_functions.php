@@ -11,6 +11,7 @@ use App\Models\Payment;
 use App\Models\Setting;
 use App\Models\DeliveryDetails;
 use Illuminate\Support\Facades\DB;
+use \Illuminate\Support\Facades\Notification;
 
 if (!function_exists('save_file')) {
     /**
@@ -22,27 +23,27 @@ if (!function_exists('save_file')) {
      * @return a string which is name of the file with extension and address.
      *
      * */
-    function save_file($request)
+    function save_file($file, $defaultName)
     {
         // Handle File Upload
-        if ($request->file('logo')) {
+        if ($file) {
 
             // Get filename with extension
-            $filenameWithExt = $request->file('logo')->getClientOriginalName();
+            $filenameWithExt = $file->getClientOriginalName();
 
             // Get just filename
             $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
 
             // Get just ext
-            $extension = $request->file('logo')->getClientOriginalExtension();
+            $extension = $file->getClientOriginalExtension();
 
             //Filename to store
             $fileNameToStore = $filename . '_' . time() . '.' . $extension;
 
             // Upload Image
-            $path = $request->file('logo')->storeAs('/public/profile_images', $fileNameToStore);
+            $path = $file->storeAs('/public/profile_images', $fileNameToStore);
         } else {
-            $fileNameToStore = 'noimage.jpg';
+            $fileNameToStore = $defaultName;
         }
 
         return $fileNameToStore;
@@ -344,7 +345,7 @@ if (!function_exists('get_orders')) {
                 $status = ['completed', 'canceld', 'reject'];
                 break;
             case 'active-orders':
-                $status = ['pending', 'processing', 'delivered'];
+                $status = ['processing', 'delivered'];
                 break;
             default:
                 $status = [];
@@ -411,7 +412,7 @@ if (!function_exists('send_notification')) {
             event(new \App\Events\NotificationEvent('Notification', $notifyUsers[$i]));
         }
 
-        \Illuminate\Support\Facades\Notification::send($notifyUsers, new \App\Notifications\UpdateNotification($message, $userId));
+        Notification::send($notifyUsers, new \App\Notifications\UpdateNotification($message, $userId));
     }
 }
 

@@ -171,11 +171,11 @@ class DatabaseSeeder extends Seeder
         ));
 
         DB::table('branche_main_info')->insert(array(
-            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'business_id' => '1','title' => 'Fifty-Fifty','description' => 'Eat anything with 50 Afs.','logo' => 'test_1614666474.png','contact' => '+937909090','location' => 'Herat-Chawk Golha','status' => 'approved'),
-            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'business_id' => '2','title' => 'Herat Super Market','description' => 'Any you need, we have.','logo' => 'logo_1614666570.png','contact' => '+937303030','location' => 'Herat-Chawk Shahre Now','status' => 'old'),
-            array('id' => '3','created_at' => NULL,'updated_at' => NULL,'business_id' => '3','title' => 'Ghulam Bargar','description' => 'Any you need, we have.','logo' => 'logo_1614666570.png','contact' => '+937303030','location' => 'Herat-Chawk Shahre Now','status' => 'approved'),
-            array('id' => '4','created_at' => NULL,'updated_at' => '2021-03-24 16:05:20','business_id' => '1','title' => 'Fifty-Fifty','description' => 'Eat anything with 50 Afs. and 100','logo' => 'test_1614666474.png','contact' => '+937909090','location' => 'Herat-Chawk Golha','status' => 'rejected'),
-            array('id' => '5','created_at' => NULL,'updated_at' => '2021-03-25 12:15:55','business_id' => '2','title' => 'Herat Super Market','description' => 'Any you need, we have.','logo' => 'grocery-store_1616657916.jpg','contact' => '+937303030','location' => 'Herat-Chawk Shahre Now','status' => 'approved')
+            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'business_id' => '1','title' => 'Fifty-Fifty','description' => 'Eat anything with 50 Afs.','banner' => 'deafult_banner.jpg', 'logo' => 'test_1614666474.png','contact' => '+937909090','location' => 'Herat-Chawk Golha','status' => 'approved'),
+            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'business_id' => '2','title' => 'Herat Super Market','description' => 'Any you need, we have.','banner' => 'deafult_banner.jpg', 'logo' => 'logo_1614666570.png','contact' => '+937303030','location' => 'Herat-Chawk Shahre Now','status' => 'old'),
+            array('id' => '3','created_at' => NULL,'updated_at' => NULL,'business_id' => '3','title' => 'Ghulam Bargar','description' => 'Any you need, we have.','banner' => 'deafult_banner.jpg', 'logo' => 'logo_1614666570.png','contact' => '+937303030','location' => 'Herat-Chawk Shahre Now','status' => 'approved'),
+            array('id' => '4','created_at' => NULL,'updated_at' => '2021-03-24 16:05:20','business_id' => '1','title' => 'Fifty-Fifty','description' => 'Eat anything with 50 Afs. and 100','banner' => 'deafult_banner.jpg', 'logo' => 'test_1614666474.png','contact' => '+937909090','location' => 'Herat-Chawk Golha','status' => 'rejected'),
+            array('id' => '5','created_at' => NULL,'updated_at' => '2021-03-25 12:15:55','business_id' => '2','title' => 'Herat Super Market','description' => 'Any you need, we have.','banner' => 'deafult_banner.jpg', 'logo' => 'grocery-store_1616657916.jpg','contact' => '+937303030','location' => 'Herat-Chawk Shahre Now','status' => 'approved')
           ));
 
           DB::table('items')->insert(array(
