@@ -30,7 +30,7 @@ class CustomerGetRequests extends Controller
 
     public function get_single_restaurant_profile(Request $request) {
         
-        $data['profile'] = Branch::select('id', 'business_type')->with('branchDetails:business_id,title,description,logo,contact,location')->where('id', $request['restaurantID'])->get();
+        $data['profile'] = Branch::select('id', 'business_type')->with('branchDetails:business_id,title,description,logo,contact,location,banner')->where('id', $request['restaurantID'])->get();
 
         // Check if this restaurant is from customer's favorite.
         $count = DB::table('favorited_restaurants')->where('branch_id', $request['restaurantID'])->count();
