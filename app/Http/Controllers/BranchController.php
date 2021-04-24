@@ -83,8 +83,8 @@ class BranchController extends Controller
                 ['business_id' => $id,
                 'title' => $requestData['title'],
                 'description' => $requestData['description'],
-                'logo' => save_file($request->file('logo')),
-                'banner' => save_file($request->file('banner')),
+                'logo' => save_file($request->file('logo'), 'deafult_logo.jpg'),
+                'banner' => save_file($request->file('banner'), 'deafult_banner.jpg'),
                 'contact' => $requestData['contact'],
                 'location' => $requestData['location'],
                 'status' => 'approved']
@@ -188,14 +188,14 @@ class BranchController extends Controller
 
         // If there was a new image, use it otherwise get old image name.
         if ($request->file('logo')) {
-            $update['logo'] = save_file($request->file('logo'));
+            $update['logo'] = save_file($request->file('logo'), 'deafult_logo.jpg');
         } else {
             $update['logo'] =  $branch->branchDetails->logo;
         }
 
         // If there was a new image for banner, use it otherwise get old image name.
         if ($request->file('banner')) {
-            $update['banner'] = save_file($request->file('banner'));
+            $update['banner'] = save_file($request->file('banner'), 'deafult_banner.jpg');
         } else {
             $update['banner'] =  $branch->branchDetails->banner;
         }

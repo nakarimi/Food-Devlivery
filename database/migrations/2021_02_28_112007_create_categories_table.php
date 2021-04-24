@@ -18,7 +18,7 @@ class CreateCategoriesTable extends Migration
             $table->string('title');
             $table->string('type');
             $table->string('description')->nullable();
-            $table->string('thumbnail')->nullable();
+            $table->string('thumbnail');
             $table->string('status')->nullable();
             });
     }

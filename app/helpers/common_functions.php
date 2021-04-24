@@ -23,7 +23,7 @@ if (!function_exists('save_file')) {
      * @return a string which is name of the file with extension and address.
      *
      * */
-    function save_file($file)
+    function save_file($file, $defaultName)
     {
         // Handle File Upload
         if ($file) {
@@ -43,7 +43,7 @@ if (!function_exists('save_file')) {
             // Upload Image
             $path = $file->storeAs('/public/profile_images', $fileNameToStore);
         } else {
-            $fileNameToStore = 'noimage.jpg';
+            $fileNameToStore = $defaultName;
         }
 
         return $fileNameToStore;

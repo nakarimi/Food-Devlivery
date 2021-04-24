@@ -19,7 +19,7 @@ class CreateItemDetailsTable extends Migration
             $table->integer('item_id')->nullable();
             $table->string('title')->nullable();
             $table->string('description')->nullable();
-            $table->string('thumbnail')->nullable();
+            $table->string('thumbnail');
             $table->double('price')->nullable();
             $table->double('package_price')->nullable();
             $table->string('unit')->nullable();
