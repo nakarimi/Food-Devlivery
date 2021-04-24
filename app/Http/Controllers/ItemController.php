@@ -106,7 +106,7 @@ class ItemController extends Controller
                 ['item_id' => $id,
                 'title' => $requestData['title'],
                 'description' => $requestData['description'],
-                'thumbnail' => save_file($request),
+                'thumbnail' => save_file($request->file('logo')),
                 'price' => $requestData['price'],
                 'package_price' => $requestData['package_price'],
                 'unit' => $requestData['unit'],
@@ -217,7 +217,7 @@ class ItemController extends Controller
 
             // If there was a new image, use it otherwise get old image name.
            if ($request->file('logo')) {
-               $update['thumbnail'] = save_file($request);
+               $update['thumbnail'] = save_file($request->file('logo'));
            } else {
               $update['thumbnail'] =  get_item_details($item, Session::get('itemType'))->thumbnail;
            }

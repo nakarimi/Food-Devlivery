@@ -20,6 +20,7 @@ class BranchMainInfo extends Migration
             $table->string('title');
             $table->string('description')->nullable();
             $table->string('logo')->nullable();
+            $table->string('banner')->nullable();
             $table->string('contact')->nullable();
             $table->string('location')->nullable();
             $table->string('note')->nullable();
