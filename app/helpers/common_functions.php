@@ -23,25 +23,25 @@ if (!function_exists('save_file')) {
      * @return a string which is name of the file with extension and address.
      *
      * */
-    function save_file($request)
+    function save_file($file)
     {
         // Handle File Upload
-        if ($request->file('logo')) {
+        if ($file) {
 
             // Get filename with extension
-            $filenameWithExt = $request->file('logo')->getClientOriginalName();
+            $filenameWithExt = $file->getClientOriginalName();
 
             // Get just filename
             $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
 
             // Get just ext
-            $extension = $request->file('logo')->getClientOriginalExtension();
+            $extension = $file->getClientOriginalExtension();
 
             //Filename to store
             $fileNameToStore = $filename . '_' . time() . '.' . $extension;
 
             // Upload Image
-            $path = $request->file('logo')->storeAs('/public/profile_images', $fileNameToStore);
+            $path = $file->storeAs('/public/profile_images', $fileNameToStore);
         } else {
             $fileNameToStore = 'noimage.jpg';
         }

@@ -4,6 +4,16 @@
 @stop
 @section('content')
 <div class="container">
+       <div class="row">
+         <div class="col-md-12">
+            <div class="card">
+               <div class="team_work_agile" style="background: linear-gradient(rgba(23, 22, 23, 0.2), rgba(23, 22, 23, 0.5)), url({{ url('storage/profile_images/'.$branch->branchDetails->banner) }}) no-repeat;">
+                  <h4>{{ $branch->branchDetails->title }}</h4>
+               </div>
+            </div>
+         </div>
+      </div>
+
    <div class="row">
       <div class="col-md-12">
          <div class="card">
@@ -14,7 +24,7 @@
                </div>
             </div>
             <div class="card-body">
-
+            
                <a href="{{ url('/branch') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
                <a href="{{ url('/branch/' . $branch->id . '/edit') }}" title="Edit Branch"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
 {{--               <form method="POST" action="{{ url('branch' . '/' . $branch->id) }}" accept-charset="UTF-8" style="display:inline">--}}
