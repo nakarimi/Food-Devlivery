@@ -45,8 +45,8 @@
          <label for="category_id" class="control-label">{{ (get_role() == "restaurant") ? 'کتگوری اصلی' : 'Main Category' }}</label>
          <select class="custom-select mr-sm-2" name="main_category_id" id="main_category_id" required>
             <option value="" >.....</option>
-            @foreach($categories as $category)
-                <option value="{{ $category->type }}" @if( isset($item->type) && $category->type == $item->type) selected="selected" @endif >{{ translate_term($category->type) }}</option>
+            @foreach($category_types as $category)
+                <option value="{{ $category->type }}" @if( isset($item->category_id) && $category->type == $item->category->type) selected="selected" @endif >{{ translate_term($category->type) }}</option>
             @endforeach
          </select>
          {!! $errors->first('code', '
@@ -58,9 +58,21 @@
    <div class="col">
       <div class="form-group{{ $errors->has('code') ? 'has-error' : ''}}">
          <label for="category_id" class="control-label">{{ (get_role() == "restaurant") ? 'کتگوری' : 'Category' }}</label>
-         <select class="custom-select mr-sm-2" name="category_id" id="category_id" required>
-            <option value="" >کتگوری اصلی را انتخاب کنید</option>
-         </select>
+         
+         @if(!isset($item->category_id))
+            {{-- This if for the new item creation. --}}
+            <select class="custom-select mr-sm-2" name="category_id" id="category_id" required>
+               <option value="" >کتگوری اصلی را انتخاب کنید</option>
+            </select>
+         @else
+            <select class="custom-select mr-sm-2" name="category_id" id="category_id" required>
+               @foreach($categories as $category)
+                  <option value="{{ $category->id }}" @if($category->id == $item->category_id) selected="selected" @endif >{{ $category->title }}</option>
+               @endforeach
+            </select>
+         @endif
+         
+         
          {!! $errors->first('code', '
          <p class="help-block">:message</p>
          ') !!}
