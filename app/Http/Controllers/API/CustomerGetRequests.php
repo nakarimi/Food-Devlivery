@@ -4,13 +4,14 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
-use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Item;
 use App\Models\Category;
+use App\Models\Order;
 use JWTAuth;
+use Validator;
 
 class CustomerGetRequests extends Controller
 {
@@ -38,8 +39,22 @@ class CustomerGetRequests extends Controller
         // add is_favorite to result.
         $data['profile'][0]->is_favorite = ($count > 0); 
 
-        // List of all item categories indexed by main type. (title, id)
-        $data['tabs'] = Category::get(['id', 'type', 'title'])->groupBy('type')->toArray(); 
+        // List of all items of a restaurant.
+        $data['items'] = Item::select('id', 'category_id')->with('category')->with('approvedItemDetails:item_id,title,description,thumbnail,price')->where('branch_id', $request['restaurantID'])->get()->toArray();
+
+        // These categories should be those which actually restaruant has item for them.
+        $category_ids = [];
+        foreach ($data['items'] as $row) {
+            $category_ids[] = $row['category_id'];
+        }
+        
+        // List of all item categories indexed by main type. (title, id).
+        $data['tabs'] = Category::get(['id', 'type', 'title'])->whereIn('id', array_unique($category_ids))->groupBy('type')->toArray();
+
+        $customerID = JWTAuth::user()->id; // Get current customer id from JWT Authentication.
+
+        // List of old item purchased by this customer from this restaurant.
+        $data['old_purchases'] = $this->get_old_purchases($request['restaurantID'], $customerID); 
         
         return $data;
     }
@@ -101,5 +116,28 @@ class CustomerGetRequests extends Controller
         $data['branches'] = $this->get_list_restaurants($all = false, $latest = false, $favorited = false, $customerID = false, $request['keyword']);
 
         return $data;
+    }
+
+    // List of old item purchased by this customer from this restaurant.
+    public function get_old_purchases($branch, $customerID) {
+
+        $old_orders = Order::where('customer_id', $customerID)->where('branch_id', $branch)->get(['contents'])->toArray();
+
+        $item_ids = [];
+
+        // Go through the orders and get items from its content,
+        foreach ($old_orders as $order) {
+
+            $items = json_decode($order['contents']);
+
+            // Go through each content and collect items.
+            foreach ($items->contents as $key => $item) {
+                $item = reset($item); 
+                $item_ids[] = $item->item_id;
+            }
+
+        }
+
+        return Item::select('id')->with('approvedItemDetails:item_id,title,description,thumbnail,price')->whereIn('id', array_unique($item_ids))->get()->toArray();
     }
 }

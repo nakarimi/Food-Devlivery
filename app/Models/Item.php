@@ -71,7 +71,7 @@ class Item extends Model
     }
 
     public function category(){
-        return $this->hasOne(Category::class, 'id', 'category_id')->latest();
+        return $this->hasOne(Category::class, 'id', 'category_id')->select('id', 'type');
     }
 
     
