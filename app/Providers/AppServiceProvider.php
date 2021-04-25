@@ -37,16 +37,15 @@ class AppServiceProvider extends ServiceProvider
        View::composer(['layouts.sidebar', 'dashboards.restaurant.layouts.sidebar'], function ($view) {
             $status = ['pending', 'processing', 'delivered'];
             if (get_role() == "restaurant"){
+                
                 $userId = auth()->user()->id;
                 $pendingItems = loadUserItemsData(['pending'], $userId, true);
+                
                 // Get user branch.
-                $branches =  getUserBranches($userId);
-                $branchIds = [];
-                foreach ($branches as $branch) {
-                    array_push($branchIds, $branch->id);
-                }
+                $branchID = get_current_branch_id();
+                
                 // Get user active orders.
-                $activeOrders = Order::whereIn('branch_id', $branchIds)->whereIn('status', $status)->count();
+                $activeOrders = Order::where('branch_id', $branchID)->whereIn('status', $status)->count();
 
                 // Get user rejected items.
                 $rejectedItems = loadUserItemsData(['rejected'], $userId, true);
