@@ -637,23 +637,31 @@ if (!function_exists('get_waiting_orders')) {
             $query->where('status', 'pending')->where('orders.created_at', '<', $timeOffSet)->whereHas('branchDetails', function ($sub) use ($keyword) {
                 $sub->where('title', 'LIKE', "%" . $keyword . "%");
             });
+        })->orwhere(function ($query) use ($keyword) {
+            // Get orders that are assigned to company to delivery and yet have no driver assigned to them.
+            $query->whereHas('deliveryDetails', function ($subquery) {
+                $subquery->where('delivery_type', 'company')->whereNull('driver_id');
+            })->where('status', '<>', 'reject')->whereHas('branchDetails', function ($sub) use ($keyword) {
+                $sub->where('title', 'LIKE', "%" . $keyword . "%");
         });
+        });
+
         // INFO: on Waiting orders we list and filter all orders that with these 2 conditions:
         //  1. Pending status and created time is older that 1 mins. (It means order is created 1 minute a go and still restaruant not responded to it)
         //  2. Orders that restaurant requested delivery for them and yet no driver is assigned.
         
         // @TODO: Here you removed the 2nd logic (about drivers), it lists all orders with no driver assigned and consider the status, but if you provide the code, (based on your bellow condition), it does not get those orders correctly because it only get orders by status and not check this logic (whereNull('driver_id')). 
-        if (!$code) {
-            $order_query->orwhere(function ($query) use ($keyword) {
-                // Get orders that are assigned to company to delivery and yet have no driver assigned to them.
-                $query->whereHas('deliveryDetails', function ($subquery) {
-                    $subquery->where('delivery_type', '
-                    ')->whereNull('driver_id');
-                })->where('status', '<>', 'reject')->whereHas('branchDetails', function ($sub) use ($keyword) {
-                    $sub->where('title', 'LIKE', "%" . $keyword . "%");
-                });
-            });
-        }
+        // if (!$code) {
+        //     $order_query->orwhere(function ($query) use ($keyword) {
+        //         // Get orders that are assigned to company to delivery and yet have no driver assigned to them.
+        //         $query->whereHas('deliveryDetails', function ($subquery) {
+        //             $subquery->where('delivery_type', '
+        //             ')->whereNull('driver_id');
+        //         })->where('status', '<>', 'reject')->whereHas('branchDetails', function ($sub) use ($keyword) {
+        //             $sub->where('title', 'LIKE', "%" . $keyword . "%");
+        //         });
+        //     });
+        // }
         return ($count) ?  $order_query->count() : $order_query->paginate($perPage);
     }
 }
