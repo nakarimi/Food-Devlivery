@@ -1,24 +1,14 @@
 
 @section('title')
-    @if (last(request()->segments()) == "activeOrders") Active Orders @else Waiting Orders @endif
+    @if(\Request::is('waitingOrders')) Waiting Orders @else Active Orders  @endif
 @stop
 <div class="container">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">@if (last(request()->segments()) == "activeOrders") Active Orders @else Waiting Orders @endif</div>
+                <div class="card-header">@if(\Request::is('waitingOrders')) Waiting Orders @else Active Orders  @endif</div>
                 <div class="card-body">
-                    <form  accept-charset="UTF-8" class="form-inline my-2 my-lg-0 float-right" role="search">
-                        <div class="input-group">
-                            <input type="text" class="form-control mx-1" name="code" placeholder="Code" wire:model="code">
-                            <input type="text" class="form-control" name="search" placeholder="Search..." wire:model="keyword">
-                            <span class="input-group-append">
-                                <button class="btn btn-secondary form-control" type="submit">
-                                <i class="fa fa-search"></i>
-                                </button>
-                            </span>
-                        </div>
-                    </form>
+                    @include('order.orders.order-filter')
                     <br/>
                     <br/>
                     <br/>
@@ -45,42 +35,39 @@
                                     <td>{{ $item->customer->name }} <br> ({{$item->reciever_phone}}) </td>
                                     <td class="max-width200">{!! show_order_itmes($item->contents) !!}</td>
                                     <td class='@if (($item->has_delivery == 1) && ($item->deliveryDetails->driver)) hasDriver @endif '>
-                                        @if($item->has_delivery == 1)
-                                            @if($item->deliveryDetails->delivery_type == 'own')
+                                        @if($item->deliveryDetails->delivery_type == 'own')
                                                 <span class="badge bg-inverse-success">Own Delivery</span>
+                                        @else
+                                            @if($item->deliveryDetails->driver)
+
+                                                <span class="badge bg-inverse-primary">(Company Delivery) <br>
+                                                    <span class="badge bg-inverse-danger">{{$item->deliveryDetails->driver->title}}</span>
+                                                </span>
+
                                             @else
-                                                @if($item->deliveryDetails->driver)
-
-                                                    <span class="badge bg-inverse-primary">(Company Delivery) <br>
-                                                        <span class="badge bg-inverse-danger">{{$item->deliveryDetails->driver->title}}</span>
-                                                    </span>
-
-                                                @else
-                                                <select class="custom-select mr-sm-2 driver_select" order_id={{$item->id}} name="driver_id" id="driver_id" customer_id="{{ $item->customer_id }}" required>
-                                                    
-                                                    @if(count($drivers) > 0)
-                                                        <option value="" disabled selected >Selece Driver</option>
-                                                    @endif
-
-                                                    @forelse($drivers as $driver)
-                                                         
-                                                        @if($driver->status == 'free')
-                                                            <option value="{{ $driver->id }}" status="free">{{ $driver->title }} </option>
-                                                        @elseif($driver->status == 'busy')
-                                                            <option value="{{ $driver->id }}" status="busy">{{ $driver->title }} </option>
+                                                @if(\Request::is('waitingOrders'))
+                                                    <select class="custom-select mr-sm-2 driver_select" order_id={{$item->id}} name="driver_id" id="driver_id" customer_id="{{ $item->customer_id }}" required>
+                                                        
+                                                        @if(count($drivers) > 0)
+                                                            <option value="" disabled selected >Selece Driver</option>
                                                         @endif
 
-                                                    @empty
-                                                        <option value="" disabled selected >Driver N/A</option>
-                                                    @endforelse
+                                                        @forelse($drivers as $driver)
+                                                            
+                                                            @if($driver->status == 'free')
+                                                                <option value="{{ $driver->id }}" status="free">{{ $driver->title }} </option>
+                                                            @elseif($driver->status == 'busy')
+                                                                <option value="{{ $driver->id }}" status="busy">{{ $driver->title }} </option>
+                                                            @endif
 
-                                                </select>
+                                                        @empty
+                                                            <option value="" disabled selected >Driver N/A</option>
+                                                        @endforelse
+
+                                                    </select>
                                                 @endif
                                             @endif
-                                        @else
-                                            <span class="badge bg-inverse-warning">Self Delivery</span>
                                         @endif
-
                                     </td>
                                     <td>
                                         <select class="custom-select mr-sm-2" order_id={{$item->id}} status="{{$item->status}}" name="order_status" id="order_status" required>
