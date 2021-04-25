@@ -377,21 +377,28 @@ if (!function_exists('get_orders')) {
         if ($code) {
             $order_query = $order_query->where('id', $code);
         }
+
+        if (!empty($keyword)) {
+            $orders = $order_query->wherehas(
+                'branchDetails',
+                function ($query) use ($keyword) {
+                    $query->where('title', 'LIKE', "%$keyword%");
+                }
+            );
+        }
+
         if ($type == 'waiting-orders') {
             $orders = get_waiting_orders($keyword, $perPage, false, $code);
         } else {
-            if (!empty($keyword)) {
-                $orders = $order_query->wherehas(
-                    'branchDetails',
-                    function ($query) use ($keyword) {
-                        $query->where('title', 'LIKE', "%$keyword%");
-                    }
-                );
-            }
+
             // Get orders that in addition to other filters, also should have drivers.
-            $orders = $order_query->whereHas('deliveryDetails', function ($subquery) {
-                $subquery->orWhere('delivery_type', 'own');
-            })->latest()->paginate($perPage);
+           if ($type == 'active-orders') {
+                $order_query = $order_query->whereHas('deliveryDetails', function ($subquery) {
+                    $subquery->Where('delivery_type', 'own')->orWhereNotNull('driver_id');
+                });
+            }
+
+            $orders = $order_query->latest()->paginate($perPage);
         }
 
         // Real time template are in livewire dir.
@@ -635,7 +642,7 @@ if (!function_exists('get_waiting_orders')) {
         //  1. Pending status and created time is older that 1 mins. (It means order is created 1 minute a go and still restaruant not responded to it)
         //  2. Orders that restaurant requested delivery for them and yet no driver is assigned.
         
-        // @TODO: Here if no code is provided, it lists all orders with no driver assigned and consider the status, but if you provide the code, (based on your bellow condition), it does not get those orders correctly because it only get orders by status and not check this logic (whereNull('driver_id')). 
+        // @TODO: Here you removed the 2nd logic (about drivers), it lists all orders with no driver assigned and consider the status, but if you provide the code, (based on your bellow condition), it does not get those orders correctly because it only get orders by status and not check this logic (whereNull('driver_id')). 
         if (!$code) {
             $order_query->orwhere(function ($query) use ($keyword) {
                 // Get orders that are assigned to company to delivery and yet have no driver assigned to them.
