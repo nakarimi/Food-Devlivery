@@ -21,15 +21,17 @@
         </div>
         <div class="card-body">
           {{-- Table filter --}}
-          @include('dashboards.shared.filter', [
-            'route_name' => ($viewData['history']) ? 'restaurantPaymentHistory' : 'restaurantPendingPayments',
-            'select' => [
-                'title' => 'All Restaurants',
-                'field_name' => 'restaurant_id',
-                'data' => $viewData['restaurants'],
-                'label_name' => 'name',
-            ]
-          ])
+          <div class="mb-4">
+            @include('dashboards.shared.filter', [
+              'route_name' => ($viewData['history']) ? 'restaurantPaymentHistory' : 'restaurantPendingPayments',
+              'select' => [
+                  'title' => 'All Restaurants',
+                  'field_name' => 'restaurant_id',
+                  'data' => $viewData['restaurants'],
+                  'label_name' => 'name',
+              ]
+            ])
+          </div>
 
           {{-- If there was no data for the page. --}}
           @if (count($payments) > 0 || (isset($_GET['branch_id']) && $_GET['branch_id'] > 0))

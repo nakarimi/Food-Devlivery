@@ -273,7 +273,8 @@ class PaymentController extends Controller
     public function restaurantPendingPayments(Request $request)
     {
         $view = 'dashboards.finance_manager.payment.restaurant.pending_payments';
-        $viewData = $this->resturantFilter($request);
+        $viewData = $this->resturantFilter($request, 'done');
+
         $viewData['history'] = false;
         return $this->get_payments($request, '=', 'done', $view, $viewData);
     }
@@ -287,6 +288,7 @@ class PaymentController extends Controller
     {
         $paymentId = $request->payment_id;
         $this->changePaymentStatus($paymentId, 'approved');
+        orders_paid_status($paymentId, 1);
 
         // Send Notification to restaurant.
         $payment = Payment::find($paymentId);
@@ -298,14 +300,15 @@ class PaymentController extends Controller
     public function restaurantsPaymentHistory(Request $request)
     {
         $view = 'dashboards.finance_manager.payment.restaurant.pending_payments';
-        $viewData = $this->resturantFilter($request);
+        $viewData = $this->resturantFilter($request, 'approved');
         $viewData['history'] = true;
         return $this->get_payments($request, '=', 'approved', $view, $viewData);
     }
 
-    public function resturantFilter($request)
+    public function resturantFilter($request, $status)
     {
-        $viewData['restaurants'] = DB::table('users')->whereIn('id', DB::table('branches')->get()->pluck('user_id'))->get()->toArray();
+       
+        $viewData['restaurants'] = get_branches_by_status($status);
         $viewData['filter'] = ['restaurant_id' => $request->restaurant_id];
         if ($request->get('date-range') && $request->get('date-range') != 'Choose Date') {
             $dates = explode(" - ", $request->get('date-range'));

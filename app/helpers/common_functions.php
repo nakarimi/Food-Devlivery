@@ -433,15 +433,7 @@ if (!function_exists('update_order')) {
 
                 $order = Order::findOrFail($id);
 
-                // @TODO: Here craete a function that takes the request as param, calculate total price and return (I mean move the bellow calculation to a function, since we need it when order creation)
-
-                // Calculate the total price of items for this order.
-                $total_price = 0;
-                $items = json_decode($requestData['contents']);
-                foreach ($items->contents as $key => $item) {
-                    $item = reset($item); // this will return object contains just count, price, item_id
-                    $total_price += $item->count * $item->price;
-                }
+                $total_price = calculate_order_items_price($requestData['contents']);
 
                 $orderData = [
                     'branch_id' => $requestData['branch_id'],
@@ -457,10 +449,6 @@ if (!function_exists('update_order')) {
                     'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 ];
 
-                // @TODO: Here create another function that accept two params $orderData array as reference, and second param is total price of order, this (function) will calculate the commissions (general commssion and delivery commission, and at the end attached the calculated values to the array.
-
-                $order->update($orderData);
-
                 if ($deliver_update) {
                     $updateDeliveryDetails = [
                         'order_id' => $id,
@@ -468,9 +456,12 @@ if (!function_exists('update_order')) {
                         'delivery_adress' => $requestData['delivery_adress'],
                     ];
 
+                    calculate_order_commission_value($orderData, $total_price);
+
                     // Update delivery details.
                     $result = DeliveryDetails::updateOrCreate(['order_id' => $id], $updateDeliveryDetails);
                 }
+                $order->update($orderData);
             });
         } catch (\Throwable $th) {
             dd($th);
@@ -709,5 +700,51 @@ if (!function_exists('get_this_branch_last_paid_date')) {
         }
 
         return $last_paid;
+    }
+
+    // Calculate the total price of items for this order.
+    if (!function_exists('calculate_order_items_price')) {
+        function calculate_order_items_price($json_items)
+        {
+            $total_price = 0;
+            $items = json_decode($json_items);
+            foreach ($items->contents as $key => $item) {
+                $item = reset($item); // This will return object contains just count, price, item_id
+                $total_price += $item->count * $item->price;
+            }
+            return $total_price;
+        }
+    }
+    // Calculate the commissions (general commssion and delivery commission.
+    if (!function_exists('calculate_order_commission_value')) {
+        function calculate_order_commission_value(&$orderData, $total_price)
+        {
+            $commission_obj = DB::table('commissions')->where('type', 'general')->first();
+            if ($commission_obj) {
+                $commission_percent = $commission_obj->percentage;
+                $commission_value = round($total_price * ($commission_percent / 100));
+                $orderData['commission_value'] = $commission_value;
+            }
+
+            // @TODO: The delivery commission should be added if it is on company.
+        }
+    }
+
+    // Update all orders paid status after final approval by finance manager.
+    if (!function_exists('orders_paid_status')) {
+        function orders_paid_status($id, $status)
+        {
+            DB::table('orders')->where('payment_id', $id)->update(['paid' => $status]);
+        }
+    }
+    if (!function_exists('get_branches_by_status')) {
+        function get_branches_by_status($status)
+        {
+            $branchIDs = DB::table('payments')->where('status', $status)->get()->pluck('branch_id')->toArray();
+            return DB::table('users')
+                ->whereIn('id', DB::table('branches')->whereIn('id', $branchIDs)->get()->pluck('user_id'))
+                ->get()->toArray();
+            
+        }
     }
 }
