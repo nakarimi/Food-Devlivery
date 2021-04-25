@@ -189,7 +189,8 @@ class DatabaseSeeder extends Seeder
             array('id' => '8','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1','status' => '1'),
             array('id' => '9','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '1','status' => '1'),
             array('id' => '10','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '1','status' => '1'),
-            array('id' => '11','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '1','status' => '1')
+            array('id' => '11','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '1','status' => '1'),
+            array('id' => '12','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '2','status' => '1')
           ));
 
 
@@ -215,7 +216,8 @@ class DatabaseSeeder extends Seeder
   array('id' => '19','created_at' => NULL,'updated_at' => '2021-03-25 12:16:09','item_id' => '10','title' => 'روغن گیاهی','description' => 'آفتاب گردان','thumbnail' => 'oil2_1616657874.jpg','price' => '140','package_price' => NULL,'unit' => 'بوتل','notes' => NULL,'details_status' => 'approved'),
   array('id' => '20','created_at' => NULL,'updated_at' => '2021-03-25 12:19:46','item_id' => '5','title' => 'کیک','description' => 'کیک نانپزی','thumbnail' => 'image_1616658523.jpg','price' => '40','package_price' => '0','unit' => 'piece','notes' => NULL,'details_status' => 'approved'),
   array('id' => '21','created_at' => NULL,'updated_at' => '2021-03-25 12:19:48','item_id' => '6','title' => 'پیزا مخصوص','description' => NULL,'thumbnail' => 'images_1616658572.jpg','price' => '80','package_price' => '0','unit' => 'piece','notes' => NULL,'details_status' => 'approved'),
-  array('id' => '22','created_at' => NULL,'updated_at' => '2021-03-25 12:29:06','item_id' => '11','title' => 'صابون','description' => 'گلنار','thumbnail' => '-زرد._1616659021.jpg','price' => '15','package_price' => NULL,'unit' => 'piece','notes' => NULL,'details_status' => 'approved')
+  array('id' => '22','created_at' => NULL,'updated_at' => '2021-03-25 12:29:06','item_id' => '11','title' => 'صابون','description' => 'گلنار','thumbnail' => '-زرد._1616659021.jpg','price' => '15','package_price' => NULL,'unit' => 'piece','notes' => NULL,'details_status' => 'approved'),
+  array('id' => '23','created_at' => NULL,'updated_at' => '2021-03-25 12:16:07','item_id' => '12','title' => 'آیسکریم','description' => '300 گرم','thumbnail' => 'cream_1616657797.jpg','price' => '60','package_price' => NULL,'unit' => 'عدد','notes' => NULL,'details_status' => 'approved'),
 ));
 
         DB::table('categories')->insert(array(
