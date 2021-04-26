@@ -79,7 +79,8 @@ class CustomerGetRequests extends Controller
         }
 
         if ($keyword) {
-            $branches = $branches->where('branche_main_info.title','LIKE', "%$keyword%");
+            // Since different column is needed, return is different.
+            return $branches->where('branche_main_info.title','LIKE', "%$keyword%")->select('branches.id', 'branche_main_info.title')->get();
         }
 
         return $branches->select('branches.id', 'branche_main_info.title', 'branche_main_info.description', 'branche_main_info.logo')->get();
@@ -108,10 +109,25 @@ class CustomerGetRequests extends Controller
         return $items->latest()->get();
     }
 
+    // Get items of a restaurant based on the provided filters.
+    public function search_items($keyword = false) {
+        
+        $items = Item::select('id')->with('approvedItemDetails:item_id,title,description,thumbnail,price');
+
+        if ($keyword) {
+            $items = $items->wherehas(
+                'approvedItemDetails', function ($query) use ($keyword) {
+                $query->where('title','LIKE', "%$keyword%");
+            });
+        }
+
+        return $items->paginate(5);
+    }
+
     // This helper search for available items and restuarant and generate array with tow sections based on provided keyword.
     public function home_page_general_search(Request $request) {
         
-        $data['items'] = $this->get_items($category = false, $branch = false, $request['keyword']);
+        $data['items'] = $this->search_items($request['keyword']);
 
         $data['branches'] = $this->get_list_restaurants($all = false, $latest = false, $favorited = false, $customerID = false, $request['keyword']);
 

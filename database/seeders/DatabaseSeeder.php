@@ -190,7 +190,14 @@ class DatabaseSeeder extends Seeder
             array('id' => '9','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '1','status' => '1'),
             array('id' => '10','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '1','status' => '1'),
             array('id' => '11','created_at' => NULL,'updated_at' => NULL,'branch_id' => '2','category_id' => '1','status' => '1'),
-            array('id' => '12','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '2','status' => '1')
+            array('id' => '12','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '2','status' => '1'),
+            array('id' => '13','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1','status' => '1'),
+            array('id' => '14','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1','status' => '1'),
+            array('id' => '15','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1','status' => '1'),
+            array('id' => '16','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1','status' => '1'),
+            array('id' => '17','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1','status' => '1'),
+            array('id' => '18','created_at' => NULL,'updated_at' => NULL,'branch_id' => '1','category_id' => '1','status' => '1')
+
           ));
 
 
@@ -218,6 +225,12 @@ class DatabaseSeeder extends Seeder
   array('id' => '21','created_at' => NULL,'updated_at' => '2021-03-25 12:19:48','item_id' => '6','title' => 'پیزا مخصوص','description' => NULL,'thumbnail' => 'images_1616658572.jpg','price' => '80','package_price' => '0','unit' => 'piece','notes' => NULL,'details_status' => 'approved'),
   array('id' => '22','created_at' => NULL,'updated_at' => '2021-03-25 12:29:06','item_id' => '11','title' => 'صابون','description' => 'گلنار','thumbnail' => '-زرد._1616659021.jpg','price' => '15','package_price' => NULL,'unit' => 'piece','notes' => NULL,'details_status' => 'approved'),
   array('id' => '23','created_at' => NULL,'updated_at' => '2021-03-25 12:16:07','item_id' => '12','title' => 'آیسکریم','description' => '300 گرم','thumbnail' => 'cream_1616657797.jpg','price' => '60','package_price' => NULL,'unit' => 'عدد','notes' => NULL,'details_status' => 'approved'),
+  array('id' => '24','created_at' => NULL,'updated_at' => NULL,'item_id' => '13','title' => 'چپس ساده نونی','description' => 'جزئیات کلی','thumbnail' => 'chips_1619419645.jpg','price' => '40','package_price' => NULL,'unit' => NULL,'notes' => NULL,'details_status' => 'approved'),
+  array('id' => '25','created_at' => NULL,'updated_at' => NULL,'item_id' => '14','title' => 'چپس ساده حلوایی','description' => 'جزئیات کلی','thumbnail' => 'content9555_1619419692.jpg','price' => '45','package_price' => NULL,'unit' => NULL,'notes' => NULL,'details_status' => 'approved'),
+  array('id' => '26','created_at' => NULL,'updated_at' => NULL,'item_id' => '15','title' => 'چپس ساده خرمایی','description' => 'جزئیات کلی','thumbnail' => 'fast-food_1619419742.jpg','price' => '48','package_price' => NULL,'unit' => NULL,'notes' => NULL,'details_status' => 'approved'),
+  array('id' => '27','created_at' => NULL,'updated_at' => NULL,'item_id' => '16','title' => 'چپس ساده مرغ','description' => 'جزئیات کلی','thumbnail' => 'stick2_1619419778.jpg','price' => '48','package_price' => NULL,'unit' => NULL,'notes' => NULL,'details_status' => 'approved'),
+  array('id' => '28','created_at' => NULL,'updated_at' => NULL,'item_id' => '17','title' => 'چپس ساده ماهی','description' => 'جزئیات کلی','thumbnail' => 'food_1619419805.jpg','price' => '48','package_price' => NULL,'unit' => NULL,'notes' => NULL,'details_status' => 'approved'),
+  array('id' => '29','created_at' => NULL,'updated_at' => NULL,'item_id' => '18','title' => 'چپس ساده تخم مرغ','description' => 'جزئیات کلی','thumbnail' => 'image_1619419828.jpg','price' => '48','package_price' => NULL,'unit' => NULL,'notes' => NULL,'details_status' => 'approved')
 ));
 
         DB::table('categories')->insert(array(
