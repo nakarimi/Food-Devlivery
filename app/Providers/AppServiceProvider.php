@@ -35,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
 
        // Share data for sidebar badges for restaurant and admin.
        View::composer(['layouts.sidebar', 'dashboards.restaurant.layouts.sidebar'], function ($view) {
-            $status = ['pending', 'processing', 'delivered'];
+
             if (get_role() == "restaurant"){
                 
                 $userId = auth()->user()->id;
@@ -45,14 +45,14 @@ class AppServiceProvider extends ServiceProvider
                 $branchID = get_current_branch_id();
                 
                 // Get user active orders.
-                $activeOrders = Order::where('branch_id', $branchID)->whereIn('status', $status)->count();
+                $activeOrders = get_active_orders_count($branchID);
 
                 // Get user rejected items.
                 $rejectedItems = loadUserItemsData(['rejected'], $userId, true);
 
                 $view->with('sidebarData', [
                     'pendingItems' => $pendingItems,
-                    'activeOrders' => $activeOrders,
+                    'restaurantActiveOrders' => $activeOrders,
                     'rejectedItems' => $rejectedItems
                 ]);
             }
@@ -63,7 +63,7 @@ class AppServiceProvider extends ServiceProvider
                 $waitingOrders = get_waiting_orders("%", null, true);
 
                 // Get all active orders.
-                $activeOrders = Order::whereIn('status', $status)->count();
+                $activeOrders = get_active_orders_count(false);
                 
                 $pendingItems = Item::whereHas(
                     'itemFullDetails', function ($query) {

@@ -15,9 +15,22 @@ function show_message(msg) {
     }
 
     hide_message();
-
 }
 
+// For now this only handles the orders for support and restaurant sidebar.
+function update_counter_js(data) {
+
+    let counts = JSON.parse(data);
+    if (counts.restaurantActiveOrders) {
+        $('#sidebar .orders #restaurantActiveOrders').text(counts.restaurantActiveOrders);
+        console.log("restaurantActiveOrders : " + counts.restaurantActiveOrders)
+    }
+    else {
+        $('#sidebar .orders #tatalOrdersCount').text((counts.activeOrders + counts.waitingOrders));
+        $('#sidebar .orders #activeOrdersCount').text(counts.activeOrders);
+        $('#sidebar .orders #waitingOrdersCount').text(counts.waitingOrders);
+    }
+}
 // Hide the normal alert.
 function hide_message() {
     $(".alertDiv").fadeTo(2000, 500).slideUp(500, function(){

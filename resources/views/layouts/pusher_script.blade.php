@@ -24,6 +24,9 @@
             playSound();
         }
         
+        // Update counters when ever update-event is called.
+        update_counter_js(JSON.stringify(data['data']));
+
         // The message above is displayed, when user is on any page, but update of active orders should happened only when user is on the active orders page.
         if (window.location.pathname == '/activeOrders') {
             // console.log('update-event called');

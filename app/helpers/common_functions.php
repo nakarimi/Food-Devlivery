@@ -340,23 +340,20 @@ if (!function_exists('get_orders')) {
     {
         // Order lists based on different status. active([Pending, Accept, Processing, Delivery]) and history ([completed, Canceled])
         $status = [];
+        $drivers = false;
+        $pageTitle = 'Waiting Orders'; // Livewire can't access Request::is in blade so we need to pass the name.
+        $perPage = 25;
         switch ($type) {
             case 'history':
                 $status = ['completed', 'canceld', 'reject'];
                 break;
             case 'active-orders':
                 $status = (get_role() == "restaurant") ? ['pending', 'processing', 'delivered'] : ['processing', 'delivered'];
+                $pageTitle = 'Active Orders';
                 break;
             default:
                 $status = [];
         };
-
-        $drivers = Driver::all();
-        $perPage = 25;
-
-        if ($type == 'waiting-orders') {
-            $status = ['delivered'];
-        }
 
         // If it is restaurant then user will have some restricted data.
         if (get_role() == "restaurant") {
@@ -374,6 +371,7 @@ if (!function_exists('get_orders')) {
         $code = (isset($_GET['code'])) ? $_GET['code'] : $code;
 
         $order_query = Order::whereIn('status', $status);
+        
         if ($code) {
             $order_query = $order_query->where('id', $code);
         }
@@ -389,6 +387,7 @@ if (!function_exists('get_orders')) {
 
         if ($type == 'waiting-orders') {
             $orders = get_waiting_orders($keyword, $perPage, false, $code);
+            $drivers = Driver::all();
         } else {
 
             // Get orders that in addition to other filters, also should have drivers.
@@ -403,7 +402,7 @@ if (!function_exists('get_orders')) {
 
         // Real time template are in livewire dir.
         if ($realTime) {
-            return view('livewire.waiting-orders', compact('orders', 'drivers'));
+            return view('livewire.waiting-orders', compact('orders', 'drivers', 'pageTitle'));
         }
 
         // Order history routes are using main template.
@@ -759,4 +758,55 @@ if (!function_exists('get_this_branch_last_paid_date')) {
                 ->get()->toArray();
         }
     }
+
+    if (!function_exists('get_active_orders_count')) {
+        function get_active_orders_count($branchID)
+        {
+            
+            $status = (get_role() == "restaurant") ? ['pending', 'processing', 'delivered'] : ['processing', 'delivered'];
+
+            $orders = Order::whereIn('status', $status);
+
+            // Active orders count for restaurant.
+            if ($branchID) {
+                $orders = $orders->where('branch_id', $branchID); 
+            }
+            else {
+                // Active orders count for Support.
+                $orders = $orders->whereHas('deliveryDetails', function ($subquery) {
+                    $subquery->Where('delivery_type', 'own')->orWhereNotNull('driver_id');
+                });
+            }
+            
+            return $orders->count();
+        }
+    }
+
+    if (!function_exists('get_updated_counts_for_JS_update')) {
+        function get_updated_counts_for_JS_update()
+        {
+            $branchID = false; // By default this data is for support not for branch.
+            if (get_role() == "restaurant"){
+                // Get user branch.
+                $branchID = get_current_branch_id();
+
+                // Get active orders count.
+                $data['restaurantActiveOrders'] = get_active_orders_count($branchID);
+
+            }
+            else {
+                // Get active orders count.
+                $data['activeOrders'] = get_active_orders_count(false);
+
+                // Get waiting orders count.
+                $data['waitingOrders'] = get_waiting_orders("%", null, true);
+
+            }
+
+            return $data;
+        }
+    }
+
+    
+
 }

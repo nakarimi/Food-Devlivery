@@ -22,13 +22,13 @@
                 <li @if (\Request::is('menu*')) class="active" @endif>
                     <a href="{{route('menu.index')}}"><i class="la la-edit"></i><span>مینیو</span></a>
                 </li>
-                @php $orderChanges = (@$sidebarData['activeOrders']) ?: 0; @endphp
-                <li class="submenu">
-                    <a href="#"><i class="la la-legal"></i> <span class="menu-title">@if($orderChanges != 0) <span class="badge badge-danger custom-badge">{{$orderChanges}}</span> @endifسفارشات</span> <span class="menu-arrow"></span></a>
+                @php $orderChanges = (@$sidebarData['restaurantActiveOrders']) ?: 0 ; @endphp
+                <li class="submenu orders">
+                    <a href="#"><i class="la la-legal"></i> <span class="menu-title">@if($orderChanges != 0) <span class="badge badge-danger custom-badge" id="restaurantActiveOrders">{{$orderChanges}}</span> @endifسفارشات</span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         {{--  <li><a  @if (\Request::is('orders/create*')) class="active" @endif href="{{ route('orders.create') }}">Add Order</a></li>--}}
                         {{-- <li><a  @if (\Request::is('orders')) class="active" @endif href="{{ route('orders.waitingOrders') }}">Waiting Orders</a></li> --}}
-                        <li><a  @if (\Request::is('activeOrders')) class="active" @endif href="{{ url('/activeOrders') }}"> @if($sidebarData['activeOrders'] != 0)<span class="badge badge-danger custom-badge">{{$sidebarData['activeOrders']}}</span>@endifسفارشات فعال</a></li>
+                        <li><a  @if (\Request::is('activeOrders')) class="active" @endif href="{{ url('/activeOrders') }}"> @if($sidebarData['restaurantActiveOrders'] != 0)<span class="badge badge-danger custom-badge" id="restaurantActiveOrders">{{$sidebarData['restaurantActiveOrders']}}</span>@endifسفارشات فعال</a></li>
                         <li><a  @if (\Request::is('order-history')) class="active" @endif href="{{ route('order.history') }}">تاریخچه سفارشات</a></li>
                     </ul>
                 </li>
