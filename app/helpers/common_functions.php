@@ -263,7 +263,7 @@ if (!function_exists('get_branch_details')) {
 
 // This will return order items for views.
 if (!function_exists('show_order_itmes')) {
-    function show_order_itmes($items)
+    function show_order_itmes($items, $api = false)
     {
 
         // Open html warapper for list of items.
@@ -273,6 +273,7 @@ if (!function_exists('show_order_itmes')) {
 
         $items = $items->contents;
 
+        $contents = [];
         for ($k = 0; $k < count($items); $k++) {
 
             // Create the correct format of key.
@@ -293,11 +294,13 @@ if (!function_exists('show_order_itmes')) {
             $title =  $itemRecord->approvedItemDetails->title;
 
             $output .= "<li>$title, $item->count</li>";
+
+            $contents[] = ['title' => $title, 'count' => $item->count];
         }
         // Close html Wrapper.
         $output .= "</ul></span>";
 
-        return $output;
+        return ($api) ? $contents : $output;
     }
 }
 

@@ -11,7 +11,7 @@ use App\Models\Item;
 use App\Models\Category;
 use App\Models\Order;
 use JWTAuth;
-use Validator;
+// use Validator;
 
 class CustomerGetRequests extends Controller
 {

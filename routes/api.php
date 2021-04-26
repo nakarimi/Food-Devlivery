@@ -55,15 +55,16 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => 'api',
+    'middleware' => 'jwt.verify',
     'prefix' => 'driver'
 
 ], function ($router) {
-    Route::get('/check', [DriverRequests::class, 'check']);    
+    Route::get('/check', [DriverRequests::class, 'check']);
+    Route::get('/new-orders-list', [DriverRequests::class, 'new_orders_list']);   
 });
 
 Route::group([
-    'middleware' => 'api',
+    'middleware' => 'jwt.verify',
     'prefix' => 'branch'
 
 ], function ($router) {
