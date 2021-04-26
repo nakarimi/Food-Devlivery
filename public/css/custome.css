@@ -168,7 +168,7 @@ td.hasDriver select {
 .custom-badge-en-parent {
   float: right;
 }
-.submenu a.subdrop .custom-badge-en-parent {
+.submenu a.subdrop .custom-badge-en-parent, .submenu a.subdrop .custom-badge {
   display: none;
 }
 .menu-title {

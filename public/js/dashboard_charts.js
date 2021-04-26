@@ -4,8 +4,6 @@ $(document).ready(function() {
         type: 'get',
         url:'/get_orders_by_status',
         success: function (response) {
-            console.log(
-                response);
             createChart(response, 'Order Statistics Based on Status', 'orders_status_chart', 400, '100%');
         },
         error: function (e) {
