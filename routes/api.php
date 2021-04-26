@@ -36,6 +36,8 @@ Route::group([
     Route::post('/refresh', [JwtAuthController::class, 'refresh']);    
 });
 
+Route::post('/verify-phone', [CustomerPostRequests::class, 'customer_verify_phone']);
+
 Route::group([
     'middleware' => 'jwt.verify',
     'prefix' => 'customer'
