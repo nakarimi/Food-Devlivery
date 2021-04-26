@@ -18,7 +18,7 @@ class OrderDelivery extends Migration
             $table->timestamps();
             $table->integer('order_id');
             $table->string('delivery_type');
-            $table->string('delivery_adress');
+            $table->string('delivery_address');
             $table->integer('driver_id')->nullable();
             $table->double('delivery_commission')->nullable();
 

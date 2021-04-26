@@ -462,7 +462,7 @@ if (!function_exists('update_order')) {
                     $updateDeliveryDetails = [
                         'order_id' => $id,
                         'delivery_type' => $requestData['delivery_type'],
-                        'delivery_adress' => $requestData['delivery_adress'],
+                        'delivery_address' => customer_address_add($requestData['customer_id'], $requestData['delivery_address']),
                     ];
 
                     calculate_order_commission_value($orderData, $total_price);
@@ -757,6 +757,19 @@ if (!function_exists('get_this_branch_last_paid_date')) {
             return DB::table('users')
                 ->whereIn('id', DB::table('branches')->whereIn('id', $branchIDs)->get()->pluck('user_id'))
                 ->get()->toArray();
+        }
+    }
+    if (!function_exists('customer_address_add')) {
+        function customer_address_add($customer_id, $data)
+        {
+            $address = DB::table('customer_addresses')->find($data);
+            if ($address) {
+                return $address->id;
+            }
+            return DB::table('customer_addresses')->insertGetId([
+                'customer_id' => $customer_id,
+                'address' => $data
+            ]);
         }
     }
 }

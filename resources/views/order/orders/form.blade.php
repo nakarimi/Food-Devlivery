@@ -136,11 +136,11 @@
     </div>
   </div>
   <div class="col">
-    <div class="form-group{{ $errors->has('delivery_adress') ? 'has-error' : '' }}">
-      <label for="delivery_adress" class="control-label">{{ 'Delivery Adress' }}</label>
+    <div class="form-group{{ $errors->has('delivery_address') ? 'has-error' : '' }}">
+      <label for="delivery_address" class="control-label">{{ 'Delivery Adress' }}</label>
       {{-- <input class="form-control" name="status" type="text" id="status" value="{{ $order->status ?? ''}}" required> --}}
-      <input class="form-control" name="delivery_adress" type="text" id="delivery_adress"
-        value="{{ $order->deliveryDetails->delivery_adress ?? '' }}">
+      <input class="form-control" name="delivery_address" type="text" id="delivery_address"
+        value="{{ $order->deliveryDetails->delivery_address ?? '' }}">
       {!! $errors->first(
     'status',
     '

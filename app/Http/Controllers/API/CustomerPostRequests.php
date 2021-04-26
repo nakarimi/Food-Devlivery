@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use App\Models\Branch;
-use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class CustomerPostRequests extends Controller
 {
@@ -59,14 +59,12 @@ class CustomerPostRequests extends Controller
 
                 // Add order to table.
                 $order_id = DB::table('orders')->insertGetId($newOrder);
-
                 $updateDeliveryDetails = [
                     'order_id' => $order_id,
                     'delivery_type' => $requestData['delivery_type'],
-                    'delivery_adress' => $requestData['delivery_adress'],
+                    'delivery_address' => customer_address_add($requestData['customer_id'], $requestData['delivery_address']),
                     'driver_id' => NULL,
                 ];
-
                 // Insert delivery details.
                 DB::table('order_delivery')->insertGetId($updateDeliveryDetails);
 
@@ -82,6 +80,7 @@ class CustomerPostRequests extends Controller
             return 1;
         } catch (\Exception $e) {
             DB::rollback();
+            dd($e);
             return -1;
         }
     }
@@ -96,6 +95,18 @@ class CustomerPostRequests extends Controller
     public function customer_signup(Request $request)
     {
         try {
+            // Check that customer id exist on users and not exist on customers table.
+            $validator = Validator::make($request->all(), [
+                'customer_id' => 'integer|unique:customers|exists:users,id', 
+                'first_name' => 'required|max:191',
+                'last_name' => 'required|max:191',
+                'gender' => 'required',
+                'age' => 'integer|required',
+                'phone' => 'unique:customers|max:10|min:10', // 0761234567
+                'city' => 'max:191',
+                'address' => 'max:250',
+                'address2' => 'max:250',
+            ]);
 
             // Since we deal with multiple tables, so we use transactions for handling conflicts and other issues.
             DB::beginTransaction();
@@ -104,18 +115,33 @@ class CustomerPostRequests extends Controller
             unset($customerDetails['token']); // To prevent: 1054 Unknown column 'token' in 'field list'.
             $customer_id = DB::table('customers')->insertGetId($customerDetails->toArray());
 
-            event(new \App\Events\UpdateEvent('New Customer Signed Up!', $customer_id));
-
             DB::commit();
             return $customer_id;
         } catch (\Exception $e) {
             DB::rollback();
-            dd($e);
-            return -1;
+            return [$validator->errors()->all(), $e->getMessage()];
         }
     }
     public function customer_shipping_address(Request $request)
     {
-        return $request;
+        try {
+            // Check that customer id exist on users table.
+            $validator = Validator::make($request->all(), [
+                'customer_id' => 'integer|exists:users,id', 
+                'address' => 'max:250',
+            ]);
+
+            DB::beginTransaction();
+            $customerAddress = $request;
+            unset($customerAddress['token']); // To prevent: 1054 Unknown column 'token' in 'field list'.
+            $address_id = DB::table('customer_addresses')->insertGetId($customerAddress->toArray());
+
+            DB::commit();
+            return $address_id;
+        } catch (\Exception $e) {
+            DB::rollback();
+            return [$validator->errors()->all(), $e->getMessage()];
+        }
+
     }
 }
