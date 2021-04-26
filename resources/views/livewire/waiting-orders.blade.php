@@ -1,12 +1,12 @@
 
 @section('title')
-    @if(\Request::is('waitingOrders')) Waiting Orders @else Active Orders  @endif
+    {{$pageTitle}}
 @stop
 <div class="container">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">@if(\Request::is('waitingOrders')) Waiting Orders @else Active Orders  @endif</div>
+                <div class="card-header">{{$pageTitle}}</div>
                 <div class="card-body">
                     @include('order.orders.order-filter')
                     <br/>
@@ -45,27 +45,25 @@
                                                 </span>
 
                                             @else
-                                                @if(\Request::is('waitingOrders'))
-                                                    <select class="custom-select mr-sm-2 driver_select" order_id={{$item->id}} name="driver_id" id="driver_id" customer_id="{{ $item->customer_id }}" required>
+                                               <select class="custom-select mr-sm-2 driver_select" order_id={{$item->id}} name="driver_id" id="driver_id" customer_id="{{ $item->customer_id }}" required>
                                                         
-                                                        @if(count($drivers) > 0)
-                                                            <option value="" disabled selected >Selece Driver</option>
+                                                    @if(count($drivers) > 0)
+                                                        <option value="" disabled selected >Selece Driver</option>
+                                                    @endif
+
+                                                    @forelse($drivers as $driver)
+                                                        
+                                                        @if($driver->status == 'free')
+                                                            <option value="{{ $driver->id }}" status="free">{{ $driver->title }} </option>
+                                                        @elseif($driver->status == 'busy')
+                                                            <option value="{{ $driver->id }}" status="busy">{{ $driver->title }} </option>
                                                         @endif
 
-                                                        @forelse($drivers as $driver)
-                                                            
-                                                            @if($driver->status == 'free')
-                                                                <option value="{{ $driver->id }}" status="free">{{ $driver->title }} </option>
-                                                            @elseif($driver->status == 'busy')
-                                                                <option value="{{ $driver->id }}" status="busy">{{ $driver->title }} </option>
-                                                            @endif
+                                                    @empty
+                                                        <option value="" disabled selected >Driver N/A</option>
+                                                    @endforelse
 
-                                                        @empty
-                                                            <option value="" disabled selected >Driver N/A</option>
-                                                        @endforelse
-
-                                                    </select>
-                                                @endif
+                                                </select>
                                             @endif
                                         @endif
                                     </td>

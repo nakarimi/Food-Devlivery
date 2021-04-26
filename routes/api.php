@@ -52,20 +52,19 @@ Route::group([
     Route::get('/search-foods-in-retaurant', [CustomerGetRequests::class, 'search_foods_in_retaurant']);
     Route::get('/home-page-general-search', [CustomerGetRequests::class, 'home_page_general_search']);
 
-    
-    
 });
 
 Route::group([
-    'middleware' => 'api',
+    'middleware' => 'jwt.verify',
     'prefix' => 'driver'
 
 ], function ($router) {
-    Route::get('/check', [DriverRequests::class, 'check']);    
+    Route::get('/check', [DriverRequests::class, 'check']);
+    Route::get('/new-orders-list', [DriverRequests::class, 'new_orders_list']);   
 });
 
 Route::group([
-    'middleware' => 'api',
+    'middleware' => 'jwt.verify',
     'prefix' => 'branch'
 
 ], function ($router) {

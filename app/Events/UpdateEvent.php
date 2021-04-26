@@ -19,6 +19,7 @@ class UpdateEvent implements ShouldBroadcastNow
 
     public $message;
     public $userId;
+    public $data;
 
     /**
      * Create a new event instance.
@@ -29,6 +30,7 @@ class UpdateEvent implements ShouldBroadcastNow
     {
         $this->message = $message;
         $this->userId = (!is_null($orderId)) ? Branch::findOrFail(Order::findOrFail($orderId)->branch_id)->user_id : NULL;
+        $this->data = get_updated_counts_for_JS_update();
     }
 
     /**

@@ -205,7 +205,7 @@ class OrdersController extends Controller
 
         } catch (\Exception $e) {
             DB::rollback();
-            return 'Order updated!';
+            return 'Order Not updated!';
         }
 
     }
