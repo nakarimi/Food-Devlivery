@@ -374,7 +374,7 @@ if (!function_exists('get_orders')) {
         $code = (isset($_GET['code'])) ? $_GET['code'] : $code;
 
         $order_query = Order::whereIn('status', $status);
-        
+
         if ($code) {
             $order_query = $order_query->where('id', $code);
         }
@@ -464,7 +464,7 @@ if (!function_exists('update_order')) {
                     $updateDeliveryDetails = [
                         'order_id' => $id,
                         'delivery_type' => $requestData['delivery_type'],
-                        'delivery_adress' => $requestData['delivery_adress'],
+                        'delivery_address' => customer_address_add($requestData['customer_id'], $requestData['delivery_address']),
                     ];
 
                     calculate_order_commission_value($orderData, $total_price);
@@ -761,26 +761,38 @@ if (!function_exists('get_this_branch_last_paid_date')) {
                 ->get()->toArray();
         }
     }
+    if (!function_exists('customer_address_add')) {
+        function customer_address_add($customer_id, $data)
+        {
+            $address = DB::table('customer_addresses')->find($data);
+            if ($address) {
+                return $address->id;
+            }
+            return DB::table('customer_addresses')->insertGetId([
+                'customer_id' => $customer_id,
+                'address' => $data
+            ]);
+        }
+    }
 
     if (!function_exists('get_active_orders_count')) {
         function get_active_orders_count($branchID)
         {
-            
+
             $status = (get_role() == "restaurant") ? ['pending', 'processing', 'delivered'] : ['processing', 'delivered'];
 
             $orders = Order::whereIn('status', $status);
 
             // Active orders count for restaurant.
             if ($branchID) {
-                $orders = $orders->where('branch_id', $branchID); 
-            }
-            else {
+                $orders = $orders->where('branch_id', $branchID);
+            } else {
                 // Active orders count for Support.
                 $orders = $orders->whereHas('deliveryDetails', function ($subquery) {
                     $subquery->Where('delivery_type', 'own')->orWhereNotNull('driver_id');
                 });
             }
-            
+
             return $orders->count();
         }
     }
@@ -789,27 +801,21 @@ if (!function_exists('get_this_branch_last_paid_date')) {
         function get_updated_counts_for_JS_update()
         {
             $branchID = false; // By default this data is for support not for branch.
-            if (get_role() == "restaurant"){
+            if (get_role() == "restaurant") {
                 // Get user branch.
                 $branchID = get_current_branch_id();
 
                 // Get active orders count.
                 $data['restaurantActiveOrders'] = get_active_orders_count($branchID);
-
-            }
-            else {
+            } else {
                 // Get active orders count.
                 $data['activeOrders'] = get_active_orders_count(false);
 
                 // Get waiting orders count.
                 $data['waitingOrders'] = get_waiting_orders("%", null, true);
-
             }
 
             return $data;
         }
     }
-
-    
-
 }

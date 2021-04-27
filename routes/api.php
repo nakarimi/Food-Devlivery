@@ -71,3 +71,5 @@ Route::group([
     Route::get('/check', [BranchRequests::class, 'check']);    
 });
 
+// This route called before generating token, so doesn't need middleware.
+Route::post('/verify-phone', [CustomerPostRequests::class, 'customer_verify_phone']);

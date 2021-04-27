@@ -18,7 +18,7 @@ class DeliveryDetails extends Model
      *
      * @var array
      */
-    protected $fillable = ['order_id', 'delivery_adress', 'delivery_type'];
+    protected $fillable = ['order_id', 'delivery_address', 'delivery_type'];
 
     public function driver(){
         return $this->hasOne(Driver::class, 'id', 'driver_id')->latest();

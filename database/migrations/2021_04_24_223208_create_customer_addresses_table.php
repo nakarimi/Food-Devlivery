@@ -15,7 +15,7 @@ class CreateCustomerAddressesTable extends Migration
     {
         Schema::create('customer_addresses', function (Blueprint $table) {
             $table->id();
-            $table->string('address');
+            $table->string('address', 250);
             $table->bigInteger('customer_id')->unsigned();
             // Due to using DB this field should have current datetime as default value.
             $table->timestamp('updated_at')->useCurrent();
