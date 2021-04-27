@@ -31,7 +31,8 @@ Route::group([
 
 ], function ($router) {
     Route::post('/login', [JwtAuthController::class, 'login']);
-    Route::post('/register', [JwtAuthController::class, 'register']);
+    // Route::post('/register', [JwtAuthController::class, 'register']);
+    Route::post('/customer-signup', [JwtAuthController::class, 'customer_signup']);
     Route::post('/logout', [JwtAuthController::class, 'logout']);
     Route::post('/refresh', [JwtAuthController::class, 'refresh']);    
 });
@@ -43,8 +44,8 @@ Route::group([
 ], function ($router) {
     // All the bellow routes need token authentication.
     Route::post('/submit-new-order', [CustomerPostRequests::class, 'submit_new_order']);
-    Route::post('/signup', [CustomerPostRequests::class, 'customer_signup']);
-    Route::post('/shipping-address', [CustomerPostRequests::class, 'customer_shipping_address']);
+    // Route::post('/signup', [CustomerPostRequests::class, 'customer_signup']);
+    // Route::post('/shipping-address', [CustomerPostRequests::class, 'customer_shipping_address']);
     Route::post('/update-order', [CustomerPostRequests::class, 'update_order']);
     Route::get('/home-page-data', [CustomerGetRequests::class, 'home_page_data']);
     Route::get('/restaurnt-food-list-signle-category', [CustomerGetRequests::class, 'get_list_restaurant_food_of_single_category']);

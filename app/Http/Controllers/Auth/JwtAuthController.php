@@ -10,6 +10,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Controllers\Controller; 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
  
 class JwtAuthController extends Controller
 {
@@ -56,6 +57,62 @@ class JwtAuthController extends Controller
             'success' => true,
             'data' => $user
         ], Response::HTTP_OK);
+    }
+
+    public function customer_signup(Request $request)
+    {
+        
+        $validator = Validator::make($request->all(), [
+            'full_name' => 'required|max:191',
+            'phone' => 'unique:users|max:10|min:10', // 0761234567
+            'address_title' => 'min:10',
+            'address_type' => 'min:10',
+        ]);  
+ 
+         if ($validator->fails()) {  
+            return response()->json(['error'=>$validator->errors()], 401); 
+        }
+
+
+        try {
+            // Since we deal with multiple tables, so we use transactions for handling conflicts and other issues.
+            DB::beginTransaction();
+
+            $user = new User();
+            $user->name = $request->full_name;
+            $user->phone = $request->phone;
+            $user->email = $request->phone . '@customer.com';   // A fake email for customers.
+            $user->password = bcrypt($user->email);
+            $user->save();
+            
+            $customerAddressDetails = [
+                'customer_id' => $user->id,
+                'address_title' => $request->address_title,
+                'address_type' => $request->address_type,
+                'address_details' => $request->address_details,
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
+            ];
+
+            DB::table('customer_addresses')->insertGetId($customerAddressDetails);
+
+            DB::commit();
+    
+            if ($this->token) {
+                return $this->login($request);
+            }
+    
+            return response()->json([
+                'success' => true,
+                'data' => $user
+            ], Response::HTTP_OK);
+
+         
+        } catch (\Exception $e) {
+            DB::rollback();
+            return [$validator->errors()->all(), $e->getMessage()];
+        }
+        
     }
   
     public function login(Request $request)

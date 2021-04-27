@@ -464,7 +464,7 @@ if (!function_exists('update_order')) {
                     $updateDeliveryDetails = [
                         'order_id' => $id,
                         'delivery_type' => $requestData['delivery_type'],
-                        'delivery_address' => customer_address_add($requestData['customer_id'], $requestData['delivery_address']),
+                        'delivery_address' => $requestData['address_id'],
                     ];
 
                     calculate_order_commission_value($orderData, $total_price);
@@ -761,6 +761,8 @@ if (!function_exists('get_this_branch_last_paid_date')) {
                 ->get()->toArray();
         }
     }
+    
+    // @TODO: is this needed.
     if (!function_exists('customer_address_add')) {
         function customer_address_add($customer_id, $data)
         {
