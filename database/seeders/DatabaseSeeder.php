@@ -279,17 +279,17 @@ class DatabaseSeeder extends Seeder
         ));
 
         DB::table('order_delivery')->insert(array(
-            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'order_id' => '1','delivery_type' => 'own','delivery_adress' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0'),
-            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'order_id' => '2','delivery_type' => 'company','delivery_adress' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0'),
-            array('id' => '3','created_at' => NULL,'updated_at' => NULL,'order_id' => '3','delivery_type' => 'own','delivery_adress' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0'),
-            array('id' => '4','created_at' => NULL,'updated_at' => NULL,'order_id' => '4','delivery_type' => 'company','delivery_adress' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0'),
-            array('id' => '5','created_at' => NULL,'updated_at' => NULL,'order_id' => '5','delivery_type' => 'company','delivery_adress' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0'),
-            array('id' => '6','created_at' => NULL,'updated_at' => NULL,'order_id' => '6','delivery_type' => 'company','delivery_adress' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0'),
-            array('id' => '7','created_at' => NULL,'updated_at' => NULL,'order_id' => '7','delivery_type' => 'company','delivery_adress' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0'),
-            array('id' => '8','created_at' => NULL,'updated_at' => NULL,'order_id' => '8','delivery_type' => 'company','delivery_adress' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0'),
-            array('id' => '9','created_at' => NULL,'updated_at' => NULL,'order_id' => '9','delivery_type' => 'company','delivery_adress' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0'),
-            array('id' => '10','created_at' => NULL,'updated_at' => NULL,'order_id' => '10','delivery_type' => 'company','delivery_adress' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0'),
-            array('id' => '11','created_at' => NULL,'updated_at' => NULL,'order_id' => '11','delivery_type' => 'company','delivery_adress' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0')
+            array('id' => '1','created_at' => NULL,'updated_at' => NULL,'order_id' => '1','delivery_type' => 'own','delivery_address' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0'),
+            array('id' => '2','created_at' => NULL,'updated_at' => NULL,'order_id' => '2','delivery_type' => 'company','delivery_address' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0'),
+            array('id' => '3','created_at' => NULL,'updated_at' => NULL,'order_id' => '3','delivery_type' => 'own','delivery_address' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0'),
+            array('id' => '4','created_at' => NULL,'updated_at' => NULL,'order_id' => '4','delivery_type' => 'company','delivery_address' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0'),
+            array('id' => '5','created_at' => NULL,'updated_at' => NULL,'order_id' => '5','delivery_type' => 'company','delivery_address' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0'),
+            array('id' => '6','created_at' => NULL,'updated_at' => NULL,'order_id' => '6','delivery_type' => 'company','delivery_address' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0'),
+            array('id' => '7','created_at' => NULL,'updated_at' => NULL,'order_id' => '7','delivery_type' => 'company','delivery_address' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0'),
+            array('id' => '8','created_at' => NULL,'updated_at' => NULL,'order_id' => '8','delivery_type' => 'company','delivery_address' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0'),
+            array('id' => '9','created_at' => NULL,'updated_at' => NULL,'order_id' => '9','delivery_type' => 'company','delivery_address' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0'),
+            array('id' => '10','created_at' => NULL,'updated_at' => NULL,'order_id' => '10','delivery_type' => 'company','delivery_address' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0'),
+            array('id' => '11','created_at' => NULL,'updated_at' => NULL,'order_id' => '11','delivery_type' => 'company','delivery_address' => 'Herat chawk.','driver_id' => NULL,'delivery_commission' => '0')
             
         ));
 
