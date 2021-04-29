@@ -22,7 +22,7 @@ class JwtAuthController extends Controller
      * @return void
      */
     public function __construct() {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'customer_signup', 'customer_login']]);
     }
     
   
@@ -64,9 +64,10 @@ class JwtAuthController extends Controller
         
         $validator = Validator::make($request->all(), [
             'full_name' => 'required|max:191',
-            'phone' => 'unique:users|max:10|min:10', // 0761234567
-            'address_title' => 'min:10',
-            'address_type' => 'min:10',
+            'firebase_token' => 'required',
+            'phone' => 'required|unique:users|max:10|min:10', // 0761234567
+            'address_title' => 'required|min:8',
+            'address_type' => 'required|min:3',
         ]);  
  
          if ($validator->fails()) {  
@@ -80,9 +81,11 @@ class JwtAuthController extends Controller
 
             $user = new User();
             $user->name = $request->full_name;
+            $user->firebase_token = $request->firebase_token;
             $user->phone = $request->phone;
             $user->email = $request->phone . '@customer.com';   // A fake email for customers.
             $user->password = bcrypt($user->email);
+            $user->role_id = 5;  // 5 is customer role.
             $user->save();
             
             $customerAddressDetails = [
@@ -99,7 +102,7 @@ class JwtAuthController extends Controller
             DB::commit();
     
             if ($this->token) {
-                return $this->login($request);
+                return $this->customer_login($request);
             }
     
             return response()->json([
@@ -131,6 +134,41 @@ class JwtAuthController extends Controller
             'success' => true,
             'token' => $jwt_token,
         ]);
+    }
+
+    public function customer_login(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'token' => 'required',
+        ]);  
+ 
+         if ($validator->fails()) {  
+            return response()->json(['error'=>$validator->errors()], 401); 
+        }
+
+
+        $user = User::where('firebase_token', '=', $request->token)->first();
+        $jwt_token = null;
+        
+        try {
+            if (!$jwt_token = JWTAuth::fromUser($user)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid Credentials',
+                ], Response::HTTP_UNAUTHORIZED);
+            }
+    
+            return response()->json([
+                'success' => true,
+                'token' => $jwt_token,
+            ]);
+        }
+        catch (\Exception $e) {
+            DB::rollback();
+            return [$validator->errors()->all(), $e->getMessage()];
+        }
+        
     }
   
     public function logout(Request $request)

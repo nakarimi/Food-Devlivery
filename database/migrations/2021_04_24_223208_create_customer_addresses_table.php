@@ -18,7 +18,7 @@ class CreateCustomerAddressesTable extends Migration
             $table->bigInteger('customer_id')->unsigned();
             $table->string('address_title', 250);
             $table->string('address_type', 250);
-            $table->string('address_details', 250);
+            $table->string('address_details', 250)->nullable();
             $table->decimal("latitude", 8, 6)->nullable();
             $table->decimal("longitude", 8, 6)->nullable();
             // Due to using DB this field should have current datetime as default value.
