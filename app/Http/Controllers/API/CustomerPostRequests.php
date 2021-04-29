@@ -62,7 +62,7 @@ class CustomerPostRequests extends Controller
                 $updateDeliveryDetails = [
                     'order_id' => $order_id,
                     'delivery_type' => $requestData['delivery_type'],
-                    'delivery_address' => customer_address_add($requestData['customer_id'], $requestData['delivery_address']),
+                    'delivery_address' => $requestData['address_id'],
                     'driver_id' => NULL,
                 ];
                 // Insert delivery details.
@@ -104,56 +104,70 @@ class CustomerPostRequests extends Controller
 
     }
     
-    public function customer_signup(Request $request)
-    {
-        try {
-            // Check that customer id exist on users and not exist on customers table.
-            $validator = Validator::make($request->all(), [
-                'customer_id' => 'integer|unique:customers|exists:users,id', 
-                'first_name' => 'required|max:191',
-                'last_name' => 'required|max:191',
-                'gender' => 'required',
-                'age' => 'integer|required',
-                'phone' => 'unique:customers|max:10|min:10', // 0761234567
-                'city' => 'max:191',
-                'address' => 'max:250',
-                'address2' => 'max:250',
-            ]);
+    // public function customer_signup(Request $request)
+    // {
+    //     try {
+    //         // Check that customer id exist on users and not exist on customers table.
+    //         $validator = Validator::make($request->all(), [
+    //             'full_name' => 'required|max:191',
+    //             'phone' => 'unique:users|max:10|min:10', // 0761234567
+    //             'address_title' => 'min:10',
+    //             'address_type' => 'min:10',
+    //         ]);
 
-            // Since we deal with multiple tables, so we use transactions for handling conflicts and other issues.
-            DB::beginTransaction();
+    //         // Since we deal with multiple tables, so we use transactions for handling conflicts and other issues.
+    //         DB::beginTransaction();
+                        
+    //         $user = new User();
+    //         $user->name = $request->full_name;
+    //         $user->phone = $request->phone;
+    //         $user->email = $request->phone . '@customer.com';   // A fake email for customers.
+    //         $user->password = bcrypt($user->email);
+    //         $user->save();
+            
+    //         $customerAddressDetails = [
+    //             'customer_id' => $user->id,
+    //             'address_title' => $request->address_title,
+    //             'address_type' => $request->address_type,
+    //             'address_details' => $request->address_details,
+    //             'latitude' => $request->latitude,
+    //             'longitude' => $request->longitude,
+    //         ];
 
-            $customerDetails = $request;
-            unset($customerDetails['token']); // To prevent: 1054 Unknown column 'token' in 'field list'.
-            $customer_id = DB::table('customers')->insertGetId($customerDetails->toArray());
+    //         DB::table('customers')->insertGetId($customerAddressDetails);
 
-            DB::commit();
-            return $customer_id;
-        } catch (\Exception $e) {
-            DB::rollback();
-            return [$validator->errors()->all(), $e->getMessage()];
-        }
-    }
-    public function customer_shipping_address(Request $request)
-    {
-        try {
-            // Check that customer id exist on users table.
-            $validator = Validator::make($request->all(), [
-                'customer_id' => 'integer|exists:users,id', 
-                'address' => 'max:250',
-            ]);
+    //         DB::commit();
+            
+    //         return response()->json([
+    //             'success' => true,
+    //             'data' => $user
+    //         ], Response::HTTP_OK);
 
-            DB::beginTransaction();
-            $customerAddress = $request;
-            unset($customerAddress['token']); // To prevent: 1054 Unknown column 'token' in 'field list'.
-            $address_id = DB::table('customer_addresses')->insertGetId($customerAddress->toArray());
+    //     } catch (\Exception $e) {
+    //         DB::rollback();
+    //         return [$validator->errors()->all(), $e->getMessage()];
+    //     }
+    // }
+    // public function customer_shipping_address(Request $request)
+    // {
+    //     try {
+    //         // Check that customer id exist on users table.
+    //         $validator = Validator::make($request->all(), [
+    //             'customer_id' => 'integer|exists:users,id', 
+    //             'address' => 'max:250',
+    //         ]);
 
-            DB::commit();
-            return $address_id;
-        } catch (\Exception $e) {
-            DB::rollback();
-            return [$validator->errors()->all(), $e->getMessage()];
-        }
+    //         DB::beginTransaction();
+    //         $customerAddress = $request;
+    //         unset($customerAddress['token']); // To prevent: 1054 Unknown column 'token' in 'field list'.
+    //         $address_id = DB::table('customer_addresses')->insertGetId($customerAddress->toArray());
 
-    }
+    //         DB::commit();
+    //         return $address_id;
+    //     } catch (\Exception $e) {
+    //         DB::rollback();
+    //         return [$validator->errors()->all(), $e->getMessage()];
+    //     }
+
+    // }
 }

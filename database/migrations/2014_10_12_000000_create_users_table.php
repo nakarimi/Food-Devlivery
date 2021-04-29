@@ -18,6 +18,8 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->string("phone")->nullable();
+            $table->string("firebase_token")->nullable();
             $table->string('password');
             $table->string('status')->default(1);
             $table->unsignedInteger('role_id');
