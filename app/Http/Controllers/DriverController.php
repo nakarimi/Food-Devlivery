@@ -151,7 +151,7 @@ class DriverController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function driverPaymentRecived(Request $request)
+    public function driverPaymentReceived(Request $request)
     {
         DB::table('recieved_driver_payments')->insert([
             'orders_id' => $request->orders,
@@ -218,7 +218,8 @@ class DriverController extends Controller
         } else {
             $drivers = Driver::whereHas('delivered.order')
                 ->latest()->paginate($perPage);
-        }
+        } 
+        // return $drivers;
 
         return view('dashboards.finance_manager.payment.active_payments', compact('drivers'));
     }

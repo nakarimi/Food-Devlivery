@@ -49,8 +49,8 @@ Payments
                               <tr>
                                  <td>{{ $item->branchTitle ?? $item->branch->branchDetails->title }}</td>
                                  <td>{{ get_farsi_date($item->range_from) }} <b> To </b>{{ get_farsi_date($item->range_to) }}</td>
-                                 <td>{{ $item->total_order }}</td>
-                                 <td>{{ $item->total_order_income }}</td>
+                                 <td>{{ $item->total_order }} @if ($item->company_order) <small title="Total delivery by company is: {{$item->company_order}}">({{$item->company_order}})</small> @endif</td>
+                                 <td>{{ $item->total_order_income }} @if ($item->company_order_total) <small title="Total money that company received, is: {{$item->company_order_total}}">({{$item->company_order_total}})</small> @endif</td>
                                  <td>{{ $item->total_general_commission }}</td>
                                  <td>{{ $item->total_delivery_commission }}</td>
                                  <td>{{ $item->total_delivery_commission + $item->total_general_commission }}</td>
@@ -71,7 +71,7 @@ Payments
                                        <input type="hidden" value="{{ $item->total_delivery_commission }}"
                                           name="total_delivery_commission">
                                        <input type="hidden"
-                                          value="{{ $item->total_delivery_commission + $item->total_general_commission }}"
+                                          value="{{ $item->total_order_income }}"
                                           name="total_order_income">
                                        <input type="hidden" value="{{ $item->from }}" name="range_from">
                                        <input type="hidden" value="{{ $item->to }}" name="range_to">
@@ -95,7 +95,7 @@ Payments
                                           onclick="return confirm(&quot;Confirm approve?&quot;)"><span>Pending</span></button>
                                     </form>
                                     @else
-                                       <span class="badge badge-{{ $item->status == 'approved' ? 'success': 'warning'}}" title="{{ $item->status == 'approved' ? 'Payment approved by Finance Manager' : 'Payment paid by resaurant to the Finance Officer' }}">{{ $item->status == 'approved' ? 'Approved' : 'Recieved' }}</span>
+                                       <span class="badge badge-{{ $item->status == 'approved' ? 'success': 'warning'}}" title="{{ $item->status == 'approved' ? 'Payment approved by Finance Manager' : 'Payment paid by resaurant to the Finance Officer' }}">{{ $item->status == 'approved' ? 'Approved' : 'Received' }}</span>
                                     @endif
 
                                  </td>

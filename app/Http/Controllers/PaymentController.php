@@ -8,6 +8,7 @@ use App\Http\Middleware\Restaurant;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use App\Models\Branch;
+use App\Models\DeliveryDetails;
 use App\Models\User;
 use App\Models\Order;
 use Illuminate\Support\Facades\DB;
@@ -58,7 +59,6 @@ class PaymentController extends Controller
 
         // Remove empty indexes.
         $payments = array_filter($payments);
-
         return view('dashboards.finance_officer.payment.index', compact('payments', 'activeBranches'));
     }
 
@@ -139,7 +139,7 @@ class PaymentController extends Controller
         $notifyUser = Branch::find($payment->branch_id)->user_id;
         send_notification([$notifyUser], $payment->reciever_id, 'پرداخت تائید شد');
 
-        return redirect()->back()->with('flash_message', 'Payment Recieved!');
+        return redirect()->back()->with('flash_message', 'Payment Received!');
     }
 
     /**
@@ -178,13 +178,22 @@ class PaymentController extends Controller
 
         // Initialize variable for later assignment.
         $totalOrders = $totalOrdersPrice = $totalGeneralCommission = $totalDeliveryCommission = 0;
-
+        $companyOrders = 0;        
+        $companyOrdersTotal = 0;
+        
         // Base payment object to collect all calculations and pass to view.
         $payment = new \stdClass;
 
         // Go through every branch orders and sum up the needed values.
         foreach ($orders as $order) {
             $totalOrders++;
+            if($details = DeliveryDetails::where('order_id', $order->id)->first()){
+                if($details->delivery_type == 'company'){
+                    $companyOrders++;
+                    $companyOrdersTotal += $order->total;
+                }
+            }
+
             $totalOrdersPrice += $order->total;
             $totalGeneralCommission += $order->commission_value;
             $totalDeliveryCommission += (is_object($order->deliveryDetails)) ? $order->deliveryDetails->delivery_commission : 0;
@@ -196,6 +205,8 @@ class PaymentController extends Controller
         $payment->range_from = Carbon::parse($from)->format('M-d');
         $payment->range_to = Carbon::parse($to)->subDays(1)->format('M-d');
         $payment->total_order = $totalOrders;
+        $payment->company_order = $companyOrders;
+        $payment->company_order_total = $companyOrdersTotal;
         $payment->branchTitle = Branch::findOrFail($branchID)->branchDetails->title;
         $payment->total_order_income = $totalOrdersPrice;
         $payment->total_general_commission = $totalGeneralCommission;
@@ -225,15 +236,18 @@ class PaymentController extends Controller
 
         // For finance officer if payment was already filtered by branch, so not load all.
         if ($condition == 'IN') {
-            $payment_query = Payment::whereIn('status', $status);
+            $payment_query = Payment::with('orders')->whereIn('status', $status);
         } else {
-            $payment_query = Payment::where('status', $condition, $status);
+            $payment_query = Payment::with('orders')->where('status', $condition, $status);
         }
+
         if (!is_null($branchID)) {
             // If current user is restaurant then laod this view.
             if (get_current_branch_id()) {
                 // Since we need correct order, so we need to load them separatly.
                 $payments = $payment_query->where('branch_id', $branchID)->paginate($perPage);
+                company_delivery_and_payments($payments);
+
                 return view('dashboards.restaurant.payment.index', compact('payments'));
             }
             $branchPayments = $payment_query->where('branch_id', $branchID)->latest()->paginate($perPage);
@@ -249,7 +263,7 @@ class PaymentController extends Controller
             }
         }
         $payments = $payment_query->latest()->paginate($perPage);
-
+        company_delivery_and_payments($payments);
         // Collect all branches that are considered active.
         $active_branches = [];
         foreach ($payments as $payment) {

@@ -23,13 +23,13 @@
           {{-- Table filter --}}
           <div class="mb-4">
             @include('dashboards.shared.filter', [
-              'route_name' => ($viewData['history']) ? 'restaurantPaymentHistory' : 'restaurantPendingPayments',
-              'select' => [
-                  'title' => 'All Restaurants',
-                  'field_name' => 'restaurant_id',
-                  'data' => $viewData['restaurants'],
-                  'label_name' => 'name',
-              ]
+            'route_name' => ($viewData['history']) ? 'restaurantPaymentHistory' : 'restaurantPendingPayments',
+            'select' => [
+            'title' => 'All Restaurants',
+            'field_name' => 'restaurant_id',
+            'data' => $viewData['restaurants'],
+            'label_name' => 'name',
+            ]
             ])
           </div>
 
@@ -55,8 +55,14 @@
                       <td>{{ $item->branchTitle ?? $item->branch->branchDetails->title }}</td>
                       <td>{{ get_farsi_date($item->range_from) }} <b> To
                         </b>{{ get_farsi_date($item->range_to) }}</td>
-                      <td>{{ $item->total_order }}</td>
-                      <td>{{ $item->total_order_income }}</td>
+                      <td>{{ $item->total_order }} @if ($item->company_order) <small
+                            title="Total delivery by company is: {{ $item->company_order }}">({{ $item->company_order }})</small>
+                        @endif
+                      </td>
+                      <td>{{ $item->total_order_income }} @if ($item->company_order_total) <small
+                            title="Total money that company received, is: {{ $item->company_order_total }}">({{ $item->company_order_total }})</small>
+                        @endif
+                      </td>
                       <td>{{ $item->total_general_commission }}</td>
                       <td>{{ $item->total_delivery_commission }}</td>
                       <td>{{ $item->total_delivery_commission + $item->total_general_commission }}</td>

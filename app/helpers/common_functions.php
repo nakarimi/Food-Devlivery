@@ -761,7 +761,7 @@ if (!function_exists('get_this_branch_last_paid_date')) {
                 ->get()->toArray();
         }
     }
-    
+
     // @TODO: is this needed.
     if (!function_exists('customer_address_add')) {
         function customer_address_add($customer_id, $data)
@@ -818,6 +818,28 @@ if (!function_exists('get_this_branch_last_paid_date')) {
             }
 
             return $data;
+        }
+    }
+
+
+    if (!function_exists('company_delivery_and_payments')) {
+        function company_delivery_and_payments(&$payments)
+        {
+            foreach ($payments as $key => &$pay) {
+                $companyOrders = 0;
+                $companyOrdersTotal = 0;
+        
+                foreach ($pay->orders as $order) {
+                    if ($details = DeliveryDetails::where('order_id', $order->id)->first()) {
+                        if ($details->delivery_type == 'company') {
+                            $companyOrders++;
+                            $companyOrdersTotal += $order->total;
+                        }
+                    }
+                }
+                $pay->company_order = $companyOrders;
+                $pay->company_order_total = $companyOrdersTotal;
+            }
         }
     }
 }

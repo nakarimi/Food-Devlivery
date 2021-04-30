@@ -20,10 +20,10 @@ class Payment extends Model
     protected $table = 'payments';
 
     /**
-    * The database primary key value.
-    *
-    * @var string
-    */
+     * The database primary key value.
+     *
+     * @var string
+     */
     protected $primaryKey = 'id';
 
     /**
@@ -48,16 +48,23 @@ class Payment extends Model
     }
 
     // Relation ship with commission
-    public function user(){
+    public function user()
+    {
         return $this->hasOne(User::class, 'id', 'reciever_id');
     }
 
-    public function branchDetails(){
+    public function branchDetails()
+    {
         return $this->hasOne(BranchDetails::class, 'business_id', 'branch_id')->where('status', 'approved')->latest();
     }
 
-    public function branch(){
+    public function branch()
+    {
         return $this->belongsTo(Branch::class);
     }
-
+    public function orders()
+    {        
+        $orders = $this->hasMany(Order::class, 'payment_id');
+        return $orders;
+    }
 }
