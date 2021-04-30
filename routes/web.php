@@ -171,4 +171,6 @@ Route::middleware(['finance_manager'])->group(function () {
     Route::get('restaurants_pending_payments', [PaymentController::class, 'restaurantPendingPayments'])->name('restaurantPendingPayments');
     Route::get('restaurants_payment_history', [PaymentController::class, 'restaurantsPaymentHistory'])->name('restaurantPaymentHistory');
     Route::post('approve_payment', [PaymentController::class, 'finalApprovePayment'])->name('approvePayment');
+    Route::get('get_restaurant_total_income', [DashboardsController::class, 'getRestaurantPaymentData']);
+
 });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use App\Models\Item;
 use App\Models\Order;
 use App\Models\User;
@@ -59,7 +60,7 @@ class DashboardsController extends Controller
 
     public function financeOfficerDashboard()
     {
-        
+
         $paymentData = $this->getPaymentData();
         return view('dashboards.finance_officer.dashboard', compact('paymentData'));
     }
@@ -144,7 +145,14 @@ class DashboardsController extends Controller
 
     public function adminDashboardData()
     {
+        $first = date("Y-m-d", strtotime("today"));
+        $last = date("Y-m-d", strtotime("tomorrow"));
+        $today_orders = Order::whereBetween('created_at', [$first, $last]);
         $data = [
+            'all_orders' => $today_orders->count(),
+            'all_derlivered' => $today_orders->where('paid', 1)->count(),
+            'total_income' => $today_orders->where('paid', 1)->sum('total'),
+            'total_commission' => $today_orders->where('paid', 1)->sum('commission_value'),
             'totalRestaurants' => User::where('role_id', 4)->count(),
             'totalDrivers' => User::where('role_id', 3)->count(),
             'totalItems' => Item::count(),
@@ -161,7 +169,8 @@ class DashboardsController extends Controller
         return $data;
     }
 
-    public function getPaymentData() {
+    public function getPaymentData()
+    {
 
         $data['totalPaidRestaurants'] = DB::table('payments')->distinct('branch_id')->count('branch_id');
         $data['totalPendingPayments'] = Payment::where('status', 'paid')->count();
@@ -172,8 +181,27 @@ class DashboardsController extends Controller
         $data['financial_summary']['total_order_income'] = Payment::sum('total_order_income');
         $data['financial_summary']['total_paid'] = Payment::where('status', 'paid')->sum('total_order_income');
         $data['financial_summary']['total_recieved'] = Payment::where('status', 'done')->sum('total_order_income');
-        
+
 
         return $data;
+    }
+    public function getRestaurantPaymentData()
+    {
+        date_default_timezone_set('Asia/Kabul');
+        // date_default_timezone_set('Asia/Aden');
+
+        $branches = Branch::with('users')->get();
+        $chartData = [];
+        foreach (range(1, 10) as $value) {
+            $first = Carbon::now()->subDays($value);
+            $past = Carbon::now()->subDays($value-1);
+            $thisData = [];
+            $thisData[] = $value;
+            foreach ($branches as $key => $branch) {
+                $thisData[] = Payment::where('branch_id', $branch->id)->where('status', 'approved')->whereBetween('created_at', [$first, $past])->sum('total_order_income');
+            }
+            $chartData[] = $thisData;
+        }
+        return $chartData;
     }
 }
