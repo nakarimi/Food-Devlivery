@@ -16,11 +16,10 @@ $(document).ready(function() {
         function drawBackgroundColor() {
             var data = new google.visualization.DataTable();
             data.addColumn("number", "X");
-            data.addColumn("number", "Fifty Fifty");
-            data.addColumn("number", "Ghulam Bargar");
-            data.addColumn("number", "Herat Super Market");
-
-            data.addRows(dataToDraw);
+            for (const [key, value] of Object.entries(dataToDraw.label)) {
+                data.addColumn("number", value);
+            }
+            data.addRows(dataToDraw["data"]);
 
             var options = {
                 hAxis: {

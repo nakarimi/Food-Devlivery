@@ -197,11 +197,15 @@ class DashboardsController extends Controller
             $past = Carbon::now()->subDays($value-1);
             $thisData = [];
             $thisData[] = $value;
+            $labels = [];
             foreach ($branches as $key => $branch) {
+                if($value == 10){
+                    $labels[] = $branch->users->name;
+                }
                 $thisData[] = Payment::where('branch_id', $branch->id)->where('status', 'approved')->whereBetween('created_at', [$first, $past])->sum('total_order_income');
             }
             $chartData[] = $thisData;
         }
-        return $chartData;
+        return ['data' => $chartData, 'label'=> $labels];
     }
 }
