@@ -66,7 +66,7 @@ class JwtAuthController extends Controller
         
         $validator = Validator::make($request->all(), [
             'full_name' => 'required|max:191',
-            'firebase_token' => 'required',
+            'token' => 'required|unique:users,firebase_token',
             'phone' => 'required|unique:users|max:10|min:10', // 0761234567
             'address_title' => 'required|min:8',
             'address_type' => 'required|min:3',
@@ -83,7 +83,7 @@ class JwtAuthController extends Controller
 
             $user = new User();
             $user->name = $request->full_name;
-            $user->firebase_token = $request->firebase_token;
+            $user->firebase_token = $request->token;
             $user->phone = $request->phone;
             $user->email = $request->phone . '@customer.com';   // A fake email for customers.
             $user->password = bcrypt($user->email);
@@ -104,7 +104,7 @@ class JwtAuthController extends Controller
             DB::commit();
     
             if ($this->token) {
-                return $this->customer_login($request);
+                return $this->customer_signin($request);
             }
     
             return response()->json([

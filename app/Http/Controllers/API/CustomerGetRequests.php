@@ -156,4 +156,41 @@ class CustomerGetRequests extends Controller
 
         return Item::select('id')->with('approvedItemDetails:item_id,title,description,thumbnail,price')->whereIn('id', array_unique($item_ids))->get()->toArray();
     }
+
+    public function active_orders(Request $request) {
+        return $this->orders_list(['pending', 'processing', 'delivered'], JWTAuth::user()->id);
+    }
+
+    public function order_history(Request $request) {
+        return $this->orders_list(['completed', 'canceld', 'reject'], JWTAuth::user()->id);
+    }
+
+    public function orders_list($status, $customerID) {
+        
+        $orders = [];
+
+        $ordersList = Order::whereIn('status', $status)->where('customer_id', $customerID)->latest()->get();
+
+
+        foreach ($ordersList as $order) {
+            $data = []; 
+            $data['id'] = $order->id;
+            $data['price'] = $order->total;
+            $data['reciever_phone'] = $order->reciever_phone;
+            $data['delivery_address'] = $order->deliveryDetails->delivery_address;
+            $data['restaurant_title'] = $order->branchDetails->title;
+            $data['restaurant_logo'] = $order->branchDetails->logo;
+            $data['restaurant_location'] = $order->branchDetails->location;
+            $data['created_at'] = $order->created_at;
+            $data['completed_time'] = $order->timeDetails->completed_time ?? NULL;
+            $data['promissed_time'] = $order->timeDetails->promissed_time ?? NULL;
+            $data['contents'] = show_order_itmes($order->contents, true);
+
+            $orders[] = $data;
+        }
+
+        return $orders;
+    }
+
+
 }

@@ -52,6 +52,8 @@ Route::group([
     Route::get('/get-single-restaurant-profile', [CustomerGetRequests::class, 'get_single_restaurant_profile']);
     Route::get('/search-foods-in-retaurant', [CustomerGetRequests::class, 'search_foods_in_retaurant']);
     Route::get('/home-page-general-search', [CustomerGetRequests::class, 'home_page_general_search']);
+    Route::get('/active-orders', [CustomerGetRequests::class, 'active_orders']);
+    Route::get('/order-history', [CustomerGetRequests::class, 'order_history']);
 
 });
 

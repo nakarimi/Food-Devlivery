@@ -293,9 +293,11 @@ if (!function_exists('show_order_itmes')) {
             // Set title.
             $title =  $itemRecord->approvedItemDetails->title;
 
+            $price =  $itemRecord->approvedItemDetails->price;
+
             $output .= "<li>$title, $item->count</li>";
 
-            $contents[] = ['title' => $title, 'count' => $item->count];
+            $contents[] = ['title' => $title, 'count' => $item->count, 'price' => $price];
         }
         // Close html Wrapper.
         $output .= "</ul></span>";
