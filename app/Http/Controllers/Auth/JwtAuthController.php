@@ -22,7 +22,7 @@ class JwtAuthController extends Controller
      * @return void
      */
     public function __construct() {
-        $this->middleware('auth:api', ['except' => ['login', 'customer_signup', 'customer_login']]);
+        $this->middleware('auth:api', ['except' => ['login', 'customer_signup', 'customer_signin']]);
     }
     
   
@@ -136,7 +136,7 @@ class JwtAuthController extends Controller
         ]);
     }
 
-    public function customer_login(Request $request)
+    public function customer_signin(Request $request)
     {
 
         $validator = Validator::make($request->all(), [
@@ -151,24 +151,26 @@ class JwtAuthController extends Controller
         $user = User::where('firebase_token', '=', $request->token)->first();
         $jwt_token = null;
         
-        try {
+        
+        if (is_null($user)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not exist in the system!',
+            ]);
+        }
+        else {
             if (!$jwt_token = JWTAuth::fromUser($user)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Invalid Credentials',
                 ], Response::HTTP_UNAUTHORIZED);
             }
-    
+
             return response()->json([
                 'success' => true,
                 'token' => $jwt_token,
             ]);
         }
-        catch (\Exception $e) {
-            DB::rollback();
-            return [$validator->errors()->all(), $e->getMessage()];
-        }
-        
     }
   
     public function logout(Request $request)

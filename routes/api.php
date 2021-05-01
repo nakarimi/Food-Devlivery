@@ -31,7 +31,7 @@ Route::group([
     Route::post('/login', [JwtAuthController::class, 'login']);
     // Route::post('/register', [JwtAuthController::class, 'register']);
     Route::post('/customer-signup', [JwtAuthController::class, 'customer_signup']);
-    Route::post('/customer-login', [JwtAuthController::class, 'customer_login']);
+    Route::post('/customer-signin', [JwtAuthController::class, 'customer_signin']);
     Route::post('/logout', [JwtAuthController::class, 'logout']);
     Route::post('/refresh', [JwtAuthController::class, 'refresh']);    
 });

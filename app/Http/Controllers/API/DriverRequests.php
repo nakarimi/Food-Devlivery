@@ -68,6 +68,7 @@ class DriverRequests extends Controller
             $data['delivery_address'] = $order->deliveryDetails->delivery_address;
             $data['restaurant_title'] = $order->branchDetails->title;
             $data['restaurant_logo'] = $order->branchDetails->logo;
+            $data['restaurant_mobile'] = $order->branchDetails->contact;
             $data['restaurant_location'] = $order->branchDetails->location;
             $data['promissed_time'] = $order->timeDetails->promissed_time;
             $data['contents'] = show_order_itmes($order->contents, true);
