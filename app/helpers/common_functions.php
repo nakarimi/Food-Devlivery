@@ -343,7 +343,7 @@ if (!function_exists('get_orders')) {
     {
         // Order lists based on different status. active([Pending, Accept, Processing, Delivery]) and history ([completed, Canceled])
         $status = [];
-        $drivers = false;
+        $drivers = [];
         $pageTitle = 'Waiting Orders'; // Livewire can't access Request::is in blade so we need to pass the name.
         $perPage = 25;
         switch ($type) {

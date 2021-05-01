@@ -60,8 +60,10 @@ Route::group([
     'prefix' => 'driver'
 
 ], function ($router) {
-    Route::get('/check', [DriverRequests::class, 'check']);
-    Route::get('/new-orders-list', [DriverRequests::class, 'new_orders_list']);   
+    // Route::get('/check', [DriverRequests::class, 'check']);
+    Route::get('/new-orders-list', [DriverRequests::class, 'new_orders_list']);
+    Route::get('/my-orders', [DriverRequests::class, 'my_orders']);
+    Route::post('/pick-order', [DriverRequests::class, 'pick_order']); 
 });
 
 Route::group([
