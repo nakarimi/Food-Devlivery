@@ -68,7 +68,7 @@ class CustomerPostRequests extends Controller
                 // Insert delivery details.
                 DB::table('order_delivery')->insertGetId($updateDeliveryDetails);
 
-                event(new \App\Events\UpdateEvent('New Order Recieved!', $order_id));
+                event(new \App\Events\UpdateEvent('New Order Received!', $order_id));
                 // if (($k % 5) == 0) {
                 // 	sleep(0.25);
                 // }

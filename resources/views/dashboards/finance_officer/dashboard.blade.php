@@ -82,7 +82,7 @@
                                         <th>Total Income</th>
                                         <th>Total Asked</th>
                                         <th>Total Paid</th>
-                                        <th>Total Recieved</th>
+                                        <th>Total Received</th>
                                         <th>Total Restaurant</th>
                                     </tr>
                                 </thead>

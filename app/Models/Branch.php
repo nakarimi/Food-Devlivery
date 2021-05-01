@@ -52,6 +52,11 @@ class Branch extends Model
         return $this->hasOne(BranchDetails::class, 'business_id')->where('status', 'approved')->latest();
     }
 
+    // Relationship with Users table.
+    public function users(){
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     // Relation ship with commission
     public function mainCommission(){
         return $this->hasOne(Commission::class, 'id', 'main_commission_id');

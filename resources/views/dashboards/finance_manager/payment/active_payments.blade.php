@@ -70,7 +70,7 @@
 ]) !!}
                         <button class="btn btn-success btn-sm" type="Submit"
                           onclick="return confirm(&quot;Do you receive the orders payment?&quot;)">Payment
-                          Recived</button>
+                          Received</button>
                         {!! Form::close() !!}
                       </td>
                     </tr>

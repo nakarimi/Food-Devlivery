@@ -55,8 +55,8 @@
                         @foreach($payments as $item)
                         <tr>
                            <td>{{ get_farsi_date($item->range_from) .' الی ' . get_farsi_date($item->range_to) }}</td>
-                           <td>{{ $item->total_order }}</td>
-                           <td>{{ $item->total_order_income }}</td>
+                           <td>{{ $item->total_order }} @if ($item->company_order) <small title="مجموع سفارشات رسانده شده توسط شرکت: {{$item->company_order}}">({{$item->company_order}})</small> @endif</td>
+                           <td>{{ $item->total_order_income }} @if ($item->company_order_total) <small title="مجموع پول دریافت شده توسط شرکت: {{$item->company_order_total}}">({{$item->company_order_total}})</small> @endif</td>
                            <td>{{ $item->total_general_commission }}</td>
                            <td>{{ $item->total_delivery_commission }}</td>
                            <td>{{ $item->total_delivery_commission + $item->total_general_commission }}</td>
@@ -66,14 +66,14 @@
                                  <form method="POST" action="{{ url('/pay') }}" accept-charset="UTF-8" style="display:inline">
                                     {{ csrf_field() }}
                                     <input type="hidden" value="{{ $item->id }}" name="payment_id">
-                                    <button type="submit" class="btn btn-success btn-sm" title="پرداخت." onclick="return confirm(&quot;پرداخت را تائید میکنید؟&quot;)">پرداخت</button>
+                                    <button type="submit" class="btn btn-success btn-sm" title="تسویه‌حساب." onclick="return confirm(&quot;تسویه‌حساب را تائید میکنید؟&quot;)">تسویه‌حساب</button>
                                  </form>
                               @elseif($item->status == 'paid')
                                  <span class="badge badge-warning" >انتظار</span>
                               @elseif($item->status == 'approved')
-                                 <span class="badge badge-info" title="پرداخت تائید نهایی شده توسط فایننس منیجر.">پرداخت تائید نهایی شده</span>
+                                 <span class="badge badge-info" title="تسویه‌حساب تائید نهایی شده توسط فایننس منیجر.">تسویه‌حساب تائید نهایی شده</span>
                               @else 
-                                 <span class="badge badge-success" title="پرداخت نیاز به تائید توسط فایننس منیجر دارد.">پرداخت تائید شده</span>
+                                 <span class="badge badge-success" title="تسویه‌حساب نیاز به تائید توسط فایننس منیجر دارد.">تسویه‌حساب تائید شده</span>
                               @endif
                            </td>
                         </tr>

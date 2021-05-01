@@ -19,7 +19,7 @@
 
         // console.log('update-event called');
         // Here we check if notification from pusher is about a new order, and is related to this user. Show message if it was, 
-        if (JSON.stringify(data['message']) == '"New Order Recieved!"' && (userId == JSON.stringify(data['userId']))) {
+        if (JSON.stringify(data['message']) == '"New Order Received!"' && (userId == JSON.stringify(data['userId']))) {
             show_message(['سفارش جدید اضافه شد.', 'success']);
             playSound();
         }

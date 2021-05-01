@@ -163,7 +163,7 @@ Route::middleware(['finance_officer'])->group(function () {
 */
 Route::middleware(['finance_manager'])->group(function () {
     Route::get('finance_manager/dashboard', [DashboardsController::class, 'financeManagerDashboard'])->name('finance_manager.dashboard');
-    Route::post('driver_payment_recived/{driver}/{orders}/{total}', [DriverController::class, 'driverPaymentRecived'])->name('driver.payments',);
+    Route::post('driver_payment_recived/{driver}/{orders}/{total}', [DriverController::class, 'driverPaymentReceived'])->name('driver.payments',);
     Route::resource('driver', 'App\Http\Controllers\DriverController');
     Route::get('active_payments', [DriverController::class, 'activePayments'])->name('driver.active_payments');
     Route::get('drivers_payment_history', [DriverController::class, 'driverPaymentHistory'])->name('driverPaymentHistory',);
@@ -171,4 +171,6 @@ Route::middleware(['finance_manager'])->group(function () {
     Route::get('restaurants_pending_payments', [PaymentController::class, 'restaurantPendingPayments'])->name('restaurantPendingPayments');
     Route::get('restaurants_payment_history', [PaymentController::class, 'restaurantsPaymentHistory'])->name('restaurantPaymentHistory');
     Route::post('approve_payment', [PaymentController::class, 'finalApprovePayment'])->name('approvePayment');
+    Route::get('get_restaurant_total_income', [DashboardsController::class, 'getRestaurantPaymentData']);
+
 });
