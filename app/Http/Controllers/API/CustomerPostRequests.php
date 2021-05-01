@@ -94,15 +94,15 @@ class CustomerPostRequests extends Controller
 
     // Verify the customer phone number, if exist should be redirected to the dashboard page.
     // If not exist should be redirected to the sign up page.
-    public function customer_verify_phone(Request $request){
-        $customer = DB::table('customers')->where('phone', $request->phone)->first();
-        if($customer) {
-            return 1; // Means customer with phone number exist, redirect to dashboard.
-        }else{
-            return 0; // Means customer not exist, should be registerd.
-        }
+    // public function customer_verify_phone(Request $request){
+    //     $customer = DB::table('customers')->where('phone', $request->phone)->first();
+    //     if($customer) {
+    //         return 1; // Means customer with phone number exist, redirect to dashboard.
+    //     }else{
+    //         return 0; // Means customer not exist, should be registerd.
+    //     }
 
-    }
+    // }
     
     // public function customer_signup(Request $request)
     // {

@@ -45,7 +45,7 @@ Route::group([
     Route::post('/submit-new-order', [CustomerPostRequests::class, 'submit_new_order']);
     // Route::post('/signup', [CustomerPostRequests::class, 'customer_signup']);
     // Route::post('/shipping-address', [CustomerPostRequests::class, 'customer_shipping_address']);
-    Route::post('/verify-phone', [CustomerPostRequests::class, 'customer_verify_phone']); // This route called before generating token, so doesn't need middleware.
+    // Route::post('/verify-phone', [CustomerPostRequests::class, 'customer_verify_phone']); // This route called before generating token, so doesn't need middleware.
     Route::post('/update-order', [CustomerPostRequests::class, 'update_order']);
     Route::get('/home-page-data', [CustomerGetRequests::class, 'home_page_data']);
     Route::get('/restaurnt-food-list-signle-category', [CustomerGetRequests::class, 'get_list_restaurant_food_of_single_category']);
