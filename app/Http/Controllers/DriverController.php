@@ -153,7 +153,7 @@ class DriverController extends Controller
      */
     public function driverPaymentReceived(Request $request)
     {
-        DB::table('recieved_driver_payments')->insert([
+        DB::table('received_driver_payments')->insert([
             'orders_id' => $request->orders,
             'total_money_received' => $request->total,
             'driver_id' => $request->driver,
@@ -170,7 +170,7 @@ class DriverController extends Controller
             $keyword['date'][1] = date('Y-m-d', strtotime($keyword['date'][1]));
         }
         $perPage = 10;
-        $query = DB::table('recieved_driver_payments as rdp')
+        $query = DB::table('received_driver_payments as rdp')
             ->join('users', 'users.id', '=', 'rdp.finance_manager_id')
             ->join('drivers', 'drivers.id', '=', 'rdp.driver_id')
             ->select('rdp.*', 'users.name', 'drivers.title');

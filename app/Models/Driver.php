@@ -51,10 +51,10 @@ class Driver extends Model
     }
     public function delivered()
     {
-        // Load the IDs of orders that has recieved_driver_payments records.
+        // Load the IDs of orders that has received_driver_payments records.
         // And ignore those orders to be loaded on the Drivers Who have money table.
         $orders = [];
-        $recived_orders = DB::table('recieved_driver_payments')->get()->pluck('orders_id');
+        $recived_orders = DB::table('received_driver_payments')->get()->pluck('orders_id');
 
         // Merge all Orders Ids in a sinle array.
         foreach ($recived_orders as $key => &$value) {

@@ -92,7 +92,7 @@
                                         <td>{{$paymentData['financial_summary']['total_order_income']}} (AF)</td>
                                         <td>{{$paymentData['financial_summary']['total_order_income']}} (AF)</td>
                                         <td>{{$paymentData['financial_summary']['total_paid']}} (AF)</td>
-                                        <td>{{$paymentData['financial_summary']['total_recieved']}} (AF)</td>
+                                        <td>{{$paymentData['financial_summary']['total_received']}} (AF)</td>
                                         <td>{{$paymentData['totalActiveRestaurants']}}</td>
                                     </tr>
                                 </tbody>
