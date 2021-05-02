@@ -180,7 +180,7 @@ class DashboardsController extends Controller
         $data['financial_summary']['total_order'] = Payment::sum('total_order');
         $data['financial_summary']['total_order_income'] = Payment::sum('total_order_income');
         $data['financial_summary']['total_paid'] = Payment::where('status', 'paid')->sum('total_order_income');
-        $data['financial_summary']['total_recieved'] = Payment::where('status', 'done')->sum('total_order_income');
+        $data['financial_summary']['total_received'] = Payment::where('status', 'done')->sum('total_order_income');
 
 
         return $data;

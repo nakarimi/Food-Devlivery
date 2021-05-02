@@ -102,7 +102,7 @@
                             {{ csrf_field() }}
                             <input type="hidden" value="{{ $item->id }}" name="payment_id">
                             <button type="submit" class="btn btn-warning btn-sm payment_pending_btn"
-                              title="This means you recieved money from restaurant."
+                              title="This means you received money from restaurant."
                               onclick="return confirm(&quot;Confirm approve?&quot;)"><span>Pending</span></button>
                           </form>
                         @else

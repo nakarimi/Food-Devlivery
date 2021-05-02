@@ -13,7 +13,7 @@ class CreateReceivedDriverPaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('recieved_driver_payments', function (Blueprint $table) {
+        Schema::create('received_driver_payments', function (Blueprint $table) {
             $table->id();
             $table->string('orders_id'); // The orders id should be stored as the serialize array 
             $table->decimal('total_money_received');
@@ -42,6 +42,6 @@ class CreateReceivedDriverPaymentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('recieved_driver_payments');
+        Schema::dropIfExists('received_driver_payments');
     }
 }
