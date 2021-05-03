@@ -436,13 +436,13 @@ if (!function_exists('update_order')) {
 
         try {
             DB::transaction(function () use ($requestData, $id) {
-                $deliver_update = false;
-                $requestData['has_delivery'] = 0;
+                // $deliver_update = false;
+                // $requestData['has_delivery'] = 0;
 
-                if ($requestData['delivery_type'] != 'self') {
-                    $requestData['has_delivery'] = 1;
-                    $deliver_update = true;
-                }
+                // if ($requestData['delivery_type'] != 'self') {
+                //     $requestData['has_delivery'] = 1;
+                //     $deliver_update = true;
+                // }
 
                 $order = Order::findOrFail($id);
 
@@ -451,7 +451,7 @@ if (!function_exists('update_order')) {
                 $orderData = [
                     'branch_id' => $requestData['branch_id'],
                     'customer_id' => $requestData['customer_id'],
-                    'has_delivery' => $requestData['has_delivery'],
+                    // 'has_delivery' => $requestData['has_delivery'],
                     'title' => $requestData['title'],
                     // 'commission_value' => $requestData['commission_value'],
                     'total' => $total_price,
@@ -462,19 +462,22 @@ if (!function_exists('update_order')) {
                     'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 ];
 
-                if ($deliver_update) {
-                    $updateDeliveryDetails = [
-                        'order_id' => $id,
-                        'delivery_type' => $requestData['delivery_type'],
-                        'delivery_address' => $requestData['address_id'],
-                    ];
+                calculate_order_commission_value($orderData, $total_price);
 
-                    calculate_order_commission_value($orderData, $total_price);
-
-                    // Update delivery details.
-                    $result = DeliveryDetails::updateOrCreate(['order_id' => $id], $updateDeliveryDetails);
-                }
                 $order->update($orderData);
+
+                $delivery_comission = calculate_order_delivery_commission_value($id);
+
+                $detailsData = [
+                    'delivery_type' => $requestData['delivery_type'], 
+                    'delivery_commission' => $delivery_comission
+                ];
+
+                $result = DeliveryDetails::where('order_id', $id)->update($detailsData);
+
+                // print_r($result);
+                // die;
+                
             });
         } catch (\Throwable $th) {
             dd($th);
@@ -742,8 +745,21 @@ if (!function_exists('get_this_branch_last_paid_date')) {
                 $commission_value = round($total_price * ($commission_percent / 100));
                 $orderData['commission_value'] = $commission_value;
             }
+        }
+    }
 
-            // @TODO: The delivery commission should be added if it is on company.
+    // Calculate the commissions (general commssion and delivery commission.
+    if (!function_exists('calculate_order_delivery_commission_value')) {
+        function calculate_order_delivery_commission_value($order_id)
+        {
+            $total_price = Order::where('id', $order_id)->first()->total;
+            $commission_obj = DB::table('commissions')->where('type', 'delivery')->first();
+            if ($commission_obj) {
+                $commission_percent = $commission_obj->percentage;
+                $commission_value = round($total_price * ($commission_percent / 100));
+                
+                return $commission_value;
+            }
         }
     }
 
