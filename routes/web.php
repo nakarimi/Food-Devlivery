@@ -147,6 +147,7 @@ Route::middleware(['support'])->group(function () {
 
     Route::post('approveLock/{id}', 'App\Http\Controllers\BlockCustomerController@approveLock');
     Route::resource('blockedCustomer', 'App\Http\Controllers\BlockCustomerController');
+    Route::post('assignDriver', 'App\Http\Controllers\OrdersController@assignDriver')->name('assignDriver');
 });
 
 /*

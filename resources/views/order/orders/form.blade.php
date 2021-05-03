@@ -175,7 +175,7 @@
                @endforeach
                {{-- Default value --}}
                value="0"
-               data-item="{{$item->approvedItemDetails}}"
+               data-item="{{$item->approvedItemLessDetails}}"
             >
          </div>
       </div>
