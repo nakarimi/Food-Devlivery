@@ -57,8 +57,8 @@
         </li>
 
         <li>
-          <a @if (\Request::is('driver')) class="active" @endif
-            href="{{ route('driver.index') }}"><i class="la la-truck"></i> <span class="menu-title">Drivers</span>
+          <a @if (\Request::is('driversTracking')) class="active" @endif
+            href="{{ url('driversTracking') }}"><i class="la la-truck"></i> <span class="menu-title">Drivers Tracking</span>
           </a>
         </li>
 
@@ -80,6 +80,11 @@
 
             <li><a @if (\Request::is('admin/users')) class="active" @endif href="{{ route('users.index') }}">Users</a></li>
             <li><a @if (\Request::is('blockedCustomer')) class="active" @endif href="{{ route('blockedCustomer.index') }}">Blocked Customers</a></li>
+            <li>
+              <a @if (\Request::is('driver')) class="active" @endif
+                href="{{ route('driver.index') }}"><i class="la la-truck"></i> <span class="menu-title">Drivers</span>
+              </a>
+            </li>
             <li>
               <a @if (\Request::is('admin/activitylogs*')) class="active" @endif href="{{ url('/admin/activitylogs') }}">Activity Logs</a>
             </li>
