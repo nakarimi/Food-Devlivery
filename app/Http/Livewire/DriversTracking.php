@@ -2,18 +2,16 @@
 
 namespace App\Http\Livewire;
 
-use Livewire\WithPagination;
 use App\Models\Driver;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DriversTracking extends Component
 {
-    use WithPagination;
-    protected $paginationTheme = 'bootstrap';
-
+    
     public $listeners = ['refreshDrivers'];
     public $keyword;
     public $code;
