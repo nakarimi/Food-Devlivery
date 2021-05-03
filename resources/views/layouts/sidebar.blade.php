@@ -42,6 +42,7 @@
                     class="badge badge-danger custom-badge-en">{{ $sidebarData['pendingItems'] }}</span>@endif
               </li>
               <li><a href="{{ route('items.approved') }}" @if (\Request::is('approvedItems*')) class="active" @endif>Approved Items</a></li>
+              <li><a href="{{route('items.rejected')}}" @if (\Request::is('rejectedItems*')) class="active" @endif>Rejected Items @if($sidebarData['rejectedItems'] != 0)<span class="badge badge-danger custom-badge">{{$sidebarData['rejectedItems']}}</span>@endif </a></li>
 
 
               <li><a @if (\Request::is('category')) class="active" @endif href="{{ route('category.index') }}">Category</a></li>
@@ -59,6 +60,12 @@
                     class="badge badge-danger custom-badge-en">{{ $sidebarData['pendingBranches'] }}</span>
                 @endif
               </li>
+              <li><a @if (\Request::is('rejectedBranches')) class="active" @endif href="{{ route('branches.rejected') }}">Rejected Branches</a>
+                @if ($sidebarData['rejectedBranches'] != 0)<span
+                    class="badge badge-danger custom-badge-en">{{ $sidebarData['rejectedBranches'] }}</span>
+                @endif
+              </li>
+
               <!--  -->
             </ul>
           </li>
