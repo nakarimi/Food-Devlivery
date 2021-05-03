@@ -3,6 +3,8 @@
     // Enable pusher logging - don't include this in production
     Pusher.logToConsole = true;
 
+    let userId = @php echo auth()->user()->id; @endphp;
+
     var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
         cluster: '{{ env('PUSHER_APP_CLUSTER') }}'
     });
