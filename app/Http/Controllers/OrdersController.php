@@ -222,10 +222,16 @@ class OrdersController extends Controller
         $driver_id = $request['driver_id'];
         $customer_id = $request['customer_id'];
         $userId = \auth()->user()->id;
-        DeliveryDetails::where('order_id', $id)->update(['driver_id' => $driver_id]);
+        
+        $detailsData = [
+            'driver_id' => $driver_id, 
+            'delivery_commission' => calculate_order_delivery_commission_value($id)
+        ];
+
+        DeliveryDetails::where('order_id', $id)->update($detailsData);
         $this->update_driver_status($id, 'busy');
         event(new \App\Events\UpdateEvent('Driver assigned!', $id));
-        send_notification([$driver_id], $userId, 'New Order has been assigned to you');
+        // send_notification([$driver_id], $userId, 'New Order has been assigned to you');
 
     }
 

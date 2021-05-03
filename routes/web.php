@@ -47,27 +47,18 @@ Route::middleware(['admin'])->group(function () {
     Route::resource('commission', 'App\Http\Controllers\CommissionController');
     Route::resource('driver', 'App\Http\Controllers\DriverController');
     Route::resource('payment', 'App\Http\Controllers\PaymentController');
-    Route::post('/approveItem', 'App\Http\Controllers\ItemController@approveItem');
-    Route::post('/rejectItem', 'App\Http\Controllers\ItemController@rejectItem');
-    Route::get('/rejectedItems', 'App\Http\Controllers\ItemController@rejectedItems')->name('items.rejected');
-    Route::post('/approveBranch', 'App\Http\Controllers\BranchController@approveBranch');
-    Route::post('/rejectBranch', 'App\Http\Controllers\BranchController@rejectBranch');
-    Route::resource('category', 'App\Http\Controllers\CategoryController');
-    Route::get('/pendingBranches', 'App\Http\Controllers\BranchController@pendingBranches')->name('branches.pending');
-    Route::get('/rejectedBranches', 'App\Http\Controllers\BranchController@rejectedBranches')->name('branches.rejected');
-    Route::get('/approvedBranches', 'App\Http\Controllers\BranchController@approvedBranches')->name('branches.approved');
+    
     Route::get('/loadItemsBasedOnBranch', 'App\Http\Controllers\MenuController@loadItemsBasedOnBranch');
     Route::put('/deactiveUser/{id}', 'App\Http\Controllers\Admin\UsersController@deactiveUser');
     Route::put('/activateUser/{id}', 'App\Http\Controllers\Admin\UsersController@activateUser');
-    Route::post('approveLock/{id}', 'App\Http\Controllers\BlockCustomerController@approveLock');
-    Route::resource('blockedCustomer', 'App\Http\Controllers\BlockCustomerController');
+
     Route::post('/backup-create', 'App\Http\Controllers\BackupController@create')->name('get-backup');
     Route::get('/backups', 'App\Http\Controllers\BackupController@index')->name('backups');
     Route::delete('/delete-backup/{name}', 'App\Http\Controllers\BackupController@destroy')->name('backup.destroy');
     Route::post('/download-backup', 'App\Http\Controllers\BackupController@downloadBackup')->name('backup.download');
-    Route::post('/approvePayment', 'App\Http\Controllers\PaymentController@approvePayment');
-    Route::post('/rejectPayment', 'App\Http\Controllers\PaymentController@rejectPayment');
-    Route::post('followupOrder', 'App\Http\Controllers\OrdersController@followupOrder');
+    // Route::post('/approvePayment', 'App\Http\Controllers\PaymentController@approvePayment');
+    // Route::post('/rejectPayment', 'App\Http\Controllers\PaymentController@rejectPayment');
+    
 });
 
 /*
@@ -98,15 +89,9 @@ Route::middleware(['restaurant'])->group(function () {
     Route::post('updateOrderStatus', 'App\Http\Controllers\OrdersController@updateOrderStatus')->name('updateOrderStatus');
     Route::post('assignDriver', 'App\Http\Controllers\OrdersController@assignDriver')->name('assignDriver');
     Route::post('requestDelivery', 'App\Http\Controllers\OrdersController@requestDelivery')->name('requestDelivery');
-
-    // Livewire Route for active orders.
-    Route::get('/activeOrders', \App\Http\Livewire\ActiveOrder::class);
-    Route::get('/waitingOrders', \App\Http\Livewire\WaitingOrder::class);
-
-    Route::get('/order-history', 'App\Http\Controllers\OrdersController@orderHistory')->name('order.history');
     Route::resource('orders', 'App\Http\Controllers\OrdersController')->only([
-        'edit', 'show', 'destroy', 'update'
-    ]);;
+        'edit', 'show', 'update'
+    ]);
 
     Route::post('blockCustomer', 'App\Http\Controllers\BlockCustomerController@store')->name('blockCustomer');
     Route::get('get_orders_by_status', 'App\Http\Controllers\DashboardsController@get_orders_by_status');
@@ -131,6 +116,38 @@ Route::middleware(['driver'])->group(function () {
 */
 Route::middleware(['support'])->group(function () {
     Route::get('support/dashboard', 'App\Http\Controllers\DashboardsController@supportDashboard')->name('support.dashboard');
+
+    // Livewire Route for active orders.
+    Route::get('/activeOrders', \App\Http\Livewire\ActiveOrder::class);
+    Route::get('/waitingOrders', \App\Http\Livewire\WaitingOrder::class);
+    Route::get('/order-history', 'App\Http\Controllers\OrdersController@orderHistory')->name('order.history');
+    Route::resource('orders', 'App\Http\Controllers\OrdersController')->only([
+        'edit', 'show', 'update'
+    ]);
+    Route::get('/driversTracking', \App\Http\Livewire\DriversTracking::class);
+    Route::resource('item', 'App\Http\Controllers\ItemController');
+    Route::resource('branch', 'App\Http\Controllers\BranchController');
+
+    Route::get('/pendingItems', 'App\Http\Controllers\ItemController@pendingItems')->name('items.pending');
+    Route::get('/approvedItems', 'App\Http\Controllers\ItemController@approvedItems')->name('items.approved');
+    Route::get('/rejectedItems', 'App\Http\Controllers\ItemController@rejectedItems')->name('items.rejected');
+
+    Route::post('/approveItem', 'App\Http\Controllers\ItemController@approveItem');
+    Route::post('/rejectItem', 'App\Http\Controllers\ItemController@rejectItem');
+    Route::get('/rejectedItems', 'App\Http\Controllers\ItemController@rejectedItems')->name('items.rejected');
+
+    Route::post('/approveBranch', 'App\Http\Controllers\BranchController@approveBranch');
+    Route::post('/rejectBranch', 'App\Http\Controllers\BranchController@rejectBranch');
+    Route::resource('category', 'App\Http\Controllers\CategoryController');
+    Route::get('/pendingBranches', 'App\Http\Controllers\BranchController@pendingBranches')->name('branches.pending');
+    Route::get('/rejectedBranches', 'App\Http\Controllers\BranchController@rejectedBranches')->name('branches.rejected');
+    Route::get('/approvedBranches', 'App\Http\Controllers\BranchController@approvedBranches')->name('branches.approved');
+
+    Route::post('followupOrder', 'App\Http\Controllers\OrdersController@followupOrder');
+
+    Route::post('approveLock/{id}', 'App\Http\Controllers\BlockCustomerController@approveLock');
+    Route::resource('blockedCustomer', 'App\Http\Controllers\BlockCustomerController');
+    Route::post('assignDriver', 'App\Http\Controllers\OrdersController@assignDriver')->name('assignDriver');
 });
 
 /*

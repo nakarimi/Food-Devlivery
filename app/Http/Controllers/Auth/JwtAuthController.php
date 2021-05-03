@@ -26,38 +26,38 @@ class JwtAuthController extends Controller
     }
     
   
-    public function register(Request $request)
-    {
+    // public function register(Request $request)
+    // {
  
-         $validator = Validator::make($request->all(), 
-                      [ 
-                      'name' => 'required',
-                      'email' => 'required|email',
-                      'password' => 'required',  
-                      'c_password' => 'required|same:password', 
-                     ]);  
+    //      $validator = Validator::make($request->all(), 
+    //                   [ 
+    //                   'name' => 'required',
+    //                   'email' => 'required|email',
+    //                   'password' => 'required',  
+    //                   'c_password' => 'required|same:password', 
+    //                  ]);  
  
-         if ($validator->fails()) {  
+    //      if ($validator->fails()) {  
  
-               return response()->json(['error'=>$validator->errors()], 401); 
+    //            return response()->json(['error'=>$validator->errors()], 401); 
  
-            }   
+    //         }   
  
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
-        $user->save();
+    //     $user = new User();
+    //     $user->name = $request->name;
+    //     $user->email = $request->email;
+    //     $user->password = bcrypt($request->password);
+    //     $user->save();
   
-        if ($this->token) {
-            return $this->login($request);
-        }
+    //     if ($this->token) {
+    //         return $this->login($request);
+    //     }
   
-        return response()->json([
-            'success' => true,
-            'data' => $user
-        ], Response::HTTP_OK);
-    }
+    //     return response()->json([
+    //         'success' => true,
+    //         'data' => $user
+    //     ], Response::HTTP_OK);
+    // }
 
     public function customer_signup(Request $request)
     {
@@ -131,9 +131,20 @@ class JwtAuthController extends Controller
                 'message' => 'Invalid Email or Password',
             ], Response::HTTP_UNAUTHORIZED);
         }
+
+        // If customer logs in, so avoid since customer_signin is there for customer.
+    	if (JWTAuth::user()->role_id == 5) {
+    		return response()->json([
+                'success' => false,
+                'message' => 'Wrong End Point!',
+        	]);
+    	}
   
+        $user_data = JWTAuth::user()->only('email', 'name');
+        
         return response()->json([
             'success' => true,
+            'user_info' => $user_data,
             'token' => $jwt_token,
         ]);
     }

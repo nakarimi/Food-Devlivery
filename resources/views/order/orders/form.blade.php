@@ -113,12 +113,23 @@
     </div>
   </div>
   <div class="col">
-
+    <div class="form-group{{ $errors->has('delivery_address') ? 'has-error' : '' }}">
+      <label for="delivery_address" class="control-label">{{ 'Delivery Adress' }}</label>
+      {{-- <input class="form-control" name="status" type="text" id="status" value="{{ $order->status ?? ''}}" required> --}}
+      <input class="form-control" name="delivery_address" type="text" id="delivery_address"
+        value="{{ $order->deliveryDetails->delivery_address ?? '' }}">
+      {!! $errors->first(
+    'status',
+    '
+         <p class="help-block">:message</p>
+         ',
+) !!}
+    </div>
   </div>
 </div>
 
 <div class="form-row">
-  <div class="col">
+  {{-- <div class="col">
     <div class="form-group{{ $errors->has('driver_id') ? 'has-error' : '' }}">
       <label for="driver_id" class="control-label">{{ 'Driver Id' }}</label>
       <select class="custom-select mr-sm-2" name="driver_id" id="driver_id">
@@ -134,21 +145,8 @@
          ',
 ) !!}
     </div>
-  </div>
-  <div class="col">
-    <div class="form-group{{ $errors->has('delivery_address') ? 'has-error' : '' }}">
-      <label for="delivery_address" class="control-label">{{ 'Delivery Adress' }}</label>
-      {{-- <input class="form-control" name="status" type="text" id="status" value="{{ $order->status ?? ''}}" required> --}}
-      <input class="form-control" name="delivery_address" type="text" id="delivery_address"
-        value="{{ $order->deliveryDetails->delivery_address ?? '' }}">
-      {!! $errors->first(
-    'status',
-    '
-         <p class="help-block">:message</p>
-         ',
-) !!}
-    </div>
-  </div>
+  </div> --}}
+  
 </div>
 
 <input type="text" name="contents" class="d-none">
@@ -177,7 +175,7 @@
                @endforeach
                {{-- Default value --}}
                value="0"
-               data-item="{{$item->approvedItemDetails}}"
+               data-item="{{$item->approvedItemLessDetails}}"
             >
          </div>
       </div>
