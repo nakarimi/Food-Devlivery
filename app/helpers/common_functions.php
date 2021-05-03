@@ -752,7 +752,11 @@ if (!function_exists('get_this_branch_last_paid_date')) {
     if (!function_exists('calculate_order_delivery_commission_value')) {
         function calculate_order_delivery_commission_value($order_id)
         {
-            $total_price = Order::where('id', $order_id)->first()->total;
+            // Take the total price and calculate if driver is assigned, otherwise return 0;
+            $total_price = Order::where('id', $order_id)->whereHas('deliveryDetails', function ($subquery) {
+                $subquery->whereNotNull('driver_id');
+            })->first()->total ?? 0;
+
             $commission_obj = DB::table('commissions')->where('type', 'delivery')->first();
             if ($commission_obj) {
                 $commission_percent = $commission_obj->percentage;

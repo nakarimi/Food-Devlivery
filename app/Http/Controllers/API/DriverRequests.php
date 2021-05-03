@@ -30,7 +30,7 @@ class DriverRequests extends Controller
             'delivery_commission' => calculate_order_delivery_commission_value($id)
         ];
 
-        DeliveryDetails::where('order_id', $id)->update();
+        DeliveryDetails::where('order_id', $id)->update($detailsData);
 
         app('App\Http\Controllers\OrdersController')->update_driver_status($id, 'busy');
 

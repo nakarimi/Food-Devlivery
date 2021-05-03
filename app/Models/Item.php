@@ -51,6 +51,12 @@ class Item extends Model
         return $this->hasOne(ItemDetails::class, 'item_id')->where('details_status', 'approved')->latest();
     }
 
+    // Relationship with lessdetails table.
+    public function approvedItemLessDetails(){
+
+        return $this->hasOne(ItemDetails::class, 'item_id')->where('details_status', 'approved')->select(['id', 'title', 'price', 'item_id'])->latest();
+    }
+
     // Relationship with details table.
     public function pendingItemDetails(){
         return $this->hasOne(ItemDetails::class, 'item_id')->where('details_status', 'pending')->latest();
