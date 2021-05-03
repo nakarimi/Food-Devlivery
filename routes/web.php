@@ -102,6 +102,7 @@ Route::middleware(['restaurant'])->group(function () {
     // Livewire Route for active orders.
     Route::get('/activeOrders', \App\Http\Livewire\ActiveOrder::class);
     Route::get('/waitingOrders', \App\Http\Livewire\WaitingOrder::class);
+    Route::get('/drivers-tracking', \App\Http\Livewire\DriversTracking::class);
 
     Route::get('/order-history', 'App\Http\Controllers\OrdersController@orderHistory')->name('order.history');
     Route::resource('orders', 'App\Http\Controllers\OrdersController')->only([
