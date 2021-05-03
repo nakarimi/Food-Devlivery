@@ -225,7 +225,7 @@ class OrdersController extends Controller
         DeliveryDetails::where('order_id', $id)->update(['driver_id' => $driver_id]);
         $this->update_driver_status($id, 'busy');
         event(new \App\Events\UpdateEvent('Driver assigned!', $id));
-        send_notification([$driver_id], $userId, 'New Order has been assigned to you');
+        // send_notification([$driver_id], $userId, 'New Order has been assigned to you');
 
     }
 
