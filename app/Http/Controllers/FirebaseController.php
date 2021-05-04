@@ -27,18 +27,12 @@ class FirebaseController extends Controller
     public function varify_user($uid)
     {
         // Check the user validation by uid.
-        try {
-            $path = base_path('config/fooddelivery-firebase.json');
-            $factory = (new Factory)
-                ->withServiceAccount($path)
-                ->withDatabaseUri('https://fooddelivery-cc39b-default-rtdb.firebaseio.com');
-    
-            $auth = $factory->createAuth();
-            $user = $auth->getUser($uid);
-            return true;
-            
-        } catch (\Throwable $th) {
-            return Response($th, 404);
-        }
+        $path = base_path('config/fooddelivery-firebase.json');
+        $factory = (new Factory)
+            ->withServiceAccount($path)
+            ->withDatabaseUri('https://fooddelivery-cc39b-default-rtdb.firebaseio.com');
+        $auth = $factory->createAuth();
+        $user = $auth->getUser($uid);
+        return $user;
     }
 }

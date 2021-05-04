@@ -62,8 +62,6 @@ class JwtAuthController extends Controller
     public function customer_signup(Request $request)
     {
 
-        // @TODO: Here we need to check if provided firebase_token is valid using firebase.
-        
         $validator = Validator::make($request->all(), [
             'full_name' => 'required|max:191',
             'token' => 'required|unique:users,firebase_token',
@@ -77,6 +75,10 @@ class JwtAuthController extends Controller
 
 
         try {
+
+            // Here we need to check if provided firebase_token is valid using firebase.
+            app('App\Http\Controllers\FirebaseController')->varify_user($request->token);
+            
             // Since we deal with multiple tables, so we use transactions for handling conflicts and other issues.
             DB::beginTransaction();
 
