@@ -76,4 +76,4 @@ Route::group([
 ], function ($router) {
     Route::get('/check', [BranchRequests::class, 'check']);    
 });
-Route::get('firebase', [FirebaseController::class, 'index']);    
+// Route::get('firebase', [FirebaseController::class, 'index']);  
