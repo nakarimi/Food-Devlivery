@@ -11,6 +11,6 @@ class OrderTimeDetails extends Model
 
     protected $table = 'order_timing';
 
-    protected $fillable = ['order_id', 'processing_time', 'rejected_time', 'promissed_time'];
+    protected $fillable = ['order_id', 'processing_time', 'rejected_time', 'promissed_time', 'delivery_time', 'caceled_time', 'completed_time'];
 
 }

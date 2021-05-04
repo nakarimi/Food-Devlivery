@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\API;
 
+use JWTAuth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\DeliveryDetails;
 use App\Models\Driver;
-use JWTAuth;
+use Illuminate\Support\Facades\DB;
+use App\Models\OrderTimeDetails;
+use Carbon\Carbon;
 
 class DriverRequests extends Controller
 {
@@ -23,21 +26,70 @@ class DriverRequests extends Controller
 
     public function pick_order(Request $request) {
         $id = $request['order_id'];
-        $driver_id = $request['driver_id'];
+        $driver_id = Driver::where('user_id', JWTAuth::user()->id)->first()->id;
         
         $detailsData = [
             'driver_id' => $driver_id, 
             'delivery_commission' => calculate_order_delivery_commission_value($id)
         ];
 
-        DeliveryDetails::where('order_id', $id)->update($detailsData);
+        $result = DeliveryDetails::where('order_id', $id)->whereNull('driver_id')->update($detailsData);
 
         app('App\Http\Controllers\OrdersController')->update_driver_status($id, 'busy');
 
         event(new \App\Events\UpdateEvent('Order Updated!', $id));
         // send_notification([$driver_id], $userId, 'New Order has been assigned to you');
 
-        return 1;
+        // Maybe two drivers pick same order at same time.
+        if ($result) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Order picked by you.!',
+            ]);
+        }
+        else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry a problem happened!',
+            ]);
+        }
+        
+    }
+
+    public function delivered_order(Request $request) {
+        $id = $request['order_id'];
+        $driver_id = Driver::where('user_id', JWTAuth::user()->id)->first()->id;
+
+        try {
+
+            DB::transaction(function () use ($id, $driver_id) {
+                
+                Order::where('id', $id)->whereHas('deliveryDetails', function ($subquery) use ($driver_id) {
+                    $subquery->where('driver_id', $driver_id);
+                })->update(['status' => 'delivered']);
+
+                OrderTimeDetails::updateOrCreate(['order_id' => $id], ['delivery_time' => Carbon::now()->format('Y-m-d H:i:s')]);
+            });
+
+            // status of driver can't be cahnge dfor one order.
+            // app('App\Http\Controllers\OrdersController')->update_driver_status($id, 'free');
+
+            event(new \App\Events\UpdateEvent('Order Updated!', $id));
+            // send_notification([$driver_id], $userId, 'New Order has been assigned to you');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Order delivered by you!',
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry a problem happened!',
+            ]);
+        }
+
+        
     }
 
     public function my_orders(Request $request) {

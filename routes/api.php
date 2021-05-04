@@ -66,7 +66,8 @@ Route::group([
     // Route::get('/check', [DriverRequests::class, 'check']);
     Route::get('/new-orders-list', [DriverRequests::class, 'new_orders_list']);
     Route::get('/my-orders', [DriverRequests::class, 'my_orders']);
-    Route::post('/pick-order', [DriverRequests::class, 'pick_order']); 
+    Route::post('/pick-order', [DriverRequests::class, 'pick_order']);
+    Route::post('/deliver-order', [DriverRequests::class, 'delivered_order']); 
 });
 
 Route::group([
