@@ -7,6 +7,7 @@ use App\Http\Controllers\API\CustomerGetRequests;
 use App\Http\Controllers\API\CustomerPostRequests;
 use App\Http\Controllers\API\DriverRequests;
 use App\Http\Controllers\API\BranchRequests;
+use App\Http\Controllers\FirebaseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,3 +76,4 @@ Route::group([
 ], function ($router) {
     Route::get('/check', [BranchRequests::class, 'check']);    
 });
+Route::get('firebase', [FirebaseController::class, 'index']);    
