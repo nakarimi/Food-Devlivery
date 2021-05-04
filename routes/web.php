@@ -61,25 +61,43 @@ Route::middleware(['admin'])->group(function () {
     
 });
 
+
+/*
+|--------------------------------------------------------------------------
+| All routes in this part can access by (Admin, Support)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['support'])->group(function () {
+    Route::get('support/dashboard', 'App\Http\Controllers\DashboardsController@supportDashboard')->name('support.dashboard');
+    Route::get('/driversTracking', \App\Http\Livewire\DriversTracking::class);
+    Route::resource('branch', 'App\Http\Controllers\BranchController');
+    Route::post('/approveBranch', 'App\Http\Controllers\BranchController@approveBranch');
+    Route::post('/rejectBranch', 'App\Http\Controllers\BranchController@rejectBranch');
+    Route::resource('category', 'App\Http\Controllers\CategoryController');
+    Route::get('/pendingBranches', 'App\Http\Controllers\BranchController@pendingBranches')->name('branches.pending');
+    Route::get('/rejectedBranches', 'App\Http\Controllers\BranchController@rejectedBranches')->name('branches.rejected');
+    Route::get('/approvedBranches', 'App\Http\Controllers\BranchController@approvedBranches')->name('branches.approved');
+    Route::post('followupOrder', 'App\Http\Controllers\OrdersController@followupOrder');
+    Route::post('approveLock/{id}', 'App\Http\Controllers\BlockCustomerController@approveLock');
+    Route::resource('blockedCustomer', 'App\Http\Controllers\BlockCustomerController');
+    Route::post('assignDriver', 'App\Http\Controllers\OrdersController@assignDriver')->name('assignDriver');
+
+    // Livewire Route for active orders.
+    Route::get('/waitingOrders', \App\Http\Livewire\WaitingOrder::class);
+});
+
 /*
 |--------------------------------------------------------------------------
 | All routes in this part can access by (Admin, Restaurant)
 |--------------------------------------------------------------------------
 */
 Route::middleware(['restaurant'])->group(function () {
-
     Route::get('restaurant/dashboard', 'App\Http\Controllers\DashboardsController@restaurantDashboard')->name('restaurant.dashboard');
-
-    Route::get('/pendingItems', 'App\Http\Controllers\ItemController@pendingItems')->name('items.pending');
-    Route::get('/approvedItems', 'App\Http\Controllers\ItemController@approvedItems')->name('items.approved');
-    Route::get('/rejectedItems', 'App\Http\Controllers\ItemController@rejectedItems')->name('items.rejected');
     Route::get('/loadCategory', 'App\Http\Controllers\CategoryController@loadCategory');
     Route::post('updateItemStockStatus', 'App\Http\Controllers\ItemController@updateItemStockStatus')->name('updateItemStockStatus');
     Route::get('/payment-history', 'App\Http\Controllers\PaymentController@paymentHistory')->name('payment.history');
     Route::get('/active-payments', 'App\Http\Controllers\PaymentController@activePayments')->name('active.payments');
     Route::post('/pay', 'App\Http\Controllers\PaymentController@pay');
-
-    // Route::get('paymentsCreate', 'App\Http\Controllers\PaymentController@restaurantPaymentsCreate');
     Route::post('saveRestaurantPayment', 'App\Http\Controllers\PaymentController@SaveRestaurantPayments');
     Route::resource('item', 'App\Http\Controllers\ItemController');
     Route::resource('menu', 'App\Http\Controllers\MenuController');
@@ -89,66 +107,21 @@ Route::middleware(['restaurant'])->group(function () {
     Route::post('updateOrderStatus', 'App\Http\Controllers\OrdersController@updateOrderStatus')->name('updateOrderStatus');
     Route::post('assignDriver', 'App\Http\Controllers\OrdersController@assignDriver')->name('assignDriver');
     Route::post('requestDelivery', 'App\Http\Controllers\OrdersController@requestDelivery')->name('requestDelivery');
-    Route::resource('orders', 'App\Http\Controllers\OrdersController')->only([
-        'edit', 'show', 'update'
-    ]);
-
     Route::post('blockCustomer', 'App\Http\Controllers\BlockCustomerController@store')->name('blockCustomer');
     Route::get('get_orders_by_status', 'App\Http\Controllers\DashboardsController@get_orders_by_status');
     Route::put('mark_read_notifications', [App\Http\Controllers\HomeController::class, 'markNotificationAsRead']);
     Route::get('favorited-by', 'App\Http\Controllers\BranchController@favorited_by');
-    
-});
-
-/*
-|--------------------------------------------------------------------------
-| All routes in this part can access by (Admin, Driver)
-|--------------------------------------------------------------------------
-*/
-Route::middleware(['driver'])->group(function () {
-    Route::get('driver/dashboard', 'App\Http\Controllers\DashboardsController@driverDashboard')->name('driver.dashboard');
-});
-
-/*
-|--------------------------------------------------------------------------
-| All routes in this part can access by (Admin, Support)
-|--------------------------------------------------------------------------
-*/
-Route::middleware(['support'])->group(function () {
-    Route::get('support/dashboard', 'App\Http\Controllers\DashboardsController@supportDashboard')->name('support.dashboard');
-
-    // Livewire Route for active orders.
-    Route::get('/activeOrders', \App\Http\Livewire\ActiveOrder::class);
-    Route::get('/waitingOrders', \App\Http\Livewire\WaitingOrder::class);
-    Route::get('/order-history', 'App\Http\Controllers\OrdersController@orderHistory')->name('order.history');
-    Route::resource('orders', 'App\Http\Controllers\OrdersController')->only([
-        'edit', 'show', 'update'
-    ]);
-    Route::get('/driversTracking', \App\Http\Livewire\DriversTracking::class);
-    Route::resource('item', 'App\Http\Controllers\ItemController');
-    Route::resource('branch', 'App\Http\Controllers\BranchController');
-
     Route::get('/pendingItems', 'App\Http\Controllers\ItemController@pendingItems')->name('items.pending');
     Route::get('/approvedItems', 'App\Http\Controllers\ItemController@approvedItems')->name('items.approved');
     Route::get('/rejectedItems', 'App\Http\Controllers\ItemController@rejectedItems')->name('items.rejected');
-
-    Route::post('/approveItem', 'App\Http\Controllers\ItemController@approveItem');
-    Route::post('/rejectItem', 'App\Http\Controllers\ItemController@rejectItem');
-    Route::get('/rejectedItems', 'App\Http\Controllers\ItemController@rejectedItems')->name('items.rejected');
-
-    Route::post('/approveBranch', 'App\Http\Controllers\BranchController@approveBranch');
-    Route::post('/rejectBranch', 'App\Http\Controllers\BranchController@rejectBranch');
-    Route::resource('category', 'App\Http\Controllers\CategoryController');
-    Route::get('/pendingBranches', 'App\Http\Controllers\BranchController@pendingBranches')->name('branches.pending');
-    Route::get('/rejectedBranches', 'App\Http\Controllers\BranchController@rejectedBranches')->name('branches.rejected');
-    Route::get('/approvedBranches', 'App\Http\Controllers\BranchController@approvedBranches')->name('branches.approved');
-
-    Route::post('followupOrder', 'App\Http\Controllers\OrdersController@followupOrder');
-
-    Route::post('approveLock/{id}', 'App\Http\Controllers\BlockCustomerController@approveLock');
-    Route::resource('blockedCustomer', 'App\Http\Controllers\BlockCustomerController');
-    Route::post('assignDriver', 'App\Http\Controllers\OrdersController@assignDriver')->name('assignDriver');
+    Route::get('/activeOrders', \App\Http\Livewire\ActiveOrder::class);
+    Route::get('/order-history', 'App\Http\Controllers\OrdersController@orderHistory')->name('order.history');
+     Route::resource('orders', 'App\Http\Controllers\OrdersController')->only([
+        'edit', 'show', 'update'
+    ]);
+    
 });
+
 
 /*
 |--------------------------------------------------------------------------
@@ -157,6 +130,16 @@ Route::middleware(['support'])->group(function () {
 */
 Route::middleware(['customer'])->group(function () {
     Route::get('customer/dashboard', 'App\Http\Controllers\DashboardsController@customerDashboard')->name('customer.dashboard');
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| All routes in this part can access by (Admin, Driver)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['driver'])->group(function () {
+    Route::get('driver/dashboard', 'App\Http\Controllers\DashboardsController@driverDashboard')->name('driver.dashboard');
 });
 
 /*

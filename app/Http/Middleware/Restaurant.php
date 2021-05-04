@@ -20,7 +20,7 @@ class Restaurant
         if (Auth::check()){
             $role=Auth::user()->role->name;
             $role=strtolower($role);
-            if ($role=="restaurant" || $role=="admin") {
+            if ($role=="restaurant" || $role=="support" || $role=="admin") {
                 return $next($request);
             }
             abort(403);

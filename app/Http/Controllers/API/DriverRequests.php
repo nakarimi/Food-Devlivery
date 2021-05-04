@@ -89,17 +89,26 @@ class DriverRequests extends Controller
             ]);
         }
 
-        
     }
 
     public function my_orders(Request $request) {
         $driver_id = Driver::where('user_id', JWTAuth::user()->id)->first()->id;
+
+        if ($request->history) {
+            return $this->orders_list($newOrders = false, $driver_id, $oldOrders = true);
+        }
+
         return $this->orders_list($newOrders = false, $driver_id);
     }
 
-    public function orders_list($newOrders = true, $driverId = false) {
+    public function orders_list($newOrders = true, $driverId = false, $oldOrders = false) {
         $orders = [];
+
         $ordersList = Order::whereIn('status', ['processing']);
+
+        if ($oldOrders) {
+            $ordersList = Order::whereIn('status', ['delivered', 'completed'])->whereDate('created_at', '>', Carbon::now()->subDays(7));
+        }
 
         if ($newOrders) {
             // Get all the orders waiting for delviery.

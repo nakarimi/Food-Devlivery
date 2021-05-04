@@ -500,13 +500,13 @@ if (!function_exists('validateOrderInputs')) {
             $request->all(),
             [
                 'branch_id' => 'required|integer',
-                'customer_id' => 'required|integer',
                 'delivery_type' => 'required',
                 'total' => 'required|integer',
                 'commission_value' => 'required',
                 'status' => 'required',
                 'reciever_phone' => 'required',
                 'contents' => 'required',
+                'address_id' => 'required',
             ]
         );
 

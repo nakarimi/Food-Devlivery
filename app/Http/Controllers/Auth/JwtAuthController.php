@@ -67,9 +67,8 @@ class JwtAuthController extends Controller
         $validator = Validator::make($request->all(), [
             'full_name' => 'required|max:191',
             'token' => 'required|unique:users,firebase_token',
-            'phone' => 'required|unique:users|max:10|min:10', // 0761234567
+            'phone' => 'required|max:10|min:10', // 0761234567
             'address_title' => 'required|min:8',
-            'address_type' => 'required|min:3',
         ]);  
  
          if ($validator->fails()) {  
