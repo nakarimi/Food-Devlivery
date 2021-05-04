@@ -40,7 +40,7 @@ class CustomerGetRequests extends Controller
         $data['profile'][0]->is_favorite = ($count > 0); 
 
         // List of all items of a restaurant.
-        $data['items'] = Item::select('id', 'category_id')->with('category')->with('approvedItemDetails:item_id,title,description,thumbnail,price')->where('branch_id', $request['restaurantID'])->get()->toArray();
+        $data['items'] = Item::select('id', 'category_id')->with('approvedItemDetails:item_id,title,description,thumbnail,price')->where('branch_id', $request['restaurantID'])->get()->toArray();
 
         // These categories should be those which actually restaruant has item for them.
         $category_ids = [];
