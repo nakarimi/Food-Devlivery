@@ -4,7 +4,7 @@ Description  : Js codes related to orders.
 */
 
 function show_message(msg) {
-
+   
     let message = '<div id="success-alert" class="alert alert-'+msg[1]+' alert-dismissible fade show" role="alert"><strong>'+msg[0]+'</strong></div>';
 
     if ($('div.alertDiv').length) {
@@ -48,25 +48,6 @@ function playSound() {
     var audio = new Audio('/audio/short_notification.mp3');
     audio.play()
 }
-
-$(document).on('change','#audio',function(){
-
-    let order_id = $(this).attr('order_id');
-    let customer_id = $(this).attr('customer_id');
-    let driver_id = $(this).val();
-    $.ajax({
-        type: 'POST',
-        url:'/assignDriver',
-        data: {order_id:order_id, driver_id: driver_id, customer_id:customer_id},
-        success: function (data) {
-            show_message("The Order assigned to Driver!")
-        },
-        error: function (e) {
-            alert("js error in order.js file.")
-            
-        }
-    });
-});
 
 $(document).on('click','.read-notification-button',function(event){
     var not_id =  $(this).attr('notification_id');

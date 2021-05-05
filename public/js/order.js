@@ -99,7 +99,7 @@ jQuery(function ($) {
                 url:'/assignDriver',
                 data: {order_id:order_id, driver_id: driver_id, customer_id:customer_id},
                 success: function (data) {
-                    show_message("The Order assigned to Driver!")
+                    show_message(["The Order assigned to Driver!", 'success'])
                 },
                 error: function (e) {
                     alert("js error in order.js file.")
