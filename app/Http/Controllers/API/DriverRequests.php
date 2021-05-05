@@ -135,7 +135,7 @@ class DriverRequests extends Controller
             $data['restaurant_logo'] = $order->branchDetails->logo;
             $data['restaurant_mobile'] = $order->branchDetails->contact;
             $data['restaurant_location'] = $order->branchDetails->location;
-            $data['promissed_time'] = $order->timeDetails->promissed_time;
+            $data['promissed_time'] = Carbon::parse($order->timeDetails->promissed_time)->diffForHumans();
             $data['contents'] = show_order_itmes($order->contents, true);
 
             $orders[] = $data;

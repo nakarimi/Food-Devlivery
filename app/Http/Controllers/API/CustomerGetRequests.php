@@ -83,7 +83,7 @@ class CustomerGetRequests extends Controller
             return $branches->where('branche_main_info.title','LIKE', "%$keyword%")->select('branches.id', 'branche_main_info.title')->get();
         }
 
-        return $branches->select('branches.id', 'branche_main_info.title', 'branche_main_info.description', 'branche_main_info.logo')->get();
+        return $branches->select('branches.id', 'branche_main_info.title', 'branche_main_info.description', 'branche_main_info.logo as thumbnail')->get();
     }
 
     // Get items of a restaurant based on the provided filters.

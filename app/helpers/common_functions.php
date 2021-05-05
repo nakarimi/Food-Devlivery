@@ -12,6 +12,7 @@ use App\Models\Setting;
 use App\Models\DeliveryDetails;
 use Illuminate\Support\Facades\DB;
 use \Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Validator;
 
 if (!function_exists('save_file')) {
     /**
@@ -503,16 +504,13 @@ if (!function_exists('validateOrderInputs')) {
                 'delivery_type' => 'required',
                 'total' => 'required|integer',
                 'commission_value' => 'required',
-                'status' => 'required',
                 'reciever_phone' => 'required',
                 'contents' => 'required',
                 'address_id' => 'required',
             ]
         );
 
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
-        }
+        return $validator;
     }
 }
 

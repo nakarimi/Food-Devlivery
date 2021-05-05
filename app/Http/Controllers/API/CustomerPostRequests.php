@@ -14,7 +14,12 @@ class CustomerPostRequests extends Controller
 {
     public function submit_new_order(Request $request)
     {
-        validateOrderInputs($request);
+        $validator = validateOrderInputs($request);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+
         $requestData = $request->all();
 
         // Don't accept order from blocked customers.
@@ -46,7 +51,7 @@ class CustomerPostRequests extends Controller
             for ($k = 0; $k < 1; $k++) {
 
                 // $newOrder = [
-                //     'branch_id' => $requestData['branch_id'],
+                //     'branch_id' => rand(1, 3),
                 //     'customer_id' => JWTAuth::user()->id,
                 //     'has_delivery' => 1, //($has_delivery) ? '1' : '0', for now delivery is required.
                 //     'total' => $requestData['total'],
@@ -55,7 +60,7 @@ class CustomerPostRequests extends Controller
                 //     'note' => $requestData['note'],
                 //     'reciever_phone' => $requestData['reciever_phone'],
                 //     'contents' => $requestData['contents'],
-                //     'created_at' => Carbon::today()->subDays(rand(14, 24)),
+                //     'created_at' => Carbon::today()->subDays(rand(5, 10)),
                 // ];
 
                 // Add order to table.
@@ -63,7 +68,7 @@ class CustomerPostRequests extends Controller
 
                 $updateDeliveryDetails = [
                     'order_id' => $order_id,
-                    'delivery_type' => $requestData['delivery_type'],
+                    'delivery_type' => 'own',
                     'delivery_address' => $requestData['address_id'],
                     'driver_id' => NULL,
                 ];
@@ -92,7 +97,13 @@ class CustomerPostRequests extends Controller
 
     public function update_order(Request $request)
     {
-        validateOrderInputs($request);
+
+        $validator = validateOrderInputs($request);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+
         $requestData = $request->all();
         update_order($requestData, $requestData['order_id'], true);
     }
