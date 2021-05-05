@@ -737,11 +737,27 @@ if (!function_exists('get_this_branch_last_paid_date')) {
     if (!function_exists('calculate_order_commission_value')) {
         function calculate_order_commission_value(&$orderData, $total_price)
         {
-            $commission_obj = DB::table('commissions')->where('type', 'general')->first();
-            if ($commission_obj) {
-                $commission_percent = $commission_obj->percentage;
-                $commission_value = round($total_price * ($commission_percent / 100));
-                $orderData['commission_value'] = $commission_value;
+            $branch = Branch::find($orderData['branch_id']);
+            if($branch){
+                $commission_obj = DB::table('commissions')->find($branch->main_commission_id);
+                if ($commission_obj) {
+                    if($commission_obj->value){
+                        $commission_value = $commission_obj->value;
+                        // TODO: Which logic should be applied here, do we should multiply the commission value to the number of the items, or it is fix for any much items that offered?
+                        // Number of total items
+                        $sum = 0;
+                        $items = json_decode($orderData['contents']);
+                        foreach (reset($items) as $key => $value) {
+                            $x = reset($value);
+                            $sum += $x->count;
+                        }
+                        $orderData['commission_value'] = $sum * $commission_value;
+                    }else{
+                        $commission_percent = $commission_obj->percentage;
+                        $commission_value = round($total_price * ($commission_percent / 100));
+                        $orderData['commission_value'] = $commission_value;
+                    }
+                }
             }
         }
     }
@@ -751,17 +767,13 @@ if (!function_exists('get_this_branch_last_paid_date')) {
         function calculate_order_delivery_commission_value($order_id)
         {
             // Take the total price and calculate if driver is assigned, otherwise return 0;
-            $total_price = Order::where('id', $order_id)->whereHas('deliveryDetails', function ($subquery) {
+            $orderData = Order::where('id', $order_id)->whereHas('deliveryDetails', function ($subquery) {
                 $subquery->whereNotNull('driver_id');
-            })->first()->total ?? 0;
+            })->first();
+            $total_price = $orderData->total ?? 0;
 
-            $commission_obj = DB::table('commissions')->where('type', 'delivery')->first();
-            if ($commission_obj) {
-                $commission_percent = $commission_obj->percentage;
-                $commission_value = round($total_price * ($commission_percent / 100));
-                
-                return $commission_value;
-            }
+            calculate_order_commission_value($orderData , $total_price);
+            return $orderData['commission_value'];
         }
     }
 

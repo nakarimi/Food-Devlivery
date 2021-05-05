@@ -86,11 +86,11 @@ class OrdersController extends Controller
     public function update(Request $request, $id)
     {
         
-        $validator = validateOrderInputs($request);
+        // $validator = validateOrderInputs($request);
 
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
-        }
+        // if ($validator->fails()) {
+        //     return response()->json(['error' => $validator->errors()], 401);
+        // }
 
         $requestData = $request->all();
         update_order($requestData, $id);
