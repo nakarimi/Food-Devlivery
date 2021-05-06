@@ -17,6 +17,7 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    @include('order.orders.order-filter')
                     <div class="table-responsive">
                         @include('dashboards.restaurant.orders.table')
                     </div>

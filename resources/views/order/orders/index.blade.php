@@ -11,7 +11,7 @@
          <div class="card">
             <div class="card-header">Orders</div>
             <div class="card-body">
-               
+              @include('order.orders.order-filter')
                <div class="table-responsive">
                   <table class="table">
                      <thead>

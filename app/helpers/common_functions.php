@@ -219,7 +219,7 @@ if (!function_exists('abortUrlFor')) {
 
 // This will return orders based on branch ids of a user.
 if (!function_exists('loadUserAllOrders')) {
-    function loadUserAllOrders($userId, $status, $perPage = NULL)
+    function loadUserAllOrders($userId, $status, $perPage = NULL, $code = NULL)
     {
         // Get user branch.
         $branches =  getUserBranches($userId);
@@ -228,6 +228,10 @@ if (!function_exists('loadUserAllOrders')) {
             array_push($branchIds, $branch->id);
         }
         $orders = Order::whereIn('branch_id', $branchIds)->whereIn('status', $status)->with('customer.blockedCustomer');
+
+        if ($code) {
+            $orders = $orders->where('id', $code);
+        } 
 
         if ($perPage) {
             $orders = $orders->latest()->paginate($perPage);
@@ -291,14 +295,13 @@ if (!function_exists('show_order_itmes')) {
                 continue;
             }
 
-            // Set title.
             $title =  $itemRecord->approvedItemDetails->title;
-
             $price =  $itemRecord->approvedItemDetails->price;
+            $description = $itemRecord->approvedItemDetails->description;
 
             $output .= "<li>$title, $item->count</li>";
 
-            $contents[] = ['title' => $title, 'count' => $item->count, 'price' => $price];
+            $contents[] = ['title' => $title, 'count' => $item->count, 'price' => $price, 'description' => $description];
         }
         // Close html Wrapper.
         $output .= "</ul></span>";
@@ -348,7 +351,7 @@ if (!function_exists('get_orders')) {
         $status = [];
         $drivers = [];
         $pageTitle = 'Waiting Orders'; // Livewire can't access Request::is in blade so we need to pass the name.
-        $perPage = 25;
+        $perPage = 15;
         switch ($type) {
             case 'history':
                 $status = ['completed', 'canceld', 'reject'];
@@ -361,20 +364,20 @@ if (!function_exists('get_orders')) {
                 $status = [];
         };
 
+        // For real time data, datatable search is enough.
+        $keyword = ($request) ? $request->get('search') : $keyword; // @TODO: is this line needed as well?
+        $keyword = (!$keyword && isset($_GET['search'])) ? $_GET['search'] : $keyword;
+        $code = (isset($_GET['code'])) ? $_GET['code'] : $code;
+
         // If it is restaurant then user will have some restricted data.
         if (get_role() == "restaurant") {
             $userId = Auth::user()->id;
-            $orders = loadUserAllOrders($userId, $status, $perPage);
+            $orders = loadUserAllOrders($userId, $status, $perPage, $code);
             if ($realTime) {
                 return view('livewire.restaurant.active-orders', compact('orders', 'drivers'))->extends('dashboards.restaurant.layouts.master');
             }
             return view('dashboards.restaurant.orders.index', compact('orders'));
         }
-
-        // For real time data, datatable search is enough.
-        $keyword = ($request) ? $request->get('search') : $keyword; // @TODO: is this line needed as well?
-        $keyword = (!$keyword && isset($_GET['search'])) ? $_GET['search'] : $keyword;
-        $code = (isset($_GET['code'])) ? $_GET['code'] : $code;
 
         $order_query = Order::whereIn('status', $status);
 
