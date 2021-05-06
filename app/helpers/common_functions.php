@@ -219,7 +219,7 @@ if (!function_exists('abortUrlFor')) {
 
 // This will return orders based on branch ids of a user.
 if (!function_exists('loadUserAllOrders')) {
-    function loadUserAllOrders($userId, $status, $perPage = NULL, $code = NULL)
+    function loadUserAllOrders($userId, $status, $perPage = NULL, $code = NULL, $date = NULL)
     {
         // Get user branch.
         $branches =  getUserBranches($userId);
@@ -231,6 +231,10 @@ if (!function_exists('loadUserAllOrders')) {
 
         if ($code) {
             $orders = $orders->where('id', $code);
+        } 
+
+        if ($date) {
+            $orders = $orders->whereBetween('created_at', [$date[0] . " 00:00:00", $date[1] . " 23:59:59"]);
         } 
 
         if ($perPage) {
@@ -368,11 +372,19 @@ if (!function_exists('get_orders')) {
         $keyword = ($request) ? $request->get('search') : $keyword; // @TODO: is this line needed as well?
         $keyword = (!$keyword && isset($_GET['search'])) ? $_GET['search'] : $keyword;
         $code = (isset($_GET['code'])) ? $_GET['code'] : $code;
+        $date = null;
+
+        if (isset($_GET['date-range']) && !empty($_GET['date-range'])) {
+            $dates = explode(" - ", $_GET['date-range']);
+            $dates[0] = date('Y-m-d', strtotime($dates[0]));
+            $dates[1] = date('Y-m-d', strtotime($dates[1]));
+            $date = $dates;
+        }
 
         // If it is restaurant then user will have some restricted data.
         if (get_role() == "restaurant") {
             $userId = Auth::user()->id;
-            $orders = loadUserAllOrders($userId, $status, $perPage, $code);
+            $orders = loadUserAllOrders($userId, $status, $perPage, $code, $date);
             if ($realTime) {
                 return view('livewire.restaurant.active-orders', compact('orders', 'drivers'))->extends('dashboards.restaurant.layouts.master');
             }
@@ -384,6 +396,10 @@ if (!function_exists('get_orders')) {
         if ($code) {
             $order_query = $order_query->where('id', $code);
         }
+
+        if ($date) {
+            $order_query = $order_query->whereBetween('created_at', [$date[0] . " 00:00:00", $date[1] . " 23:59:59"]);
+        } 
 
         if (!empty($keyword)) {
             $orders = $order_query->wherehas(

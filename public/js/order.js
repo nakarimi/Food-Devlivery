@@ -229,5 +229,11 @@ jQuery(function ($) {
             });
 
         });
+        
+        // Reset button for filter of order history.
+        $(document).on('click','#order_filter #resetbtn',function(){
+            $("#order_filter").trigger('reset');
+            $("#order_filter").submit();
+        });
     });
 })
