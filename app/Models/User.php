@@ -79,4 +79,8 @@ class User extends Authenticatable implements JWTSubject
     public function blockedCustomer(){
         return $this->hasOne(BlockCustomer::class, 'customer_id');
     }
+    // user with address
+    public function address(){
+        return $this->hasMany(CustomerAddress::class, 'customer_id');
+    }
 }

@@ -9,10 +9,7 @@
                 <div class="card-header">{{$pageTitle}}</div>
                 <div class="card-body">
                     @include('order.orders.order-filter')
-                    <br/>
-                    <br/>
-                    <br/>
-                    <div class="table-responsive">
+                   <div class="table-responsive">
                         <table class="table">
                             <thead>
                             <tr>

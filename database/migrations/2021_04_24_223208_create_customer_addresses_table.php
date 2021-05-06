@@ -21,6 +21,7 @@ class CreateCustomerAddressesTable extends Migration
             $table->string('address_details', 250)->nullable();
             $table->decimal("latitude", 8, 6)->nullable();
             $table->decimal("longitude", 8, 6)->nullable();
+            $table->tinyInteger("is_default")->nullable();
             // Due to using DB this field should have current datetime as default value.
             $table->timestamp('updated_at')->useCurrent();
             $table->timestamp('created_at')->useCurrent();

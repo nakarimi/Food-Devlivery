@@ -108,4 +108,83 @@ class CustomerPostRequests extends Controller
         update_order($requestData, $requestData['order_id'], true);
     }
 
+    public function address_add(Request $request) {
+        
+        $this->validate($request, [
+            'address_title' => 'required',
+            'address_type' => 'required',
+        ]);
+
+        $data = [
+            'customer_id' => JWTAuth::user()->id,
+            'address_title' => $request['address_title'],
+            'address_type' => $request['address_type'],
+            'address_details' => $request['address_details'],
+            'latitude' => $request['latitude'],
+            'longitude' => $request['longitude'],
+        ];
+
+        DB::table('customer_addresses')->insertGetId($data);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'New address added.',
+        ]);
+    }
+
+    public function address_edit(Request $request) {
+        
+        $this->validate($request, [
+            'address_title' => 'required',
+            'address_type' => 'required',
+        ]);
+
+        $detailsData = [
+            'address_title' => $request['address_title'],
+            'address_type' => $request['address_type'],
+            'address_details' => $request['address_details'],
+            'latitude' => $request['latitude'],
+            'longitude' => $request['longitude'],
+        ];
+
+        $result = DB::table('customer_addresses')->where('id', $request['address_id'])->update($detailsData);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Address updated.',
+        ]);
+    }
+
+    public function set_address_as_default(Request $request) {
+        
+        $this->validate($request, [
+            'address_id' => 'required',
+        ]);
+        
+        // invalidate any old default address.
+        DB::table('customer_addresses')->where('customer_id', JWTAuth::user()->id)->update(['is_default' => 0]);
+
+        // invalidate any old default address.
+        DB::table('customer_addresses')->where('id', $request['address_id'])->update(['is_default' => 1]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Address is now the default one.',
+        ]);
+    }
+
+    public function delete_address(Request $request) {
+        
+        $this->validate($request, [
+            'address_id' => 'required',
+        ]);
+        
+        DB::table('customer_addresses')->delete($request['address_id']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Address deleted.',
+        ]);
+    }
+
 }

@@ -77,7 +77,7 @@ class JwtAuthController extends Controller
         try {
 
             // Here we need to check if provided firebase_token is valid using firebase.
-            app('App\Http\Controllers\FirebaseController')->varify_user($request->token);
+            // app('App\Http\Controllers\FirebaseController')->varify_user($request->token);
             
             // Since we deal with multiple tables, so we use transactions for handling conflicts and other issues.
             DB::beginTransaction();
@@ -96,6 +96,7 @@ class JwtAuthController extends Controller
                 'address_title' => $request->address_title,
                 'address_type' => $request->address_type,
                 'address_details' => $request->address_details,
+                'is_default' => $request->is_default,
                 'latitude' => $request->latitude,
                 'longitude' => $request->longitude,
             ];
