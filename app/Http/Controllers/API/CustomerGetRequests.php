@@ -11,6 +11,7 @@ use App\Models\Item;
 use App\Models\Category;
 use App\Models\Order;
 use JWTAuth;
+use App\Models\User;
 // use Validator;
 
 class CustomerGetRequests extends Controller
@@ -163,6 +164,10 @@ class CustomerGetRequests extends Controller
 
     public function order_history(Request $request) {
         return $this->orders_list(['completed', 'canceld', 'reject'], JWTAuth::user()->id);
+    }
+
+    public function customer_profile() {
+        return User::where('id', JWTAuth::user()->id)->with('address')->get(['id', 'name', 'phone']);
     }
 
     public function orders_list($status, $customerID) {
