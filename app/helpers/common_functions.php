@@ -797,21 +797,6 @@ if (!function_exists('get_this_branch_last_paid_date')) {
         }
     }
 
-    // @TODO: is this needed.
-    if (!function_exists('customer_address_add')) {
-        function customer_address_add($customer_id, $data)
-        {
-            $address = DB::table('customer_addresses')->find($data);
-            if ($address) {
-                return $address->id;
-            }
-            return DB::table('customer_addresses')->insertGetId([
-                'customer_id' => $customer_id,
-                'address' => $data
-            ]);
-        }
-    }
-
     if (!function_exists('get_active_orders_count')) {
         function get_active_orders_count($branchID)
         {

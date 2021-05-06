@@ -167,7 +167,7 @@ class CustomerGetRequests extends Controller
     }
 
     public function customer_profile() {
-        return User::where('id', JWTAuth::user()->id)->with('address')->get(['id', 'name', 'phone']);
+        return User::where('id', JWTAuth::user()->id)->with('address:id,customer_id,address_title,address_type,address_details,is_default')->get(['id', 'name', 'phone']);
     }
 
     public function orders_list($status, $customerID) {

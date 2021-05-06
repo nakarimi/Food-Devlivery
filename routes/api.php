@@ -53,8 +53,10 @@ Route::group([
     Route::get('/home-page-general-search', [CustomerGetRequests::class, 'home_page_general_search']);
     Route::get('/active-orders', [CustomerGetRequests::class, 'active_orders']);
     Route::get('/order-history', [CustomerGetRequests::class, 'order_history']);
-
-
+    Route::post('/address-add', [CustomerPostRequests::class, 'address_add']);
+    Route::post('/address-edit', [CustomerPostRequests::class, 'address_edit']);
+    Route::post('/make-address-default', [CustomerPostRequests::class, 'set_address_as_default']);
+    Route::post('/delete-address', [CustomerPostRequests::class, 'delete_address']);
 });
 
 Route::group([
