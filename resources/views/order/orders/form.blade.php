@@ -157,29 +157,104 @@
    <p class="help-block">:message</p>
    ') !!}
 </div> --}}
+<div class="accordion" id="accordionExample">
+  <div class="card">
+    <div class="card-header" id="headingOne">
+      <h5 class="mb-0">
+        <button class="btn btn-link colleplse-toggle" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Items
+        </button>
+      </h5>
+    </div>
 
-   @foreach ($restaurant_items as $item)
-      <div class="float-left col-sm-3 p-2">
-         <div class="d-flex justify-content-between bg-primary rounded p-2">
-            <label class="flex-grow-1">{{ $item->approvedItemDetails->title }}</label>
-         
-            <input type="number" class="form-control d-inline-block w-50 rounded-pill items_in_order"
-               @foreach ($order->contentsToArray()['contents'] as $content)
-                  @foreach ($content as $details)
-                        @if ($item->id == (int) $details['item_id'])
-                           @php
-                              echo ('value="' . $details['count'] . '"');
-                           @endphp
-                        @endif
-                  @endforeach
-               @endforeach
-               {{-- Default value --}}
-               value="0"
-               data-item="{{$item->approvedItemLessDetails}}"
-            >
-         </div>
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div class="card-body">
+        <table class="table table-borderless">
+          <thead>
+              <tr>
+                  <th>Name</th>
+                  <th>Quantity</th>
+                  <th>Name</th>
+                  <th>Quantity</th>
+              </tr>
+          </thead>
+          <tbody>
+               @foreach ($exist_item as $key => $item)
+               @if ($key%2 == 0)
+                <tr>
+              @endif
+                  <td>
+                      <label class="flex-grow-1">{{ $item->approvedItemDetails->title }}</label>
+                  </td>
+                  <td>
+                      <input type="number" class="form-control focusedInput d-inline-block w-75 rounded-pill items_in_order"
+                        @foreach ($order->contentsToArray()['contents'] as $content)
+                          @foreach ($content as $details)
+                                @if ($item->id == (int) $details['item_id'])
+                                  @php
+                                      echo ('value="' . $details['count'] . '"');
+                                  @endphp
+                                @endif
+                          @endforeach
+                        @endforeach
+                        {{-- Default value --}}
+                        value="0"
+                        data-item="{{$item->approvedItemLessDetails}}"
+                      >
+                </td>
+              @if ($key%2 != 0)
+                </tr>
+              @endif
+           @endforeach
+          </tbody>
+        </table>
       </div>
-   @endforeach
+    </div>
+  </div>
+    <div class="card">
+      <div class="card-header" id="headingOne">
+        <h5 class="mb-0">
+          <button class="btn btn-link colleplse-toggle" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            More Item
+          </button>
+        </h5>
+      </div>
+      <div id="collapseTwo" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div class="card-body">
+        <table class="table table-borderless">
+          <thead>
+              <tr>
+                  <th>Name</th>
+                  <th>Quantity</th>
+                  <th>Name</th>
+                  <th>Quantity</th>
+              </tr>
+          </thead>
+          <tbody>
+               @foreach ($non_exist_item as $key => $item)
+               @if ($key%2 == 0)
+                <tr>
+              @endif
+                  <td>
+                      <label class="flex-grow-1">{{ $item->approvedItemDetails->title }}</label>
+                  </td>
+                  <td>
+                      <input type="number" class="form-control focusedInput d-inline-block w-75 rounded-pill items_in_order"
+                        {{-- Default value --}}
+                        value="0"
+                        data-item="{{$item->approvedItemLessDetails}}"
+                      >
+                </td>
+              @if ($key%2 != 0)
+                </tr>
+              @endif
+           @endforeach
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="form-group">
   <input class="btn btn-primary" type="submit" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}">
 </div>

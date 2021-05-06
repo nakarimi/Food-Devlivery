@@ -61,6 +61,16 @@ class OrdersController extends Controller
         abortUrlFor("restaurant");
         $data = $this->dropdown_data($id);
         $data['restaurant_items'] = Item::where('branch_id', $data['order']->branch_id)->with('approvedItemDetails')->get();
+        foreach ($data['order']->contentsToArray()['contents'] as $key => $item) {
+            $item_ids[] = reset($item)['item_id'];
+        }
+        foreach ($data['restaurant_items'] as $key => $item) {
+            if(in_array($item->id, $item_ids)){
+                $data['exist_item'][] = $item;
+            }else{
+                $data['non_exist_item'][] = $item;
+            }
+        }
         return view('order.orders.edit', $data);
     }
 
@@ -76,11 +86,11 @@ class OrdersController extends Controller
     public function update(Request $request, $id)
     {
         
-        $validator = validateOrderInputs($request);
+        // $validator = validateOrderInputs($request);
 
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
-        }
+        // if ($validator->fails()) {
+        //     return response()->json(['error' => $validator->errors()], 401);
+        // }
 
         $requestData = $request->all();
         update_order($requestData, $id);
