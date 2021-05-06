@@ -795,6 +795,8 @@ if (!function_exists('get_this_branch_last_paid_date')) {
     }
 
     // @TODO: is this needed.
+    // Adding new address to the database based on customer. this will be used if user choose
+    //  the exist address or will be create new one and assign its id to the associated order.
     if (!function_exists('customer_address_add')) {
         function customer_address_add($customer_id, $data)
         {
