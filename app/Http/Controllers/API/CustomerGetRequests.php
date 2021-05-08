@@ -65,8 +65,24 @@ class CustomerGetRequests extends Controller
         return $this->get_items($category = false, $request['restaurantID'], $request['keyword']);
     }
 
+    // This helper search for available items and restuarant and generate array with tow sections based on provided keyword.
+    public function home_page_general_search(Request $request) {
+        
+        $data = [];
+
+        if ($request['type'] == 'mixed' || $request['type'] == 'foods') {
+            $data['items'] = $this->search_items($request['keyword']);
+        }
+        
+        if ($request['type'] == 'mixed' || $request['type'] == 'restaurants') {
+            $data['branches'] = $this->get_list_restaurants($all = false, $latest = false, $favorited = false, $customerID = false, $request['keyword'], $paginate = true);
+        }
+
+        return $data;
+    }
+
     // Get list of restaurants based on the provided filters.
-    public function get_list_restaurants($all = false, $latest = false, $favorited = false, $customerID = false, $keyword = false) {
+    public function get_list_restaurants($all = false, $latest = false, $favorited = false, $customerID = false, $keyword = false, $paginate = false) {
         
         $branches = DB::table('branches')
         ->join('branche_main_info', 'branches.id', '=', 'branche_main_info.business_id')
@@ -81,7 +97,8 @@ class CustomerGetRequests extends Controller
 
         if ($keyword) {
             // Since different column is needed, return is different.
-            return $branches->where('branche_main_info.title','LIKE', "%$keyword%")->select('branches.id', 'branche_main_info.title')->get();
+            $branches = $branches->where('branche_main_info.title','LIKE', "%$keyword%")->select('branches.id', 'branche_main_info.title');
+            return ($paginate) ? $branches->paginate(5) : $branches->get();
         }
 
         return $branches->select('branches.id', 'branche_main_info.title', 'branche_main_info.description', 'branche_main_info.logo as thumbnail')->get();
@@ -123,16 +140,6 @@ class CustomerGetRequests extends Controller
         }
 
         return $items->paginate(5);
-    }
-
-    // This helper search for available items and restuarant and generate array with tow sections based on provided keyword.
-    public function home_page_general_search(Request $request) {
-        
-        $data['items'] = $this->search_items($request['keyword']);
-
-        $data['branches'] = $this->get_list_restaurants($all = false, $latest = false, $favorited = false, $customerID = false, $request['keyword']);
-
-        return $data;
     }
 
     // List of old item purchased by this customer from this restaurant.
