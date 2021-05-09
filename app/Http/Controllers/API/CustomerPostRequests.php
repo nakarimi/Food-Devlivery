@@ -124,11 +124,12 @@ class CustomerPostRequests extends Controller
             'longitude' => $request['longitude'],
         ];
 
-        DB::table('customer_addresses')->insertGetId($data);
+        $newAddressId = DB::table('customer_addresses')->insertGetId($data);
 
         return response()->json([
             'success' => true,
             'message' => 'New address added.',
+            'added_address' => DB::table('customer_addresses')->where('id', $newAddressId)->get(['id', 'customer_id', 'address_title', 'address_type', 'address_details', 'is_default'])
         ]);
     }
 
