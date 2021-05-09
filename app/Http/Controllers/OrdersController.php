@@ -167,7 +167,7 @@ class OrdersController extends Controller
         switch($status) {
             case 'processing' :
                 $field = 'processing_time';
-                $promissed_time = $request['promissed_time'];
+                $promissed_time = Carbon::now()->addMinutes($request['promissed_time'])->format('Y-m-d H:i:s'); // Get promissed time from provided minuts.
                 send_notification([$customer_id], $userId, 'Your order has been Approved');
                 break;
             case 'reject' :
@@ -198,9 +198,6 @@ class OrdersController extends Controller
             $updateDeliveryTimeDetails = [];
 
             if (!is_null($promissed_time)) {
-                $date = Carbon::now()->format('Y-m-d');
-                $promissed_time = Carbon::createFromFormat("Y-m-d H:i:s", $date .' '. $promissed_time.':00');
-
                 $updateDeliveryTimeDetails = [
                     $field => $now,
                     'promissed_time' => $promissed_time
@@ -213,7 +210,6 @@ class OrdersController extends Controller
                     'reject_reason' => $message
                 ];
             }
-
             OrderTimeDetails::updateOrCreate(['order_id' => $id], $updateDeliveryTimeDetails);
             event(new \App\Events\UpdateEvent('Order Updated!', $id));
 

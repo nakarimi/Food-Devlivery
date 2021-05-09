@@ -188,7 +188,7 @@ class CustomerGetRequests extends Controller
             $data = []; 
             $data['id'] = $order->id;
             $data['price'] = $order->total;
-            $data['reciever_phone'] = $order->reciever_phone;
+            $data['reciever_phone'] = $order->customer->reciever_phone;
             $data['delivery_address'] = $order->deliveryDetails->delivery_address;
             $data['restaurant_title'] = $order->branchDetails->title;
             $data['restaurant_logo'] = $order->branchDetails->logo;

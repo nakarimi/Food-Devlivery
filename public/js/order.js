@@ -31,16 +31,15 @@ jQuery(function ($) {
             $('#order_approved_form input[name=customer_id]').val($(this).attr('customer_id'));
         });
 
-        $(document).on('change','input#promissed_time',function(){
-            $('#order_approved_form_submit_btn').css("pointer-events", 'auto');
-        });
-
         $(document).on('click','#order_approved_form_submit_btn',function(){
             let order_id = $('#order_approved_form input[name=order_id]').val();
             let promissed_time =  $('#order_approved_form #promissed_time').val();
             let customer_id =  $('#order_approved_form input[name=customer_id]').val();
             let status =  'processing';
 
+            if (promissed_time.length < 1) {
+                promissed_time = 15; // Minutes
+            }
             // IF correct values are not provided.
             if (promissed_time.length < 1 || !order_id > 0 || !customer_id > 0) {
                 alert("صفحه را مججد لود کنید.");

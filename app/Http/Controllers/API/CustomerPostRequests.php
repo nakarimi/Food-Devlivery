@@ -42,7 +42,6 @@ class CustomerPostRequests extends Controller
                 'commission_value' => $requestData['commission_value'],
                 'status' => 'pending',
                 'note' => $requestData['note'],
-                'reciever_phone' => $requestData['reciever_phone'],
                 'contents' => $requestData['contents'],
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ];
@@ -58,7 +57,6 @@ class CustomerPostRequests extends Controller
                 //     'commission_value' => $requestData['commission_value'],
                 //     'status' => 'pending',
                 //     'note' => $requestData['note'],
-                //     'reciever_phone' => $requestData['reciever_phone'],
                 //     'contents' => $requestData['contents'],
                 //     'created_at' => Carbon::today()->subDays(rand(5, 10)),
                 // ];
