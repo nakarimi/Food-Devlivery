@@ -40,7 +40,7 @@
 
 @if((get_role() != "restaurant")) 
     <th> Reciever Phone </th>
-    <td> {{ $order->reciever_phone }} </td>
+    <td> {{ $order->customer->reciever_phone }} </td>
 @endif
 
 <tr>

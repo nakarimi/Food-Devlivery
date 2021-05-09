@@ -81,17 +81,7 @@
     </div>
   </div>
   <div class="col">
-    <div class="form-group{{ $errors->has('reciever_phone') ? 'has-error' : '' }}">
-      <label for="reciever_phone" class="control-label">{{ 'Reciever Phone' }}</label>
-      <input class="form-control" name="reciever_phone" type="text" id="reciever_phone"
-        value="{{ $order->reciever_phone ?? '' }}" required>
-      {!! $errors->first(
-    'reciever_phone',
-    '
-         <p class="help-block">:message</p>
-         ',
-) !!}
-    </div>
+    
   </div>
 </div>
 

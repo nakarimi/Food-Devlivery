@@ -477,7 +477,6 @@ if (!function_exists('update_order')) {
                     'total' => $total_price,
                     'status' => $requestData['status'],
                     'note' => $requestData['note'],
-                    'reciever_phone' => $requestData['reciever_phone'],
                     'contents' => $requestData['contents'],
                     'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 ];
@@ -523,7 +522,6 @@ if (!function_exists('validateOrderInputs')) {
                 'delivery_type' => 'required',
                 'total' => 'required|integer',
                 'commission_value' => 'required',
-                'reciever_phone' => 'required',
                 'contents' => 'required',
                 'address_id' => 'required',
             ]
@@ -597,7 +595,7 @@ if (!function_exists('get_promissed_date')) {
     {
         if ($date) {
             Carbon::setLocale('fa');
-            return Carbon::parse($date)->diffForHumans();
+            return Carbon::now()->diffForHumans(Carbon::parse($date),true,false,2);
         }
 
         return '';

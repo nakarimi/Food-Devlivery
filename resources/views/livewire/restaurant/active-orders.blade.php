@@ -48,14 +48,25 @@
                             <form id="order_approved_form" method="POST" style="width:100%;">
                                 {!! csrf_field() !!}
                                 <div class="form-group">
-                                    <input type="time" class="form-control" id="promissed_time" />
+                                    
+                                    <select class="form-control" id="promissed_time" style="direction: ltr;">
+                                        <option value="">00:15</option>
+                                        <option value="30">00:30</option>
+                                        <option value="45">00:45</option>
+                                        <option value="60">01:00</option>
+                                        <option value="75">01:15</option>
+                                        <option value="90">01:30</option>
+                                        <option value="105">01:45</option>
+                                        <option value="120">02:00</option>
+                                    </select>
+
                                     <input type="hidden" class="form-control" name="order_id" />
                                     <input type="hidden" class="form-control" name="customer_id" />
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-6">
-                                            <a href="javascript:void(0);" data-dismiss="modal" style="pointer-events: none;" class="btn btn-primary continue-btn"  id="order_approved_form_submit_btn">تائید</a>
+                                            <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-primary continue-btn"  id="order_approved_form_submit_btn">تائید</a>
                                         </div>
                                         <div class="col-6">
                                             <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-primary cancel-btn">لغو</a>

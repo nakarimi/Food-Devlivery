@@ -42,7 +42,6 @@ class CustomerPostRequests extends Controller
                 'commission_value' => $requestData['commission_value'],
                 'status' => 'pending',
                 'note' => $requestData['note'],
-                'reciever_phone' => $requestData['reciever_phone'],
                 'contents' => $requestData['contents'],
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ];
@@ -58,7 +57,6 @@ class CustomerPostRequests extends Controller
                 //     'commission_value' => $requestData['commission_value'],
                 //     'status' => 'pending',
                 //     'note' => $requestData['note'],
-                //     'reciever_phone' => $requestData['reciever_phone'],
                 //     'contents' => $requestData['contents'],
                 //     'created_at' => Carbon::today()->subDays(rand(5, 10)),
                 // ];
@@ -124,11 +122,12 @@ class CustomerPostRequests extends Controller
             'longitude' => $request['longitude'],
         ];
 
-        DB::table('customer_addresses')->insertGetId($data);
+        $newAddressId = DB::table('customer_addresses')->insertGetId($data);
 
         return response()->json([
             'success' => true,
             'message' => 'New address added.',
+            'added_address' => DB::table('customer_addresses')->where('id', $newAddressId)->get(['id', 'customer_id', 'address_title', 'address_type', 'address_details', 'is_default'])
         ]);
     }
 

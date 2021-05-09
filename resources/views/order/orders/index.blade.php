@@ -30,7 +30,7 @@
                         <tr>
                            <td>{{ $item->id}}</td>
                            <td>{{ $item->branchDetails->title }} <br> ({{$item->branchDetails->contact}}) </td>
-                           <td>{{ $item->customer->name }} <br> ({{$item->reciever_phone}}) </td>
+                           <td>{{ $item->customer->name }} <br> ({{$item->customer->reciever_phone}}) </td>
                            <td class="max-width200">{!! show_order_itmes($item->contents) !!}</td>
                            <td>
                                 @if($item->has_delivery == 1)

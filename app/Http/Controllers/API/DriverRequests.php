@@ -129,15 +129,17 @@ class DriverRequests extends Controller
             $data = []; 
             $data['id'] = $order->id;
             $data['price'] = $order->total;
-            $data['reciever_phone'] = $order->reciever_phone;
+            $data['reciever_phone'] = $order->customer->reciever_phone;
+            $data['customer_name'] = $order->customer->name;
             $data['delivery_address'] = $order->deliveryDetails->delivery_address;
             $data['restaurant_title'] = $order->branchDetails->title;
             $data['restaurant_logo'] = $order->branchDetails->logo;
             $data['restaurant_mobile'] = $order->branchDetails->contact;
             $data['restaurant_location'] = $order->branchDetails->location;
-            $data['promissed_time'] = Carbon::parse($order->timeDetails->promissed_time)->diffForHumans();
+            $data['promissed_time'] = get_promissed_date($order->timeDetails->promissed_time);
+            $data['paid'] = DB::table('received_driver_payments')->where('orders_id', $order->id)->exists();
             $data['contents'] = show_order_itmes($order->contents, true);
-
+        
             $orders[] = $data;
         }
 
