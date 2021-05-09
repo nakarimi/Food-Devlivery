@@ -231,11 +231,11 @@ if (!function_exists('loadUserAllOrders')) {
 
         if ($code) {
             $orders = $orders->where('id', $code);
-        } 
+        }
 
         if ($date) {
             $orders = $orders->whereBetween('created_at', [$date[0] . " 00:00:00", $date[1] . " 23:59:59"]);
-        } 
+        }
 
         if ($perPage) {
             $orders = $orders->latest()->paginate($perPage);
@@ -399,7 +399,7 @@ if (!function_exists('get_orders')) {
 
         if ($date) {
             $order_query = $order_query->whereBetween('created_at', [$date[0] . " 00:00:00", $date[1] . " 23:59:59"]);
-        } 
+        }
 
         if (!empty($keyword)) {
             $orders = $order_query->wherehas(
@@ -488,7 +488,7 @@ if (!function_exists('update_order')) {
                 $delivery_comission = calculate_order_delivery_commission_value($id);
 
                 $detailsData = [
-                    'delivery_type' => $requestData['delivery_type'], 
+                    'delivery_type' => $requestData['delivery_type'],
                     'delivery_commission' => $delivery_comission
                 ];
 
@@ -496,7 +496,7 @@ if (!function_exists('update_order')) {
 
                 // print_r($result);
                 // die;
-                
+
             });
         } catch (\Throwable $th) {
             dd($th);
@@ -595,7 +595,7 @@ if (!function_exists('get_promissed_date')) {
     {
         if ($date) {
             Carbon::setLocale('fa');
-            return Carbon::now()->diffForHumans(Carbon::parse($date),true,false,2);
+            return Carbon::now()->diffForHumans(Carbon::parse($date), true, false, 2);
         }
 
         return '';
@@ -755,10 +755,10 @@ if (!function_exists('get_this_branch_last_paid_date')) {
         function calculate_order_commission_value(&$orderData, $total_price)
         {
             $branch = Branch::find($orderData['branch_id']);
-            if($branch){
+            if ($branch) {
                 $commission_obj = DB::table('commissions')->find($branch->main_commission_id);
                 if ($commission_obj) {
-                    if($commission_obj->value){
+                    if ($commission_obj->value) {
                         $commission_value = $commission_obj->value;
                         // TODO: Which logic should be applied here, do we should multiply the commission value to the number of the items, or it is fix for any much items that offered?
                         // Number of total items
@@ -769,7 +769,7 @@ if (!function_exists('get_this_branch_last_paid_date')) {
                             $sum += $x->count;
                         }
                         $orderData['commission_value'] = $sum * $commission_value;
-                    }else{
+                    } else {
                         $commission_percent = $commission_obj->percentage;
                         $commission_value = round($total_price * ($commission_percent / 100));
                         $orderData['commission_value'] = $commission_value;
@@ -789,7 +789,7 @@ if (!function_exists('get_this_branch_last_paid_date')) {
             })->first();
             $total_price = $orderData->total ?? 0;
 
-            calculate_order_commission_value($orderData , $total_price);
+            calculate_order_commission_value($orderData, $total_price);
             return $orderData['commission_value'];
         }
     }
@@ -879,24 +879,39 @@ if (!function_exists('get_this_branch_last_paid_date')) {
             foreach ($payments as $key => &$pay) {
                 $pay->company_order = 0;
                 $pay->company_order_total = 0;
-                
+                $pay->company_total_commission = 0;
                 $pay->own_delivery = 0;
                 $pay->own_delivery_total = 0;
-        
+                $pay->own_total_commission = 0;
+                // Go through every branch orders and sum up the needed values.
                 foreach ($pay->orders as $order) {
+                    $pay->totalOrders++;
                     if ($details = DeliveryDetails::where('order_id', $order->id)->first()) {
                         if ($details->delivery_type == 'company') {
                             $pay->company_order++;
                             $pay->company_order_total += $order->total;
-                        }else{                            
+                            $pay->company_total_commission += $order->commission_value;
+                        } else {
                             $pay->own_delivery++;
                             $pay->own_delivery_total += $order->total;
+                            $pay->own_total_commission += $order->commission_value;
                         }
                     }
+
+                    $pay->totalOrdersPrice += $order->total;
+                    $pay->total_general_commission += $order->commission_value;
+                    $pay->total_delivery_commission += (is_object($order->deliveryDetails)) ? $order->deliveryDetails->delivery_commission : 0;
                 }
-                // dd($pay);
+                $pay->payalbe_by_company = $pay->company_order_total - $pay->company_total_commission;
+                $pay->payalbe_by_restaurant = $pay->own_delivery_total - $pay->own_total_commission;
             }
-            dd($payments);
+        }
+    }
+    if (!function_exists('calc_payable')) {
+        function calc_payable($payment)
+        {
+            return $payment->total_order_income - ($payment->total_general_commission +
+                $payment->total_delivery_commission);
         }
     }
 }

@@ -44,23 +44,35 @@
                            <th>تاریخ</th>
                            <th>تعداد سفارش</th>
                            <th>مجموع قیمت</th>
+                           <th>جمعی شرکت</th>
+                           <th>جمعی رستوران</th>
                            <th>کمیشن عمومی</th>
                            <th>کمیشن پیک </th>
+                           <th>قابل پرداخت</th>
                            <th>مجموع تحویلی</th>
                            <th>تحویل گیرنده</th>
                            <th>#</th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        @foreach($payments as $item)
-                        <tr>
-                           <td>{{ get_farsi_date($item->range_from) .' الی ' . get_farsi_date($item->range_to) }}</td>
-                           <td>{{ $item->total_order }} @if ($item->company_order) <small title="مجموع سفارشات رسانده شده توسط شرکت: {{$item->company_order}}">({{$item->company_order}})</small> @endif</td>
-                           <td>{{ $item->total_order_income }} @if ($item->company_order_total) <small title="مجموع پول دریافت شده توسط شرکت: {{$item->company_order_total}}">({{$item->company_order_total}})</small> @endif</td>
-                           <td>{{ $item->total_general_commission }}</td>
-                           <td>{{ $item->total_delivery_commission }}</td>
-                           <td>{{ $item->total_delivery_commission + $item->total_general_commission }}</td>
-                           <td> {{ $item->user->name }} </td>
+                         </tr>
+                       </thead>
+                       <tbody>
+                         @foreach ($payments as $item)
+                           <tr>
+                             <td>{{ get_farsi_date($item->range_from) . ' الی ' . get_farsi_date($item->range_to) }}</td>
+                             <td>{{ $item->total_order }}</td>
+                             <td>{{ $item->total_order_income }}</td>
+                             <td><span
+                                 title="مجموع پول های جمع شده توسط شرکت: {{ $item->company_order_total }}">{{ $item->company_order_total }}</span>
+                             </td>
+                             <td><span
+                                 title="مجموع پول های جمع شده توسط رستوران: {{ $item->own_delivery_total }}">{{ $item->own_delivery_total }}</span>
+                             </td>
+                             <td>{{ $item->total_general_commission }}</td>
+                             <td>{{ $item->total_delivery_commission }}</td>
+                             <td><span @if ($item->payalbe_by_restaurant - $item->payalbe_by_company > 0) class="text-danger" title="این مبلغ باید به شرکت پرداخت شود." 
+                                     @else class="text-success" title="این مبلغ باید از شرکت دریافت شود." @endif>
+                                 {{ abs($item->payalbe_by_restaurant - $item->payalbe_by_company) }}</span></td>
+                             <td>
+                                  <td> {{ $item->user->name }} </td>
                            <td>
                               @if($item->status == 'activated')
                                  <form method="POST" action="{{ url('/pay') }}" accept-charset="UTF-8" style="display:inline">

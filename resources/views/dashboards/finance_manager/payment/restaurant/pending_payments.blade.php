@@ -43,6 +43,8 @@
                     <th>Range</th>
                     <th>Total Orders</th>
                     <th>Total Income</th>
+                    <th>Company Delivery</th>
+                    <th>Own Delivery</th>
                     <th>General Commission</th>
                     <th>Delivery Commission</th>
                     <th>Total Payable</th>
@@ -53,19 +55,22 @@
                   @forelse ($payments as $item)
                     <tr>
                       <td>{{ $item->branchTitle ?? $item->branch->branchDetails->title }}</td>
-                      <td>{{ get_farsi_date($item->range_from) }} <b> To
-                        </b>{{ get_farsi_date($item->range_to) }}</td>
-                      <td>{{ $item->total_order }} @if ($item->company_order) <small
-                            title="Total delivery by company is: {{ $item->company_order }}">({{ $item->company_order }})</small>
-                        @endif
+                      <td>{{ get_farsi_date($item->range_from) }} <b> To </b>{{ get_farsi_date($item->range_to) }}
                       </td>
-                      <td>{{ $item->total_order_income }} @if ($item->company_order_total) <small
-                            title="Total money that company received, is: {{ $item->company_order_total }}">({{ $item->company_order_total }})</small>
-                        @endif
+                      <td>{{ $item->total_order }}</td>
+                      <td>{{ $item->total_order_income }}</td>
+                      <td><span
+                          title="Total money that company received from deliveries, is: {{ $item->company_order_total }}">{{ $item->company_order_total }}</span>
+                      </td>
+                      <td><span
+                          title="Total money that restaurant received from deliveries, is: {{ $item->own_delivery_total }}">{{ $item->own_delivery_total }}</span>
                       </td>
                       <td>{{ $item->total_general_commission }}</td>
                       <td>{{ $item->total_delivery_commission }}</td>
-                      <td>{{ $item->total_delivery_commission + $item->total_general_commission }}</td>
+                      <td><span @if ($item->payalbe_by_restaurant - $item->payalbe_by_company > 0) class="text-success" title="This amount should be paid by restaurant to clear the balance" 
+                        @else class="text-danger" title="This amount should be paid to restaurant to clear balance" @endif>
+                        {{ abs($item->payalbe_by_restaurant - $item->payalbe_by_company) }}</span></td>
+
                       <td>
 
                         @if (\Request::is('pendingPayments'))

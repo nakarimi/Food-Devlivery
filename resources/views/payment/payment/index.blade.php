@@ -43,9 +43,9 @@
                            <td>{{ $item->range_from .' To ' . $item->range_to }}</td>
                            <td>{{ $item->totalOrders }}</td>
                            <td>{{ $item->totalOrdersPrice }}</td>
-                           <td>{{ $item->totalGeneralCommission }}</td>
-                           <td>{{ $item->totalDeliveryCommission }}</td>
-                           <td>{{ $item->totalDeliveryCommission + $item->totalGeneralCommission }}</td>
+                           <td>{{ $item->total_general_commission }}</td>
+                           <td>{{ $item->total_delivery_commission }}</td>
+                           <td>{{ $item->total_delivery_commission + $item->total_general_commission }}</td>
                             <td>
                                
                             </td>

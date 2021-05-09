@@ -59,6 +59,7 @@ class PaymentController extends Controller
 
         // Remove empty indexes.
         $payments = array_filter($payments);
+        // dd($payments);
         return view('dashboards.finance_officer.payment.index', compact('payments', 'activeBranches'));
     }
 
@@ -177,41 +178,57 @@ class PaymentController extends Controller
         $orders = Order::where('status', 'completed')->whereBetween('created_at', [$from, $to])->where('branch_id', $branchID)->get();
 
         // Initialize variable for later assignment.
-        $totalOrders = $totalOrdersPrice = $totalGeneralCommission = $totalDeliveryCommission = 0;
-        $companyOrders = 0;        
-        $companyOrdersTotal = 0;
-        
+        $totalOrders = $totalOrdersPrice = $total_general_commission = $total_delivery_commission = 0;
+
         // Base payment object to collect all calculations and pass to view.
         $payment = new \stdClass;
-
+        
+        $company_order = 0;
+        $company_order_total = 0;
+        $company_total_commission = 0;
+        $own_delivery = 0;
+        $own_delivery_total = 0;
+        $own_total_commission = 0;
         // Go through every branch orders and sum up the needed values.
         foreach ($orders as $order) {
             $totalOrders++;
-            if($details = DeliveryDetails::where('order_id', $order->id)->first()){
-                if($details->delivery_type == 'company'){
-                    $companyOrders++;
-                    $companyOrdersTotal += $order->total;
+            if ($details = DeliveryDetails::where('order_id', $order->id)->first()) {
+                if ($details->delivery_type == 'company') {
+                    $company_order++;
+                    $company_order_total += $order->total;
+                    $company_total_commission += $order->commission_value;
+                }else{                            
+                    $own_delivery++;
+                    $own_delivery_total += $order->total;
+                    $own_total_commission += $order->commission_value;
                 }
             }
 
             $totalOrdersPrice += $order->total;
-            $totalGeneralCommission += $order->commission_value;
-            $totalDeliveryCommission += (is_object($order->deliveryDetails)) ? $order->deliveryDetails->delivery_commission : 0;
+            $total_general_commission += $order->commission_value;
+            $total_delivery_commission += (is_object($order->deliveryDetails)) ? $order->deliveryDetails->delivery_commission : 0;
         }
+        $payalbe_by_company = $company_order_total - $company_total_commission;
+        $payalbe_by_restaurant = $own_delivery_total - $own_total_commission;
 
         // Assing a new row to payment object.
         $payment->from = Carbon::parse($from)->format('Y-m-d');
         $payment->to = Carbon::parse($to)->format('Y-m-d');
         $payment->range_from = Carbon::parse($from)->format('M-d');
         $payment->range_to = Carbon::parse($to)->subDays(1)->format('M-d');
-        $payment->total_order = $totalOrders;
-        $payment->company_order = $companyOrders;
-        $payment->company_order_total = $companyOrdersTotal;
         $payment->branchTitle = Branch::findOrFail($branchID)->branchDetails->title;
         $payment->total_order_income = $totalOrdersPrice;
-        $payment->total_general_commission = $totalGeneralCommission;
-        $payment->total_delivery_commission = $totalDeliveryCommission;
+        $payment->total_general_commission = $total_general_commission;
+        $payment->total_delivery_commission = $total_delivery_commission;
+        $payment->payable = calc_payable($payment);
         $payment->orders = $orders->pluck('id');
+        
+        $payment->total_order = $totalOrders;
+        $payment->company_order = $company_order;
+        $payment->company_order_total = $company_order_total;
+        $payment->own_delivery_total = $own_delivery_total;
+        $payment->payalbe_by_company = $payalbe_by_company;
+        $payment->payalbe_by_restaurant = $payalbe_by_restaurant;
 
         // Return orders if not empty.
         return ($totalOrders > 0) ? $payment : [];
